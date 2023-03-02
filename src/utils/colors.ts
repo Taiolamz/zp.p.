@@ -9,6 +9,7 @@ const colors = {
     grey: "#83839F",
     greyVariantOne: "#5E6366",
     greyVariantTwo: "#E7E7E7",
+    greyVariantThree: "#797A81",
     yellow: "#fbad39",
     green: "#089E17",
     orange:"#FFAF56",
