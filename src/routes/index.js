@@ -8,7 +8,7 @@ import { routesPath } from "../utils";
 function AppRoute() {
   const { login, dashboard } = routesPath;
   return (
-    <div>
+    <>
       <Routes>
         <Route path={login} element={<Login />} />
         <Route
@@ -21,7 +21,7 @@ function AppRoute() {
         />
         <Route path='*' element={<NotFound />} />
       </Routes>
-    </div>
+    </>
   );
 }
 
