@@ -5,6 +5,7 @@ import { colors, boxShadow, spacing, borderRadius } from "../../utils";
 interface StyleProps {
   secondary?: boolean;
   icon?: ReactElement;
+  disabled?: boolean;
 }
 
 export const Container = styled.button`
@@ -14,9 +15,9 @@ export const Container = styled.button`
   -webkit-align-items: center;
   justify-content: center;
   background-color: ${(p: StyleProps) =>
-    p.secondary ? colors.primary : colors.primary};
+    p.disabled?colors.greyVariantThree: p.secondary ? colors.primary : colors.primary};
   box-shadow: ${boxShadow.light};
-  height: 43px;
+  height: 50px;
   width: 100%;
   border: none;
   border-radius: ${borderRadius.medium};
@@ -29,11 +30,9 @@ export const ButtonIcon = styled.div`
     p.icon ? colors.primary : colors.primary};
 `;
 
-export const Image = styled.img`
-  position: absolute;
-  top: -30px;
-  z-index: 1;
-  width: 60px;
-  height: 60px;
-  border-radius: ${borderRadius.large};
+export const DisabledContainer = styled.div`
+ position: relative;
 `;
+
+
+
