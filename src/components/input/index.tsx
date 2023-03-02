@@ -1,8 +1,7 @@
 import React, { useState, memo } from "react";
-import { MdEmail, MdOutlineCheck } from "react-icons/md";
 import { FiEyeOff, FiEye, FiSearch } from "react-icons/fi";
-import { AiFillUnlock } from "react-icons/ai";
-import { H6 } from "../../styles";
+
+import { H6, H4 } from "../../styles";
 import { colors } from "../../utils";
 import {
   InputContainer,
@@ -11,6 +10,7 @@ import {
   InputIconContainer,
   FormInputContainer,
   LabelContainer,
+  LabelContent,
 } from "./style";
 
 interface IProps {
@@ -40,16 +40,17 @@ function Input({
   if (type === "email") {
     return (
       <FormInputContainer>
-        {label && (
-          <LabelContainer>
-            <H6 left color={colors.grey}>
-              {label}
-            </H6>
-          </LabelContainer>
-        )}
+        <LabelContent>
+          {label && (
+            <LabelContainer>
+              <H4 semiBold left color={colors.primary}>
+                {label}
+              </H4>
+            </LabelContainer>
+          )}
+        </LabelContent>
         <InputContainer backgroundColor={backgroundColor} error={error}>
           <InputCover>
-            <MdEmail color={colors.greyVariantOne} size={"25px"} />
             <InputContent
               value={value}
               name={name}
@@ -58,31 +59,26 @@ function Input({
               placeholder={placeholder}
             />
           </InputCover>
-
-          <InputIconContainer error={error}>
-            {value.length > 1 && (
-              <MdOutlineCheck color={colors.green} size={"25px"} />
-            )}
-          </InputIconContainer>
         </InputContainer>
-        <H6 left color={colors.red}>
+        <H4 left color={colors.red}>
           {error}
-        </H6>
+        </H4>
       </FormInputContainer>
     );
   } else if (type === "password") {
     return (
       <FormInputContainer>
-        {label && (
-          <LabelContainer>
-            <H6 left color={colors.grey}>
-              {label}
-            </H6>
-          </LabelContainer>
-        )}
+        <LabelContent>
+          {label && (
+            <LabelContainer>
+              <H4 semiBold left color={colors.primary}>
+                {label}
+              </H4>
+            </LabelContainer>
+          )}
+        </LabelContent>
         <InputContainer backgroundColor={backgroundColor} error={error}>
           <InputCover>
-            <AiFillUnlock color={colors.greyVariantOne} size={"25px"} />
             <InputContent
               name={name}
               type={isPasswordVisible ? "text" : "password"}
@@ -94,22 +90,22 @@ function Input({
           <InputIconContainer>
             {isPasswordVisible ? (
               <FiEye
-                color={colors.grey}
-                size={"25px"}
+                color={colors.primary}
+                size={"20px"}
                 onClick={() => setIsPasswordVisible(false)}
               />
             ) : (
               <FiEyeOff
-                color={colors.grey}
-                size={"25px"}
+                color={colors.primary}
+                size={"20px"}
                 onClick={() => setIsPasswordVisible(true)}
               />
             )}
           </InputIconContainer>
         </InputContainer>
-        <H6 left color={colors.red}>
+        <H4 left color={colors.red}>
           {error}
-        </H6>
+        </H4>
       </FormInputContainer>
     );
   }
