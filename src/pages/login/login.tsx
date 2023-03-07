@@ -4,18 +4,30 @@ import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import { Container, ContainerContent, Content, SwitchCard } from "./style";
 import { Button, Input, Switch } from "../../components";
-import { colors, spacing } from "../../utils";
+import { colors, spacing, showMessage } from "../../utils";
 import { H2 } from "../../styles";
+import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
 
 function Login() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [switchChecked, setSwitchChecked] = useState(false);
+
+  const loginState = useAppSelector((state) => state.login);
 
   const schema = yup.object().shape({
     email: yup.string().email().required("Email is required"),
     password: yup.string().required("Paasword is required"),
   });
+
+  // console.log(loginState, "login users");
+  const handleToast = () => {
+    showMessage({
+      type: "error",
+      message: "Login Success",
+    });
+  };
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
@@ -31,6 +43,7 @@ function Login() {
             <ContainerContent>
               <Content>
                 <H2
+                  onClick={handleToast}
                   center
                   bold
                   color={colors.primary}

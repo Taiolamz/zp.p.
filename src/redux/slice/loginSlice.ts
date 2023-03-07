@@ -13,7 +13,7 @@ interface LoginState {
 }
 
 const initialState = {
-  data: [],
+  data: {},
   status: "idle",
   error: null,
 } as LoginState;
