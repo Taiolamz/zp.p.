@@ -1,6 +1,10 @@
 const routesPath = {
-    login: "/",
-    dashboard: "/dashboard",
-  };
-  
-  export default routesPath;
+  TOKEN: "token",
+  login: "/",
+  logout: "/logout",
+  signup: "/signup",
+  passwordReset: "/password/reset",
+  dashboard: "/dashboard",
+};
+
+export default routesPath;
