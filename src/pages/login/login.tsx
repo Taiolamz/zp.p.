@@ -1,5 +1,5 @@
 import * as yup from "yup";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Formik } from "formik";
 import { Container, ContainerContent, Content, SwitchCard } from "./style";
@@ -7,7 +7,11 @@ import { Button, Input, Switch } from "../../components";
 import { colors, spacing, showMessage } from "../../utils";
 import { H2 } from "../../styles";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
+import { loginRequest, loginReset } from "../../redux/slice";
+import { routesPath } from "../../utils";
+import Cookies from "js-cookie";
 
+const { dashboard, TOKEN } = routesPath;
 function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -22,6 +26,20 @@ function Login() {
   });
 
   // console.log(loginState, "login users");
+  let token = Cookies.get(TOKEN);
+
+  useEffect(() => {
+    // dispatch(loginReset());
+    if (loginState.status === "failed") {
+      console.log("error 2");
+      showMessage({ type: "error", message: "Invalid username or password" });
+      // navigate(dashboard);
+    }
+    if (loginState.status === "succeeded") {
+      navigate(dashboard);
+    }
+  }, [loginState]);
+
   const handleToast = () => {
     showMessage({
       type: "error",
@@ -31,8 +49,16 @@ function Login() {
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
+      enableReinitialize={true}
       validationSchema={schema}
       onSubmit={async (values, { setSubmitting }) => {
+        const { email, password } = values;
+        const payload = {
+          email: email.trim(),
+          password: password.trim(),
+          rememberUser: switchChecked,
+        };
+        dispatch(loginRequest(payload));
         setSubmitting(false);
       }}>
       {(formikProps) => {

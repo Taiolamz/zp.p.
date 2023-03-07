@@ -1,9 +1,14 @@
+import Cookies from "js-cookie";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
-export { PrivateRoute };
+import { routesPath } from "../utils";
 
+const { TOKEN } = routesPath;
 function PrivateRoute({ children }) {
-  const token = localStorage.getItem("token");
+  // const token = localStorage.getItem("token");
+  let token = Cookies.get(TOKEN);
+
+  console.log(token, "user token");
 
   axios.defaults.headers.common["Authorization"] = token;
 
@@ -15,3 +20,5 @@ function PrivateRoute({ children }) {
   // authorized so return child components
   return children;
 }
+
+export { PrivateRoute };
