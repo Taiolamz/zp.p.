@@ -8,7 +8,7 @@ import { routesPath } from "../utils";
  */
 
 const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
-const { TOKEN, login, logout, passwordReset, signup } = routesPath;
+const { TOKEN, LOGIN, LOGOUT, PASSWORDRESET, SIGNUP } = routesPath;
 
 let AuthToken: string = Cookies.get(TOKEN) || "token";
 
@@ -22,12 +22,12 @@ const instance = axios.create({
 });
 
 instance.interceptors.request.use((config) => {
-  if (config.url === logout) {
+  if (config.url === LOGOUT) {
     config.baseURL = BASE_URL;
     //  "https://api.zojapay.com/api/v1"
   }
 
-  if (config.url !== login && config.url !== passwordReset) {
+  if (config.url !== LOGIN && config.url !== PASSWORDRESET) {
     config.headers["Authorization"] = "Bearer " + AuthToken;
   }
   return config;
@@ -39,7 +39,7 @@ instance.interceptors.response.use(
   (err) => {
     if (err.response.state === 403) {
       Cookies.remove(TOKEN);
-      window.location.href = login;
+      window.location.href = LOGIN;
       return Promise.reject(err.response.data);
     }
 

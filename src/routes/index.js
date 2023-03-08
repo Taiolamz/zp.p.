@@ -2,17 +2,21 @@ import { Routes, Route } from "react-router-dom";
 import { Dashboard } from "../pages/dashboard";
 import { Login } from "../pages/login";
 import { NotFound } from "../pages/notFound";
+import { SideBar } from "../atoms";
 import { PrivateRoute } from "./privateRoute";
 import { routesPath } from "../utils";
-
+import { useAppDispatch, useAppSelector } from "../redux/redux-hooks";
 function AppRoute() {
-  const { login, dashboard } = routesPath;
+  const { LOGIN, DASHBOARD } = routesPath;
+  const authState = useAppSelector((state) => state.auth);
+  const { token, authenticated } = authState.data;
+
   return (
     <>
       <Routes>
-        <Route path={login} element={<Login />} />
+        <Route path={LOGIN} element={<Login />} />
         <Route
-          path={dashboard}
+          path={DASHBOARD}
           element={
             <PrivateRoute>
               <Dashboard />
@@ -21,6 +25,7 @@ function AppRoute() {
         />
         <Route path='*' element={<NotFound />} />
       </Routes>
+      {authenticated && <SideBar />}
     </>
   );
 }

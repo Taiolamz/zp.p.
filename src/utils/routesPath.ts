@@ -1,10 +1,10 @@
 const routesPath = {
   TOKEN: "token",
-  login: "/",
-  logout: "/logout",
-  signup: "/signup",
-  passwordReset: "/password/reset",
-  dashboard: "/dashboard",
+  LOGIN: "/",
+  LOGOUT: "/logout",
+  SIGNUP: "/signup",
+  PASSWORDRESET: "/password/reset",
+  DASHBOARD: "/dashboard",
 };
 
 export default routesPath;
