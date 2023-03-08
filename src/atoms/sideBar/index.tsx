@@ -123,7 +123,7 @@ function SideBar() {
 
   const handleNavigateUser = (item: NavIProps) => {
     const itemToEdit = item;
-    const updatedList: NavIProps[] = [...navList].map((el: any) => {
+    const updatedList: NavIProps[] = [...navList].map((el: NavIProps) => {
       if (el.text === itemToEdit.text) {
         el.isSelected = !el.isSelected;
       } else {
@@ -132,6 +132,7 @@ function SideBar() {
       return el;
     });
     setNavList(updatedList);
+    navigate(itemToEdit.path);
   };
 
   const handleLogout = (item: any) => {
@@ -157,11 +158,11 @@ function SideBar() {
             <ImgContainer>
               <Img src={images.logoMain} alt='logo' />
             </ImgContainer>
-            {navList.map((item, index) => (
+            {navList.map((item) => (
               <SideBarCard
-                key={index}
+                key={item.id}
                 onClick={() => {
-                  navigate(DASHBOARD);
+                  handleNavigateUser(item);
                 }}
                 isSelected={item.isSelected}
                 text={item.text}
