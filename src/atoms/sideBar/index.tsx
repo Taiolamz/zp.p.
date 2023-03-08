@@ -1,4 +1,4 @@
-import { ReactElement } from "react";
+import { ReactElement, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import { AiOutlineUser, AiOutlineDollarCircle } from "react-icons/ai";
@@ -26,7 +26,16 @@ interface IProps {
   isSelected: boolean;
   onClick?: () => void;
 }
-const { DASHBOARD, TOKEN, LOGIN } = routesPath;
+
+export interface NavIProps {
+  id: number;
+  text: string;
+  icon: ReactElement;
+  isSelected: boolean;
+  path: string;
+}
+const { DASHBOARD, TOKEN, LOGIN, KYC, SUPPORT, SETTLEMENTS, USERS, SETTINGS } =
+  routesPath;
 function TabNav({ text, icon, isSelected, onClick }: IProps) {
   return (
     <TabNavContainer onClick={onClick}>
@@ -43,34 +52,46 @@ function SideBar() {
   const navigate = useNavigate();
   const data = [
     {
-      isSelected: false,
+      id: 1,
+      isSelected: true,
       text: "Dashboard",
       icon: <AiOutlineUser />,
+      path: DASHBOARD,
     },
     {
+      id: 2,
       isSelected: false,
       text: "KYC",
       icon: <FiUsers />,
+      path: KYC,
     },
     {
-      isSelected: true,
+      id: 3,
+      isSelected: false,
       text: "Support",
       icon: <FiMail />,
+      path: SUPPORT,
     },
     {
+      id: 4,
       isSelected: false,
       text: "Settlements",
       icon: <FiTrendingUp />,
+      path: SETTLEMENTS,
     },
     {
+      id: 5,
       isSelected: false,
       text: "Users",
       icon: <AiOutlineDollarCircle />,
+      path: USERS,
     },
     {
+      id: 6,
       isSelected: false,
       text: "Settings",
       icon: <FiSettings />,
+      path: SETTINGS,
     },
   ];
 
@@ -98,12 +119,27 @@ function SideBar() {
     },
   ];
 
+  const [navList, setNavList] = useState(data);
+
+  const handleNavigateUser = (item: NavIProps) => {
+    const itemToEdit = item;
+    const updatedList: NavIProps[] = [...navList].map((el: any) => {
+      if (el.text === itemToEdit.text) {
+        el.isSelected = !el.isSelected;
+      } else {
+        el.isSelected = false;
+      }
+      return el;
+    });
+    setNavList(updatedList);
+  };
+
   const handleLogout = (item: any) => {
     if (item.text === "Logout") {
       Cookies.remove(TOKEN);
       dispatch(loginReset());
       dispatch(authReset());
-      navigate("/");
+      navigate(LOGIN);
     }
   };
 
@@ -111,7 +147,7 @@ function SideBar() {
     Cookies.remove(TOKEN);
     dispatch(loginReset());
     dispatch(authReset());
-    navigate("/");
+    navigate(LOGIN);
   };
   return (
     <>
@@ -121,7 +157,7 @@ function SideBar() {
             <ImgContainer>
               <Img src={images.logoMain} alt='logo' />
             </ImgContainer>
-            {data.map((item, index) => (
+            {navList.map((item, index) => (
               <SideBarCard
                 key={index}
                 onClick={() => {
