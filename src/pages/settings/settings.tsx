@@ -1,4 +1,3 @@
-import { Container } from "./style";
 import { AppContainer } from "../../styles";
 
 function Settings() {

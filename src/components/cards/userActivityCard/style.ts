@@ -9,7 +9,7 @@ export const Container = styled.div`
   background-color: ${colors.white};
   box-shadow: ${boxShadow.light};
   margin: ${spacing.xsmall} ${spacing.xsmall};
-  padding: ${spacing.medium} ${spacing.xsmall} ${spacing.xsmall}
+  padding: ${spacing.small} ${spacing.xsmall} ${spacing.xsmall}
     ${spacing.xsmall};
   border-radius: ${borderRadius.medium};
   position: relative;
@@ -20,9 +20,7 @@ export const InfluncerText = styled.div`
 `;
 
 export const Image = styled.img`
-  position: absolute;
-  top: -30px;
-  z-index: 1;
+  margin-bottom: ${spacing.small};
   width: 60px;
   height: 60px;
   border-radius: ${borderRadius.large};
