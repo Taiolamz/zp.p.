@@ -11,7 +11,7 @@ import { loginRequest, loginReset } from "../../redux/slice";
 import { routesPath } from "../../utils";
 import Cookies from "js-cookie";
 
-const { dashboard, TOKEN } = routesPath;
+const { DASHBOARD, TOKEN } = routesPath;
 function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -25,18 +25,13 @@ function Login() {
     password: yup.string().required("Paasword is required"),
   });
 
-  // console.log(loginState, "login users");
-  let token = Cookies.get(TOKEN);
-
   useEffect(() => {
     // dispatch(loginReset());
     if (loginState.status === "failed") {
-      console.log("error 2");
       showMessage({ type: "error", message: "Invalid username or password" });
-      // navigate(dashboard);
     }
     if (loginState.status === "succeeded") {
-      navigate(dashboard);
+      navigate(DASHBOARD);
     }
   }, [loginState]);
 
