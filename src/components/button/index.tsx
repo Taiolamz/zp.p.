@@ -11,6 +11,8 @@ interface IProps {
   disabled?: boolean;
   type?: "button" | "submit";
   secondary?: boolean;
+  borderColor?: string;
+  color?: string;
 }
 
 function Button({
@@ -20,16 +22,21 @@ function Button({
   type = "button",
   secondary = false,
   disabled = false,
+  borderColor,
+  color,
 }: IProps) {
   return (
     <Container
+      borderColor={borderColor}
       secondary={secondary}
       type={type}
       onClick={onClick}
       disabled={disabled}>
-      {icon && <ButtonIcon icon={icon}>{icon}</ButtonIcon>}
+      {icon && <ButtonIcon color={color}>{icon}</ButtonIcon>}
       {!disabled && (
-        <H2 color={icon ? colors.primary : colors.white} semiBold>
+        <H2
+          color={color ? color : icon ? colors.primary : colors.white}
+          semiBold>
           {text}
         </H2>
       )}
