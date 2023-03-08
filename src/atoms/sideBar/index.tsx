@@ -1,10 +1,14 @@
 import { ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 import { AiOutlineUser, AiOutlineDollarCircle } from "react-icons/ai";
 import { FiUsers, FiMail, FiTrendingUp, FiSettings } from "react-icons/fi";
+import { useAppDispatch } from "../../redux/redux-hooks";
+import { loginReset } from "../../redux/slice";
+import { authReset } from "../../redux/slice";
 import { SideBarCard, UserActivityCard } from "../../components/index";
 import { H6 } from "../../styles";
-import { colors, images } from "../../utils";
+import { colors, images, routesPath } from "../../utils";
 import {
   Container,
   Content,
@@ -22,7 +26,7 @@ interface IProps {
   isSelected: boolean;
   onClick?: () => void;
 }
-
+const { DASHBOARD, TOKEN, LOGIN } = routesPath;
 function TabNav({ text, icon, isSelected, onClick }: IProps) {
   return (
     <TabNavContainer onClick={onClick}>
@@ -35,31 +39,32 @@ function TabNav({ text, icon, isSelected, onClick }: IProps) {
 }
 
 function SideBar() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const data = [
     {
-      isSelected: true,
-      text: "My Portfolio",
+      isSelected: false,
+      text: "Dashboard",
       icon: <AiOutlineUser />,
     },
     {
       isSelected: false,
-      text: "My Group",
+      text: "KYC",
       icon: <FiUsers />,
     },
     {
-      isSelected: false,
-      text: "Messages",
+      isSelected: true,
+      text: "Support",
       icon: <FiMail />,
     },
     {
       isSelected: false,
-      text: "Analytics",
+      text: "Settlements",
       icon: <FiTrendingUp />,
     },
     {
       isSelected: false,
-      text: "Pack",
+      text: "Users",
       icon: <AiOutlineDollarCircle />,
     },
     {
@@ -95,13 +100,17 @@ function SideBar() {
 
   const handleLogout = (item: any) => {
     if (item.text === "Logout") {
-      localStorage.removeItem("token");
+      Cookies.remove(TOKEN);
+      dispatch(loginReset());
+      dispatch(authReset());
       navigate("/");
     }
   };
 
   const handleLogoutDesktop = () => {
-    localStorage.removeItem("token");
+    Cookies.remove(TOKEN);
+    dispatch(loginReset());
+    dispatch(authReset());
     navigate("/");
   };
   return (
@@ -110,11 +119,14 @@ function SideBar() {
         <Content>
           <div>
             <ImgContainer>
-              <Img src={images.logo} alt='trending graph' />
+              <Img src={images.logoMain} alt='logo' />
             </ImgContainer>
             {data.map((item, index) => (
               <SideBarCard
                 key={index}
+                onClick={() => {
+                  navigate(DASHBOARD);
+                }}
                 isSelected={item.isSelected}
                 text={item.text}
                 icon={item.icon}
@@ -122,8 +134,8 @@ function SideBar() {
             ))}
           </div>
           <UserActivityCard
-            title='Thersa milly'
-            helper='Influncer'
+            title='John Doe'
+            helper='Verified'
             onClick={handleLogoutDesktop}
           />
         </Content>

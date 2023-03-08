@@ -5,17 +5,20 @@ import { colors } from "../../../utils";
 import { Container, Content, Indicator, Icon } from "./style";
 
 interface IProps {
+  onClick: () => void;
   isSelected?: boolean;
   text: string;
   icon?: ReactElement;
 }
-function SideBarCard({ isSelected, text, icon }: IProps) {
+function SideBarCard({ isSelected, text, icon, onClick }: IProps) {
   return (
-    <Container>
+    <Container onClick={onClick}>
       <Indicator isSelected={isSelected} />
       <Content isSelected={isSelected}>
         <Icon isSelected={isSelected}>{icon}</Icon>
-        <H5 color={isSelected ? colors.primary : colors.grey}>{text}</H5>
+        <H5 color={isSelected ? colors.white : colors.greyVariantFour}>
+          {text}
+        </H5>
       </Content>
     </Container>
   );
