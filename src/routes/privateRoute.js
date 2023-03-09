@@ -8,8 +8,6 @@ function PrivateRoute({ children }) {
   // const token = localStorage.getItem("token");
   let token = Cookies.get(TOKEN);
 
-  console.log(token, "user token");
-
   axios.defaults.headers.common["Authorization"] = token;
 
   if (!token) {

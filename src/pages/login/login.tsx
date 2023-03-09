@@ -24,16 +24,15 @@ function Login() {
     email: yup.string().email().required("Email is required"),
     password: yup.string().required("Password is required"),
   });
-
-  useEffect(() => {
-    // dispatch(loginReset());
-    if (loginState.status === "failed") {
-      showMessage({ type: "error", message: "Invalid username or password" });
-    }
-    if (loginState.status === "succeeded") {
-      navigate(DASHBOARD);
-    }
-  }, [loginState]);
+  // using this or real api call
+  // useEffect(() => {
+  //   if (loginState.status === "failed") {
+  //     showMessage({ type: "error", message: "Invalid username or password" });
+  //   }
+  //   if (loginState.status === "succeeded") {
+  //     navigate(DASHBOARD);
+  //   }
+  // }, [loginState]);
 
   const handleToast = () => {
     showMessage({
@@ -53,7 +52,20 @@ function Login() {
           password: password.trim(),
           rememberUser: switchChecked,
         };
-        dispatch(loginRequest(payload));
+        await dispatch(loginRequest(payload));
+
+        if (
+          loginState.status === "succeeded" &&
+          email === "test@test.com" &&
+          password === "P@ssword"
+        ) {
+          navigate(DASHBOARD);
+        } else {
+          showMessage({
+            type: "error",
+            message: "Invalid username or password",
+          });
+        }
         setSubmitting(false);
       }}>
       {(formikProps) => {
