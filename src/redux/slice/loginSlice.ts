@@ -33,8 +33,7 @@ export const loginRequest = createAsyncThunk(
       //   return response.data;
 
       if (email === "test@test.com" && password === "P@ssword") {
-        Cookies.set(TOKEN, "Allenjamesnbworn");
-        console.log("it is here now");
+       
         const response = {
           email,
           name: "John Doe",
