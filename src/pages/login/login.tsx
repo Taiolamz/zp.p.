@@ -22,7 +22,7 @@ function Login() {
 
   const schema = yup.object().shape({
     email: yup.string().email().required("Email is required"),
-    password: yup.string().required("Paasword is required"),
+    password: yup.string().required("Password is required"),
   });
 
   useEffect(() => {
@@ -58,7 +58,6 @@ function Login() {
       }}>
       {(formikProps) => {
         const { handleChange, values, handleSubmit, errors } = formikProps;
-
         return (
           <Container>
             <ContainerContent>

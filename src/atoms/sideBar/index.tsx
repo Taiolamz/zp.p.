@@ -1,5 +1,5 @@
-import { ReactElement, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { ReactElement, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 import { AiOutlineUser, AiOutlineDollarCircle } from "react-icons/ai";
 import { FiUsers, FiMail, FiTrendingUp, FiSettings } from "react-icons/fi";
@@ -50,50 +50,55 @@ function TabNav({ text, icon, isSelected, onClick }: IProps) {
 function SideBar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const data = [
-    {
-      id: 1,
-      isSelected: true,
-      text: "Dashboard",
-      icon: <AiOutlineUser />,
-      path: DASHBOARD,
-    },
-    {
-      id: 2,
-      isSelected: false,
-      text: "KYC",
-      icon: <FiUsers />,
-      path: KYC,
-    },
-    {
-      id: 3,
-      isSelected: false,
-      text: "Support",
-      icon: <FiMail />,
-      path: SUPPORT,
-    },
-    {
-      id: 4,
-      isSelected: false,
-      text: "Settlements",
-      icon: <FiTrendingUp />,
-      path: SETTLEMENTS,
-    },
-    {
-      id: 5,
-      isSelected: false,
-      text: "Users",
-      icon: <AiOutlineDollarCircle />,
-      path: USERS,
-    },
-    {
-      id: 6,
-      isSelected: false,
-      text: "Settings",
-      icon: <FiSettings />,
-      path: SETTINGS,
-    },
-  ];
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  function navigationPath() {
+    return [
+      {
+        id: 1,
+        isSelected: currentPath === DASHBOARD ? true : false,
+        text: "Dashboard",
+        icon: <AiOutlineUser />,
+        path: DASHBOARD,
+      },
+      {
+        id: 2,
+        isSelected: currentPath === KYC ? true : false,
+        text: "KYC",
+        icon: <FiUsers />,
+        path: KYC,
+      },
+      {
+        id: 3,
+        isSelected: currentPath === SUPPORT ? true : false,
+        text: "Support",
+        icon: <FiMail />,
+        path: SUPPORT,
+      },
+      {
+        id: 4,
+        isSelected: currentPath === SETTLEMENTS ? true : false,
+        text: "Settlements",
+        icon: <FiTrendingUp />,
+        path: SETTLEMENTS,
+      },
+      {
+        id: 5,
+        isSelected: currentPath === USERS ? true : false,
+        text: "Users",
+        icon: <AiOutlineDollarCircle />,
+        path: USERS,
+      },
+      {
+        id: 6,
+        isSelected: currentPath === SETTINGS ? true : false,
+        text: "Settings",
+        icon: <FiSettings />,
+        path: SETTINGS,
+      },
+    ];
+  }
 
   const dataBottomTab = [
     {
@@ -119,20 +124,13 @@ function SideBar() {
     },
   ];
 
-  const [navList, setNavList] = useState(data);
+  useEffect(() => {
+    navigationPath();
+  }, []);
 
   const handleNavigateUser = (item: NavIProps) => {
-    const itemToEdit = item;
-    const updatedList: NavIProps[] = [...navList].map((el: NavIProps) => {
-      if (el.text === itemToEdit.text) {
-        el.isSelected = !el.isSelected;
-      } else {
-        el.isSelected = false;
-      }
-      return el;
-    });
-    setNavList(updatedList);
-    navigate(itemToEdit.path);
+    navigate(item.path);
+    navigationPath();
   };
 
   const handleLogout = (item: any) => {
@@ -158,7 +156,7 @@ function SideBar() {
             <ImgContainer>
               <Img src={images.logoMain} alt='logo' />
             </ImgContainer>
-            {navList.map((item) => (
+            {navigationPath().map((item) => (
               <SideBarCard
                 key={item.id}
                 onClick={() => {

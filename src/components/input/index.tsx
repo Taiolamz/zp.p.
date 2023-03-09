@@ -60,9 +60,11 @@ function Input({
             />
           </InputCover>
         </InputContainer>
-        <H4 left color={colors.red}>
-          {error}
-        </H4>
+        {error && (
+          <H4 left color={colors.red}>
+            {error}
+          </H4>
+        )}
       </FormInputContainer>
     );
   } else if (type === "password") {
@@ -103,9 +105,11 @@ function Input({
             )}
           </InputIconContainer>
         </InputContainer>
-        <H4 left color={colors.red}>
-          {error}
-        </H4>
+        {error && (
+          <H4 left color={colors.red}>
+            {error}
+          </H4>
+        )}
       </FormInputContainer>
     );
   }
@@ -129,9 +133,11 @@ function Input({
           value={value}
         />
       </InputContainer>
-      <H6 left color={colors.red}>
-        {error}
-      </H6>
+      {error && (
+        <H4 left color={colors.red}>
+          {error}
+        </H4>
+      )}
     </div>
   );
 }

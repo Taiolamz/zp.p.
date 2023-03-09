@@ -24,8 +24,8 @@ export const InputContainer = styled.div`
   border-radius: ${borderRadius.small};
   &:focus-within {
     outline: none;
-    box-shadow: 0 0 0 1px ${(p: StyleProps) =>
-      p.error ? colors.red : colors.primary};
+    box-shadow: 0 0 0 1px
+      ${(p: StyleProps) => (p.error ? colors.red : colors.primary)};
   }
 `;
 
@@ -39,8 +39,8 @@ export const InputContent = styled.input`
   transition: all 0.3s ease;
   &:focus {
     outline: none;
-    box-shadow: 0 0 0 0px  ${(p: StyleProps) =>
-      p.error ? colors.red : colors.primary};
+    box-shadow: 0 0 0 0px
+      ${(p: StyleProps) => (p.error ? colors.red : colors.primary)};
   }
 `;
 export const InputCover = styled.div`
@@ -51,7 +51,7 @@ export const InputCover = styled.div`
 `;
 
 export const InputIconContainer = styled.div`
-   display: block;
+  display: block;
 `;
 
 export const FormInputContainer = styled.div`
@@ -60,16 +60,15 @@ export const FormInputContainer = styled.div`
 
 export const LabelContent = styled.div`
   position: relative;
-`
+`;
 
 export const LabelContainer = styled.div`
-
   position: absolute;
-  align-self:flex-start;
-  text-align:center;
+  align-self: flex-start;
+  text-align: center;
   margin-left: 20px;
-  padding:0px 10px;
+  padding: 0px 10px;
   bottom: -6px;
-  background-color:${colors.white};
-  z-index:${1};
+  background-color: ${colors.white};
+  z-index: ${1};
 `;
