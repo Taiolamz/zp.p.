@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { KycLevels } from "../../atoms";
+import { CountInfo } from "../../atoms";
 import { Container } from "./style";
 import { AppContainer } from "../../styles";
 function Kyc() {
@@ -27,7 +27,7 @@ function Kyc() {
   ];
   return (
     <AppContainer>
-      <KycLevels data={data} />
+      <CountInfo data={data} />
     </AppContainer>
   );
 }

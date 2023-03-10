@@ -4,17 +4,17 @@ import { H1, H4 } from "../../../styles";
 import { colors } from "../../../utils";
 import { Container } from "./style";
 
-export interface KycLevelCardIProps {
+export interface CountInfoCardIProps {
   id?: number;
   isSelected?: boolean;
   count: number;
   title: string;
 }
 
-interface IProps extends KycLevelCardIProps {
+interface IProps extends CountInfoCardIProps {
   onClick?: () => void;
 }
-function KycLevelCard({ isSelected, count, title, onClick }: IProps) {
+function CountInfoCard({ isSelected, count, title, onClick }: IProps) {
   return (
     <Container isSelected={isSelected} onClick={onClick}>
       <H4 left color={colors.grey}>
@@ -30,4 +30,4 @@ function KycLevelCard({ isSelected, count, title, onClick }: IProps) {
   );
 }
 
-export default memo(KycLevelCard);
+export default memo(CountInfoCard);

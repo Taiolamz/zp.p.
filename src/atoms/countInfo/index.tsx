@@ -1,22 +1,18 @@
 import { useState, useLayoutEffect } from "react";
-
-import { KycLevelCard } from "../../components/index";
-
-import { colors } from "../../utils";
+import { CountInfoCard } from "../../components";
 import { Container, Content } from "./style";
+import { CountInfoCardIProps } from "../../components/cards/countInfoCard";
 
-import { KycLevelCardIProps } from "../../components/cards/kycLevelCard";
-
-export interface KycLevelsIProps {
-  data: KycLevelCardIProps[];
+export interface CountInfoIProps {
+  data: CountInfoCardIProps[];
 }
 
-function KycLevels({ data }: KycLevelsIProps) {
-  const [kycLevels, setKycLevels] = useState([] as KycLevelCardIProps[]);
+function CountInfo({ data }: CountInfoIProps) {
+  const [dataList, setDataList] = useState([] as CountInfoCardIProps[]);
 
   useLayoutEffect(() => {
-    let result: KycLevelCardIProps[] = [];
-    data.forEach((item: KycLevelCardIProps) =>
+    let result: CountInfoCardIProps[] = [];
+    data.forEach((item: CountInfoCardIProps) =>
       result.push({
         id: item.id,
         isSelected: item.id === 1 ? true : false,
@@ -25,13 +21,13 @@ function KycLevels({ data }: KycLevelsIProps) {
       })
     );
 
-    setKycLevels(result);
+    setDataList(result);
   }, []);
 
-  const handleOnSelectCard = (item: KycLevelCardIProps) => {
+  const handleOnSelectCard = (item: CountInfoCardIProps) => {
     const itemToEdit = item;
-    const updatedData: KycLevelCardIProps[] = [...kycLevels].map(
-      (el: KycLevelCardIProps) => {
+    const updatedData: CountInfoCardIProps[] = [...dataList].map(
+      (el: CountInfoCardIProps) => {
         if (itemToEdit.title === el.title) {
           el.isSelected = true;
         } else {
@@ -41,14 +37,14 @@ function KycLevels({ data }: KycLevelsIProps) {
       }
     );
 
-    setKycLevels(updatedData);
+    setDataList(updatedData);
   };
   return (
     <>
       <Container>
-        {kycLevels.map((item: KycLevelCardIProps) => (
+        {dataList.map((item: CountInfoCardIProps) => (
           <Content key={item.id}>
-            <KycLevelCard
+            <CountInfoCard
               isSelected={item.isSelected}
               onClick={() => handleOnSelectCard(item)}
               count={item.count}
@@ -61,4 +57,4 @@ function KycLevels({ data }: KycLevelsIProps) {
   );
 }
 
-export default KycLevels;
+export default CountInfo;
