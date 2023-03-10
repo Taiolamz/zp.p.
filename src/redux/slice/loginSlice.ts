@@ -31,18 +31,18 @@ export const loginRequest = createAsyncThunk(
       // for the actual login api
       //   const response = await api.post("login", payload);
       //   return response.data;
-
+      const token = "Allenjamesnbworn";
       if (email === "test@test.com" && password === "P@ssword") {
-       
+        Cookies.set(TOKEN, token);
         const response = {
           email,
           name: "John Doe",
-          token: "Allenjamesnbworn",
+          token: token,
         };
 
         dispatch(
           authRequest({
-            token: "Allenjamesnbworn",
+            token: token,
             rememberUser: rememberUser,
             authenticated: true,
           })
@@ -50,11 +50,9 @@ export const loginRequest = createAsyncThunk(
 
         return response;
       } else {
-        console.log("error 1");
         return "Invalid email or password";
       }
     } catch (err) {
-      console.log(err, "errors");
       throw err;
     }
   }

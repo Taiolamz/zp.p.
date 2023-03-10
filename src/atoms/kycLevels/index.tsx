@@ -28,8 +28,6 @@ function KycLevels({ data }: KycLevelsIProps) {
     setKycLevels(result);
   }, []);
 
-  console.log(kycLevels, "data");
-
   const handleOnSelectCard = (item: KycLevelCardIProps) => {
     const itemToEdit = item;
     const updatedData: KycLevelCardIProps[] = [...kycLevels].map(

@@ -40,6 +40,7 @@ function Login() {
       message: "Login Success",
     });
   };
+
   return (
     <Formik
       initialValues={{ email: "", password: "" }}
@@ -54,11 +55,7 @@ function Login() {
         };
         await dispatch(loginRequest(payload));
 
-        if (
-          loginState.status === "succeeded" &&
-          email === "test@test.com" &&
-          password === "P@ssword"
-        ) {
+        if (email === "test@test.com" && password === "P@ssword") {
           navigate(DASHBOARD);
         } else {
           showMessage({
