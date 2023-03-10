@@ -16,6 +16,7 @@ const colors = {
   orange: "#FFAF56",
   purple: "#7B91F7",
   purpleVariantOne: "#EFF2FE",
+  purpleVariantTwo: "#DDDFF7",
   smokeWhite: "#f6f6f6",
   gold: "#FFB800",
 };

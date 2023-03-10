@@ -6,8 +6,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   padding-left: 230px;
+  padding-right: ${spacing.small};
   @media (max-width: 768px) {
     padding-left: 0px;
+    padding-right: 0px;
     padding: 0px ${spacing.xsmall};
   }
 `;

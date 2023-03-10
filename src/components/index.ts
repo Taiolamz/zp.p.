@@ -4,3 +4,4 @@ export { default as Switch } from "./switch";
 export { default as ActivityIndicator } from "./activityIndicator";
 export { default as SideBarCard } from "./cards/sideBarCard";
 export { default as UserActivityCard } from "./cards/userActivityCard";
+export { default as KycLevelCard } from "./cards/kycLevelCard";
