@@ -1,7 +1,15 @@
 import { useState } from "react";
+import {
+  Pagination,
+  UserDetailsCard,
+  SearchInput,
+  CurrentPageCard,
+} from "../../components";
 import { CountInfo } from "../../atoms";
-import { Container } from "./style";
-import { AppContainer } from "../../styles";
+import { SearchContainer } from "./style";
+import { AppContainer, H3 } from "../../styles";
+import { colors } from "../../utils";
+
 function Kyc() {
   const data = [
     {
@@ -25,9 +33,95 @@ function Kyc() {
       title: "Agency",
     },
   ];
+
+  const userDetails: any = [
+    {
+      id: 1,
+      userName: "Wade Warren",
+      bvn: 222233434555,
+      phone: "+2348036329178",
+    },
+
+    {
+      id: 2,
+      userName: "Wade Warren",
+      bvn: 222233434555,
+      phone: "+2348036329178",
+    },
+    {
+      id: 3,
+      userName: "Wade Warren",
+      bvn: 222233434555,
+      phone: "+2348036329178",
+    },
+    {
+      id: 4,
+      userName: "Wade Warren",
+      bvn: 222233434555,
+      phone: "+2348036329178",
+    },
+    {
+      id: 5,
+      userName: "Wade Warren",
+      bvn: 222233434555,
+      phone: "+2348036329178",
+    },
+    {
+      id: 6,
+      userName: "Wade Warren",
+      bvn: 222233434555,
+      phone: "+2348036329178",
+    },
+  ];
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchValue, setSearchValue] = useState("");
+  const totalPages = 5;
+
   return (
     <AppContainer>
       <CountInfo data={data} />
+
+      <SearchContainer>
+        <CurrentPageCard pageNumber={1} />
+        <SearchInput
+          backgroundColor={colors.white}
+          name='SearchValue'
+          value={searchValue}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setSearchValue(e.target.value)
+          }
+          placeholder='Search Records'
+        />
+      </SearchContainer>
+      <div>
+        <UserDetailsCard
+          header={true}
+          id='#'
+          userName='Profile Name'
+          bvn='BVN'
+          phoneNo='Phone Number'
+          onClick={() => {}}
+        />
+        {userDetails.map((item: any) => (
+          <UserDetailsCard
+            key={item.id}
+            id={item.id}
+            userName={item.userName}
+            bvn={item.bvn}
+            phoneNo={item.phone}
+            onClick={() => {}}
+          />
+        ))}
+      </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={(selectedPage) => {
+          setCurrentPage(selectedPage);
+        }}
+      />
     </AppContainer>
   );
 }
