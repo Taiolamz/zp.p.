@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import axios from "axios";
 import type { AxiosRequestConfig } from "axios";
-import { routesPath } from "../utils";
+import { routesPath, showMessage } from "../utils";
 
 /**
  * Creates an initial 'axios' instance with custom settings.
@@ -41,6 +41,13 @@ instance.interceptors.response.use(
       Cookies.remove(TOKEN);
       window.location.href = LOGIN;
       return Promise.reject(err.response.data);
+    }
+
+    if (err.response.state === 401) {
+      showMessage({
+        type: "error",
+        message: err.response.data.message,
+      });
     }
 
     if (err.request) {
