@@ -1,10 +1,5 @@
-import { ReactElement } from "react";
 import styled from "styled-components";
 import { colors, boxShadow, spacing, borderRadius } from "../../utils";
-
-interface StyleProps {
-  helper?: string;
-}
 
 export const Container = styled.div`
   display: flex;

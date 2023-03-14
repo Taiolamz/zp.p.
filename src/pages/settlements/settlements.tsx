@@ -1,9 +1,15 @@
+import { useState } from "react";
+import { FiDownload } from "react-icons/fi";
 import { AppContainer, PageContainer } from "../../styles";
-import { Navbar, CountInfoCard, DatePicker } from "../../components";
+import {
+  Navbar,
+  CountInfoCard,
+  DatePicker,
+  BorderedText,
+} from "../../components";
 // import { CountInfo } from "../../atoms";
 import { colors, currencyFormat } from "../../utils";
 import { InfoCountContainer, InfoCountContent } from "./style";
-import { useState } from "react";
 
 const data = [
   {
@@ -36,6 +42,7 @@ function Settlements() {
       <Navbar title='SETTLEMENTS' />
       <PageContainer>
         {/* <CountInfo data={data} /> */}
+        <All
         <InfoCountContainer>
           {data.map((item: any) => (
             <InfoCountContent>
@@ -51,6 +58,13 @@ function Settlements() {
           <div>
             <DatePicker selectedDate={setTransactionStartDate} />
             fm,dm,fgj
+          </div>
+          <div style={{ backgroundColor: "white", padding: 30 }}>
+            <BorderedText text={"Inflow"} />
+            <BorderedText
+              icon={<FiDownload color={colors.primary} size={15} />}
+              text={"Inflow"}
+            />
           </div>
         </InfoCountContainer>
       </PageContainer>
