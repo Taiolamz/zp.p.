@@ -1,10 +1,14 @@
-import { ReactElement } from "react";
-import { useNavigate } from "react-router-dom";
+import { ReactElement, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import Cookies from "js-cookie";
 import { AiOutlineUser, AiOutlineDollarCircle } from "react-icons/ai";
 import { FiUsers, FiMail, FiTrendingUp, FiSettings } from "react-icons/fi";
+import { useAppDispatch } from "../../redux/redux-hooks";
+import { loginReset } from "../../redux/slice";
+import { authReset } from "../../redux/slice";
 import { SideBarCard, UserActivityCard } from "../../components/index";
 import { H6 } from "../../styles";
-import { colors, images } from "../../utils";
+import { colors, images, routesPath } from "../../utils";
 import {
   Container,
   Content,
@@ -23,6 +27,15 @@ interface IProps {
   onClick?: () => void;
 }
 
+export interface NavIProps {
+  id: number;
+  text: string;
+  icon: ReactElement;
+  isSelected: boolean;
+  path: string;
+}
+const { DASHBOARD, TOKEN, LOGIN, KYC, SUPPORT, SETTLEMENTS, USERS, SETTINGS } =
+  routesPath;
 function TabNav({ text, icon, isSelected, onClick }: IProps) {
   return (
     <TabNavContainer onClick={onClick}>
@@ -35,39 +48,57 @@ function TabNav({ text, icon, isSelected, onClick }: IProps) {
 }
 
 function SideBar() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const data = [
-    {
-      isSelected: true,
-      text: "My Portfolio",
-      icon: <AiOutlineUser />,
-    },
-    {
-      isSelected: false,
-      text: "My Group",
-      icon: <FiUsers />,
-    },
-    {
-      isSelected: false,
-      text: "Messages",
-      icon: <FiMail />,
-    },
-    {
-      isSelected: false,
-      text: "Analytics",
-      icon: <FiTrendingUp />,
-    },
-    {
-      isSelected: false,
-      text: "Pack",
-      icon: <AiOutlineDollarCircle />,
-    },
-    {
-      isSelected: false,
-      text: "Settings",
-      icon: <FiSettings />,
-    },
-  ];
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  function navigationPath() {
+    return [
+      {
+        id: 1,
+        isSelected: currentPath === DASHBOARD ? true : false,
+        text: "Dashboard",
+        icon: <AiOutlineUser />,
+        path: DASHBOARD,
+      },
+      {
+        id: 2,
+        isSelected: currentPath === KYC ? true : false,
+        text: "KYC",
+        icon: <FiUsers />,
+        path: KYC,
+      },
+      {
+        id: 3,
+        isSelected: currentPath === SUPPORT ? true : false,
+        text: "Support",
+        icon: <FiMail />,
+        path: SUPPORT,
+      },
+      {
+        id: 4,
+        isSelected: currentPath === SETTLEMENTS ? true : false,
+        text: "Settlements",
+        icon: <FiTrendingUp />,
+        path: SETTLEMENTS,
+      },
+      {
+        id: 5,
+        isSelected: currentPath === USERS ? true : false,
+        text: "Users",
+        icon: <AiOutlineDollarCircle />,
+        path: USERS,
+      },
+      {
+        id: 6,
+        isSelected: currentPath === SETTINGS ? true : false,
+        text: "Settings",
+        icon: <FiSettings />,
+        path: SETTINGS,
+      },
+    ];
+  }
 
   const dataBottomTab = [
     {
@@ -93,16 +124,29 @@ function SideBar() {
     },
   ];
 
+  useEffect(() => {
+    navigationPath();
+  }, []);
+
+  const handleNavigateUser = (item: NavIProps) => {
+    navigate(item.path);
+    navigationPath();
+  };
+
   const handleLogout = (item: any) => {
     if (item.text === "Logout") {
-      localStorage.removeItem("token");
-      navigate("/");
+      Cookies.remove(TOKEN);
+      dispatch(loginReset());
+      dispatch(authReset());
+      navigate(LOGIN);
     }
   };
 
   const handleLogoutDesktop = () => {
-    localStorage.removeItem("token");
-    navigate("/");
+    Cookies.remove(TOKEN);
+    dispatch(loginReset());
+    dispatch(authReset());
+    navigate(LOGIN);
   };
   return (
     <>
@@ -110,11 +154,14 @@ function SideBar() {
         <Content>
           <div>
             <ImgContainer>
-              <Img src={images.logo} alt='trending graph' />
+              <Img src={images.logoMain} alt='logo' />
             </ImgContainer>
-            {data.map((item, index) => (
+            {navigationPath().map((item) => (
               <SideBarCard
-                key={index}
+                key={item.id}
+                onClick={() => {
+                  handleNavigateUser(item);
+                }}
                 isSelected={item.isSelected}
                 text={item.text}
                 icon={item.icon}
@@ -122,8 +169,8 @@ function SideBar() {
             ))}
           </div>
           <UserActivityCard
-            title='Thersa milly'
-            helper='Influncer'
+            title='John Doe'
+            helper='Verified'
             onClick={handleLogoutDesktop}
           />
         </Content>

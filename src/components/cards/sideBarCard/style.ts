@@ -12,9 +12,10 @@ export const Container = styled.div`
 `;
 
 export const Indicator = styled.div`
-  height: ${(p: StyleProps) => (p.isSelected ? "40px" : "0px")};
-  width: ${(p: StyleProps) => (p.isSelected ? "5px" : "0px")};
-  background-color: ${colors.primary};
+  height: 40px;
+  width: 5px;
+  background-color: ${(p: StyleProps) =>
+    p.isSelected ? colors.primary : colors.white};
   margin-right: 15px;
   border-top-right-radius: ${borderRadius.small};
   border-bottom-right-radius: ${borderRadius.small};
@@ -22,17 +23,19 @@ export const Indicator = styled.div`
 
 export const Icon = styled.div`
   margin-right: ${spacing.xxsmall};
-  color: ${(p: StyleProps) => (p.isSelected ? colors.primary : colors.grey)};
+  color: ${(p: StyleProps) =>
+    p.isSelected ? colors.white : colors.greyVariantFour};
 `;
 
 export const Content = styled.div`
-  background-color: ${colors.white};
   border-radius: ${borderRadius.medium};
-  box-shadow: ${(p: StyleProps) => (p.isSelected ? boxShadow.light : "0px")};
+  background-color: ${(p: StyleProps) =>
+    p.isSelected ? colors.primary : colors.white};
+  color: ${(p: StyleProps) => (p.isSelected ? colors.white : colors.primary)};
   height: 51px;
+  width: 140px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  padding: 0 30px;
+  padding: 0 0 0 25px;
 `;

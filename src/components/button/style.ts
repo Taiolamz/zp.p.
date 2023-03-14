@@ -6,6 +6,8 @@ interface StyleProps {
   secondary?: boolean;
   icon?: ReactElement;
   disabled?: boolean;
+  borderColor?: string;
+  color?: string;
 }
 
 export const Container = styled.button`
@@ -15,24 +17,31 @@ export const Container = styled.button`
   -webkit-align-items: center;
   justify-content: center;
   background-color: ${(p: StyleProps) =>
-    p.disabled?colors.greyVariantThree: p.secondary ? colors.primary : colors.primary};
+    p.disabled
+      ? colors.greyVariantThree
+      : p.secondary
+      ? "transparent"
+      : colors.primary};
   box-shadow: ${boxShadow.light};
   height: 50px;
   width: 100%;
-  border: none;
+  border-color: ${(p: StyleProps) =>
+    p.disabled
+      ? colors.greyVariantThree
+      : p.borderColor
+      ? p.borderColor
+      : p.secondary
+      ? colors.primary
+      : colors.primary};
   border-radius: ${borderRadius.medium};
   cursor: pointer;
 `;
 
 export const ButtonIcon = styled.div`
   margin-right: ${spacing.xxsmall};
-  color: ${(p: StyleProps) =>
-    p.icon ? colors.primary : colors.primary};
+  color: ${(p: StyleProps) => (p.color ? p.color : colors.primary)};
 `;
 
 export const DisabledContainer = styled.div`
- position: relative;
+  position: relative;
 `;
-
-
-
