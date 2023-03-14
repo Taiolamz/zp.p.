@@ -1,11 +1,59 @@
-import { AppContainer } from "../../styles";
+import { AppContainer, PageContainer } from "../../styles";
+import { Navbar } from "../../components";
 
 function Settlements() {
   return (
     <AppContainer>
-      <h1>Settlements</h1>
-      <h1>Settlements</h1>
-      <h1>Settlements</h1>
+      <Navbar title='SETTLEMENT' />
+      <PageContainer>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+        <h1>Settlements</h1>
+      </PageContainer>
     </AppContainer>
   );
 }

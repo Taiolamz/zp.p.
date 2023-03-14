@@ -4,6 +4,7 @@ export { default as Button } from "./button";
 export { default as Switch } from "./switch";
 export { default as ActivityIndicator } from "./activityIndicator";
 export { default as Pagination } from "./pagination";
+export { default as Navbar } from "./navbar";
 export { default as SideBarCard } from "./cards/sideBarCard";
 export { default as UserActivityCard } from "./cards/userActivityCard";
 export { default as CountInfoCard } from "./cards/countInfoCard";
