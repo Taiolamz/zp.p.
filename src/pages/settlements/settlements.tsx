@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FiDownload } from "react-icons/fi";
-import { AppContainer, PageContainer } from "../../styles";
+import { AppContainer, PageContainer, H1 } from "../../styles";
 import {
   Navbar,
   CountInfoCard,
@@ -8,8 +8,14 @@ import {
   BorderedText,
 } from "../../components";
 // import { CountInfo } from "../../atoms";
-import { colors, currencyFormat } from "../../utils";
-import { InfoCountContainer, InfoCountContent } from "./style";
+import { colors, currencyFormat, spacing } from "../../utils";
+import {
+  AllTransactionContainer,
+  AllTransactionContent,
+  DateContent,
+  InfoCountContainer,
+  InfoCountContent,
+} from "./style";
 
 const data = [
   {
@@ -42,7 +48,34 @@ function Settlements() {
       <Navbar title='SETTLEMENTS' />
       <PageContainer>
         {/* <CountInfo data={data} /> */}
-        <All
+        <AllTransactionContainer>
+          <H1>All Transaction</H1>
+          <AllTransactionContent>
+            <DateContent>
+              <DatePicker selectedDate={setTransactionStartDate} />
+              <div
+                style={{
+                  marginLeft: spacing.xsmall,
+                  marginRight: spacing.xsmall,
+                }}>
+                -
+              </div>
+              <DatePicker selectedDate={setTransactionEndDate} />
+            </DateContent>
+            <BorderedText
+              onClick={() => {}}
+              backgroundColor={colors.white}
+              color={colors.grey}
+              text={"Today"}
+            />
+            <BorderedText
+              onClick={() => {}}
+              backgroundColor={colors.primary}
+              color={colors.white}
+              text={"Filter Page"}
+            />
+          </AllTransactionContent>
+        </AllTransactionContainer>
         <InfoCountContainer>
           {data.map((item: any) => (
             <InfoCountContent>
@@ -54,18 +87,6 @@ function Settlements() {
               />
             </InfoCountContent>
           ))}
-
-          <div>
-            <DatePicker selectedDate={setTransactionStartDate} />
-            fm,dm,fgj
-          </div>
-          <div style={{ backgroundColor: "white", padding: 30 }}>
-            <BorderedText text={"Inflow"} />
-            <BorderedText
-              icon={<FiDownload color={colors.primary} size={15} />}
-              text={"Inflow"}
-            />
-          </div>
         </InfoCountContainer>
       </PageContainer>
     </AppContainer>

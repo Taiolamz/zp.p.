@@ -40,7 +40,7 @@ function RDatePicker({ selectedDate, placeholderText, required }: IProps) {
   return (
     <Container>
       <DatePicker
-        className='wrapperClassName'
+        className='wrapperClassName calendarClassName'
         placeholderText={placeholderText ? placeholderText : "DD-MM-YYYY"}
         selected={date}
         onChange={(date: any) => onChange(date)}

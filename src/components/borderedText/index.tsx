@@ -1,6 +1,6 @@
 import { memo, ReactElement } from "react";
 import { Container } from "./style";
-import { H4 } from "../../styles";
+import { H5 } from "../../styles";
 import { colors, spacing } from "../../utils";
 
 interface IProps {
@@ -10,15 +10,26 @@ interface IProps {
   color?: string;
   height?: string | number;
   borderRadius?: string | number;
+  onClick?: () => void;
 }
 
-function BorderedText({ text, icon, backgroundColor, color, height }: IProps) {
+function BorderedText({
+  text,
+  icon,
+  backgroundColor,
+  color,
+  height,
+  onClick,
+}: IProps) {
   return (
-    <Container height={height} backgroundColor={backgroundColor}>
+    <Container
+      onClick={onClick}
+      height={height}
+      backgroundColor={backgroundColor}>
       {icon && <div style={{ marginRight: spacing.xxsmall }}>{icon}</div>}
-      <H4 semiBold color={color ? color : colors.grey}>
+      <H5 semiBold color={color ? color : colors.grey}>
         {text}
-      </H4>
+      </H5>
     </Container>
   );
 }

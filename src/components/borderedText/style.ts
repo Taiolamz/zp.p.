@@ -15,7 +15,7 @@ export const Container = styled.div`
   align-self: flex-start;
   background-color: ${(p: StyleProps) =>
     p.backgroundColor ? p.backgroundColor : colors.smokeWhite};
-  height: ${(p: StyleProps) => (p.height ? p.height : "28px")};
+  height: ${(p: StyleProps) => (p.height ? p.height : "38px")};
   padding: 0px ${spacing.small};
   border-radius: ${(p: StyleProps) =>
     p.borderRadius ? p.borderRadius : borderRadius.medium};

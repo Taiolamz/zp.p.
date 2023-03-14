@@ -1,5 +1,31 @@
 import styled from "styled-components";
 import { spacing } from "../../utils";
+
+export const AllTransactionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+`;
+
+export const AllTransactionContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 50%;
+`;
+
+export const DateContent = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+`;
+
 export const InfoCountContainer = styled.div`
   display: flex;
   flex-direction: row;
