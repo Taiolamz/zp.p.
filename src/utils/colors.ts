@@ -14,6 +14,7 @@ const colors = {
   greyVariantFour: "#818187",
   yellow: "#fbad39",
   green: "#089E17",
+  greenVariantOne: "#2DBD9B",
   orange: "#FFAF56",
   purple: "#7B91F7",
   purpleVariantOne: "#EFF2FE",
