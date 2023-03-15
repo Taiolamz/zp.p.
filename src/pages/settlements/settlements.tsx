@@ -8,7 +8,6 @@ import {
   BorderedText,
 } from "../../components";
 import { SettlementBarChart } from "../../atoms";
-// import { CountInfo } from "../../atoms";
 import { colors, currencyFormat, spacing } from "../../utils";
 import {
   AllTransactionContainer,
@@ -45,10 +44,11 @@ const data = [
 const inflowData = [1000, 90, 100, 800, 500, 100, 900, 70, 80, 100, 800, 700];
 const outflowData = [100, 10, 20, 80, 100, 800, 700, 800, 90, 100, 800, 500];
 const profitData = [90, 50, 100, 91, 68, 100, 45, 70, 80, 30, 800, 50];
+const emptyData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 function Settlements() {
   const [transactionStartDate, setTransactionStartDate] = useState("");
   const [transactionEndDate, setTransactionEndDate] = useState("");
-  const [barChartSelectedText, setBarChartSelectedText] = useState("");
+  const [barChartSelectedText, setBarChartSelectedText] = useState("All Data");
 
   return (
     <AppContainer>
@@ -98,9 +98,28 @@ function Settlements() {
         <div>
           <SettlementBarChart
             setBarChartSelectedText={setBarChartSelectedText}
-            inflowData={inflowData}
-            outflowData={outflowData}
-            profitData={profitData}
+            // inflowData={inflowData}
+            // outflowData={outflowData}
+            // profitData={profitData}
+
+            inflowData={
+              barChartSelectedText === "All Data" ||
+              barChartSelectedText === "Inflow"
+                ? inflowData
+                : emptyData
+            }
+            outflowData={
+              barChartSelectedText === "All Data" ||
+              barChartSelectedText === "Outflow"
+                ? outflowData
+                : emptyData
+            }
+            profitData={
+              barChartSelectedText === "All Data" ||
+              barChartSelectedText === "Profit"
+                ? profitData
+                : emptyData
+            }
           />
         </div>
       </PageContainer>
