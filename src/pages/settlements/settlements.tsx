@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiDownload } from "react-icons/fi";
 import { AppContainer, PageContainer, H1 } from "../../styles";
 import {
@@ -7,6 +7,7 @@ import {
   DatePicker,
   BorderedText,
 } from "../../components";
+import { SettlementBarChart } from "../../atoms";
 // import { CountInfo } from "../../atoms";
 import { colors, currencyFormat, spacing } from "../../utils";
 import {
@@ -40,9 +41,15 @@ const data = [
     color: colors.greenVariantOne,
   },
 ];
+
+const inflowData = [1000, 90, 100, 800, 500, 100, 900, 70, 80, 100, 800, 700];
+const outflowData = [100, 10, 20, 80, 100, 800, 700, 800, 90, 100, 800, 500];
+const profitData = [90, 50, 100, 91, 68, 100, 45, 70, 80, 30, 800, 50];
 function Settlements() {
   const [transactionStartDate, setTransactionStartDate] = useState("");
   const [transactionEndDate, setTransactionEndDate] = useState("");
+  const [barChartSelectedText, setBarChartSelectedText] = useState("");
+
   return (
     <AppContainer>
       <Navbar title='SETTLEMENTS' />
@@ -78,7 +85,7 @@ function Settlements() {
         </AllTransactionContainer>
         <InfoCountContainer>
           {data.map((item: any) => (
-            <InfoCountContent>
+            <InfoCountContent key={item.id}>
               <CountInfoCard
                 title={item.title}
                 helper={item.helper}
@@ -88,6 +95,14 @@ function Settlements() {
             </InfoCountContent>
           ))}
         </InfoCountContainer>
+        <div>
+          <SettlementBarChart
+            setBarChartSelectedText={setBarChartSelectedText}
+            inflowData={inflowData}
+            outflowData={outflowData}
+            profitData={profitData}
+          />
+        </div>
       </PageContainer>
     </AppContainer>
   );

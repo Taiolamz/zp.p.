@@ -8,6 +8,7 @@ const colors = {
   blueVariantTwo: "#F3F4FD",
   white: "#FFFFFF",
   grey: "#83839F",
+  greyDark: "#3B3B45",
   greyVariantOne: "#5E6366",
   greyVariantTwo: "#E7E7E7",
   greyVariantThree: "#797A81",
