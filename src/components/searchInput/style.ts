@@ -26,7 +26,7 @@ export const InputContainer = styled.div`
 
 export const InputContent = styled.input`
   color: ${colors.primary};
-  background-color: ${colors.white};
+  background-color: transparent;
   border: 0px solid ${colors.primary};
   height: 30px;
   width: 95%;

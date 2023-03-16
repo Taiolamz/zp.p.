@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors, boxShadow, spacing, borderRadius } from "../../utils";
+import { colors, spacing, borderRadius } from "../../utils";
 
 interface StyleProps {
   height?: string | number;
