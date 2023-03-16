@@ -7,7 +7,7 @@ import {
   DatePicker,
   BorderedText,
   Pagination,
-  Tab,
+  SearchInput,
 } from "../../components";
 import { SettlementBarChart, TabView } from "../../atoms";
 import { colors, currencyFormat, spacing } from "../../utils";
@@ -17,6 +17,8 @@ import {
   DateContent,
   InfoCountContainer,
   InfoCountContent,
+  TabViewContainer,
+  TabContentTwo,
 } from "./style";
 
 const data = [
@@ -60,6 +62,7 @@ function Settlements() {
     useState<any[number]>(1);
   const [barChartSelectedText, setBarChartSelectedText] = useState("All Data");
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchValue, setSearchValue] = useState("");
   const totalPages = 5;
 
   console.log(tabViewSelectedIndex, "tabViewSelectedIndex");
@@ -132,13 +135,31 @@ function Settlements() {
           />
         </div>
 
-        <div>
+        <TabViewContainer>
           <TabView
-            backgroundColor={colors.white}
             data={tabViewData}
             setSelectedIndex={setTabViewSelectedIndex}
           />
-        </div>
+          <TabContentTwo>
+            <SearchInput
+              backgroundColor={"transparent"}
+              name='SearchValue'
+              value={searchValue}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setSearchValue(e.target.value)
+              }
+              placeholder='Search Records'
+            />
+
+            <BorderedText
+              backgroundColor={colors.primary}
+              color={colors.white}
+              icon={<FiDownload color={colors.white} size={15} />}
+              text='Download records'
+            />
+          </TabContentTwo>
+        </TabViewContainer>
+
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

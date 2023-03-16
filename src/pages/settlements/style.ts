@@ -38,3 +38,23 @@ export const InfoCountContainer = styled.div`
 export const InfoCountContent = styled.div`
   width: 30%;
 `;
+
+export const TabViewContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+`;
+
+export const TabContentTwo = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 35%;
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+`;
