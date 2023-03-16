@@ -20,6 +20,7 @@ const colors = {
   purple: "#7B91F7",
   purpleVariantOne: "#EFF2FE",
   purpleVariantTwo: "#DDDFF7",
+  purpleVariantThree: "#7780DE",
   smokeWhite: "#f6f6f6",
   gold: "#FFB800",
 };

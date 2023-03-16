@@ -1,0 +1,52 @@
+import { useState } from "react";
+import { Container } from "./style";
+import { Tab } from "../../components";
+import { TabIProps } from "../../components/tab";
+
+export interface TabViewIPropsIProps {
+  data: TabIProps[];
+  setSelectedIndex: any[number];
+  backgroundColor?: string;
+}
+
+function TabView({
+  data,
+  backgroundColor,
+  setSelectedIndex,
+}: TabViewIPropsIProps) {
+  const [dataList, setDataList] = useState(data);
+
+  const handleOnSelect = (item: TabIProps) => {
+    const itemToEdit = item;
+    const updatedData: TabIProps[] = [...dataList].map((el: TabIProps) => {
+      if (itemToEdit.text === el.text) {
+        el.isSelected = true;
+      } else {
+        el.isSelected = false;
+      }
+      return el;
+    });
+
+    setDataList(updatedData);
+    setSelectedIndex(itemToEdit.id);
+  };
+  return (
+    <>
+      <div style={{ display: "flex" }}>
+        <Container backgroundColor={backgroundColor}>
+          {dataList.map((item: TabIProps) => (
+            <Tab
+              onClick={() => handleOnSelect(item)}
+              key={item.id}
+              isSelected={item.isSelected}
+              text={item.text}
+              paddingRight={dataList.length === item.id ? false : true}
+            />
+          ))}
+        </Container>
+      </div>
+    </>
+  );
+}
+
+export default TabView;

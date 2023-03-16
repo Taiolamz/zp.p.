@@ -6,8 +6,10 @@ import {
   CountInfoCard,
   DatePicker,
   BorderedText,
+  Pagination,
+  Tab,
 } from "../../components";
-import { SettlementBarChart } from "../../atoms";
+import { SettlementBarChart, TabView } from "../../atoms";
 import { colors, currencyFormat, spacing } from "../../utils";
 import {
   AllTransactionContainer,
@@ -41,6 +43,12 @@ const data = [
   },
 ];
 
+const tabViewData = [
+  { id: 1, isSelected: true, text: "Failed Transactions" },
+  { id: 2, isSelected: false, text: "Bills History" },
+  { id: 3, isSelected: false, text: "Cash Request History" },
+];
+
 const inflowData = [1000, 90, 100, 800, 500, 100, 900, 70, 80, 100, 800, 700];
 const outflowData = [100, 10, 20, 80, 100, 800, 700, 800, 90, 100, 800, 500];
 const profitData = [90, 50, 100, 91, 68, 100, 45, 70, 80, 30, 800, 50];
@@ -48,8 +56,13 @@ const emptyData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 function Settlements() {
   const [transactionStartDate, setTransactionStartDate] = useState("");
   const [transactionEndDate, setTransactionEndDate] = useState("");
+  const [tabViewSelectedIndex, setTabViewSelectedIndex] =
+    useState<any[number]>(1);
   const [barChartSelectedText, setBarChartSelectedText] = useState("All Data");
+  const [currentPage, setCurrentPage] = useState(1);
+  const totalPages = 5;
 
+  console.log(tabViewSelectedIndex, "tabViewSelectedIndex");
   return (
     <AppContainer>
       <Navbar title='SETTLEMENTS' />
@@ -98,10 +111,6 @@ function Settlements() {
         <div>
           <SettlementBarChart
             setBarChartSelectedText={setBarChartSelectedText}
-            // inflowData={inflowData}
-            // outflowData={outflowData}
-            // profitData={profitData}
-
             inflowData={
               barChartSelectedText === "All Data" ||
               barChartSelectedText === "Inflow"
@@ -122,6 +131,21 @@ function Settlements() {
             }
           />
         </div>
+
+        <div>
+          <TabView
+            backgroundColor={colors.white}
+            data={tabViewData}
+            setSelectedIndex={setTabViewSelectedIndex}
+          />
+        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(selectedPage) => {
+            setCurrentPage(selectedPage);
+          }}
+        />
       </PageContainer>
     </AppContainer>
   );
