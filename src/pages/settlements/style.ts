@@ -7,6 +7,7 @@ export const AllTransactionContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  margin-top: ${spacing.small};
 `;
 
 export const AllTransactionContent = styled.div`
@@ -16,6 +17,9 @@ export const AllTransactionContent = styled.div`
   align-items: center;
   flex-wrap: wrap;
   width: 50%;
+  @media (max-width: 768px) {
+    width: 90%;
+  }
 `;
 
 export const DateContent = styled.div`
@@ -45,6 +49,7 @@ export const TabViewContainer = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
+  margin: ${spacing.small} 0px;
 `;
 
 export const TabContentTwo = styled.div`

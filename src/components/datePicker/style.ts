@@ -11,4 +11,5 @@ export const Container = styled.div`
   padding: 0px ${spacing.xxsmall};
   border-radius: ${borderRadius.small};
   border: 1px solid ${colors.white};
+  cursor: pointer;
 `;

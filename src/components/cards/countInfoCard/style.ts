@@ -13,7 +13,7 @@ export const Container = styled.div`
   background-color: ${(p: StyleProps) =>
     p.isSelected ? colors.purpleVariantTwo : colors.white};
   box-shadow: ${boxShadow.light};
-  padding: ${spacing.small};
+  padding: ${spacing.small} ${spacing.small};
   @media (max-width: 768px) {
     padding: ${spacing.xsmall};
   }

@@ -12,7 +12,7 @@ import { Bar } from "react-chartjs-2";
 import { Container, BorderedTextContainer, Content } from "./style";
 import { colors, spacing } from "../../utils";
 import { BorderedText } from "../../components";
-import { H2 } from "../../styles";
+import { H3 } from "../../styles";
 
 export interface BarChartIProps {
   inflowData: number[];
@@ -97,7 +97,7 @@ function BarChart({ inflowData, outflowData, profitData }: BarChartIProps) {
 
   return (
     <div style={{ marginTop: spacing.small }}>
-      <Bar options={options} data={data} height={225} width={1080} />
+      <Bar options={options} data={data} height={195} width={1080} />
     </div>
   );
 }
@@ -139,9 +139,9 @@ function SettlementBarChart({
     <>
       <Container>
         <Content>
-          <H2 semiBold left color={colors.greyDark}>
+          <H3 semiBold left color={colors.greyDark}>
             Inflow/Outflow/Profit
-          </H2>
+          </H3>
           <BorderedTextContainer>
             {optionData?.map((item: SettlementBarChartOptionsIProps) => (
               <BorderedText

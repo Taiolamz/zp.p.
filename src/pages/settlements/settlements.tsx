@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FiDownload } from "react-icons/fi";
-import { AppContainer, PageContainer, H1 } from "../../styles";
+import { AppContainer, PageContainer, H1, H2, H3 } from "../../styles";
 import {
   Navbar,
   CountInfoCard,
@@ -9,7 +9,7 @@ import {
   Pagination,
   SearchInput,
 } from "../../components";
-import { SettlementBarChart, TabView } from "../../atoms";
+import { SettlementBarChart, TabView, TransactionsView } from "../../atoms";
 import { colors, currencyFormat, spacing } from "../../utils";
 import {
   AllTransactionContainer,
@@ -51,6 +51,49 @@ const tabViewData = [
   { id: 3, isSelected: false, text: "Cash Request History" },
 ];
 
+const transactionData = [
+  {
+    id: 1,
+    tid: "CRIDD",
+    amount: 20000,
+    type: "Bill payment",
+    status: "System Failure",
+    time: "24/11/2021- 17:01",
+    icon: true,
+    name: "Allen Kardic",
+  },
+  {
+    id: 2,
+    tid: "CRIDD",
+    amount: 20000,
+    type: "Bill payment",
+    status: "System Failure",
+    time: "24/11/2021- 17:01",
+    icon: true,
+    name: "James Brown",
+  },
+  {
+    id: 3,
+    tid: "CRIDD",
+    amount: 20000,
+    type: "Bill payment",
+    status: "System Failure",
+    time: "24/11/2021- 17:01",
+    icon: true,
+    name: "Enoch Yakubu",
+  },
+];
+
+const transactionDataHeader = {
+  id: "",
+  name: "Customer",
+  tid: "Transaction ID",
+  amount: "Amount",
+  type: "Transaction Type",
+  status: "Failure Reason",
+  time: "Time",
+};
+
 const inflowData = [1000, 90, 100, 800, 500, 100, 900, 70, 80, 100, 800, 700];
 const outflowData = [100, 10, 20, 80, 100, 800, 700, 800, 90, 100, 800, 500];
 const profitData = [90, 50, 100, 91, 68, 100, 45, 70, 80, 30, 800, 50];
@@ -58,6 +101,7 @@ const emptyData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 function Settlements() {
   const [transactionStartDate, setTransactionStartDate] = useState("");
   const [transactionEndDate, setTransactionEndDate] = useState("");
+  const [displayRecordDate, setDisplayRecordDate] = useState("");
   const [tabViewSelectedIndex, setTabViewSelectedIndex] =
     useState<any[number]>(1);
   const [barChartSelectedText, setBarChartSelectedText] = useState("All Data");
@@ -65,14 +109,12 @@ function Settlements() {
   const [searchValue, setSearchValue] = useState("");
   const totalPages = 5;
 
-  console.log(tabViewSelectedIndex, "tabViewSelectedIndex");
   return (
     <AppContainer>
       <Navbar title='SETTLEMENTS' />
       <PageContainer>
-        {/* <CountInfo data={data} /> */}
         <AllTransactionContainer>
-          <H1>All Transaction</H1>
+          <H3 color={colors.primary}>All Transactions</H3>
           <AllTransactionContent>
             <DateContent>
               <DatePicker selectedDate={setTransactionStartDate} />
@@ -140,26 +182,44 @@ function Settlements() {
             data={tabViewData}
             setSelectedIndex={setTabViewSelectedIndex}
           />
-          <TabContentTwo>
-            <SearchInput
-              backgroundColor={"transparent"}
-              name='SearchValue'
-              value={searchValue}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setSearchValue(e.target.value)
-              }
-              placeholder='Search Records'
-            />
 
-            <BorderedText
-              backgroundColor={colors.primary}
-              color={colors.white}
-              icon={<FiDownload color={colors.white} size={15} />}
-              text='Download records'
-            />
-          </TabContentTwo>
+          {tabViewSelectedIndex === 1 ? (
+            <TabContentTwo>
+              <SearchInput
+                backgroundColor={"transparent"}
+                name='SearchValue'
+                value={searchValue}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setSearchValue(e.target.value)
+                }
+                placeholder='Search Records'
+              />
+
+              <BorderedText
+                backgroundColor={colors.primary}
+                color={colors.white}
+                icon={<FiDownload color={colors.white} size={15} />}
+                text='Download records'
+              />
+            </TabContentTwo>
+          ) : (
+            <TabContentTwo>
+              <DatePicker selectedDate={setDisplayRecordDate} />
+              <BorderedText
+                backgroundColor={colors.primary}
+                color={colors.white}
+                text='Display Records'
+              />
+            </TabContentTwo>
+          )}
         </TabViewContainer>
 
+        <TransactionsView
+          type={""}
+          headerData={transactionDataHeader}
+          header={true}
+          data={transactionData}
+        />
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

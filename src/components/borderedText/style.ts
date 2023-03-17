@@ -5,6 +5,7 @@ interface StyleProps {
   height?: string | number;
   backgroundColor?: string;
   borderRadius?: string | number;
+  cursor?: string;
 }
 
 export const Container = styled.div`
@@ -13,6 +14,7 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   align-self: flex-start;
+  cursor: ${(p: StyleProps) => (p.cursor ? p.cursor : "pointer")};
   background-color: ${(p: StyleProps) =>
     p.backgroundColor ? p.backgroundColor : colors.smokeWhite};
   height: ${(p: StyleProps) => (p.height ? p.height : "38px")};
