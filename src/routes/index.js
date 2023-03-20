@@ -7,15 +7,13 @@ import { Users } from "../pages/users";
 import { Settlements } from "../pages/settlements";
 import { Settings } from "../pages/settings";
 import { NotFound } from "../pages/notFound";
-import { SideBar } from "../atoms";
 import { PrivateRoute } from "./privateRoute";
 import { routesPath } from "../utils";
 import { useAppSelector } from "../redux/redux-hooks";
 function AppRoute() {
   const { LOGIN, DASHBOARD, SUPPORT, KYC, SETTLEMENTS, USERS, SETTINGS } =
     routesPath;
-  const authState = useAppSelector((state) => state.auth);
-  const { authenticated } = authState.data;
+  // const authState = useAppSelector((state) => state.auth);
 
   return (
     <>
@@ -72,7 +70,6 @@ function AppRoute() {
         />
         <Route path='*' element={<NotFound />} />
       </Routes>
-      {authenticated && <SideBar />}
     </>
   );
 }

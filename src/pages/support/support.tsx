@@ -1,10 +1,12 @@
-import { AppContainer } from "../../styles";
+import { AppContainer } from "../../atoms";
 function Support() {
   return (
-    <AppContainer>
-      <h1>Support</h1>
-      <h1>Support</h1>
-      <h1>Support</h1>
+    <AppContainer navTitle='SUPPORT'>
+      <div>
+        <h1>Support</h1>
+        <h1>Support</h1>
+        <h1>Support</h1>
+      </div>
     </AppContainer>
   );
 }

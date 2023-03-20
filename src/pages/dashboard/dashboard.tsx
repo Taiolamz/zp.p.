@@ -1,11 +1,12 @@
-import { Container } from "./style";
-import { AppContainer } from "../../styles";
+import { AppContainer } from "../../atoms";
 function Dashboard() {
   return (
-    <AppContainer>
-      <h1>Dashboard</h1>
-      <h1>Dashboard</h1>
-      <h1>Dashboard</h1>
+    <AppContainer navTitle='DASHBOARD'>
+      <div>
+        <h1>Dashboard</h1>
+        <h1>Dashboard</h1>
+        <h1>Dashboard</h1>
+      </div>
     </AppContainer>
   );
 }

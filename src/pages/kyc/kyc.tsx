@@ -5,9 +5,9 @@ import {
   SearchInput,
   CurrentPageCard,
 } from "../../components";
-import { CountInfo } from "../../atoms";
+import { AppContainer, CountInfo } from "../../atoms";
 import { SearchContainer } from "./style";
-import { AppContainer, H3 } from "../../styles";
+
 import { colors } from "../../utils";
 
 function Kyc() {
@@ -79,49 +79,50 @@ function Kyc() {
   const totalPages = 5;
 
   return (
-    <AppContainer>
-      <CountInfo data={data} />
-
-      <SearchContainer>
-        <CurrentPageCard pageNumber={1} />
-        <SearchInput
-          backgroundColor={colors.white}
-          name='SearchValue'
-          value={searchValue}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setSearchValue(e.target.value)
-          }
-          placeholder='Search Records'
-        />
-      </SearchContainer>
+    <AppContainer navTitle='KYC'>
       <div>
-        <UserDetailsCard
-          header={true}
-          id='#'
-          userName='Profile Name'
-          bvn='BVN'
-          phoneNo='Phone Number'
-          onClick={() => {}}
-        />
-        {userDetails.map((item: any) => (
+        <CountInfo data={data} />
+        <SearchContainer>
+          <CurrentPageCard pageNumber={1} />
+          <SearchInput
+            backgroundColor={colors.white}
+            name='SearchValue'
+            value={searchValue}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setSearchValue(e.target.value)
+            }
+            placeholder='Search Records'
+          />
+        </SearchContainer>
+        <div>
           <UserDetailsCard
-            key={item.id}
-            id={item.id}
-            userName={item.userName}
-            bvn={item.bvn}
-            phoneNo={item.phone}
+            header={true}
+            id='#'
+            userName='Profile Name'
+            bvn='BVN'
+            phoneNo='Phone Number'
             onClick={() => {}}
           />
-        ))}
-      </div>
+          {userDetails.map((item: any) => (
+            <UserDetailsCard
+              key={item.id}
+              id={item.id}
+              userName={item.userName}
+              bvn={item.bvn}
+              phoneNo={item.phone}
+              onClick={() => {}}
+            />
+          ))}
+        </div>
 
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={(selectedPage) => {
-          setCurrentPage(selectedPage);
-        }}
-      />
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(selectedPage) => {
+            setCurrentPage(selectedPage);
+          }}
+        />
+      </div>
     </AppContainer>
   );
 }

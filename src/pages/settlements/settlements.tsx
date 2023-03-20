@@ -2,7 +2,8 @@ import * as yup from "yup";
 import { useState, useEffect } from "react";
 import { Formik } from "formik";
 import { FiDownload } from "react-icons/fi";
-import { AppContainer, PageContainer, H3 } from "../../styles";
+
+import { H3 } from "../../styles";
 import {
   Navbar,
   CountInfoCard,
@@ -21,6 +22,7 @@ import {
   TabView,
   TransactionsView,
   MoreIconView,
+  AppContainer,
 } from "../../atoms";
 import { colors, currencyFormat, spacing } from "../../utils";
 import {
@@ -221,9 +223,8 @@ function Settlements() {
   };
 
   return (
-    <AppContainer>
-      <Navbar title='SETTLEMENTS' />
-      <PageContainer>
+    <AppContainer navTitle='SETTLEMENTS'>
+      <div>
         <AllTransactionContainer>
           <H3 color={colors.primary}>All Transactions</H3>
           <AllTransactionContent>
@@ -462,7 +463,7 @@ function Settlements() {
           closeModal={() => setMoreIsVisible(false)}
           options={moreIconOption}
         />
-      </PageContainer>
+      </div>
     </AppContainer>
   );
 }
