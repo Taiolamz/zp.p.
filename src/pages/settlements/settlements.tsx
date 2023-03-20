@@ -2,7 +2,7 @@ import * as yup from "yup";
 import { useState, useEffect } from "react";
 import { Formik } from "formik";
 import { FiDownload } from "react-icons/fi";
-import { AppContainer, PageContainer, H1, H2, H3 } from "../../styles";
+import { AppContainer, PageContainer, H3 } from "../../styles";
 import {
   Navbar,
   CountInfoCard,
