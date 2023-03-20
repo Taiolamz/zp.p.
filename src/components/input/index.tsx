@@ -124,7 +124,6 @@ function Input({
         borderColor={borderColor}
         error={error}
         backgroundColor={backgroundColor}>
-        <FiSearch color={colors.greyVariantOne} size={"25px"} />
         <InputContent
           placeholder={placeholder}
           name={name}

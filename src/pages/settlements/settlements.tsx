@@ -10,6 +10,8 @@ import {
   SearchInput,
   Modal,
   Picker,
+  Input,
+  TextArea,
 } from "../../components";
 import {
   SettlementBarChart,
@@ -198,6 +200,7 @@ function Settlements() {
   };
 
   const [selectedPicker, setSelectedPicker] = useState("");
+  const [inputValue, setInputValue] = useState("");
 
   return (
     <AppContainer>
@@ -268,6 +271,7 @@ function Settlements() {
         </div>
 
         <Picker
+          error={"hhhh"}
           label='Profit dfm,,dfm'
           selectedValue={setSelectedPicker}
           placeholder='Choose One'
@@ -275,6 +279,24 @@ function Settlements() {
             { label: "View Details", value: "View Details" },
             { label: "Delete Options", value: "Delete Options" },
           ]}
+        />
+        <Input
+          backgroundColor={colors.white}
+          borderColor={colors.grey}
+          placeholder='Test'
+          type='text'
+          value={inputValue}
+          name={"name"}
+          onChange={(e) => setInputValue(e.target.value)}
+        />
+
+        <TextArea
+          backgroundColor={colors.white}
+          borderColor={colors.grey}
+          placeholder='Test'
+          value={inputValue}
+          name={"name"}
+          onChange={(e: any) => setInputValue(e.target.value)}
         />
         <TabViewContainer>
           <TabView

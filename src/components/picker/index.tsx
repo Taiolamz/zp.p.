@@ -18,6 +18,7 @@ interface IProps {
   onClick?: () => void;
   height?: number | string;
   selectedValue: any;
+  error?: string;
 }
 
 function Picker({
@@ -27,6 +28,7 @@ function Picker({
   placeholder,
   height,
   selectedValue,
+  error,
 }: IProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [value, setValue] = useState<any>("");
@@ -39,12 +41,17 @@ function Picker({
   return (
     <>
       {label && (
-        <H6 style={{ marginLeft: 5 }} left color={colors.grey}>
+        <H5
+          semiBold
+          style={{ marginLeft: 5, marginBottom: spacing.xsmall }}
+          left
+          color={colors.grey}>
           {label}
-        </H6>
+        </H5>
       )}
 
       <Container
+        error={error}
         onClick={() => setIsVisible(!isVisible)}
         height={height}
         backgroundColor={backgroundColor}>
@@ -72,6 +79,12 @@ function Picker({
             ))}
           </Content>
         </ContentContainer>
+      )}
+
+      {error && (
+        <H5 left color={error ? colors.red : colors.grey}>
+          {error}
+        </H5>
       )}
     </>
   );
