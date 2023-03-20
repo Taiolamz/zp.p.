@@ -63,3 +63,36 @@ export const TabContentTwo = styled.div`
     width: 100%;
   }
 `;
+
+export const EscalateFormContainer = styled.div`
+  padding: 0px ${spacing.medium};
+  width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+  @media (max-width: 768px) {
+    width: 90%;
+  }
+  @media (max-width: 320px) {
+    width: 100%;
+  }
+`;
+
+export const EscalateBtnContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 50%;
+  @media (max-width: 320px) {
+    width: 100%;
+  }
+`;
+
+export const CustomerNameContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 25%;
+  @media (max-width: 320px) {
+    width: 100%;
+  }
+`;

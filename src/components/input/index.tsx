@@ -1,8 +1,8 @@
 import React, { useState, memo } from "react";
-import { FiEyeOff, FiEye, FiSearch } from "react-icons/fi";
+import { FiEyeOff, FiEye } from "react-icons/fi";
 
-import { H6, H4 } from "../../styles";
-import { colors } from "../../utils";
+import { H5, H4 } from "../../styles";
+import { colors, spacing } from "../../utils";
 import {
   InputContainer,
   InputContent,
@@ -23,6 +23,7 @@ interface IProps {
   backgroundColor?: string;
   value: string;
   borderColor?: string;
+  marginBottom?: number | string;
 }
 
 function Input({
@@ -35,6 +36,7 @@ function Input({
   backgroundColor,
   value,
   borderColor,
+  marginBottom,
 }: IProps) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   if (type === "email") {
@@ -114,12 +116,17 @@ function Input({
     );
   }
   return (
-    <div>
+    <div style={{ marginBottom: marginBottom ? marginBottom : spacing.small }}>
       {label && (
-        <H6 left color={colors.grey}>
+        <H5
+          semiBold
+          style={{ marginLeft: 5, marginBottom: spacing.xsmall }}
+          left
+          color={colors.grey}>
           {label}
-        </H6>
+        </H5>
       )}
+
       <InputContainer
         borderColor={borderColor}
         error={error}

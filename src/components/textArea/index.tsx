@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { H6, H4 } from "../../styles";
+import { H5, H4 } from "../../styles";
 import { colors, spacing } from "../../utils";
 import { InputContainer } from "./style";
 
@@ -28,11 +28,15 @@ function TextArea({
   marginBottom,
 }: IProps) {
   return (
-    <div style={{ marginBottom: marginBottom ? marginBottom : spacing.xsmall }}>
+    <div style={{ marginBottom: marginBottom ? marginBottom : spacing.small }}>
       {label && (
-        <H6 left color={colors.grey}>
+        <H5
+          semiBold
+          style={{ marginLeft: 5, marginBottom: spacing.xsmall }}
+          left
+          color={colors.grey}>
           {label}
-        </H6>
+        </H5>
       )}
       <InputContainer
         borderColor={borderColor}

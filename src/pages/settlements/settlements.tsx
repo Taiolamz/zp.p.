@@ -1,4 +1,6 @@
+import * as yup from "yup";
 import { useState, useEffect } from "react";
+import { Formik } from "formik";
 import { FiDownload } from "react-icons/fi";
 import { AppContainer, PageContainer, H1, H2, H3 } from "../../styles";
 import {
@@ -12,6 +14,7 @@ import {
   Picker,
   Input,
   TextArea,
+  Button,
 } from "../../components";
 import {
   SettlementBarChart,
@@ -28,6 +31,9 @@ import {
   InfoCountContent,
   TabViewContainer,
   TabContentTwo,
+  EscalateFormContainer,
+  EscalateBtnContainer,
+  CustomerNameContainer,
 } from "./style";
 
 const data = [
@@ -161,9 +167,8 @@ function Settlements() {
   const [searchValue, setSearchValue] = useState("");
   const totalPages = 5;
 
-  const [selectedFailedTransaction, setSelectedFailedTransaction] = useState(
-    {}
-  );
+  const [selectedFailedTransaction, setSelectedFailedTransaction] =
+    useState<any>({});
   const [moreIsVisible, setMoreIsVisible] = useState(false);
   const [escalateModalVisible, setEscalateModalVisible] = useState(false);
   const [selectedTransactionActionText, setSelectedTransactionActionText] =
@@ -174,6 +179,22 @@ function Settlements() {
   const escalateClose = "Close Transaction";
 
   const moreIconOption = [escalate, escalateLog, escalateClose];
+
+  const [selectedEscalateTo, setSelectedEscalateTo] = useState("");
+  const [selectedPriorityLevel, setSelectedPriorityLevel] = useState("");
+
+  const escalateCchema = yup.object().shape({
+    title: yup.string().required("Title is required"),
+    description: yup.string().required("Description is required"),
+    escalateTo:
+      selectedEscalateTo.length < 2
+        ? yup.string().required("To who is required")
+        : yup.string(),
+    priorityLevel:
+      selectedPriorityLevel.length < 2
+        ? yup.string().required("Priority level is required")
+        : yup.string(),
+  });
 
   // this effect checks if any transaction card has been selected to show more modal
   useEffect(() => {
@@ -198,9 +219,6 @@ function Settlements() {
     setSelectedTransactionActionText("");
     setSelectedFailedTransaction({});
   };
-
-  const [selectedPicker, setSelectedPicker] = useState("");
-  const [inputValue, setInputValue] = useState("");
 
   return (
     <AppContainer>
@@ -270,34 +288,6 @@ function Settlements() {
           />
         </div>
 
-        <Picker
-          error={"hhhh"}
-          label='Profit dfm,,dfm'
-          selectedValue={setSelectedPicker}
-          placeholder='Choose One'
-          options={[
-            { label: "View Details", value: "View Details" },
-            { label: "Delete Options", value: "Delete Options" },
-          ]}
-        />
-        <Input
-          backgroundColor={colors.white}
-          borderColor={colors.grey}
-          placeholder='Test'
-          type='text'
-          value={inputValue}
-          name={"name"}
-          onChange={(e) => setInputValue(e.target.value)}
-        />
-
-        <TextArea
-          backgroundColor={colors.white}
-          borderColor={colors.grey}
-          placeholder='Test'
-          value={inputValue}
-          name={"name"}
-          onChange={(e: any) => setInputValue(e.target.value)}
-        />
         <TabViewContainer>
           <TabView
             data={tabViewData}
@@ -369,12 +359,101 @@ function Settlements() {
           }}
         />
 
-        <div onClick={() => setEscalateModalVisible(true)}>open modal</div>
         <Modal
           isModalVisible={escalateModalVisible}
-          // closeModal={() => setEscalateModalVisible(false)}>
           closeModal={handleCloseEscalateModal}>
-          <div>modal content</div>
+          <Formik
+            initialValues={{
+              title: "",
+              description: "",
+              escalateTo: "",
+              priorityLevel: "",
+            }}
+            enableReinitialize={true}
+            validationSchema={escalateCchema}
+            onSubmit={async (values, { setSubmitting }) => {
+              const { title, description, escalateTo, priorityLevel } = values;
+              setSubmitting(false);
+            }}>
+            {(formikProps) => {
+              const { handleChange, values, handleSubmit, errors } =
+                formikProps;
+              return (
+                <form onSubmit={handleSubmit}>
+                  <EscalateFormContainer>
+                    <CustomerNameContainer>
+                      <Input
+                        label='Customer Name'
+                        backgroundColor={colors.white}
+                        borderColor={colors.grey}
+                        placeholder='Enter title'
+                        type='text'
+                        value={selectedFailedTransaction?.name}
+                        name={"name"}
+                        onChange={() => {}}
+                      />
+                    </CustomerNameContainer>
+
+                    <Input
+                      label='Title'
+                      backgroundColor={colors.white}
+                      borderColor={colors.grey}
+                      placeholder='Enter title'
+                      type='text'
+                      value={values.title}
+                      name={"title"}
+                      onChange={handleChange}
+                      error={errors.title}
+                    />
+
+                    <TextArea
+                      label='Title'
+                      backgroundColor={colors.white}
+                      borderColor={colors.grey}
+                      placeholder='Type here...'
+                      value={values.description}
+                      name={"description"}
+                      onChange={handleChange}
+                      error={errors.description}
+                    />
+
+                    <Picker
+                      error={errors.escalateTo}
+                      label='Escalate to'
+                      selectedValue={setSelectedEscalateTo}
+                      placeholder='Select Agent'
+                      options={[
+                        { label: "View Details", value: "View Details" },
+                        { label: "Delete Options", value: "Delete Options" },
+                      ]}
+                    />
+
+                    <Picker
+                      error={errors.priorityLevel}
+                      label='Priority Level'
+                      selectedValue={setSelectedPriorityLevel}
+                      placeholder='Select Priority'
+                      options={[
+                        { label: "View Details", value: "View Details" },
+                        { label: "Delete Options", value: "Delete Options" },
+                      ]}
+                    />
+                    <EscalateBtnContainer>
+                      <Button type='submit' text='Escalate' disabled={false} />
+                      <Button
+                        onClick={handleCloseEscalateModal}
+                        text='Cancel'
+                        disabled={false}
+                        secondary
+                        borderColor='transparent'
+                        color={colors.primary}
+                      />
+                    </EscalateBtnContainer>
+                  </EscalateFormContainer>
+                </form>
+              );
+            }}
+          </Formik>
         </Modal>
 
         <MoreIconView

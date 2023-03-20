@@ -12,7 +12,9 @@ export const Container = styled.div`
   padding: 0px ${spacing.xxsmall};
   border-radius: ${borderRadius.medium};
   align-self: flex-start;
-  border: 1px solid ${(p: StyleProps) => (p.error ? colors.red : colors.grey)};
+  border: 1px solid
+    ${(p: StyleProps) =>
+      p.error && p.error?.length > 1 ? colors.red : colors.grey};
   display: flex;
   flex-direction: row;
   justify-content: space-between;
