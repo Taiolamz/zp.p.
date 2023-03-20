@@ -8,6 +8,7 @@ import {
   BorderedText,
   Pagination,
   SearchInput,
+  Modal,
 } from "../../components";
 import { SettlementBarChart, TabView, TransactionsView } from "../../atoms";
 import { colors, currencyFormat, spacing } from "../../utils";
@@ -152,6 +153,8 @@ function Settlements() {
   const [searchValue, setSearchValue] = useState("");
   const totalPages = 5;
 
+  const [escalateModalVisible, setEscalateModalVisible] = useState(false);
+
   return (
     <AppContainer>
       <Navbar title='SETTLEMENTS' />
@@ -289,6 +292,13 @@ function Settlements() {
             setCurrentPage(selectedPage);
           }}
         />
+
+        <div onClick={() => setEscalateModalVisible(true)}>open modal</div>
+        <Modal
+          isModalVisible={escalateModalVisible}
+          closeModal={() => setEscalateModalVisible(false)}>
+          <div>modal content</div>
+        </Modal>
       </PageContainer>
     </AppContainer>
   );
