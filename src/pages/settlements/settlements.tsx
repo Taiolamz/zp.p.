@@ -94,6 +94,49 @@ const transactionDataHeader = {
   time: "Time",
 };
 
+const billsHistoryData = [
+  {
+    id: 1,
+    tid: "CRIDD44BI",
+    amount: 20000,
+    type: "Bill payment",
+    status: "System Failure",
+    time: "24/11/2021- 17:01",
+    icon: true,
+    name: "Allen Kardic",
+  },
+  {
+    id: 2,
+    tid: "CRIDD44BI",
+    amount: 20000,
+    type: "Bill payment",
+    status: "System Failure",
+    time: "24/11/2021- 17:01",
+    icon: true,
+    name: "James Brown",
+  },
+  {
+    id: 3,
+    tid: "CRIDD44BI",
+    amount: 20000,
+    type: "Bill payment",
+    status: "System Failure",
+    time: "24/11/2021- 17:01",
+    icon: true,
+    name: "Enoch Yakubu",
+  },
+];
+
+const billsHistoryHeader = {
+  id: "",
+  name: "Customer",
+  tid: "Transaction ID",
+  amount: "Amount",
+  type: "Bill Type",
+  status: "Status",
+  time: "Time",
+};
+
 const inflowData = [1000, 90, 100, 800, 500, 100, 900, 70, 80, 100, 800, 700];
 const outflowData = [100, 10, 20, 80, 100, 800, 700, 800, 90, 100, 800, 500];
 const profitData = [90, 50, 100, 91, 68, 100, 45, 70, 80, 30, 800, 50];
@@ -213,13 +256,32 @@ function Settlements() {
             </TabContentTwo>
           )}
         </TabViewContainer>
+        {tabViewSelectedIndex === 1 && (
+          <TransactionsView
+            type={"transactions"}
+            headerData={transactionDataHeader}
+            header={true}
+            data={transactionData}
+          />
+        )}
 
-        <TransactionsView
-          type={""}
-          headerData={transactionDataHeader}
-          header={true}
-          data={transactionData}
-        />
+        {tabViewSelectedIndex === 2 && (
+          <TransactionsView
+            type={"billHistory"}
+            headerData={billsHistoryHeader}
+            header={true}
+            data={billsHistoryData}
+          />
+        )}
+
+        {tabViewSelectedIndex === 3 && (
+          <TransactionsView
+            type={"billHistory"}
+            headerData={billsHistoryHeader}
+            header={true}
+            data={billsHistoryData}
+          />
+        )}
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

@@ -2,6 +2,7 @@ import { TransactionContainer } from "./style";
 import { TransactionCard } from "../../components";
 
 export interface TabViewIPropsIProps {
+  type: string;
   data: any[];
   setSelectedItem?: any;
   backgroundColor?: string;
@@ -15,6 +16,7 @@ function TransactionsView({
   setSelectedItem,
   header = false,
   headerData,
+  type,
 }: any) {
   const handleOnSelect = (item: any) => {
     setSelectedItem(item);
@@ -41,20 +43,44 @@ function TransactionsView({
           </div>
         )}
         <TransactionContainer backgroundColor={backgroundColor}>
-          {data.map((item: any) => (
-            <TransactionCard
-              key={item.id}
-              onClick={() => handleOnSelect(item)}
-              id={item.id}
-              tid={item.tid}
-              name={item.name}
-              amount={item.name}
-              status={item.status}
-              type={item.type}
-              time={item.type}
-              icon={item.icon}
-            />
-          ))}
+          {type === "transactions" && (
+            <div>
+              {data.map((item: any) => (
+                <TransactionCard
+                  cardType={type}
+                  key={item.id}
+                  onClick={() => handleOnSelect(item)}
+                  id={item.id}
+                  tid={item.tid}
+                  name={item.name}
+                  amount={item.name}
+                  status={item.status}
+                  type={item.type}
+                  time={item.type}
+                  icon={item.icon}
+                />
+              ))}
+            </div>
+          )}
+
+          {type === "billHistory" && (
+            <div>
+              {data.map((item: any) => (
+                <TransactionCard
+                  cardType={type}
+                  key={item.id}
+                  onClick={() => handleOnSelect(item)}
+                  id={item.id}
+                  tid={item.tid}
+                  name={item.name}
+                  amount={item.name}
+                  status={item.status}
+                  type={item.type}
+                  time={item.type}
+                />
+              ))}
+            </div>
+          )}
         </TransactionContainer>
       </div>
     </>

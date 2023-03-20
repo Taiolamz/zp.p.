@@ -11,6 +11,7 @@ interface IProps {
   height?: string | number;
   borderRadius?: string | number;
   onClick?: () => void;
+  cursor?: string;
 }
 
 function BorderedText({
@@ -20,12 +21,14 @@ function BorderedText({
   color,
   height,
   onClick,
+  cursor = "pointer",
 }: IProps) {
   return (
     <Container
       onClick={onClick}
       height={height}
-      backgroundColor={backgroundColor}>
+      backgroundColor={backgroundColor}
+      cursor={cursor}>
       {icon && <div style={{ marginRight: spacing.xxsmall }}>{icon}</div>}
       <H5 semiBold color={color ? color : colors.grey}>
         {text}

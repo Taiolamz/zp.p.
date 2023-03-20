@@ -20,6 +20,7 @@ export interface TransactionCardIProps {
   time: string;
   icon?: boolean;
   backgroundColor?: string;
+  cardType?: string;
 }
 
 interface IProps extends TransactionCardIProps {
@@ -37,6 +38,7 @@ function TransactionCard({
   icon,
   onClick,
   header = false,
+  cardType,
   backgroundColor,
 }: any) {
   return (
