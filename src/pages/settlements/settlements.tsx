@@ -9,6 +9,7 @@ import {
   Pagination,
   SearchInput,
   Modal,
+  Picker,
 } from "../../components";
 import {
   SettlementBarChart,
@@ -196,6 +197,8 @@ function Settlements() {
     setSelectedFailedTransaction({});
   };
 
+  const [selectedPicker, setSelectedPicker] = useState("");
+
   return (
     <AppContainer>
       <Navbar title='SETTLEMENTS' />
@@ -264,6 +267,15 @@ function Settlements() {
           />
         </div>
 
+        <Picker
+          label='Profit dfm,,dfm'
+          selectedValue={setSelectedPicker}
+          placeholder='Choose One'
+          options={[
+            { label: "View Details", value: "View Details" },
+            { label: "Delete Options", value: "Delete Options" },
+          ]}
+        />
         <TabViewContainer>
           <TabView
             data={tabViewData}
