@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FiDownload } from "react-icons/fi";
 import { AppContainer, PageContainer, H1, H2, H3 } from "../../styles";
 import {
@@ -10,7 +10,12 @@ import {
   SearchInput,
   Modal,
 } from "../../components";
-import { SettlementBarChart, TabView, TransactionsView } from "../../atoms";
+import {
+  SettlementBarChart,
+  TabView,
+  TransactionsView,
+  MoreIconView,
+} from "../../atoms";
 import { colors, currencyFormat, spacing } from "../../utils";
 import {
   AllTransactionContainer,
@@ -153,7 +158,43 @@ function Settlements() {
   const [searchValue, setSearchValue] = useState("");
   const totalPages = 5;
 
+  const [selectedFailedTransaction, setSelectedFailedTransaction] = useState(
+    {}
+  );
+  const [moreIsVisible, setMoreIsVisible] = useState(false);
   const [escalateModalVisible, setEscalateModalVisible] = useState(false);
+  const [selectedTransactionActionText, setSelectedTransactionActionText] =
+    useState("");
+
+  const escalate = "Escalate";
+  const escalateLog = "Escalation Log";
+  const escalateClose = "Close Transaction";
+
+  const moreIconOption = [escalate, escalateLog, escalateClose];
+
+  // this effect checks if any transaction card has been selected to show more modal
+  useEffect(() => {
+    if (
+      selectedFailedTransaction.hasOwnProperty("name") &&
+      selectedTransactionActionText.length < 3
+    ) {
+      setMoreIsVisible(true);
+    }
+
+    if (
+      selectedFailedTransaction.hasOwnProperty("name") &&
+      selectedTransactionActionText.length > 3
+    ) {
+      setMoreIsVisible(false);
+      setEscalateModalVisible(true);
+    }
+  }, [selectedFailedTransaction, selectedTransactionActionText]);
+
+  const handleCloseEscalateModal = () => {
+    setEscalateModalVisible(false);
+    setSelectedTransactionActionText("");
+    setSelectedFailedTransaction({});
+  };
 
   return (
     <AppContainer>
@@ -265,6 +306,7 @@ function Settlements() {
             headerData={transactionDataHeader}
             header={true}
             data={transactionData}
+            setSelectedItem={setSelectedFailedTransaction}
           />
         )}
 
@@ -296,9 +338,17 @@ function Settlements() {
         <div onClick={() => setEscalateModalVisible(true)}>open modal</div>
         <Modal
           isModalVisible={escalateModalVisible}
-          closeModal={() => setEscalateModalVisible(false)}>
+          // closeModal={() => setEscalateModalVisible(false)}>
+          closeModal={handleCloseEscalateModal}>
           <div>modal content</div>
         </Modal>
+
+        <MoreIconView
+          setSelectedText={setSelectedTransactionActionText}
+          isModalVisible={moreIsVisible}
+          closeModal={() => setMoreIsVisible(false)}
+          options={moreIconOption}
+        />
       </PageContainer>
     </AppContainer>
   );

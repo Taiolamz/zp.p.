@@ -1,5 +1,5 @@
-import { memo } from "react";
-import { FiMoreVertical } from "react-icons/fi";
+import { memo, ReactElement } from "react";
+import { MoreIcon } from "../..";
 import { H1, H4, H6 } from "../../../styles";
 import { colors } from "../../../utils";
 import {
@@ -18,7 +18,7 @@ export interface TransactionCardIProps {
   status: string;
   type: string;
   time: string;
-  icon?: boolean;
+  icon?: ReactElement;
   backgroundColor?: string;
   cardType?: string;
 }
@@ -83,8 +83,8 @@ function TransactionCard({
       </MainTextContainer>
       <ViewContentContainer>
         {!header && icon && (
-          <ViewContent onClick={onClick}>
-            <FiMoreVertical color={colors.white} size={20} />
+          <ViewContent>
+            <MoreIcon onClick={onClick} />
           </ViewContent>
         )}
       </ViewContentContainer>

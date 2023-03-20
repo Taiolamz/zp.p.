@@ -20,6 +20,7 @@ function TransactionsView({
 }: any) {
   const handleOnSelect = (item: any) => {
     setSelectedItem(item);
+    // setMoreIsVisible(true);
   };
 
   return (
@@ -34,7 +35,7 @@ function TransactionsView({
                 id={headerData.id}
                 tid={headerData.tid}
                 name={headerData.name}
-                amount={headerData.name}
+                amount={headerData.amount}
                 status={headerData.status}
                 type={headerData.type}
                 time={headerData.type}
@@ -53,7 +54,7 @@ function TransactionsView({
                   id={item.id}
                   tid={item.tid}
                   name={item.name}
-                  amount={item.name}
+                  amount={item.amount}
                   status={item.status}
                   type={item.type}
                   time={item.type}

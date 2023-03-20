@@ -9,6 +9,7 @@ export { default as DatePicker } from "./datePicker";
 export { default as BorderedText } from "./borderedText";
 export { default as Tab } from "./tab";
 export { default as Modal } from "./modal";
+export { default as MoreIcon } from "./moreIcon";
 export { default as TransactionCard } from "./cards/transactionCard";
 export { default as SideBarCard } from "./cards/sideBarCard";
 export { default as UserActivityCard } from "./cards/userActivityCard";
