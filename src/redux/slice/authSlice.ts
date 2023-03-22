@@ -22,11 +22,8 @@ export const authRequest = createAsyncThunk(
   "auth",
   async (payload: AuthType) => {
     try {
-      const { token, rememberUser } = payload;
       const response = {
-        token: token,
-        rememberUser: rememberUser,
-        authenticated: true,
+        ...payload,
       };
       return response;
     } catch (err) {
@@ -36,7 +33,7 @@ export const authRequest = createAsyncThunk(
 );
 
 const authSlice = createSlice({
-  name: "login",
+  name: "auth",
   initialState,
   reducers: {
     reset: (state) => {

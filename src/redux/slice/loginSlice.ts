@@ -21,7 +21,7 @@ const initialState = {
   error: null,
 } as InitState;
 
-const { TOKEN } = routesPath;
+const { TOKEN, REMEMBERUSER } = routesPath;
 
 export const loginRequest = createAsyncThunk(
   "login",
@@ -29,29 +29,20 @@ export const loginRequest = createAsyncThunk(
     const { email, password, rememberUser } = payload;
     try {
       // for the actual login api
-      //   const response = await api.post("login", payload);
-      //   return response.data;
-      const token = "Allenjamesnbworn";
-      if (email === "test@test.com" && password === "P@ssword") {
-        Cookies.set(TOKEN, token);
-        const response = {
-          email,
-          name: "John Doe",
-          token: token,
-        };
+      const payloadData = {
+        email,
+        password,
+      };
+      const response = await api.post("admin/login", payloadData);
 
-        dispatch(
-          authRequest({
-            token: token,
-            rememberUser: rememberUser,
-            authenticated: true,
-          })
-        );
+      const { token, user } = response.data;
+      const rememberedEmail = user.email;
+      const rememberUserToString = !!rememberUser ? rememberedEmail : "";
+      Cookies.set(TOKEN, token);
+      Cookies.set(REMEMBERUSER, rememberUserToString);
+      dispatch(authRequest(user));
 
-        return response;
-      } else {
-        return "Invalid email or password";
-      }
+      return response?.data;
     } catch (err) {
       throw err;
     }

@@ -1,30 +1,30 @@
 import Cookies from "js-cookie";
 import axios from "axios";
-import type { AxiosRequestConfig } from "axios";
+
 import { routesPath, showMessage } from "../utils";
 
 /**
  * Creates an initial 'axios' instance with custom settings.
  */
 
-const BASE_URL = process.env.BASE_URL || "http://localhost:3000";
-const { TOKEN, LOGIN, LOGOUT, PASSWORDRESET, SIGNUP } = routesPath;
+const BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
+const { TOKEN, LOGIN, LOGOUT, PASSWORDRESET } = routesPath;
 
 let AuthToken: string = Cookies.get(TOKEN) || "token";
 
 const instance = axios.create({
+  baseURL: BASE_URL,
+  timeout: 10000,
   headers: {
-    baseURL: BASE_URL,
     Accept: "application/json",
     "Content-Type": "application/json; charset=utf-8",
-    timeout: 5000,
   },
 });
 
 instance.interceptors.request.use((config) => {
   if (config.url === LOGOUT) {
     config.baseURL = BASE_URL;
-    //  "https://api.zojapay.com/api/v1"
   }
 
   if (config.url !== LOGIN && config.url !== PASSWORDRESET) {
@@ -37,16 +37,25 @@ instance.interceptors.response.use(
   (res: any) => res.data,
 
   (err) => {
-    if (err.response.state === 403) {
+    if (err.response.status === 403) {
       Cookies.remove(TOKEN);
       window.location.href = LOGIN;
       return Promise.reject(err.response.data);
     }
 
-    if (err.response.state === 401) {
+    if (err.response.status === 401) {
+      console.log("error 401");
       showMessage({
         type: "error",
-        message: err.response.data.message,
+        message: err.response.data.error.message[0],
+      });
+    }
+
+    if (err.response.status === 422) {
+      console.log("error 402");
+      showMessage({
+        type: "error",
+        message: err.response.data.error.message[0],
       });
     }
 

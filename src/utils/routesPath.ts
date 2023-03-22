@@ -1,4 +1,5 @@
 const routesPath = {
+  REMEMBERUSER: "rememberUser",
   TOKEN: "token",
   LOGIN: "/",
   LOGOUT: "/logout",
