@@ -47,37 +47,49 @@ function TransactionCard({
       header={header}
       onClick={onClick}>
       <H1TextContainer>
-        <H4 left color={colors.primary}>
+        <H4 left color={header ? colors.primary : colors.grey}>
           {id}
         </H4>
       </H1TextContainer>
       <MainTextContainer>
-        <H4 left color={colors.primary}>
+        <H4 left color={header ? colors.primary : colors.grey}>
           {name}
         </H4>
       </MainTextContainer>
       <MainTextContainer>
-        <H4 left color={colors.primary}>
+        <H4 left color={header ? colors.primary : colors.grey}>
           {tid}
         </H4>
       </MainTextContainer>
       <MainTextContainer>
-        <H4 left color={colors.primary}>
+        <H4 left color={header ? colors.primary : colors.grey}>
           {amount}
         </H4>
       </MainTextContainer>
       <MainTextContainer>
-        <H4 left color={colors.primary}>
+        <H4 left color={header ? colors.primary : colors.grey}>
           {type}
         </H4>
       </MainTextContainer>
       <MainTextContainer>
-        <H4 left color={colors.primary}>
-          {status}
+        <H4
+          left
+          color={
+            header
+              ? colors.primary
+              : status === "success"
+              ? colors.greenVariantTwo
+              : colors.red
+          }>
+          {header
+            ? status
+            : status === "success"
+            ? "Successful"
+            : "Unseccessful"}
         </H4>
       </MainTextContainer>
       <MainTextContainer>
-        <H4 left color={colors.primary}>
+        <H4 left color={header ? colors.primary : colors.grey}>
           {time}
         </H4>
       </MainTextContainer>

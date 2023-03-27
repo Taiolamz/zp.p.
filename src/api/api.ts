@@ -13,7 +13,7 @@ const { TOKEN, LOGIN, LOGOUT, PASSWORDRESET } = routesPath;
 
 const instance = axios.create({
   baseURL: BASE_URL,
-  timeout: 10000,
+  timeout: 20000,
   headers: {
     Accept: "application/json",
     "Content-Type": "application/json; charset=utf-8",
@@ -23,6 +23,10 @@ const instance = axios.create({
 instance.interceptors.request.use(async (config) => {
   let AuthToken: string = (await Cookies.get(TOKEN)) || "token";
 
+  // if (config?.addTrailingSlash && config?.url[config?.url?.length - 1] !== "\") {
+  //   config.url += "\"
+  // }
+
   if (config.url === LOGOUT) {
     config.baseURL = BASE_URL;
   }
@@ -30,6 +34,7 @@ instance.interceptors.request.use(async (config) => {
   if (config.url !== LOGIN && config.url !== PASSWORDRESET) {
     config.headers.Authorization = "Bearer " + AuthToken;
   }
+
   return config;
 });
 

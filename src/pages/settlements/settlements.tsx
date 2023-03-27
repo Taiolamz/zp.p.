@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import { useState, useEffect } from "react";
 import { Formik } from "formik";
-import { FiDownload } from "react-icons/fi";
+import { FiFilter } from "react-icons/fi";
 import { H3 } from "../../styles";
 import {
   CountInfoCard,
@@ -22,7 +22,13 @@ import {
   MoreIconView,
   AppContainer,
 } from "../../atoms";
-import { colors, currencyFormat, spacing } from "../../utils";
+import {
+  colors,
+  currencyFormat,
+  getPathFromPagUrl,
+  spacing,
+  yearDateFormat,
+} from "../../utils";
 import {
   AllTransactionContainer,
   AllTransactionContent,
@@ -67,42 +73,9 @@ const data = [
 ];
 
 const tabViewData = [
-  { id: 1, isSelected: true, text: "Failed Transactions" },
-  { id: 2, isSelected: false, text: "Bills History" },
-  { id: 3, isSelected: false, text: "Cash Request History" },
-];
-
-const transactionData = [
-  {
-    id: 1,
-    tid: "CRIDD",
-    amount: 20000,
-    type: "Bill payment",
-    status: "System Failure",
-    time: "24/11/2021- 17:01",
-    icon: true,
-    name: "Allen Kardic",
-  },
-  {
-    id: 2,
-    tid: "CRIDD",
-    amount: 20000,
-    type: "Bill payment",
-    status: "System Failure",
-    time: "24/11/2021- 17:01",
-    icon: true,
-    name: "James Brown",
-  },
-  {
-    id: 3,
-    tid: "CRIDD",
-    amount: 20000,
-    type: "Bill payment",
-    status: "System Failure",
-    time: "24/11/2021- 17:01",
-    icon: true,
-    name: "Enoch Yakubu",
-  },
+  { id: 1, isSelected: true, text: "Transactions History" },
+  // { id: 2, isSelected: false, text: "Bills History" },
+  // { id: 3, isSelected: false, text: "Cash Request History" },
 ];
 
 const transactionDataHeader = {
@@ -111,8 +84,8 @@ const transactionDataHeader = {
   tid: "Transaction ID",
   amount: "Amount",
   type: "Transaction Type",
-  status: "Failure Reason",
-  time: "Time",
+  status: "Status",
+  time: "Date",
 };
 
 const billsHistoryData = [
@@ -166,7 +139,17 @@ function Settlements() {
   const dispatch = useAppDispatch();
   const [transactionStartDate, setTransactionStartDate] = useState("");
   const [transactionEndDate, setTransactionEndDate] = useState("");
-  const [displayRecordDate, setDisplayRecordDate] = useState("");
+  const [startDisplayRecordDate, setStartDisplayRecordDate] = useState("");
+  const [endDisplayRecordDate, setEndDisplayRecordDate] = useState("");
+  const [transactionFilterParams, setTransactionFilterParams] = useState({
+    reference: "",
+    type: "",
+    status: "",
+    start_date: "",
+    end_date: "",
+  });
+  const [paginationData, setPaginationData] = useState({});
+  const [transactionDataList, setTransactionDataList] = useState<any[]>([]);
   const [tabViewSelectedIndex, setTabViewSelectedIndex] =
     useState<any[number]>(1);
   const [barChartSelectedText, setBarChartSelectedText] = useState("All Data");
@@ -191,14 +174,10 @@ function Settlements() {
   const [selectedPriorityLevel, setSelectedPriorityLevel] = useState("");
 
   // redux state
-  const {
-    data: {
-      transactions: { data: getTransactionsData },
-    },
-    status: getTransactionsStatus,
-  } = useAppSelector((state) => state.getTransactions);
+  const transactionState = useAppSelector((state) => state.getTransactions);
 
-  console.log(getTransactionsData, "hh");
+  const { status: getTransactionsStatus } = transactionState;
+
   const escalateCchema = yup.object().shape({
     title: yup.string().required("Title is required"),
     description: yup.string().required("Description is required"),
@@ -236,13 +215,56 @@ function Settlements() {
     setSelectedFailedTransaction({});
   };
 
-  // const handleGetTransactions = async () => {
-  //   await
-  // };
+  // api getTransactions
+  useEffect(() => {
+    dispatch(getTransactionsRequest(transactionFilterParams));
+  }, [transactionFilterParams]);
 
   useEffect(() => {
-    dispatch(getTransactionsRequest({ name: "emma" }));
-  }, []);
+    if (getTransactionsStatus === "succeeded") {
+      let updatedList: any[] = [];
+
+      transactionState?.data?.transactions?.data.forEach(
+        (item: any, index: number) => {
+          updatedList.push({
+            id: index + 1,
+            name: item.user.name,
+            tid: item.transaction_reference,
+            amount: parseFloat(item.amount),
+            type: item.type,
+            status: item.status,
+            icon: true,
+            time: item.created_at,
+            currency: item.currency,
+          });
+        }
+      );
+
+      const { meta, links } = transactionState?.data?.transactions;
+
+      setPaginationData({
+        currentPageNo: meta.current_page,
+        next: links.next !== null ? getPathFromPagUrl(links.next) : null,
+        last: links.last !== null ? getPathFromPagUrl(links.last) : null,
+        total: 1,
+      });
+      // console.log(transactionState?.data?.transactions, "data");
+
+      setTransactionDataList(updatedList);
+    }
+  }, [transactionState]);
+
+  console.log(paginationData, "data");
+
+  const handleTransactionFilter = () => {
+    setTransactionFilterParams({
+      reference: searchValue,
+      type: "",
+      status: "",
+      start_date: yearDateFormat(startDisplayRecordDate),
+      end_date: yearDateFormat(endDisplayRecordDate),
+    });
+  };
 
   return (
     <AppContainer navTitle='SETTLEMENTS'>
@@ -317,7 +339,7 @@ function Settlements() {
             setSelectedIndex={setTabViewSelectedIndex}
           />
 
-          {tabViewSelectedIndex === 1 ? (
+          {tabViewSelectedIndex === 1 && (
             <TabContentTwo>
               <SearchInput
                 backgroundColor={"transparent"}
@@ -329,20 +351,16 @@ function Settlements() {
                 placeholder='Search Records'
               />
 
+              <DatePicker selectedDate={setStartDisplayRecordDate} />
+
+              <DatePicker selectedDate={setEndDisplayRecordDate} />
+
               <BorderedText
+                onClick={handleTransactionFilter}
                 backgroundColor={colors.primary}
                 color={colors.white}
-                icon={<FiDownload color={colors.white} size={15} />}
-                text='Download records'
-              />
-            </TabContentTwo>
-          ) : (
-            <TabContentTwo>
-              <DatePicker selectedDate={setDisplayRecordDate} />
-              <BorderedText
-                backgroundColor={colors.primary}
-                color={colors.white}
-                text='Display Records'
+                icon={<FiFilter color={colors.white} size={15} />}
+                text='Filter'
               />
             </TabContentTwo>
           )}
@@ -352,28 +370,11 @@ function Settlements() {
             type={"transactions"}
             headerData={transactionDataHeader}
             header={true}
-            data={transactionData}
+            data={transactionDataList}
             setSelectedItem={setSelectedFailedTransaction}
           />
         )}
 
-        {tabViewSelectedIndex === 2 && (
-          <TransactionsView
-            type={"billHistory"}
-            headerData={billsHistoryHeader}
-            header={true}
-            data={billsHistoryData}
-          />
-        )}
-
-        {tabViewSelectedIndex === 3 && (
-          <TransactionsView
-            type={"billHistory"}
-            headerData={billsHistoryHeader}
-            header={true}
-            data={billsHistoryData}
-          />
-        )}
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

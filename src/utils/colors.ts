@@ -16,6 +16,7 @@ const colors = {
   yellow: "#fbad39",
   green: "#089E17",
   greenVariantOne: "#2DBD9B",
+  greenVariantTwo: "#52b28d",
   orange: "#FFAF56",
   purple: "#7B91F7",
   purpleVariantOne: "#EFF2FE",

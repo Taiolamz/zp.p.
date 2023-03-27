@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../api/api";
-
+import { replaceStringWithBackslach } from "../../utils";
 type Dictionary = {
   [key: string]: any;
 };
@@ -19,9 +19,17 @@ const initialState = {
 
 export const getTransactionsRequest = createAsyncThunk(
   "getTransactions",
-  async (payload: any, { dispatch }) => {
+  async (payload: Dictionary, { dispatch }) => {
+    const url = `admin/transactions`;
+    const modelType = "App,Models,CashTransfer";
+
     try {
-      const response = await api.get("admin/transactions");
+      const response = await api.get(url, {
+        params: {
+          model_type: replaceStringWithBackslach(modelType),
+          ...payload,
+        },
+      });
       return response?.data;
     } catch (err) {
       throw err;

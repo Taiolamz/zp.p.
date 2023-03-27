@@ -58,7 +58,7 @@ export const TabContentTwo = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  width: 35%;
+  width: 60%;
   @media (max-width: 768px) {
     width: 100%;
   }
