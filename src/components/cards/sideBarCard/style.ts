@@ -39,3 +39,33 @@ export const Content = styled.div`
   align-items: center;
   padding: 0 0 0 25px;
 `;
+
+export const OptionsContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
+export const OptionsMainCover = styled.div`
+  border-radius: ${borderRadius.medium};
+  background-color: ${colors.white};
+  color: ${colors.grey};
+  height: 51px;
+  width: 140px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 0 0 25px;
+`;
+
+export const OptionsContent = styled.div`
+  border-radius: ${borderRadius.medium};
+  background-color: ${colors.white};
+  color: ${colors.grey};
+  height: 39px;
+  width: 140px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 0 0 25px;
+`;

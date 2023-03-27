@@ -4,15 +4,23 @@ import { Login } from "../pages/login";
 import { Kyc } from "../pages/kyc";
 import { Support } from "../pages/support";
 import { Users } from "../pages/users";
-import { Settlements } from "../pages/settlements";
+import { Settlements, Reconciliation } from "../pages/settlements";
 import { Settings } from "../pages/settings";
 import { NotFound } from "../pages/notFound";
 import { PrivateRoute } from "./privateRoute";
 import { routesPath } from "../utils";
 import { useAppSelector } from "../redux/redux-hooks";
 function AppRoute() {
-  const { LOGIN, DASHBOARD, SUPPORT, KYC, SETTLEMENTS, USERS, SETTINGS } =
-    routesPath;
+  const {
+    LOGIN,
+    DASHBOARD,
+    SUPPORT,
+    KYC,
+    SETTLEMENTS,
+    RECONCILIATION,
+    USERS,
+    SETTINGS,
+  } = routesPath;
   // const authState = useAppSelector((state) => state.auth);
 
   return (
@@ -49,6 +57,14 @@ function AppRoute() {
           element={
             <PrivateRoute>
               <Settlements />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={RECONCILIATION}
+          element={
+            <PrivateRoute>
+              <Reconciliation />
             </PrivateRoute>
           }
         />

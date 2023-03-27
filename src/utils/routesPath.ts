@@ -9,6 +9,7 @@ const routesPath = {
   KYC: "/kyc",
   SUPPORT: "/support",
   SETTLEMENTS: "/settlements",
+  RECONCILIATION: "/reconciliation",
   USERS: "/users",
   SETTINGS: "/settings",
 };
