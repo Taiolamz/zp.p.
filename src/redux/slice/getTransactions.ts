@@ -1,10 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-
-export interface AuthType {
-  token: string;
-  rememberUser: boolean;
-  authenticated: boolean;
-}
+import api from "../../api/api";
 
 type Dictionary = {
   [key: string]: any;
@@ -22,22 +17,20 @@ const initialState = {
   error: null,
 } as InitState;
 
-export const authRequest = createAsyncThunk(
-  "auth",
-  async (payload: AuthType) => {
+export const getTransactionsRequest = createAsyncThunk(
+  "getTransactions",
+  async (payload: any, { dispatch }) => {
     try {
-      const response = {
-        ...payload,
-      };
-      return response;
+      const response = await api.get("admin/transactions");
+      return response?.data;
     } catch (err) {
       throw err;
     }
   }
 );
 
-const authSlice = createSlice({
-  name: "auth",
+const getTransactionsSlice = createSlice({
+  name: "getTransactions",
   initialState,
   reducers: {
     reset: (state) => {
@@ -45,19 +38,20 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(authRequest.pending, (state) => {
+    builder.addCase(getTransactionsRequest.pending, (state) => {
       state.status = "loading";
     });
-    builder.addCase(authRequest.fulfilled, (state, action) => {
+    builder.addCase(getTransactionsRequest.fulfilled, (state, action) => {
       state.status = "succeeded";
       state.data = action.payload;
+      state.error = null;
     });
-    builder.addCase(authRequest.rejected, (state, action) => {
+    builder.addCase(getTransactionsRequest.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.payload;
     });
   },
 });
 
-export const authReset = authSlice.actions.reset;
-export const authSliceReducer = authSlice.reducer;
+export const getTransactionsReset = getTransactionsSlice.actions.reset;
+export const getTransactionsSliceReducer = getTransactionsSlice.reducer;

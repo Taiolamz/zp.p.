@@ -8,9 +8,12 @@ export interface LoginType {
   password: string;
   rememberUser: boolean;
 }
+type Dictionary = {
+  [key: string]: any;
+};
 
 interface InitState {
-  data: {};
+  data: Dictionary;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: any;
 }

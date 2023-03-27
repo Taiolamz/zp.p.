@@ -1,11 +1,10 @@
 import { ReactElement, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Cookies from "js-cookie";
+
 import { AiOutlineUser, AiOutlineDollarCircle } from "react-icons/ai";
 import { FiUsers, FiMail, FiTrendingUp, FiSettings } from "react-icons/fi";
-import { useAppDispatch } from "../../redux/redux-hooks";
-import { loginReset } from "../../redux/slice";
-import { authReset } from "../../redux/slice";
+import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
+import { logoutRequest } from "../../redux/slice";
 import { SideBarCard, UserActivityCard } from "../../components/index";
 import { H6 } from "../../styles";
 import { colors, images, routesPath } from "../../utils";
@@ -50,6 +49,12 @@ function TabNav({ text, icon, isSelected, onClick }: IProps) {
 function SideBar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const { status } = useAppSelector((state) => state.logout);
+  const {
+    data: { name, status: activityStatus },
+  } = useAppSelector((state) => state.auth);
+
   const location = useLocation();
   const currentPath = location.pathname;
 
@@ -135,18 +140,12 @@ function SideBar() {
 
   const handleLogout = (item: any) => {
     if (item.text === "Logout") {
-      Cookies.remove(TOKEN);
-      dispatch(loginReset());
-      dispatch(authReset());
-      navigate(LOGIN);
+      dispatch(logoutRequest());
     }
   };
 
   const handleLogoutDesktop = () => {
-    Cookies.remove(TOKEN);
-    dispatch(loginReset());
-    dispatch(authReset());
-    navigate(LOGIN);
+    dispatch(logoutRequest());
   };
   return (
     <>
@@ -169,9 +168,10 @@ function SideBar() {
             ))}
           </div>
           <UserActivityCard
-            title='John Doe'
-            helper='Verified'
+            title={name}
+            helper={activityStatus}
             onClick={handleLogoutDesktop}
+            btnDisabled={status === "loading" ? true : false}
           />
         </Content>
       </Container>

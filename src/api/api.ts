@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import axios from "axios";
-
+// import { AxiosRequestConfig } from "axios";
 import { routesPath, showMessage } from "../utils";
 
 /**
@@ -11,8 +11,6 @@ const BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
 const { TOKEN, LOGIN, LOGOUT, PASSWORDRESET } = routesPath;
 
-let AuthToken: string = Cookies.get(TOKEN) || "token";
-
 const instance = axios.create({
   baseURL: BASE_URL,
   timeout: 10000,
@@ -22,13 +20,15 @@ const instance = axios.create({
   },
 });
 
-instance.interceptors.request.use((config) => {
+instance.interceptors.request.use(async (config) => {
+  let AuthToken: string = (await Cookies.get(TOKEN)) || "token";
+
   if (config.url === LOGOUT) {
     config.baseURL = BASE_URL;
   }
 
   if (config.url !== LOGIN && config.url !== PASSWORDRESET) {
-    config.headers["Authorization"] = "Bearer " + AuthToken;
+    config.headers.Authorization = "Bearer " + AuthToken;
   }
   return config;
 });
@@ -44,7 +44,6 @@ instance.interceptors.response.use(
     }
 
     if (err.response.status === 401) {
-      console.log("error 401");
       showMessage({
         type: "error",
         message: err.response.data.error.message[0],
@@ -52,7 +51,6 @@ instance.interceptors.response.use(
     }
 
     if (err.response.status === 422) {
-      console.log("error 402");
       showMessage({
         type: "error",
         message: err.response.data.error.message[0],
@@ -74,7 +72,7 @@ instance.interceptors.response.use(
  * @returns A promise object of a response of the HTTP request with the 'data' object already
  * destructured.
  */
-// const api = <T>(cfg: AxiosRequestConfig) => instance.request<any, T>(cfg);
+// const api = <T>(cfg: any) => instance.request<any, T>(cfg);
 const api = instance;
 
 export default api;

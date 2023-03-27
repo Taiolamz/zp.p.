@@ -2,10 +2,8 @@ import * as yup from "yup";
 import { useState, useEffect } from "react";
 import { Formik } from "formik";
 import { FiDownload } from "react-icons/fi";
-
 import { H3 } from "../../styles";
 import {
-  Navbar,
   CountInfoCard,
   DatePicker,
   BorderedText,
@@ -37,6 +35,12 @@ import {
   EscalateBtnContainer,
   CustomerNameContainer,
 } from "./style";
+
+import {
+  getTransactionsRequest,
+  getTransactionsReset,
+} from "../../redux/slice";
+import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
 
 const data = [
   {
@@ -159,6 +163,7 @@ const outflowData = [100, 10, 20, 80, 100, 800, 700, 800, 90, 100, 800, 500];
 const profitData = [90, 50, 100, 91, 68, 100, 45, 70, 80, 30, 800, 50];
 const emptyData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 function Settlements() {
+  const dispatch = useAppDispatch();
   const [transactionStartDate, setTransactionStartDate] = useState("");
   const [transactionEndDate, setTransactionEndDate] = useState("");
   const [displayRecordDate, setDisplayRecordDate] = useState("");
@@ -185,6 +190,15 @@ function Settlements() {
   const [selectedEscalateTo, setSelectedEscalateTo] = useState("");
   const [selectedPriorityLevel, setSelectedPriorityLevel] = useState("");
 
+  // redux state
+  const {
+    data: {
+      transactions: { data: getTransactionsData },
+    },
+    status: getTransactionsStatus,
+  } = useAppSelector((state) => state.getTransactions);
+
+  console.log(getTransactionsData, "hh");
   const escalateCchema = yup.object().shape({
     title: yup.string().required("Title is required"),
     description: yup.string().required("Description is required"),
@@ -221,6 +235,14 @@ function Settlements() {
     setSelectedTransactionActionText("");
     setSelectedFailedTransaction({});
   };
+
+  // const handleGetTransactions = async () => {
+  //   await
+  // };
+
+  useEffect(() => {
+    dispatch(getTransactionsRequest({ name: "emma" }));
+  }, []);
 
   return (
     <AppContainer navTitle='SETTLEMENTS'>
