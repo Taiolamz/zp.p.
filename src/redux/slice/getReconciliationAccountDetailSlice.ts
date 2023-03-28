@@ -19,14 +19,9 @@ const initialState = {
 export const getReconciliationAccountDetailRequest = createAsyncThunk(
   "getReconciliationAccountDetail",
   async (payload: Dictionary, { dispatch }) => {
-    const url = `reconciliation/account/`;
-
+    const url = `admin/reconciliation/account/`;
     try {
-      const response = await api.get(url, {
-        params: {
-          userId: payload.userId,
-        },
-      });
+      const response = await api.get(`${url}${payload.userId}`);
       return response?.data;
     } catch (err) {
       throw err;
@@ -64,7 +59,7 @@ const getReconciliationAccountDetailSlice = createSlice({
   },
 });
 
-export const getReconciliationAccountDetailSliceReset =
+export const getReconciliationAccountDetailReset =
   getReconciliationAccountDetailSlice.actions.reset;
 export const getReconciliationAccountDetailSliceReducer =
   getReconciliationAccountDetailSlice.reducer;

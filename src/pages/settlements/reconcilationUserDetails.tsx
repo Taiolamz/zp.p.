@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { FiFilter } from "react-icons/fi";
 import { H2, H3 } from "../../styles";
 import {
@@ -30,7 +30,6 @@ import {
   getPathFromPagUrl,
   spacing,
   yearDateFormat,
-  routesPath,
 } from "../../utils";
 import {
   AllTransactionContainer,
@@ -76,11 +75,10 @@ const transactionDataHeader = {
   time: "Date",
 };
 
-const { RECONCILIATIONUSERDETAILS } = routesPath;
-
-function Reconciliation() {
+function ReconcilationUserDetails() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  let { id } = useParams();
   const [selectedFailedTransaction, setSelectedFailedTransaction] =
     useState<any>({});
   const [tabViewSelectedIndex, setTabViewSelectedIndex] =
@@ -106,17 +104,25 @@ function Reconciliation() {
   const transactionState = useAppSelector((state) => state.getTransactions);
   const { status: getTransactionsStatus } = transactionState;
 
-  const getReconciliationAccountState = useAppSelector(
-    (state) => state.getReconciliationAccount
+  const getReconciliationAccountDetailState = useAppSelector(
+    (state) => state.getReconciliationAccountDetail
   );
-  const { status: getReconciliationAccountStatus } =
-    getReconciliationAccountState;
+  const { status: getReconciliationAccountDetailStatus } =
+    getReconciliationAccountDetailState;
 
-  //   console.log(getReconciliationAccountState, "state");
+  const reconcileAccountState = useAppSelector(
+    (state) => state.reconcileAccount
+  );
+  const { status: reconcileAccountStatus } = reconcileAccountState;
+
   // api getTransactions
   useEffect(() => {
     dispatch(getTransactionsRequest(transactionFilterParams));
   }, [transactionFilterParams]);
+
+  useEffect(() => {
+    dispatch(getReconciliationAccountDetailRequest({ userId: id }));
+  }, []);
 
   useEffect(() => {
     if (getTransactionsStatus === "succeeded") {
@@ -143,11 +149,10 @@ function Reconciliation() {
   }, [transactionState]);
 
   useEffect(() => {
-    if (getReconciliationAccountStatus === "succeeded") {
-      console.log(getReconciliationAccountState.data.user, "acount state");
-      setUserData(getReconciliationAccountState?.data?.user);
+    if (getReconciliationAccountDetailStatus === "succeeded") {
+      setUserData(getReconciliationAccountDetailState?.data);
     }
-  }, [getReconciliationAccountState]);
+  }, [getReconciliationAccountDetailState]);
 
   const handleTransactionFilter = () => {
     setTransactionFilterParams({
@@ -159,63 +164,43 @@ function Reconciliation() {
     });
   };
 
-  const handleSearchUserReconciliation = () => {
-    dispatch(getReconciliationAccountRequest({ search: searchProfileValue }));
+  const handleReconcileBalance = () => {
+    dispatch(reconcileAccountRequest({ userId: id }));
+    // dispatch(getReconciliationAccountRequest({ search: searchProfileValue }));
   };
+
+  useEffect(() => {
+    if (reconcileAccountStatus === "succeeded") {
+      console.log(reconcileAccountState.data, "reconcileAccount");
+    }
+  }, [reconcileAccountState]);
   return (
-    <AppContainer navTitle='RECONCILIATION'>
+    <AppContainer navTitle='RECONCILIATION' navHelper='USER PROFILE'>
       <div style={{ marginTop: spacing.small }}>
-        <H2 semiBold color={colors.primary} left>
-          Find Profile
-        </H2>
-        <ReconciliationSearchContainer>
-          <div style={{ width: "70%", marginRight: spacing.small }}>
-            <SearchInput
-              backgroundColor={"transparent"}
-              name='searchProfileValue'
-              value={searchProfileValue}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setSearchProfileValue(e.target.value)
-              }
-              placeholder='Search by Phone Number or Account Number'
-            />
-          </div>
-
-          <BorderedText
-            onClick={handleSearchUserReconciliation}
-            backgroundColor={colors.primary}
-            color={colors.white}
-            text='Search Records'
-          />
-        </ReconciliationSearchContainer>
-
-        {userData.hasOwnProperty("name") && (
-          <ReconcialiationCard
-            onClick={() => {
-              navigate(`${RECONCILIATIONUSERDETAILS}${userData.id}`);
-              //   navigate(`${RECONCILIATIONUSERDETAILS}`, {
-              //     state: {
-              //       id: userData.id,
-              //     },
-              //   });
-            }}
-            name={userData.name}
-            kycLevel={userData.kyc_level}
-            lastSeen={dateFormat(userData.updated_at)}
-          />
-        )}
-
         <div>
           <ReconcileView
-            name='Wade Warren'
-            zojaBalance='70000'
+            name={userData?.user?.name}
+            zojaBalance={userData?.user?.account?.available_balance}
             kudaBalance='60000'
-            onClick={() => {}}
+            onClick={handleReconcileBalance}
             data={[
-              { text: "+23489000", helper: "Phone Number" },
-              { text: "+23489000", helper: "Phone Number" },
-              { text: "+23489000", helper: "Phone Number" },
-              { text: "+23489000", helper: "Phone Number" },
+              { text: userData?.user?.telephone, helper: "Phone Number" },
+              { text: userData?.user?.email, helper: "Email" },
+              { text: "+23489000", helper: "BVN" },
+              {
+                text: userData?.user?.account?.number,
+                helper: "Account Number",
+              },
+              { text: userData?.user?.location, helper: "Address" },
+              { text: userData?.user?.kyc_level, helper: "KYC" },
+              {
+                text: dateFormat(userData?.user?.updated_at),
+                helper: "Last Login",
+              },
+              {
+                text: dateFormat(userData?.user?.created_at),
+                helper: "Date of Onboarding",
+              },
             ]}
           />
         </div>
@@ -274,4 +259,4 @@ function Reconciliation() {
   );
 }
 
-export default Reconciliation;
+export default ReconcilationUserDetails;

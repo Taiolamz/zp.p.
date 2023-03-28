@@ -10,6 +10,7 @@ const routesPath = {
   SUPPORT: "/support",
   SETTLEMENTS: "/settlements",
   RECONCILIATION: "/reconciliation",
+  RECONCILIATIONUSERDETAILS: "/reconciliation/",
   USERS: "/users",
   SETTINGS: "/settings",
 };

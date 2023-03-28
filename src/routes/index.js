@@ -4,7 +4,11 @@ import { Login } from "../pages/login";
 import { Kyc } from "../pages/kyc";
 import { Support } from "../pages/support";
 import { Users } from "../pages/users";
-import { Settlements, Reconciliation } from "../pages/settlements";
+import {
+  Settlements,
+  Reconciliation,
+  ReconcilationUserDetails,
+} from "../pages/settlements";
 import { Settings } from "../pages/settings";
 import { NotFound } from "../pages/notFound";
 import { PrivateRoute } from "./privateRoute";
@@ -18,6 +22,7 @@ function AppRoute() {
     KYC,
     SETTLEMENTS,
     RECONCILIATION,
+    RECONCILIATIONUSERDETAILS,
     USERS,
     SETTINGS,
   } = routesPath;
@@ -65,6 +70,14 @@ function AppRoute() {
           element={
             <PrivateRoute>
               <Reconciliation />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={`${RECONCILIATIONUSERDETAILS}:id`}
+          element={
+            <PrivateRoute>
+              <ReconcilationUserDetails />
             </PrivateRoute>
           }
         />

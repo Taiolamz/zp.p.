@@ -254,7 +254,7 @@ function Settlements() {
     }
   }, [transactionState]);
 
-  console.log(paginationData, "data");
+  // console.log(paginationData, "data");
 
   const handleTransactionFilter = () => {
     setTransactionFilterParams({

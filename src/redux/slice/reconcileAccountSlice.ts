@@ -19,14 +19,9 @@ const initialState = {
 export const reconcileAccountRequest = createAsyncThunk(
   "reconcileAccount",
   async (payload: Dictionary, { dispatch }) => {
-    const url = `admin/reconcile`;
-
+    const url = `admin/reconciliation/account/`;
     try {
-      const response = await api.get(url, {
-        params: {
-          userId: payload.userId,
-        },
-      });
+      const response = await api.get(`${url}${payload.userId}/reconcile`);
       return response?.data;
     } catch (err) {
       throw err;
@@ -58,5 +53,5 @@ const reconcileAccountSlice = createSlice({
   },
 });
 
-export const reconcileAccountSliceReset = reconcileAccountSlice.actions.reset;
+export const reconcileAccountReset = reconcileAccountSlice.actions.reset;
 export const reconcileAccountSliceReducer = reconcileAccountSlice.reducer;
