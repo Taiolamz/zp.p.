@@ -1,14 +1,13 @@
-import * as yup from "yup";
 import { useState, useEffect } from "react";
-import { Formik } from "formik";
 import { FiFilter } from "react-icons/fi";
-import { H3 } from "../../styles";
+import { H2, H3 } from "../../styles";
 import {
   CountInfoCard,
   DatePicker,
   BorderedText,
   Pagination,
   SearchInput,
+  ReconcialiationCard,
   Modal,
   Picker,
   Input,
@@ -21,6 +20,7 @@ import {
   TransactionsView,
   MoreIconView,
   AppContainer,
+  ReconcileView,
 } from "../../atoms";
 import {
   colors,
@@ -37,6 +37,7 @@ import {
   InfoCountContent,
   TabViewContainer,
   TabContentTwo,
+  ReconciliationSearchContainer,
   EscalateFormContainer,
   EscalateBtnContainer,
   CustomerNameContainer,
@@ -47,30 +48,6 @@ import {
   getTransactionsReset,
 } from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
-
-const data = [
-  {
-    id: 1,
-    count: 45233333,
-    title: "Inflow",
-    helper: "Total Income",
-    color: colors.blueVariantOne,
-  },
-  {
-    id: 2,
-    count: 55000000,
-    title: "Outflow",
-    helper: "Total Withdrawals",
-    color: colors.orange,
-  },
-  {
-    id: 3,
-    count: 7000000,
-    title: "Profit",
-    helper: "Sharing Percentage on Transactions",
-    color: colors.greenVariantOne,
-  },
-];
 
 const tabViewData = [
   { id: 1, isSelected: true, text: "Transactions History" },
@@ -88,55 +65,168 @@ const transactionDataHeader = {
   time: "Date",
 };
 
-const billsHistoryData = [
-  {
-    id: 1,
-    tid: "CRIDD44BI",
-    amount: 20000,
-    type: "Bill payment",
-    status: "System Failure",
-    time: "24/11/2021- 17:01",
-    icon: true,
-    name: "Allen Kardic",
-  },
-  {
-    id: 2,
-    tid: "CRIDD44BI",
-    amount: 20000,
-    type: "Bill payment",
-    status: "System Failure",
-    time: "24/11/2021- 17:01",
-    icon: true,
-    name: "James Brown",
-  },
-  {
-    id: 3,
-    tid: "CRIDD44BI",
-    amount: 20000,
-    type: "Bill payment",
-    status: "System Failure",
-    time: "24/11/2021- 17:01",
-    icon: true,
-    name: "Enoch Yakubu",
-  },
-];
-
-const billsHistoryHeader = {
-  id: "",
-  name: "Customer",
-  tid: "Transaction ID",
-  amount: "Amount",
-  type: "Bill Type",
-  status: "Status",
-  time: "Time",
-};
-
 function Reconciliation() {
   const dispatch = useAppDispatch();
+  const [selectedFailedTransaction, setSelectedFailedTransaction] =
+    useState<any>({});
+  const [tabViewSelectedIndex, setTabViewSelectedIndex] =
+    useState<any[number]>(1);
+  const [startDisplayRecordDate, setStartDisplayRecordDate] = useState("");
+  const [endDisplayRecordDate, setEndDisplayRecordDate] = useState("");
+  const [transactionDataList, setTransactionDataList] = useState<any[]>([]);
+  const [transactionFilterParams, setTransactionFilterParams] = useState({
+    reference: "",
+    type: "",
+    status: "",
+    start_date: "",
+    end_date: "",
+  });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchValue, setSearchValue] = useState("");
+  const [searchProfileValue, setSearchProfileValue] = useState("");
+  const totalPages = 5;
 
+  // redux state
+  const transactionState = useAppSelector((state) => state.getTransactions);
+
+  const { status: getTransactionsStatus } = transactionState;
+
+  // api getTransactions
+  useEffect(() => {
+    dispatch(getTransactionsRequest(transactionFilterParams));
+  }, [transactionFilterParams]);
+
+  useEffect(() => {
+    if (getTransactionsStatus === "succeeded") {
+      let updatedList: any[] = [];
+
+      transactionState?.data?.transactions?.data.forEach(
+        (item: any, index: number) => {
+          updatedList.push({
+            id: index + 1,
+            name: item.user.name,
+            tid: item.transaction_reference,
+            amount: parseFloat(item.amount),
+            type: item.type,
+            status: item.status,
+            icon: true,
+            time: item.created_at,
+            currency: item.currency,
+          });
+        }
+      );
+
+      setTransactionDataList(updatedList);
+    }
+  }, [transactionState]);
+
+  const handleTransactionFilter = () => {
+    setTransactionFilterParams({
+      reference: searchValue,
+      type: "",
+      status: "",
+      start_date: yearDateFormat(startDisplayRecordDate),
+      end_date: yearDateFormat(endDisplayRecordDate),
+    });
+  };
   return (
     <AppContainer navTitle='SETTLEMENTS' navHelper='Reconcialtiona'>
-      <div>reconcialtion</div>
+      <div style={{ marginTop: spacing.small }}>
+        <H2 semiBold color={colors.primary} left>
+          Find Profile
+        </H2>
+        <ReconciliationSearchContainer>
+          <div style={{ width: "70%", marginRight: spacing.small }}>
+            <SearchInput
+              backgroundColor={"transparent"}
+              name='SearchValue'
+              value={searchValue}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setSearchValue(e.target.value)
+              }
+              placeholder='Search by Phone Number or Account Number'
+            />
+          </div>
+
+          <BorderedText
+            onClick={() => {}}
+            backgroundColor={colors.primary}
+            color={colors.white}
+            text='Search Records'
+          />
+        </ReconciliationSearchContainer>
+
+        <ReconcialiationCard
+          name='Waden Warren'
+          kycLevel='Level 1'
+          lastSeen='20/24'
+        />
+
+        <div>
+          <ReconcileView
+            name='Wade Warren'
+            zojaBalance='70000'
+            kudaBalance='60000'
+            onClick={() => {}}
+            data={[
+              { text: "+23489000", helper: "Phone Number" },
+              { text: "+23489000", helper: "Phone Number" },
+              { text: "+23489000", helper: "Phone Number" },
+              { text: "+23489000", helper: "Phone Number" },
+            ]}
+          />
+        </div>
+
+        <TabViewContainer>
+          <TabView
+            data={tabViewData}
+            setSelectedIndex={setTabViewSelectedIndex}
+          />
+
+          {tabViewSelectedIndex === 1 && (
+            <TabContentTwo>
+              <SearchInput
+                backgroundColor={"transparent"}
+                name='SearchValue'
+                value={searchValue}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setSearchValue(e.target.value)
+                }
+                placeholder='Search Records'
+              />
+
+              <DatePicker selectedDate={setStartDisplayRecordDate} />
+
+              <DatePicker selectedDate={setEndDisplayRecordDate} />
+
+              <BorderedText
+                onClick={handleTransactionFilter}
+                backgroundColor={colors.primary}
+                color={colors.white}
+                icon={<FiFilter color={colors.white} size={15} />}
+                text='Filter'
+              />
+            </TabContentTwo>
+          )}
+        </TabViewContainer>
+        {tabViewSelectedIndex === 1 && (
+          <TransactionsView
+            type={"transactions"}
+            headerData={transactionDataHeader}
+            header={true}
+            data={transactionDataList}
+            setSelectedItem={setSelectedFailedTransaction}
+          />
+        )}
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(selectedPage) => {
+            setCurrentPage(selectedPage);
+          }}
+        />
+      </div>
     </AppContainer>
   );
 }

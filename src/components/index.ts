@@ -18,3 +18,4 @@ export { default as UserActivityCard } from "./cards/userActivityCard";
 export { default as CountInfoCard } from "./cards/countInfoCard";
 export { default as UserDetailsCard } from "./cards/userDetailsCard";
 export { default as CurrentPageCard } from "./cards/currentPageCard";
+export { default as ReconcialiationCard } from "./cards/reconcialiationCard";

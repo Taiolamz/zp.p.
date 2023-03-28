@@ -96,3 +96,14 @@ export const CustomerNameContainer = styled.div`
     width: 100%;
   }
 `;
+
+export const ReconciliationSearchContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 50%;
+  margin: ${spacing.small} 0 ${spacing.medium} 0;
+  @media (max-width: 320px) {
+    width: 100%;
+  }
+`;
