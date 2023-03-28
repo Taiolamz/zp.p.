@@ -1,11 +1,10 @@
-import { ReactElement, useEffect } from "react";
+import { ReactElement, useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import Cookies from "js-cookie";
+
 import { AiOutlineUser, AiOutlineDollarCircle } from "react-icons/ai";
 import { FiUsers, FiMail, FiTrendingUp, FiSettings } from "react-icons/fi";
-import { useAppDispatch } from "../../redux/redux-hooks";
-import { loginReset } from "../../redux/slice";
-import { authReset } from "../../redux/slice";
+import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
+import { logoutRequest } from "../../redux/slice";
 import { SideBarCard, UserActivityCard } from "../../components/index";
 import { H6 } from "../../styles";
 import { colors, images, routesPath } from "../../utils";
@@ -33,9 +32,19 @@ export interface NavIProps {
   icon: ReactElement;
   isSelected: boolean;
   path: string;
+  options?: any[];
 }
-const { DASHBOARD, TOKEN, LOGIN, KYC, SUPPORT, SETTLEMENTS, USERS, SETTINGS } =
-  routesPath;
+const {
+  DASHBOARD,
+  TOKEN,
+  LOGIN,
+  KYC,
+  SUPPORT,
+  SETTLEMENTS,
+  RECONCILIATION,
+  USERS,
+  SETTINGS,
+} = routesPath;
 function TabNav({ text, icon, isSelected, onClick }: IProps) {
   return (
     <TabNavContainer onClick={onClick}>
@@ -50,8 +59,16 @@ function TabNav({ text, icon, isSelected, onClick }: IProps) {
 function SideBar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const { status } = useAppSelector((state) => state.logout);
+  const {
+    data: { name, status: activityStatus },
+  } = useAppSelector((state) => state.auth);
+
   const location = useLocation();
   const currentPath = location.pathname;
+  const [innerNav, setInnerNav] = useState("");
+  const [toggleBtn, setToggleBtn] = useState(false);
 
   function navigationPath() {
     return [
@@ -78,10 +95,24 @@ function SideBar() {
       },
       {
         id: 4,
-        isSelected: currentPath === SETTLEMENTS ? true : false,
+        isSelected: toggleBtn,
         text: "Settlements",
         icon: <FiTrendingUp />,
         path: SETTLEMENTS,
+        options: [
+          {
+            id: 1,
+            text: "Settlements",
+            isSelected: currentPath === SETTLEMENTS ? true : false,
+            path: SETTLEMENTS,
+          },
+          {
+            id: 2,
+            text: "Reconciliation",
+            isSelected: currentPath === RECONCILIATION ? true : false,
+            path: RECONCILIATION,
+          },
+        ],
       },
       {
         id: 5,
@@ -125,28 +156,34 @@ function SideBar() {
   ];
 
   useEffect(() => {
+    if (innerNav.length > 2) {
+      navigate(innerNav);
+    }
+    if (currentPath === SETTLEMENTS || currentPath === RECONCILIATION) {
+      setToggleBtn(true);
+    }
+
     navigationPath();
-  }, []);
+  }, [innerNav]);
 
   const handleNavigateUser = (item: NavIProps) => {
-    navigate(item.path);
-    navigationPath();
+    if (item.options) {
+      setToggleBtn(!toggleBtn);
+    } else {
+      setToggleBtn(false);
+      navigate(item.path);
+      navigationPath();
+    }
   };
 
   const handleLogout = (item: any) => {
     if (item.text === "Logout") {
-      Cookies.remove(TOKEN);
-      dispatch(loginReset());
-      dispatch(authReset());
-      navigate(LOGIN);
+      dispatch(logoutRequest());
     }
   };
 
   const handleLogoutDesktop = () => {
-    Cookies.remove(TOKEN);
-    dispatch(loginReset());
-    dispatch(authReset());
-    navigate(LOGIN);
+    dispatch(logoutRequest());
   };
   return (
     <>
@@ -165,13 +202,17 @@ function SideBar() {
                 isSelected={item.isSelected}
                 text={item.text}
                 icon={item.icon}
+                options={item?.options}
+                setInnerNav={setInnerNav}
+                toggleBtn={toggleBtn}
               />
             ))}
           </div>
           <UserActivityCard
-            title='John Doe'
-            helper='Verified'
+            title={name}
+            helper={activityStatus}
             onClick={handleLogoutDesktop}
+            btnDisabled={status === "loading" ? true : false}
           />
         </Content>
       </Container>

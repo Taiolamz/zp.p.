@@ -6,8 +6,12 @@ export interface AuthType {
   authenticated: boolean;
 }
 
+type Dictionary = {
+  [key: string]: any;
+};
+
 interface InitState {
-  data: {};
+  data: Dictionary;
   status: "idle" | "loading" | "succeeded" | "failed";
   error: any;
 }
@@ -22,11 +26,8 @@ export const authRequest = createAsyncThunk(
   "auth",
   async (payload: AuthType) => {
     try {
-      const { token, rememberUser } = payload;
       const response = {
-        token: token,
-        rememberUser: rememberUser,
-        authenticated: true,
+        ...payload,
       };
       return response;
     } catch (err) {
@@ -36,7 +37,7 @@ export const authRequest = createAsyncThunk(
 );
 
 const authSlice = createSlice({
-  name: "login",
+  name: "auth",
   initialState,
   reducers: {
     reset: (state) => {

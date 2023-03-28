@@ -1,7 +1,5 @@
-import React, { useState, memo } from "react";
-import { FiEyeOff, FiEye, FiSearch } from "react-icons/fi";
-
-import { H6, H4 } from "../../styles";
+import React, { memo } from "react";
+import { FiSearch } from "react-icons/fi";
 import { colors } from "../../utils";
 import { InputContainer, InputContent } from "./style";
 

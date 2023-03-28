@@ -1,0 +1,169 @@
+import { useState, useLayoutEffect } from "react";
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Tooltip,
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+
+import { Container, BorderedTextContainer, Content } from "./style";
+import { colors, spacing } from "../../utils";
+import { BorderedText } from "../../components";
+import { H3 } from "../../styles";
+
+export interface BarChartIProps {
+  inflowData: number[];
+  outflowData: number[];
+  profitData: number[];
+}
+
+export interface SettlementBarChartOptionsIProps {
+  text: string;
+  id: number;
+  isSelected: boolean;
+}
+
+export interface SettlementBarChartIProps extends BarChartIProps {
+  barChartSelectedData?: any[];
+  setBarChartSelectedText?: any;
+}
+
+function BarChart({ inflowData, outflowData, profitData }: BarChartIProps) {
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+
+    Tooltip
+  );
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    // scale: false,
+  };
+
+  const labels = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const fakerOne = inflowData;
+  const fakerTwo = outflowData;
+  const fakerThree = profitData;
+
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "",
+        data: fakerOne,
+        backgroundColor: colors.blueVariantOne,
+        hoverBackgroundColor: colors.blueVariantOne,
+        grouped: true,
+        barThickness: 13,
+      },
+      {
+        label: "",
+        data: fakerTwo,
+        backgroundColor: colors.orange,
+        hoverBackgroundColor: colors.orange,
+        grouped: true,
+        barThickness: 13,
+      },
+      {
+        label: "",
+        data: fakerThree,
+        backgroundColor: colors.greenVariantOne,
+        hoverBackgroundColor: colors.greenVariantOne,
+        grouped: true,
+        barThickness: 13,
+      },
+    ],
+  };
+
+  return (
+    <div style={{ marginTop: spacing.small }}>
+      <Bar options={options} data={data} height={195} width={1080} />
+    </div>
+  );
+}
+
+const barChartSelectedDataIni = [
+  { id: 1, text: "All Data", isSelected: true },
+  { id: 2, text: "Inflow", isSelected: false },
+  { id: 3, text: "Outflow", isSelected: false },
+  { id: 4, text: "Profit", isSelected: false },
+];
+function SettlementBarChart({
+  setBarChartSelectedText,
+  inflowData,
+  outflowData,
+  profitData,
+}: SettlementBarChartIProps) {
+  const [optionData, setOptionData] = useState<
+    SettlementBarChartOptionsIProps[]
+  >(barChartSelectedDataIni);
+
+  const handleOnSelect = (item: SettlementBarChartOptionsIProps) => {
+    const itemToEdit = item;
+
+    const updatedData = [...optionData].map(
+      (el: SettlementBarChartOptionsIProps) => {
+        if (el.text === itemToEdit.text) {
+          el.isSelected = true;
+        } else {
+          el.isSelected = false;
+        }
+        return el;
+      }
+    );
+
+    setOptionData(updatedData);
+    setBarChartSelectedText(itemToEdit.text);
+  };
+  return (
+    <>
+      <Container>
+        <Content>
+          <H3 semiBold left color={colors.greyDark}>
+            Inflow/Outflow/Profit
+          </H3>
+          <BorderedTextContainer>
+            {optionData?.map((item: SettlementBarChartOptionsIProps) => (
+              <BorderedText
+                onClick={() => handleOnSelect(item)}
+                key={item.id}
+                text={item.text}
+                color={item.isSelected ? colors.white : colors.grey}
+                backgroundColor={
+                  item.isSelected ? colors.primary : colors.smokeWhite
+                }
+              />
+            ))}
+          </BorderedTextContainer>
+        </Content>
+        <BarChart
+          inflowData={inflowData}
+          outflowData={outflowData}
+          profitData={profitData}
+        />
+      </Container>
+    </>
+  );
+}
+
+export default SettlementBarChart;

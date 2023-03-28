@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { RiLogoutBoxRLine } from "react-icons/ri";
 import { Container, InfluncerText, Image } from "./style";
-import { H2, H6 } from "../../../styles";
+import { H3, H6 } from "../../../styles";
 import { colors, images } from "../../../utils";
 import { Button } from "../..";
 
@@ -16,9 +16,9 @@ function UserActivityCard({ title, helper, onClick, btnDisabled }: IProps) {
   return (
     <Container>
       <Image src={images.user} alt='user acount' />
-      <H2 color={colors.grey} semiBold>
+      <H3 color={colors.grey} semiBold>
         {title}
-      </H2>
+      </H3>
       <InfluncerText>
         <H6>{helper}</H6>
       </InfluncerText>
