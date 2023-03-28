@@ -4,6 +4,9 @@ import {
   authSliceReducer,
   logoutSliceReducer,
   getTransactionsSliceReducer,
+  getReconciliationAccountSliceReducer,
+  getReconciliationAccountDetailSliceReducer,
+  reconcileAccountSliceReducer,
 } from "./slice";
 
 const rootReducer = combineReducers({
@@ -11,6 +14,9 @@ const rootReducer = combineReducers({
   auth: authSliceReducer,
   logout: logoutSliceReducer,
   getTransactions: getTransactionsSliceReducer,
+  getReconciliationAccount: getReconciliationAccountSliceReducer,
+  getReconciliationAccountDetail: getReconciliationAccountDetailSliceReducer,
+  reconcileAccount: reconcileAccountSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
