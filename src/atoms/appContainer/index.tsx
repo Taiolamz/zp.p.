@@ -7,13 +7,14 @@ export interface IProps {
   children: ReactElement;
   navTitle: string;
   navHelper?: string;
+  goBack?: () => void;
 }
 
-function AppContainer({ children, navTitle, navHelper }: IProps) {
+function AppContainer({ children, navTitle, navHelper, goBack }: IProps) {
   return (
     <>
       <Container>
-        <Navbar title={navTitle} helper={navHelper} />
+        <Navbar goBack={goBack} title={navTitle} helper={navHelper} />
         <Content>
           <SideBar />
           {children}

@@ -30,6 +30,7 @@ import {
   getPathFromPagUrl,
   spacing,
   yearDateFormat,
+  routesPath,
 } from "../../utils";
 import {
   AllTransactionContainer,
@@ -75,6 +76,8 @@ const transactionDataHeader = {
   time: "Date",
 };
 
+const { RECONCILIATION } = routesPath;
+
 function ReconcilationUserDetails() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -115,7 +118,7 @@ function ReconcilationUserDetails() {
   );
   const { status: reconcileAccountStatus } = reconcileAccountState;
 
-  // api getTransactions
+  // api
   useEffect(() => {
     dispatch(getTransactionsRequest(transactionFilterParams));
   }, [transactionFilterParams]);
@@ -166,7 +169,6 @@ function ReconcilationUserDetails() {
 
   const handleReconcileBalance = () => {
     dispatch(reconcileAccountRequest({ userId: id }));
-    // dispatch(getReconciliationAccountRequest({ search: searchProfileValue }));
   };
 
   useEffect(() => {
@@ -174,8 +176,12 @@ function ReconcilationUserDetails() {
       console.log(reconcileAccountState.data, "reconcileAccount");
     }
   }, [reconcileAccountState]);
+
   return (
-    <AppContainer navTitle='RECONCILIATION' navHelper='USER PROFILE'>
+    <AppContainer
+      goBack={() => navigate(RECONCILIATION)}
+      navTitle='RECONCILIATION'
+      navHelper='USER PROFILE'>
       <div style={{ marginTop: spacing.small }}>
         <div>
           <ReconcileView

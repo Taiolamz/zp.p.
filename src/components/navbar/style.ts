@@ -1,6 +1,5 @@
-import { ReactElement } from "react";
 import styled from "styled-components";
-import { colors, boxShadow, spacing, borderRadius } from "../../utils";
+import { colors, boxShadow, spacing } from "../../utils";
 
 interface StyleProps {
   helper?: string;
@@ -42,4 +41,12 @@ export const ImgContent = styled.img`
   height: 50px;
   border-radius: 50%;
   object-fit: contain;
+`;
+
+export const BackBtnContainer = styled.div`
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 `;
