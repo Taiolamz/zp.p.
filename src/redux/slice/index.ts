@@ -5,3 +5,5 @@ export * from "./getTransactionsSlice";
 export * from "./getReconciliationAccountSlice";
 export * from "./getReconciliationAccountDetailSlice";
 export * from "./reconcileAccountSlice";
+export * from "./getEscalationAgentsSlice";
+export * from "./createEscalationTicketSlice";

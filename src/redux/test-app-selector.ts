@@ -5,6 +5,8 @@ import {
   getTransactionsSliceReducer,
   getReconciliationAccountSliceReducer,
   reconcileAccountSliceReducer,
+  getEscalationAgentsSliceReducer,
+  createEscalationTicketSliceReducer,
 } from "./slice";
 const state = {
   login: loginSliceReducer,
@@ -13,6 +15,8 @@ const state = {
   getTransactions: getTransactionsSliceReducer,
   getReconciliationAccount: getReconciliationAccountSliceReducer,
   reconcileAccount: reconcileAccountSliceReducer,
+  getEscalationAgents: getEscalationAgentsSliceReducer,
+  createEscalationTicket: createEscalationTicketSliceReducer,
 };
 
 export const testAppSelector = (f: any) => f(state);
