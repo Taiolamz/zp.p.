@@ -189,35 +189,17 @@ function Reconciliation() {
           />
         </ReconciliationSearchContainer>
 
-        {userData.hasOwnProperty("name") && (
-          <ReconcialiationCard
-            onClick={() => {
-              navigate(`${RECONCILIATIONUSERDETAILS}${userData.id}`);
-              //   navigate(`${RECONCILIATIONUSERDETAILS}`, {
-              //     state: {
-              //       id: userData.id,
-              //     },
-              //   });
-            }}
-            name={userData.name}
-            kycLevel={userData.kyc_level}
-            lastSeen={dateFormat(userData.updated_at)}
-          />
-        )}
-
-        <div>
-          <ReconcileView
-            name='Wade Warren'
-            zojaBalance='70000'
-            kudaBalance='60000'
-            onClick={() => {}}
-            data={[
-              { text: "+23489000", helper: "Phone Number" },
-              { text: "+23489000", helper: "Phone Number" },
-              { text: "+23489000", helper: "Phone Number" },
-              { text: "+23489000", helper: "Phone Number" },
-            ]}
-          />
+        <div style={{ marginBottom: spacing.large }}>
+          {userData.hasOwnProperty("name") && (
+            <ReconcialiationCard
+              onClick={() => {
+                navigate(`${RECONCILIATIONUSERDETAILS}${userData.id}`);
+              }}
+              name={userData.name}
+              kycLevel={userData.kyc_level}
+              lastSeen={dateFormat(userData.updated_at)}
+            />
+          )}
         </div>
 
         <TabViewContainer>

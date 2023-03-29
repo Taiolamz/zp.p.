@@ -1,4 +1,3 @@
-import Modal from "react-modal";
 import {
   Container,
   TopContent,

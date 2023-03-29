@@ -39,7 +39,8 @@ function RModal({
 
   return (
     <Modal
-      isOpen={isModalVisible}
+      ariaHideApp={false}
+      isOpen={!!isModalVisible}
       onAfterOpen={afterOpenModal}
       onRequestClose={closeModal}
       style={customStyles}

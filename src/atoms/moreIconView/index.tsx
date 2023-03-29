@@ -35,6 +35,7 @@ function MoreIconView({
 
   return (
     <Modal
+      ariaHideApp={false}
       isOpen={isModalVisible}
       onAfterOpen={afterOpenModal}
       onRequestClose={closeModal}
