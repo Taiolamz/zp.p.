@@ -21,6 +21,7 @@ import {
   TransactionsView,
   MoreIconView,
   AppContainer,
+  SuccessModalWithCopy,
 } from "../../atoms";
 import {
   colors,
@@ -45,8 +46,13 @@ import {
 import {
   getTransactionsRequest,
   getTransactionsReset,
+  getEscalationAgentsRequest,
+  createEscalationTicketRequest,
 } from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
+type Dictionary = {
+  [key: string]: any;
+};
 
 const data = [
   {
@@ -161,22 +167,34 @@ function Settlements() {
     useState<any>({});
   const [moreIsVisible, setMoreIsVisible] = useState(false);
   const [escalateModalVisible, setEscalateModalVisible] = useState(false);
+  const [escalateSuccessfulModalVisible, setEscalateSuccessfulModalVisible] =
+    useState(false);
   const [selectedTransactionActionText, setSelectedTransactionActionText] =
     useState("");
+  const [escalateSuccessfulData, setEscalateSuccessfulData] =
+    useState<Dictionary>({});
+  const [escalationAgentsList, setEscalationAgentsList] = useState<any[]>([]);
 
+  const transactionDetails = "Transaction Details";
   const escalate = "Escalate";
-  const escalateLog = "Escalation Log";
-  const escalateClose = "Close Transaction";
-
-  const moreIconOption = [escalate, escalateLog, escalateClose];
+  const moreIconOption = [transactionDetails, escalate];
 
   const [selectedEscalateTo, setSelectedEscalateTo] = useState("");
   const [selectedPriorityLevel, setSelectedPriorityLevel] = useState("");
 
   // redux state
   const transactionState = useAppSelector((state) => state.getTransactions);
-
   const { status: getTransactionsStatus } = transactionState;
+
+  const getEscalationAgentsState = useAppSelector(
+    (state) => state.getEscalationAgents
+  );
+  const { status: getEscalationAgentsStatus } = getEscalationAgentsState;
+
+  const createEscalationTicketState = useAppSelector(
+    (state) => state.createEscalationTicket
+  );
+  const { status: createEscalationTicketStatus } = createEscalationTicketState;
 
   const escalateCchema = yup.object().shape({
     title: yup.string().required("Title is required"),
@@ -236,6 +254,7 @@ function Settlements() {
             icon: true,
             time: item.created_at,
             currency: item.currency,
+            phoneNumber: item.user.telephone,
           });
         }
       );
@@ -248,13 +267,44 @@ function Settlements() {
         last: links.last !== null ? getPathFromPagUrl(links.last) : null,
         total: 1,
       });
-      // console.log(transactionState?.data?.transactions, "data");
 
       setTransactionDataList(updatedList);
     }
   }, [transactionState]);
 
-  // console.log(paginationData, "data");
+  useEffect(() => {
+    // fetch escalation agents on when escalation is clicked from options
+    if (selectedTransactionActionText === "Escalate") {
+      dispatch(getEscalationAgentsRequest({ id: "user" }));
+    }
+  }, [selectedTransactionActionText]);
+
+  useEffect(() => {
+    if (getEscalationAgentsStatus === "succeeded") {
+      let result: any[] = [];
+      getEscalationAgentsState.data.internal_users.forEach((item: any) => {
+        result.push({
+          value: item.id,
+          label: item.name,
+        });
+      });
+      setEscalationAgentsList(result);
+    }
+  }, [getEscalationAgentsState]);
+
+  useEffect(() => {
+    if (createEscalationTicketStatus === "succeeded") {
+      setEscalateSuccessfulData(createEscalationTicketState.data.ticket);
+      setEscalateSuccessfulModalVisible(true);
+      setEscalateSuccessfulData({});
+    }
+  }, [createEscalationTicketState]);
+
+  const handleCloseEscalateSuccessfulModal = () => {
+    setEscalateSuccessfulModalVisible(false);
+    setEscalateSuccessfulData({});
+    handleCloseEscalateModal();
+  };
 
   const handleTransactionFilter = () => {
     setTransactionFilterParams({
@@ -338,7 +388,6 @@ function Settlements() {
             data={tabViewData}
             setSelectedIndex={setTabViewSelectedIndex}
           />
-
           {tabViewSelectedIndex === 1 && (
             <TabContentTwo>
               <SearchInput
@@ -350,11 +399,8 @@ function Settlements() {
                 }
                 placeholder='Search Records'
               />
-
               <DatePicker selectedDate={setStartDisplayRecordDate} />
-
               <DatePicker selectedDate={setEndDisplayRecordDate} />
-
               <BorderedText
                 onClick={handleTransactionFilter}
                 backgroundColor={colors.primary}
@@ -396,7 +442,18 @@ function Settlements() {
             enableReinitialize={true}
             validationSchema={escalateCchema}
             onSubmit={async (values, { setSubmitting }) => {
-              const { title, description, escalateTo, priorityLevel } = values;
+              const { title, description } = values;
+
+              await dispatch(
+                createEscalationTicketRequest({
+                  title,
+                  description,
+                  internal_user_id: selectedEscalateTo,
+                  priority_level: selectedPriorityLevel,
+                  customer_telephone: selectedFailedTransaction?.phoneNumber,
+                })
+              );
+
               setSubmitting(false);
             }}>
             {(formikProps) => {
@@ -446,10 +503,7 @@ function Settlements() {
                       label='Escalate to'
                       selectedValue={setSelectedEscalateTo}
                       placeholder='Select Agent'
-                      options={[
-                        { label: "View Details", value: "View Details" },
-                        { label: "Delete Options", value: "Delete Options" },
-                      ]}
+                      options={escalationAgentsList}
                     />
 
                     <Picker
@@ -458,12 +512,21 @@ function Settlements() {
                       selectedValue={setSelectedPriorityLevel}
                       placeholder='Select Priority'
                       options={[
-                        { label: "View Details", value: "View Details" },
-                        { label: "Delete Options", value: "Delete Options" },
+                        { label: "Low", value: "low" },
+                        { label: "Medium", value: "medium" },
+                        { label: "High", value: "high" },
                       ]}
                     />
                     <EscalateBtnContainer>
-                      <Button type='submit' text='Escalate' disabled={false} />
+                      <Button
+                        type='submit'
+                        text='Escalate'
+                        disabled={
+                          createEscalationTicketStatus === "loading"
+                            ? true
+                            : false
+                        }
+                      />
                       <Button
                         onClick={handleCloseEscalateModal}
                         text='Cancel'
@@ -479,6 +542,16 @@ function Settlements() {
             }}
           </Formik>
         </Modal>
+
+        {/* Escalation successful modal */}
+        <SuccessModalWithCopy
+          isModalVisible={escalateSuccessfulModalVisible}
+          closeModal={handleCloseEscalateSuccessfulModal}
+          text={"Complaint has been escalated with Ticket Id:"}
+          copyIconText={"Copy Ticket:Id"}
+          title={escalateSuccessfulData?.ticket_reference}
+          iconType='sent'
+        />
 
         <MoreIconView
           setSelectedText={setSelectedTransactionActionText}
