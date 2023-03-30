@@ -162,14 +162,15 @@ function Settlements() {
     start_date: "",
     end_date: "",
   });
-  const [paginationData, setPaginationData] = useState({});
+
   const [transactionDataList, setTransactionDataList] = useState<any[]>([]);
   const [tabViewSelectedIndex, setTabViewSelectedIndex] =
     useState<any[number]>(1);
   const [barChartSelectedText, setBarChartSelectedText] = useState("All Data");
+  const pageSize = 10;
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(5);
   const [searchValue, setSearchValue] = useState("");
-  const totalPages = 5;
 
   const [selectedFailedTransaction, setSelectedFailedTransaction] =
     useState<any>({});
@@ -340,8 +341,14 @@ function Settlements() {
 
   // api getTransactions
   useEffect(() => {
-    dispatch(getTransactionsRequest(transactionFilterParams));
-  }, [transactionFilterParams]);
+    dispatch(
+      getTransactionsRequest({
+        ...transactionFilterParams,
+        per_page: pageSize,
+        page: currentPage,
+      })
+    );
+  }, [transactionFilterParams, currentPage]);
 
   useEffect(() => {
     if (getTransactionsStatus === "succeeded") {
@@ -366,14 +373,11 @@ function Settlements() {
         }
       );
 
-      const { meta, links } = transactionState?.data?.transactions;
+      const {
+        meta: { links },
+      } = transactionState?.data?.transactions;
 
-      setPaginationData({
-        currentPageNo: meta.current_page,
-        next: links.next !== null ? getPathFromPagUrl(links.next) : null,
-        last: links.last !== null ? getPathFromPagUrl(links.last) : null,
-        total: 1,
-      });
+      setTotalPages(links.length - 2);
 
       setTransactionDataList(updatedList);
     }
