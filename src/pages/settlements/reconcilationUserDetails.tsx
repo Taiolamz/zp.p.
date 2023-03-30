@@ -1,19 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { FiFilter } from "react-icons/fi";
-import { H2, H3 } from "../../styles";
+
 import {
-  CountInfoCard,
   DatePicker,
   BorderedText,
   Pagination,
   SearchInput,
-  ReconcialiationCard,
-  Modal,
-  Picker,
-  Input,
-  TextArea,
-  Button,
 } from "../../components";
 import {
   SettlementBarChart,
@@ -27,34 +20,18 @@ import {
 } from "../../atoms";
 import {
   colors,
-  currencyFormat,
   dateFormat,
-  getPathFromPagUrl,
   spacing,
   yearDateFormat,
   routesPath,
 } from "../../utils";
-import {
-  AllTransactionContainer,
-  AllTransactionContent,
-  DateContent,
-  InfoCountContainer,
-  InfoCountContent,
-  TabViewContainer,
-  TabContentTwo,
-  ReconciliationSearchContainer,
-  EscalateFormContainer,
-  EscalateBtnContainer,
-  CustomerNameContainer,
-} from "./style";
+import { TabViewContainer, TabContentTwo } from "./style";
 
 import {
   getTransactionsRequest,
   getTransactionsReset,
   getReconciliationAccountDetailRequest,
   getReconciliationAccountDetailReset,
-  getReconciliationAccountRequest,
-  getReconciliationAccountReset,
   reconcileAccountRequest,
   reconcileAccountReset,
 } from "../../redux/slice";
@@ -98,7 +75,12 @@ function ReconcilationUserDetails() {
     start_date: "",
     end_date: "",
   });
-
+  const [reconcilationModalVisible, setReconcilationModalVisible] =
+    useState(false);
+  const [
+    reconcilationSuccessModalVisible,
+    setReconcilationSuccessModalVisible,
+  ] = useState(false);
   const [userData, setUserData] = useState<Dictionary>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
@@ -177,13 +159,24 @@ function ReconcilationUserDetails() {
     );
   };
 
+  const handleCloseReconcilationModal = () => {
+    setReconcilationModalVisible(false);
+  };
+
+  const handleCloseReconcilationSuccessModal = () => {
+    dispatch(reconcileAccountReset());
+    setReconcilationModalVisible(false);
+    setReconcilationSuccessModalVisible(false);
+  };
+
   useEffect(() => {
     if (reconcileAccountStatus === "succeeded") {
+      setReconcilationSuccessModalVisible(true);
       console.log(reconcileAccountState.data, "reconcileAccount");
     }
   }, [reconcileAccountState]);
 
-  // console.log(userData, "userData");
+  console.log(userData, "userData");
 
   return (
     <AppContainer
@@ -195,12 +188,12 @@ function ReconcilationUserDetails() {
           <ReconcileView
             name={userData?.user?.name}
             zojaBalance={userData?.user?.account?.available_balance}
-            kudaBalance='60000'
-            onClick={handleReconcileBalance}
+            kudaBalance={userData?.kuda_balance.toString()}
+            onClick={() => setReconcilationModalVisible(true)}
             data={[
               { text: userData?.user?.telephone, helper: "Phone Number" },
               { text: userData?.user?.email, helper: "Email" },
-              { text: "+23489000", helper: "BVN" },
+              { text: userData?.user?.kyc?.bvn_number, helper: "BVN" },
               {
                 text: userData?.user?.account?.number,
                 helper: "Account Number",
@@ -270,19 +263,19 @@ function ReconcilationUserDetails() {
         />
 
         <PerformActionModal
-          isModalVisible={false}
-          actionClick={() => {}}
-          closeModal={() => {}}
+          isModalVisible={reconcilationModalVisible}
+          actionClick={handleReconcileBalance}
+          closeModal={handleCloseReconcilationModal}
           actionText='Proceed'
           title='You Are About To Perform A Reconciliation'
-          isLoading={true}
+          isLoading={reconcileAccountStatus === "loading" ? true : false}
           text='This will revert the account balance of the user on ZojaPay to match their account balance on KUDA'
         />
 
         <SuccessActionModal
-          isModalVisible={true}
+          isModalVisible={reconcilationSuccessModalVisible}
           actionText='Finish'
-          closeModal={() => {}}
+          closeModal={handleCloseReconcilationSuccessModal}
           title='Reconciliation Successful'
           text='User will be sent a notification informing them of the reversal.'
         />
