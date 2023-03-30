@@ -23,11 +23,11 @@ import {
   AppContainer,
   SuccessModalWithCopy,
   TransactionDetailsModal,
+  LoaderModal,
 } from "../../atoms";
 import {
   colors,
   currencyFormat,
-  getPathFromPagUrl,
   spacing,
   yearDateFormat,
   dateFormat,
@@ -235,39 +235,6 @@ function Settlements() {
         : yup.string(),
   });
 
-  // this effect checks if any transaction card has been selected to show more modal
-  useEffect(() => {
-    if (
-      selectedFailedTransaction.hasOwnProperty("name") &&
-      selectedTransactionActionText.length < 3
-    ) {
-      setMoreIsVisible(true);
-    }
-
-    if (
-      selectedFailedTransaction.hasOwnProperty("name") &&
-      selectedTransactionActionText === escalate
-    ) {
-      setMoreIsVisible(false);
-      setEscalateModalVisible(true);
-      // setSelectedTransactionActionText("");
-    }
-    if (
-      selectedFailedTransaction.hasOwnProperty("name") &&
-      selectedTransactionActionText === transactionDetails
-    ) {
-      setMoreIsVisible(false);
-      setTransactionDetailsModalVisible(true);
-      dispatch(
-        getTransactionByIdRequest({
-          transId: selectedFailedTransaction.transId,
-        })
-      );
-      // getTransactionByIdStatus
-      // setSelectedTransactionActionText("");
-    }
-  }, [selectedFailedTransaction, selectedTransactionActionText]);
-
   useEffect(() => {
     if (getTransactionByIdStatus === "succeeded") {
       const {
@@ -445,6 +412,26 @@ function Settlements() {
     });
   };
 
+  // handle different excalation modules
+  const handleMoreIconOptions = async (item: string) => {
+    if (selectedFailedTransaction.hasOwnProperty("name") && item === escalate) {
+      setMoreIsVisible(false);
+      setEscalateModalVisible(true);
+    }
+    if (
+      selectedFailedTransaction.hasOwnProperty("name") &&
+      item === transactionDetails
+    ) {
+      setMoreIsVisible(false);
+      setTransactionDetailsModalVisible(true);
+      dispatch(
+        getTransactionByIdRequest({
+          transId: selectedFailedTransaction.transId,
+        })
+      );
+    }
+  };
+
   return (
     <AppContainer navTitle='SETTLEMENTS'>
       <div>
@@ -547,6 +534,7 @@ function Settlements() {
             header={true}
             data={transactionDataList}
             setSelectedItem={setSelectedFailedTransaction}
+            onClick={(item: Dictionary) => setMoreIsVisible(true)}
           />
         )}
 
@@ -710,6 +698,12 @@ function Settlements() {
           isModalVisible={moreIsVisible}
           closeModal={() => setMoreIsVisible(false)}
           options={moreIconOption}
+          onClick={(item) => handleMoreIconOptions(item)}
+        />
+        <LoaderModal
+          isModalVisible={getTransactionsStatus === "loading"}
+          text='Loading please wait...'
+          closeModal={() => {}}
         />
       </div>
     </AppContainer>

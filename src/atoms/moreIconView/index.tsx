@@ -2,11 +2,13 @@ import Modal from "react-modal";
 import { Container, OptionText } from "./style";
 import { H3 } from "../../styles";
 import { colors, boxShadow } from "../../utils";
+
 export interface MoreViewIProps {
   options: string[];
   isModalVisible: boolean;
   setSelectedText: any;
   closeModal: () => void;
+  onClick: (item: string) => any;
 }
 
 function MoreIconView({
@@ -14,6 +16,7 @@ function MoreIconView({
   isModalVisible,
   closeModal,
   setSelectedText,
+  onClick,
 }: MoreViewIProps) {
   let subtitle: any;
   function afterOpenModal() {
@@ -33,6 +36,11 @@ function MoreIconView({
     },
   };
 
+  const handleClick = (item: string) => {
+    setSelectedText(item);
+    onClick(item);
+  };
+
   return (
     <Modal
       ariaHideApp={false}
@@ -45,10 +53,7 @@ function MoreIconView({
       <Container>
         {options.map((item: string, index: number) => (
           <OptionText key={index}>
-            <H3
-              onClick={() => setSelectedText(item)}
-              left
-              color={colors.primary}>
+            <H3 onClick={() => handleClick(item)} left color={colors.primary}>
               {item}
             </H3>
           </OptionText>
