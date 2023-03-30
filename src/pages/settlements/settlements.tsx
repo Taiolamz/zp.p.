@@ -22,6 +22,7 @@ import {
   MoreIconView,
   AppContainer,
   SuccessModalWithCopy,
+  TransactionDetailsModal,
 } from "../../atoms";
 import {
   colors,
@@ -29,6 +30,8 @@ import {
   getPathFromPagUrl,
   spacing,
   yearDateFormat,
+  dateFormat,
+  formatAMPM,
 } from "../../utils";
 import {
   AllTransactionContainer,
@@ -48,6 +51,8 @@ import {
   getTransactionsReset,
   getEscalationAgentsRequest,
   createEscalationTicketRequest,
+  createEscalationTicketReset,
+  getTransactionByIdRequest,
 } from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
 type Dictionary = {
@@ -169,12 +174,17 @@ function Settlements() {
   const [escalateModalVisible, setEscalateModalVisible] = useState(false);
   const [escalateSuccessfulModalVisible, setEscalateSuccessfulModalVisible] =
     useState(false);
+
+  const [transactionDetailsModalVisible, setTransactionDetailsModalVisible] =
+    useState(false);
   const [selectedTransactionActionText, setSelectedTransactionActionText] =
     useState("");
   const [escalateSuccessfulData, setEscalateSuccessfulData] =
     useState<Dictionary>({});
   const [escalationAgentsList, setEscalationAgentsList] = useState<any[]>([]);
-
+  const [transactionByIdData, setTransactionByIdData] = useState<Dictionary>(
+    {}
+  );
   const transactionDetails = "Transaction Details";
   const escalate = "Escalate";
   const moreIconOption = [transactionDetails, escalate];
@@ -185,6 +195,12 @@ function Settlements() {
   // redux state
   const transactionState = useAppSelector((state) => state.getTransactions);
   const { status: getTransactionsStatus } = transactionState;
+
+  const getTransactionByIdState = useAppSelector(
+    (state) => state.getTransactionById
+  );
+
+  const { status: getTransactionByIdStatus } = getTransactionByIdState;
 
   const getEscalationAgentsState = useAppSelector(
     (state) => state.getEscalationAgents
@@ -220,12 +236,100 @@ function Settlements() {
 
     if (
       selectedFailedTransaction.hasOwnProperty("name") &&
-      selectedTransactionActionText.length > 3
+      selectedTransactionActionText === escalate
     ) {
       setMoreIsVisible(false);
       setEscalateModalVisible(true);
+      // setSelectedTransactionActionText("");
+    }
+    if (
+      selectedFailedTransaction.hasOwnProperty("name") &&
+      selectedTransactionActionText === transactionDetails
+    ) {
+      setMoreIsVisible(false);
+      setTransactionDetailsModalVisible(true);
+      dispatch(
+        getTransactionByIdRequest({ userId: selectedFailedTransaction.transId })
+      );
+      // getTransactionByIdStatus
+      // setSelectedTransactionActionText("");
     }
   }, [selectedFailedTransaction, selectedTransactionActionText]);
+
+  useEffect(() => {
+    if (getTransactionByIdStatus === "succeeded") {
+      // const result = []
+      // getTransactionByIdState.data.transaction.forEach((item:Dictionary)=>{
+      //   result.push({
+
+      //   })
+      // })
+
+      const {
+        amount,
+        status,
+        currency,
+        transfer_purpose,
+        beneficiary_account_id,
+        charge,
+        channel,
+        created_at,
+        user: { name },
+      } = getTransactionByIdState.data.transaction;
+      const result = {
+        amount,
+        status,
+        currency,
+        data: [
+          {
+            id: 1,
+            text: transfer_purpose,
+            helper: "Transaction Type",
+          },
+          {
+            id: 2,
+            text: name,
+            helper: "Wallet Name",
+          },
+          {
+            id: 3,
+            text: name,
+            helper: "Wallet Name",
+          },
+          {
+            id: 4,
+            text: beneficiary_account_id,
+            helper: "Beneficiary Account Id",
+          },
+          {
+            id: 5,
+            // text: currencyFormat(charge, true, "N"),
+            text: `N${charge}`,
+            helper: "Charges",
+          },
+          {
+            id: 6,
+            text: channel,
+            helper: "Channel",
+          },
+          {
+            id: 7,
+            text: formatAMPM(created_at),
+            helper: "Time",
+          },
+          {
+            id: 8,
+            text: dateFormat(created_at),
+            helper: "Date",
+          },
+        ],
+      };
+
+      setTransactionByIdData(result);
+    }
+  }, [getTransactionByIdState]);
+
+  console.log(transactionByIdData, "datsss");
 
   const handleCloseEscalateModal = () => {
     setEscalateModalVisible(false);
@@ -255,6 +359,7 @@ function Settlements() {
             time: item.created_at,
             currency: item.currency,
             phoneNumber: item.user.telephone,
+            transId: item.id,
           });
         }
       );
@@ -274,7 +379,7 @@ function Settlements() {
 
   useEffect(() => {
     // fetch escalation agents on when escalation is clicked from options
-    if (selectedTransactionActionText === "Escalate") {
+    if (selectedTransactionActionText === escalate) {
       dispatch(getEscalationAgentsRequest({ id: "user" }));
     }
   }, [selectedTransactionActionText]);
@@ -303,6 +408,7 @@ function Settlements() {
   const handleCloseEscalateSuccessfulModal = () => {
     setEscalateSuccessfulModalVisible(false);
     setEscalateSuccessfulData({});
+    dispatch(createEscalationTicketReset());
     handleCloseEscalateModal();
   };
 
@@ -552,6 +658,32 @@ function Settlements() {
           title={escalateSuccessfulData?.ticket_reference}
           iconType='sent'
         />
+
+        <TransactionDetailsModal
+          status={transactionByIdData?.status}
+          amount={transactionByIdData?.amount}
+          currency={transactionByIdData?.currency}
+          isModalVisible={transactionDetailsModalVisible}
+          closeModal={() => setTransactionDetailsModalVisible(false)}
+          onClickExportBtn={() => {}}
+          data={transactionByIdData?.data}
+          isLoading={
+            getTransactionByIdState.status === "loading" ? true : false
+          }
+        />
+
+        {/* <TransactionDetailsModal
+          status={"success"}
+          amount={"200"}
+          currency={"NGB"}
+          isModalVisible={transactionDetailsModalVisible}
+          closeModal={() => setTransactionDetailsModalVisible(false)}
+          onClickExportBtn={() => {}}
+          data={[{ id: 1, helper: "jjjd", text: "msdfdfj" }]}
+          isLoading={
+            getTransactionByIdState.status === "loading" ? true : false
+          }
+        /> */}
 
         <MoreIconView
           setSelectedText={setSelectedTransactionActionText}

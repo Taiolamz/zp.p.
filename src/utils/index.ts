@@ -6,7 +6,7 @@ export { default as fontWeight } from "./fontWeight";
 export { default as images } from "./images";
 export { default as ellipsis } from "./ellipsis";
 export { default as replaceStringWithBackslach } from "./replaceStringWithBackslach";
-export { dateFormat, yearDateFormat } from "./dateFormat";
+export { dateFormat, yearDateFormat, formatAMPM } from "./dateFormat";
 export { getPathFromPagUrl } from "./getPathFromUrl";
 export { default as currencyFormat } from "./currencyFormat";
 export { default as routesPath } from "./routesPath";

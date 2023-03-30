@@ -9,6 +9,7 @@ import {
   reconcileAccountSliceReducer,
   getEscalationAgentsSliceReducer,
   createEscalationTicketSliceReducer,
+  getTransactionByIdSliceReducer,
 } from "./slice";
 
 const rootReducer = combineReducers({
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   reconcileAccount: reconcileAccountSliceReducer,
   getEscalationAgents: getEscalationAgentsSliceReducer,
   createEscalationTicket: createEscalationTicketSliceReducer,
+  getTransactionById: getTransactionByIdSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
