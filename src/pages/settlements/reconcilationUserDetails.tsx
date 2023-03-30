@@ -17,6 +17,7 @@ import {
   ReconcileView,
   PerformActionModal,
   SuccessActionModal,
+  LoaderModal,
 } from "../../atoms";
 import {
   colors,
@@ -176,8 +177,6 @@ function ReconcilationUserDetails() {
     }
   }, [reconcileAccountState]);
 
-  console.log(userData, "userData");
-
   return (
     <AppContainer
       goBack={() => navigate(RECONCILIATION)}
@@ -278,6 +277,15 @@ function ReconcilationUserDetails() {
           closeModal={handleCloseReconcilationSuccessModal}
           title='Reconciliation Successful'
           text='User will be sent a notification informing them of the reversal.'
+        />
+
+        <LoaderModal
+          isModalVisible={
+            getTransactionsStatus === "loading" ||
+            getReconciliationAccountDetailStatus === "loading"
+          }
+          text='Loading please wait...'
+          closeModal={() => {}}
         />
       </div>
     </AppContainer>

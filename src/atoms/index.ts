@@ -10,3 +10,4 @@ export { default as SuccessModalWithCopy } from "./successModalWithCopy";
 export { default as TransactionDetailsModal } from "./transactionDetailsModal";
 export { default as PerformActionModal } from "./performActionModal";
 export { default as SuccessActionModal } from "./successActionModal";
+export { default as LoaderModal } from "./loaderModal";
