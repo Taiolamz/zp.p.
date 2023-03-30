@@ -61,7 +61,7 @@ function RModal({
           <ContentOne></ContentOne>
           <ContentTwo>
             <TitleContainer>
-              <H2 bold color={colors.primary}>
+              <H2 semiBold color={colors.primary}>
                 {title}
               </H2>
             </TitleContainer>

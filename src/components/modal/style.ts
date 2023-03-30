@@ -28,15 +28,15 @@ export const Content = styled.div`
 `;
 
 export const ContentOne = styled.div`
-  width: 100%;
+  width: 10%;
   display: flex;
   justify-content: flex-start;
 `;
 export const ContentTwo = styled.div`
-  width: 100%;
+  width: 90%;
 `;
 export const ContentThree = styled.div`
-  width: 100%;
+  width: 10%;
   display: flex;
   justify-content: flex-end;
 `;

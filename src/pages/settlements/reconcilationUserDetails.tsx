@@ -22,6 +22,8 @@ import {
   MoreIconView,
   AppContainer,
   ReconcileView,
+  PerformActionModal,
+  SuccessActionModal,
 } from "../../atoms";
 import {
   colors,
@@ -265,6 +267,24 @@ function ReconcilationUserDetails() {
           onPageChange={(selectedPage) => {
             setCurrentPage(selectedPage);
           }}
+        />
+
+        <PerformActionModal
+          isModalVisible={false}
+          actionClick={() => {}}
+          closeModal={() => {}}
+          actionText='Proceed'
+          title='You Are About To Perform A Reconciliation'
+          isLoading={true}
+          text='This will revert the account balance of the user on ZojaPay to match their account balance on KUDA'
+        />
+
+        <SuccessActionModal
+          isModalVisible={true}
+          actionText='Finish'
+          closeModal={() => {}}
+          title='Reconciliation Successful'
+          text='User will be sent a notification informing them of the reversal.'
         />
       </div>
     </AppContainer>
