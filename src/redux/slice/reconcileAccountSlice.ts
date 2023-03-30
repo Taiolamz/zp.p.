@@ -19,9 +19,9 @@ const initialState = {
 export const reconcileAccountRequest = createAsyncThunk(
   "reconcileAccount",
   async (payload: Dictionary, { dispatch }) => {
-    const url = `admin/reconciliation/account/`;
+    const url = `admin/reconciliation/account/reconcile`;
     try {
-      const response = await api.get(`${url}${payload.userId}/reconcile`);
+      const response = await api.post(url, payload);
       return response?.data;
     } catch (err) {
       throw err;

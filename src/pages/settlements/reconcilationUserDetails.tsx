@@ -168,7 +168,11 @@ function ReconcilationUserDetails() {
   };
 
   const handleReconcileBalance = () => {
-    dispatch(reconcileAccountRequest({ userId: id }));
+    dispatch(
+      reconcileAccountRequest({
+        account_number: userData?.user?.account?.number,
+      })
+    );
   };
 
   useEffect(() => {
@@ -176,6 +180,8 @@ function ReconcilationUserDetails() {
       console.log(reconcileAccountState.data, "reconcileAccount");
     }
   }, [reconcileAccountState]);
+
+  // console.log(userData, "userData");
 
   return (
     <AppContainer

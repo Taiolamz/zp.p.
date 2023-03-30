@@ -22,11 +22,7 @@ export const getReconciliationAccountRequest = createAsyncThunk(
     const url = `admin/reconciliation/account`;
 
     try {
-      const response = await api.get(url, {
-        params: {
-          search: payload.search,
-        },
-      });
+      const response = await api.post(url, payload);
       return response?.data;
     } catch (err) {
       throw err;
