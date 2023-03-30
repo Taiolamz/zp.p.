@@ -8,3 +8,4 @@ export * from "./reconcileAccountSlice";
 export * from "./getEscalationAgentsSlice";
 export * from "./createEscalationTicketSlice";
 export * from "./getTransactionByIdSlice";
+export * from "./exportTransactionByIdToMailSlice";

@@ -17,6 +17,7 @@ export interface IProps {
   currency: string;
   onClickExportBtn?: () => void;
   isLoading?: boolean;
+  exportBtnDisabled: boolean;
 }
 
 interface IPropsCard {
@@ -46,6 +47,7 @@ function TransactionDetailsModal({
   currency,
   onClickExportBtn,
   isLoading,
+  exportBtnDisabled,
 }: IProps) {
   return (
     <Modal
@@ -54,9 +56,9 @@ function TransactionDetailsModal({
       closeModal={closeModal}>
       <div>
         {isLoading ? (
-          <div>
+          <Container>
             <H5>Loading...</H5>
-          </div>
+          </Container>
         ) : (
           <Container>
             <H5 center>Amount</H5>
@@ -95,7 +97,11 @@ function TransactionDetailsModal({
                     }
                   />
                 </div>
-                <Button text='Export To Email' onClick={onClickExportBtn} />
+                <Button
+                  disabled={exportBtnDisabled}
+                  text='Export To Email'
+                  onClick={onClickExportBtn}
+                />
               </ContentItemTwo>
             </Content>
           </Container>

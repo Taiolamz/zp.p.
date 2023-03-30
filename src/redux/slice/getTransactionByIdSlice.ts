@@ -20,7 +20,7 @@ const initialState = {
 export const getTransactionByIdRequest = createAsyncThunk(
   "getTransactionById",
   async (payload: Dictionary, { dispatch }) => {
-    const url = `admin/transactions/${payload.userId}`;
+    const url = `admin/transactions/${payload.transId}`;
 
     try {
       const response = await api.get(url);

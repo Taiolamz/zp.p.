@@ -32,6 +32,7 @@ import {
   yearDateFormat,
   dateFormat,
   formatAMPM,
+  showMessage,
 } from "../../utils";
 import {
   AllTransactionContainer,
@@ -53,6 +54,8 @@ import {
   createEscalationTicketRequest,
   createEscalationTicketReset,
   getTransactionByIdRequest,
+  exportTransactionByIdToMailRequest,
+  exportTransactionByIdToMailReset,
 } from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
 type Dictionary = {
@@ -212,6 +215,12 @@ function Settlements() {
   );
   const { status: createEscalationTicketStatus } = createEscalationTicketState;
 
+  const exportTransactionByIdToMailState = useAppSelector(
+    (state) => state.exportTransactionByIdToMail
+  );
+  const { status: exportTransactionByIdToMailStatus } =
+    exportTransactionByIdToMailState;
+
   const escalateCchema = yup.object().shape({
     title: yup.string().required("Title is required"),
     description: yup.string().required("Description is required"),
@@ -249,7 +258,9 @@ function Settlements() {
       setMoreIsVisible(false);
       setTransactionDetailsModalVisible(true);
       dispatch(
-        getTransactionByIdRequest({ userId: selectedFailedTransaction.transId })
+        getTransactionByIdRequest({
+          transId: selectedFailedTransaction.transId,
+        })
       );
       // getTransactionByIdStatus
       // setSelectedTransactionActionText("");
@@ -258,13 +269,6 @@ function Settlements() {
 
   useEffect(() => {
     if (getTransactionByIdStatus === "succeeded") {
-      // const result = []
-      // getTransactionByIdState.data.transaction.forEach((item:Dictionary)=>{
-      //   result.push({
-
-      //   })
-      // })
-
       const {
         amount,
         status,
@@ -303,7 +307,6 @@ function Settlements() {
           },
           {
             id: 5,
-            // text: currencyFormat(charge, true, "N"),
             text: `N${charge}`,
             helper: "Charges",
           },
@@ -328,8 +331,6 @@ function Settlements() {
       setTransactionByIdData(result);
     }
   }, [getTransactionByIdState]);
-
-  console.log(transactionByIdData, "datsss");
 
   const handleCloseEscalateModal = () => {
     setEscalateModalVisible(false);
@@ -360,6 +361,7 @@ function Settlements() {
             currency: item.currency,
             phoneNumber: item.user.telephone,
             transId: item.id,
+            email: item.user.email,
           });
         }
       );
@@ -396,6 +398,17 @@ function Settlements() {
       setEscalationAgentsList(result);
     }
   }, [getEscalationAgentsState]);
+
+  useEffect(() => {
+    if (exportTransactionByIdToMailStatus === "succeeded") {
+      setTransactionDetailsModalVisible(false);
+      showMessage({
+        type: "success",
+        message: exportTransactionByIdToMailState?.data?.message,
+      });
+      dispatch(exportTransactionByIdToMailReset());
+    }
+  }, [exportTransactionByIdToMailState]);
 
   useEffect(() => {
     if (createEscalationTicketStatus === "succeeded") {
@@ -665,25 +678,22 @@ function Settlements() {
           currency={transactionByIdData?.currency}
           isModalVisible={transactionDetailsModalVisible}
           closeModal={() => setTransactionDetailsModalVisible(false)}
-          onClickExportBtn={() => {}}
+          onClickExportBtn={() =>
+            dispatch(
+              exportTransactionByIdToMailRequest({
+                transId: selectedFailedTransaction.transId,
+                email: selectedFailedTransaction.email,
+              })
+            )
+          }
+          exportBtnDisabled={
+            exportTransactionByIdToMailStatus === "loading" ? true : false
+          }
           data={transactionByIdData?.data}
           isLoading={
             getTransactionByIdState.status === "loading" ? true : false
           }
         />
-
-        {/* <TransactionDetailsModal
-          status={"success"}
-          amount={"200"}
-          currency={"NGB"}
-          isModalVisible={transactionDetailsModalVisible}
-          closeModal={() => setTransactionDetailsModalVisible(false)}
-          onClickExportBtn={() => {}}
-          data={[{ id: 1, helper: "jjjd", text: "msdfdfj" }]}
-          isLoading={
-            getTransactionByIdState.status === "loading" ? true : false
-          }
-        /> */}
 
         <MoreIconView
           setSelectedText={setSelectedTransactionActionText}
