@@ -434,8 +434,14 @@ function Settlements() {
       reference: searchValue,
       type: "",
       status: "",
-      start_date: yearDateFormat(startDisplayRecordDate),
-      end_date: yearDateFormat(endDisplayRecordDate),
+      start_date:
+        startDisplayRecordDate.length < 2
+          ? ""
+          : yearDateFormat(startDisplayRecordDate),
+      end_date:
+        endDisplayRecordDate.length < 2
+          ? ""
+          : yearDateFormat(endDisplayRecordDate),
     });
   };
 
