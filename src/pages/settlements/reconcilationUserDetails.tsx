@@ -246,23 +246,6 @@ function ReconcilationUserDetails() {
             </TabContentTwo>
           )}
         </TabViewContainer>
-        {/* {tabViewSelectedIndex === 1 && (
-          <TransactionsView
-            type={"transactions"}
-            headerData={transactionDataHeader}
-            header={true}
-            data={transactionDataList}
-            setSelectedItem={setSelectedFailedTransaction}
-          />
-        )}
-
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={(selectedPage) => {
-            setCurrentPage(selectedPage);
-          }}
-        /> */}
 
         <PerformActionModal
           isModalVisible={reconcilationModalVisible}
