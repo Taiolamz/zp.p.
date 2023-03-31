@@ -184,31 +184,34 @@ function ReconcilationUserDetails() {
       navHelper='USER PROFILE'>
       <div style={{ marginTop: spacing.small }}>
         <div>
-          <ReconcileView
-            name={userData?.user?.name}
-            zojaBalance={userData?.user?.account?.available_balance}
-            kudaBalance={userData?.kuda_balance.toString()}
-            onClick={() => setReconcilationModalVisible(true)}
-            data={[
-              { text: userData?.user?.telephone, helper: "Phone Number" },
-              { text: userData?.user?.email, helper: "Email" },
-              { text: userData?.user?.kyc?.bvn_number, helper: "BVN" },
-              {
-                text: userData?.user?.account?.number,
-                helper: "Account Number",
-              },
-              { text: userData?.user?.location, helper: "Address" },
-              { text: userData?.user?.kyc_level, helper: "KYC" },
-              {
-                text: dateFormat(userData?.user?.updated_at),
-                helper: "Last Login",
-              },
-              {
-                text: dateFormat(userData?.user?.created_at),
-                helper: "Date of Onboarding",
-              },
-            ]}
-          />
+          {getReconciliationAccountDetailStatus !== "loading" &&
+            userData.hasOwnProperty("user") && (
+              <ReconcileView
+                name={userData?.user?.name}
+                zojaBalance={userData?.user?.account?.available_balance}
+                kudaBalance={userData?.kuda_balance.toString()}
+                onClick={() => setReconcilationModalVisible(true)}
+                data={[
+                  { text: userData?.user?.telephone, helper: "Phone Number" },
+                  { text: userData?.user?.email, helper: "Email" },
+                  { text: userData?.user?.kyc?.bvn_number, helper: "BVN" },
+                  {
+                    text: userData?.user?.account?.number,
+                    helper: "Account Number",
+                  },
+                  { text: userData?.user?.location, helper: "Address" },
+                  { text: userData?.user?.kyc_level, helper: "KYC" },
+                  {
+                    text: dateFormat(userData?.user?.updated_at),
+                    helper: "Last Login",
+                  },
+                  {
+                    text: dateFormat(userData?.user?.created_at),
+                    helper: "Date of Onboarding",
+                  },
+                ]}
+              />
+            )}
         </div>
 
         <TabViewContainer>
