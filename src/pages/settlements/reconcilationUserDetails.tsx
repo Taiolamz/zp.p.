@@ -246,7 +246,7 @@ function ReconcilationUserDetails() {
             </TabContentTwo>
           )}
         </TabViewContainer>
-        {tabViewSelectedIndex === 1 && (
+        {/* {tabViewSelectedIndex === 1 && (
           <TransactionsView
             type={"transactions"}
             headerData={transactionDataHeader}
@@ -262,7 +262,7 @@ function ReconcilationUserDetails() {
           onPageChange={(selectedPage) => {
             setCurrentPage(selectedPage);
           }}
-        />
+        /> */}
 
         <PerformActionModal
           isModalVisible={reconcilationModalVisible}
