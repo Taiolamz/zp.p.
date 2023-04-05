@@ -16,4 +16,28 @@ export const yearDateFormat = (text: string) => {
   return datestring;
 };
 
+export const dateTimeFormat = (text: string) => {
+  let d = new Date(text);
+
+  let datestring =
+    d.getFullYear() + "/" + (d.getMonth() + 1) + "/" + d.getDate() + " ";
+
+  return datestring;
+};
+
+export function formatAMPM(date: string) {
+  const d = new Date(date);
+  let hours = d.getHours();
+  let minutes: any = d.getMinutes();
+  const ampm = hours >= 12 ? "pm" : "am";
+
+  hours %= 12;
+  hours = hours || 12;
+  minutes = minutes < 10 ? `0${minutes}` : minutes;
+
+  const strTime = `${hours}:${minutes} ${ampm}`;
+
+  return strTime;
+}
+
 // export default dateFormat;

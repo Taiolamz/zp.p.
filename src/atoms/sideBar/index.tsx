@@ -96,7 +96,7 @@ function SideBar() {
       {
         id: 4,
         isSelected: toggleBtn,
-        text: "Settlements",
+        text: currentPath === RECONCILIATION ? "Reconciliation" : "Settlements",
         icon: <FiTrendingUp />,
         path: SETTLEMENTS,
         options: [

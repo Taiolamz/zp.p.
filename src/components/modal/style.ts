@@ -19,15 +19,42 @@ export const Container = styled.div`
     p.borderRadius ? p.borderRadius : borderRadius.medium};
 `;
 
-export const CloseContainer = styled.div`
+export const Content = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${spacing.small};
+`;
+
+export const ContentOne = styled.div`
+  width: 10%;
+  display: flex;
+  justify-content: flex-start;
+`;
+export const ContentTwo = styled.div`
+  width: 90%;
+`;
+export const ContentThree = styled.div`
+  width: 10%;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+export const TitleContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  align-self: flex-end;
+  align-self: center;
+`;
+
+export const CloseContainer = styled.div`
+  display: flex;
+  align-self: flex-start;
+  width: 20px;
   padding: 2px;
   background-color: ${colors.primary};
   box-shadow: ${boxShadow.light};
   border-radius: ${borderRadius.small};
   cursor: pointer;
-  margin-bottom: ${spacing.small};
 `;

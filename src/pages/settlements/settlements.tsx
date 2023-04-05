@@ -21,13 +21,18 @@ import {
   TransactionsView,
   MoreIconView,
   AppContainer,
+  SuccessModalWithCopy,
+  TransactionDetailsModal,
+  LoaderModal,
 } from "../../atoms";
 import {
   colors,
   currencyFormat,
-  getPathFromPagUrl,
   spacing,
   yearDateFormat,
+  dateFormat,
+  formatAMPM,
+  showMessage,
 } from "../../utils";
 import {
   AllTransactionContainer,
@@ -45,8 +50,17 @@ import {
 import {
   getTransactionsRequest,
   getTransactionsReset,
+  getEscalationAgentsRequest,
+  createEscalationTicketRequest,
+  createEscalationTicketReset,
+  getTransactionByIdRequest,
+  exportTransactionByIdToMailRequest,
+  exportTransactionByIdToMailReset,
 } from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
+type Dictionary = {
+  [key: string]: any;
+};
 
 const data = [
   {
@@ -148,35 +162,65 @@ function Settlements() {
     start_date: "",
     end_date: "",
   });
-  const [paginationData, setPaginationData] = useState({});
+
   const [transactionDataList, setTransactionDataList] = useState<any[]>([]);
   const [tabViewSelectedIndex, setTabViewSelectedIndex] =
     useState<any[number]>(1);
   const [barChartSelectedText, setBarChartSelectedText] = useState("All Data");
+  const pageSize = 10;
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(5);
   const [searchValue, setSearchValue] = useState("");
-  const totalPages = 5;
 
   const [selectedFailedTransaction, setSelectedFailedTransaction] =
     useState<any>({});
   const [moreIsVisible, setMoreIsVisible] = useState(false);
   const [escalateModalVisible, setEscalateModalVisible] = useState(false);
+  const [escalateSuccessfulModalVisible, setEscalateSuccessfulModalVisible] =
+    useState(false);
+
+  const [transactionDetailsModalVisible, setTransactionDetailsModalVisible] =
+    useState(false);
   const [selectedTransactionActionText, setSelectedTransactionActionText] =
     useState("");
-
+  const [escalateSuccessfulData, setEscalateSuccessfulData] =
+    useState<Dictionary>({});
+  const [escalationAgentsList, setEscalationAgentsList] = useState<any[]>([]);
+  const [transactionByIdData, setTransactionByIdData] = useState<Dictionary>(
+    {}
+  );
+  const transactionDetails = "Transaction Details";
   const escalate = "Escalate";
-  const escalateLog = "Escalation Log";
-  const escalateClose = "Close Transaction";
-
-  const moreIconOption = [escalate, escalateLog, escalateClose];
+  const moreIconOption = [transactionDetails, escalate];
 
   const [selectedEscalateTo, setSelectedEscalateTo] = useState("");
   const [selectedPriorityLevel, setSelectedPriorityLevel] = useState("");
 
   // redux state
   const transactionState = useAppSelector((state) => state.getTransactions);
-
   const { status: getTransactionsStatus } = transactionState;
+
+  const getTransactionByIdState = useAppSelector(
+    (state) => state.getTransactionById
+  );
+
+  const { status: getTransactionByIdStatus } = getTransactionByIdState;
+
+  const getEscalationAgentsState = useAppSelector(
+    (state) => state.getEscalationAgents
+  );
+  const { status: getEscalationAgentsStatus } = getEscalationAgentsState;
+
+  const createEscalationTicketState = useAppSelector(
+    (state) => state.createEscalationTicket
+  );
+  const { status: createEscalationTicketStatus } = createEscalationTicketState;
+
+  const exportTransactionByIdToMailState = useAppSelector(
+    (state) => state.exportTransactionByIdToMail
+  );
+  const { status: exportTransactionByIdToMailStatus } =
+    exportTransactionByIdToMailState;
 
   const escalateCchema = yup.object().shape({
     title: yup.string().required("Title is required"),
@@ -191,23 +235,70 @@ function Settlements() {
         : yup.string(),
   });
 
-  // this effect checks if any transaction card has been selected to show more modal
   useEffect(() => {
-    if (
-      selectedFailedTransaction.hasOwnProperty("name") &&
-      selectedTransactionActionText.length < 3
-    ) {
-      setMoreIsVisible(true);
-    }
+    if (getTransactionByIdStatus === "succeeded") {
+      const {
+        amount,
+        status,
+        currency,
+        transfer_purpose,
+        beneficiary_account_id,
+        charge,
+        channel,
+        created_at,
+        user: { name },
+      } = getTransactionByIdState.data.transaction;
+      const result = {
+        amount,
+        status,
+        currency,
+        data: [
+          {
+            id: 1,
+            text: transfer_purpose,
+            helper: "Transaction Type",
+          },
+          {
+            id: 2,
+            text: name,
+            helper: "Wallet Name",
+          },
+          {
+            id: 3,
+            text: name,
+            helper: "Wallet Name",
+          },
+          {
+            id: 4,
+            text: beneficiary_account_id,
+            helper: "Beneficiary Account Id",
+          },
+          {
+            id: 5,
+            text: `N${charge}`,
+            helper: "Charges",
+          },
+          {
+            id: 6,
+            text: channel,
+            helper: "Channel",
+          },
+          {
+            id: 7,
+            text: formatAMPM(created_at),
+            helper: "Time",
+          },
+          {
+            id: 8,
+            text: dateFormat(created_at),
+            helper: "Date",
+          },
+        ],
+      };
 
-    if (
-      selectedFailedTransaction.hasOwnProperty("name") &&
-      selectedTransactionActionText.length > 3
-    ) {
-      setMoreIsVisible(false);
-      setEscalateModalVisible(true);
+      setTransactionByIdData(result);
     }
-  }, [selectedFailedTransaction, selectedTransactionActionText]);
+  }, [getTransactionByIdState]);
 
   const handleCloseEscalateModal = () => {
     setEscalateModalVisible(false);
@@ -217,8 +308,14 @@ function Settlements() {
 
   // api getTransactions
   useEffect(() => {
-    dispatch(getTransactionsRequest(transactionFilterParams));
-  }, [transactionFilterParams]);
+    dispatch(
+      getTransactionsRequest({
+        ...transactionFilterParams,
+        per_page: pageSize,
+        page: currentPage,
+      })
+    );
+  }, [transactionFilterParams, currentPage]);
 
   useEffect(() => {
     if (getTransactionsStatus === "succeeded") {
@@ -236,34 +333,103 @@ function Settlements() {
             icon: true,
             time: item.created_at,
             currency: item.currency,
+            phoneNumber: item.user.telephone,
+            transId: item.id,
+            email: item.user.email,
           });
         }
       );
 
-      const { meta, links } = transactionState?.data?.transactions;
+      const {
+        meta: { links },
+      } = transactionState?.data?.transactions;
 
-      setPaginationData({
-        currentPageNo: meta.current_page,
-        next: links.next !== null ? getPathFromPagUrl(links.next) : null,
-        last: links.last !== null ? getPathFromPagUrl(links.last) : null,
-        total: 1,
-      });
-      // console.log(transactionState?.data?.transactions, "data");
+      setTotalPages(links.length - 2);
 
       setTransactionDataList(updatedList);
     }
   }, [transactionState]);
 
-  console.log(paginationData, "data");
+  useEffect(() => {
+    // fetch escalation agents on when escalation is clicked from options
+    if (selectedTransactionActionText === escalate) {
+      dispatch(getEscalationAgentsRequest({ id: "user" }));
+    }
+  }, [selectedTransactionActionText]);
+
+  useEffect(() => {
+    if (getEscalationAgentsStatus === "succeeded") {
+      let result: any[] = [];
+      getEscalationAgentsState.data.internal_users.forEach((item: any) => {
+        result.push({
+          value: item.id,
+          label: item.name,
+        });
+      });
+      setEscalationAgentsList(result);
+    }
+  }, [getEscalationAgentsState]);
+
+  useEffect(() => {
+    if (exportTransactionByIdToMailStatus === "succeeded") {
+      setTransactionDetailsModalVisible(false);
+      showMessage({
+        type: "success",
+        message: exportTransactionByIdToMailState?.data?.message,
+      });
+      dispatch(exportTransactionByIdToMailReset());
+    }
+  }, [exportTransactionByIdToMailState]);
+
+  useEffect(() => {
+    if (createEscalationTicketStatus === "succeeded") {
+      setEscalateSuccessfulData(createEscalationTicketState.data.ticket);
+      setEscalateSuccessfulModalVisible(true);
+      setEscalateSuccessfulData({});
+    }
+  }, [createEscalationTicketState]);
+
+  const handleCloseEscalateSuccessfulModal = () => {
+    setEscalateSuccessfulModalVisible(false);
+    setEscalateSuccessfulData({});
+    dispatch(createEscalationTicketReset());
+    handleCloseEscalateModal();
+  };
 
   const handleTransactionFilter = () => {
     setTransactionFilterParams({
       reference: searchValue,
       type: "",
       status: "",
-      start_date: yearDateFormat(startDisplayRecordDate),
-      end_date: yearDateFormat(endDisplayRecordDate),
+      start_date:
+        startDisplayRecordDate.length < 2
+          ? ""
+          : yearDateFormat(startDisplayRecordDate),
+      end_date:
+        endDisplayRecordDate.length < 2
+          ? ""
+          : yearDateFormat(endDisplayRecordDate),
     });
+  };
+
+  // handle different excalation modules
+  const handleMoreIconOptions = async (item: string) => {
+    if (selectedFailedTransaction.hasOwnProperty("name") && item === escalate) {
+      setMoreIsVisible(false);
+      setEscalateModalVisible(true);
+    }
+    if (
+      selectedFailedTransaction.hasOwnProperty("name") &&
+      item === transactionDetails
+    ) {
+      setMoreIsVisible(false);
+      setTransactionDetailsModalVisible(true);
+      dispatch(
+        getTransactionByIdRequest({
+          transId: selectedFailedTransaction.transId,
+        })
+      );
+    }
   };
 
   return (
@@ -338,7 +504,6 @@ function Settlements() {
             data={tabViewData}
             setSelectedIndex={setTabViewSelectedIndex}
           />
-
           {tabViewSelectedIndex === 1 && (
             <TabContentTwo>
               <SearchInput
@@ -350,11 +515,8 @@ function Settlements() {
                 }
                 placeholder='Search Records'
               />
-
               <DatePicker selectedDate={setStartDisplayRecordDate} />
-
               <DatePicker selectedDate={setEndDisplayRecordDate} />
-
               <BorderedText
                 onClick={handleTransactionFilter}
                 backgroundColor={colors.primary}
@@ -372,6 +534,7 @@ function Settlements() {
             header={true}
             data={transactionDataList}
             setSelectedItem={setSelectedFailedTransaction}
+            onClick={(item: Dictionary) => setMoreIsVisible(true)}
           />
         )}
 
@@ -396,7 +559,18 @@ function Settlements() {
             enableReinitialize={true}
             validationSchema={escalateCchema}
             onSubmit={async (values, { setSubmitting }) => {
-              const { title, description, escalateTo, priorityLevel } = values;
+              const { title, description } = values;
+
+              await dispatch(
+                createEscalationTicketRequest({
+                  title,
+                  description,
+                  internal_user_id: selectedEscalateTo,
+                  priority_level: selectedPriorityLevel,
+                  customer_telephone: selectedFailedTransaction?.phoneNumber,
+                })
+              );
+
               setSubmitting(false);
             }}>
             {(formikProps) => {
@@ -446,10 +620,7 @@ function Settlements() {
                       label='Escalate to'
                       selectedValue={setSelectedEscalateTo}
                       placeholder='Select Agent'
-                      options={[
-                        { label: "View Details", value: "View Details" },
-                        { label: "Delete Options", value: "Delete Options" },
-                      ]}
+                      options={escalationAgentsList}
                     />
 
                     <Picker
@@ -458,12 +629,21 @@ function Settlements() {
                       selectedValue={setSelectedPriorityLevel}
                       placeholder='Select Priority'
                       options={[
-                        { label: "View Details", value: "View Details" },
-                        { label: "Delete Options", value: "Delete Options" },
+                        { label: "Low", value: "low" },
+                        { label: "Medium", value: "medium" },
+                        { label: "High", value: "high" },
                       ]}
                     />
                     <EscalateBtnContainer>
-                      <Button type='submit' text='Escalate' disabled={false} />
+                      <Button
+                        type='submit'
+                        text='Escalate'
+                        disabled={
+                          createEscalationTicketStatus === "loading"
+                            ? true
+                            : false
+                        }
+                      />
                       <Button
                         onClick={handleCloseEscalateModal}
                         text='Cancel'
@@ -480,11 +660,50 @@ function Settlements() {
           </Formik>
         </Modal>
 
+        {/* Escalation successful modal */}
+        <SuccessModalWithCopy
+          isModalVisible={escalateSuccessfulModalVisible}
+          closeModal={handleCloseEscalateSuccessfulModal}
+          text={"Complaint has been escalated with Ticket Id:"}
+          copyIconText={"Copy Ticket:Id"}
+          title={escalateSuccessfulData?.ticket_reference}
+          iconType='sent'
+        />
+
+        <TransactionDetailsModal
+          status={transactionByIdData?.status}
+          amount={transactionByIdData?.amount}
+          currency={transactionByIdData?.currency}
+          isModalVisible={transactionDetailsModalVisible}
+          closeModal={() => setTransactionDetailsModalVisible(false)}
+          onClickExportBtn={() =>
+            dispatch(
+              exportTransactionByIdToMailRequest({
+                transId: selectedFailedTransaction.transId,
+                email: selectedFailedTransaction.email,
+              })
+            )
+          }
+          exportBtnDisabled={
+            exportTransactionByIdToMailStatus === "loading" ? true : false
+          }
+          data={transactionByIdData?.data}
+          isLoading={
+            getTransactionByIdState.status === "loading" ? true : false
+          }
+        />
+
         <MoreIconView
           setSelectedText={setSelectedTransactionActionText}
           isModalVisible={moreIsVisible}
           closeModal={() => setMoreIsVisible(false)}
           options={moreIconOption}
+          onClick={(item) => handleMoreIconOptions(item)}
+        />
+        <LoaderModal
+          isModalVisible={getTransactionsStatus === "loading"}
+          text='Loading please wait...'
+          closeModal={() => {}}
         />
       </div>
     </AppContainer>

@@ -55,10 +55,24 @@ instance.interceptors.response.use(
       });
     }
 
+    if (err.response.status === 404) {
+      showMessage({
+        type: "error",
+        message: err.response.data.error.message,
+      });
+    }
+
     if (err.response.status === 422) {
       showMessage({
         type: "error",
         message: err.response.data.error.message[0],
+      });
+    }
+
+    if (err.response.status === 503) {
+      showMessage({
+        type: "error",
+        message: err.response.data.error.message,
       });
     }
 

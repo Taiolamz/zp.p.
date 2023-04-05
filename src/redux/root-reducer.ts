@@ -7,6 +7,10 @@ import {
   getReconciliationAccountSliceReducer,
   getReconciliationAccountDetailSliceReducer,
   reconcileAccountSliceReducer,
+  getEscalationAgentsSliceReducer,
+  createEscalationTicketSliceReducer,
+  getTransactionByIdSliceReducer,
+  exportTransactionByIdToMailSliceReducer,
 } from "./slice";
 
 const rootReducer = combineReducers({
@@ -17,6 +21,10 @@ const rootReducer = combineReducers({
   getReconciliationAccount: getReconciliationAccountSliceReducer,
   getReconciliationAccountDetail: getReconciliationAccountDetailSliceReducer,
   reconcileAccount: reconcileAccountSliceReducer,
+  getEscalationAgents: getEscalationAgentsSliceReducer,
+  createEscalationTicket: createEscalationTicketSliceReducer,
+  getTransactionById: getTransactionByIdSliceReducer,
+  exportTransactionByIdToMail: exportTransactionByIdToMailSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

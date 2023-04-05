@@ -22,11 +22,7 @@ export const getReconciliationAccountRequest = createAsyncThunk(
     const url = `admin/reconciliation/account`;
 
     try {
-      const response = await api.get(url, {
-        data: {
-          search: payload.search,
-        },
-      });
+      const response = await api.post(url, payload);
       return response?.data;
     } catch (err) {
       throw err;
@@ -64,7 +60,7 @@ const getReconciliationAccountSlice = createSlice({
   },
 });
 
-export const getReconciliationAccountSliceReset =
+export const getReconciliationAccountReset =
   getReconciliationAccountSlice.actions.reset;
 export const getReconciliationAccountSliceReducer =
   getReconciliationAccountSlice.reducer;

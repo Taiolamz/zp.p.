@@ -1,14 +1,24 @@
 import Modal from "react-modal";
 import { FiX } from "react-icons/fi";
 import { memo, ReactElement } from "react";
-import { Container, CloseContainer } from "./style";
+import {
+  Container,
+  Content,
+  CloseContainer,
+  TitleContainer,
+  ContentOne,
+  ContentTwo,
+  ContentThree,
+} from "./style";
 import { colors, boxShadow } from "../../utils";
+import { H2 } from "../../styles";
 
 interface IProps {
   closeModal: () => void;
   isModalVisible: boolean;
   backgroundColor?: string;
   children: ReactElement;
+  title?: string;
 }
 
 const customStyles = {
@@ -29,6 +39,7 @@ function RModal({
   isModalVisible,
   backgroundColor = colors.white,
   children,
+  title,
 }: IProps) {
   let subtitle: any;
 
@@ -39,15 +50,28 @@ function RModal({
 
   return (
     <Modal
-      isOpen={isModalVisible}
+      ariaHideApp={false}
+      isOpen={!!isModalVisible}
       onAfterOpen={afterOpenModal}
       onRequestClose={closeModal}
       style={customStyles}
       contentLabel='Example Modal'>
       <Container backgroundColor={backgroundColor}>
-        <CloseContainer onClick={closeModal}>
-          <FiX color={colors.white} size={15} />
-        </CloseContainer>
+        <Content>
+          <ContentOne></ContentOne>
+          <ContentTwo>
+            <TitleContainer>
+              <H2 semiBold color={colors.primary}>
+                {title}
+              </H2>
+            </TitleContainer>
+          </ContentTwo>
+          <ContentThree>
+            <CloseContainer onClick={closeModal}>
+              <FiX color={colors.white} size={15} />
+            </CloseContainer>
+          </ContentThree>
+        </Content>
         {children}
       </Container>
     </Modal>

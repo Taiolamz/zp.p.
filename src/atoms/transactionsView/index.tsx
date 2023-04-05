@@ -18,9 +18,11 @@ function TransactionsView({
   header = false,
   headerData,
   type,
+  onClick,
 }: any) {
   const handleOnSelect = (item: any) => {
     setSelectedItem(item);
+    onClick(item);
     // setMoreIsVisible(true);
   };
 

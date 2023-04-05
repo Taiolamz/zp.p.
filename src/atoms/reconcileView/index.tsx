@@ -1,4 +1,3 @@
-import Modal from "react-modal";
 import {
   Container,
   TopContent,
@@ -9,7 +8,7 @@ import {
 } from "./style";
 import { BorderedText } from "../../components";
 import { H1, H3 } from "../../styles";
-import { colors, boxShadow, currencyFormat, spacing } from "../../utils";
+import { colors, currencyFormat, spacing } from "../../utils";
 export interface MoreViewIProps {
   profileImg?: string;
   name: string;
@@ -48,7 +47,7 @@ function ReconcileView({
             :
           </div>
           <H1 bold color={colors.primary}>
-            {currencyFormat(parseFloat(zojaBalance), false, "N")}
+            {currencyFormat(parseFloat(zojaBalance), true, "N")}
           </H1>
         </TopContentItem>
         <TopContentItem>
@@ -63,7 +62,7 @@ function ReconcileView({
             :
           </div>
           <H1 bold color={colors.primary}>
-            {currencyFormat(parseFloat(kudaBalance), false, "N")}
+            {currencyFormat(parseFloat(kudaBalance), true, "N")}
           </H1>
         </TopContentItem>
         <BorderedText

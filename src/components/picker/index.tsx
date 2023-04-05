@@ -37,7 +37,7 @@ function Picker({
 
   const handleTextClick = (item: any) => {
     selectedValue(item.value);
-    setValue(item?.value);
+    setValue(item?.label);
     setIsVisible(false);
   };
   return (

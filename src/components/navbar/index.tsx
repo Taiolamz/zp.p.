@@ -1,19 +1,29 @@
 import { memo } from "react";
-import { Container, Content, ImgContent, Divider } from "./style";
+import {
+  Container,
+  Content,
+  ImgContent,
+  Divider,
+  BackBtnContainer,
+} from "./style";
 import { H1, H4 } from "../../styles";
 import { colors, images } from "../../utils";
-
+import { FiArrowLeft } from "react-icons/fi";
 interface IProps {
   title: string;
   helper?: string;
+  goBack?: () => void;
 }
 
-function Navbar({ title, helper }: IProps) {
+function Navbar({ title, helper, goBack }: IProps) {
   return (
     <Container>
       <Content>
         {helper ? (
-          <H4 color={colors.grey}>{title}</H4>
+          <BackBtnContainer onClick={goBack}>
+            <FiArrowLeft size={20} color={colors.grey} />
+            <H4 color={colors.grey}>{title}</H4>
+          </BackBtnContainer>
         ) : (
           <H1 semiBold>{title}</H1>
         )}

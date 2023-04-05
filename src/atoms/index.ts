@@ -6,3 +6,8 @@ export { default as TabView } from "./tabView";
 export { default as TransactionsView } from "./transactionsView";
 export { default as ReconcileView } from "./reconcileView";
 export { default as MoreIconView } from "./moreIconView";
+export { default as SuccessModalWithCopy } from "./successModalWithCopy";
+export { default as TransactionDetailsModal } from "./transactionDetailsModal";
+export { default as PerformActionModal } from "./performActionModal";
+export { default as SuccessActionModal } from "./successActionModal";
+export { default as LoaderModal } from "./loaderModal";

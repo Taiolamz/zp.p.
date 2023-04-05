@@ -8,7 +8,7 @@ interface StyleProps {
 }
 
 export const Container = styled.div`
-  width: 150px;
+  width: 160px;
   padding: 0px ${spacing.xxsmall};
   border-radius: ${borderRadius.medium};
   align-self: flex-start;

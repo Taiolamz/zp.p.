@@ -91,7 +91,7 @@ export const CustomerNameContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  width: 25%;
+  width: 35%;
   @media (max-width: 320px) {
     width: 100%;
   }

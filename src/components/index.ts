@@ -12,6 +12,7 @@ export { default as Modal } from "./modal";
 export { default as MoreIcon } from "./moreIcon";
 export { default as Picker } from "./picker";
 export { default as TextArea } from "./textArea";
+export { default as Clipboard } from "./clipboard";
 export { default as TransactionCard } from "./cards/transactionCard";
 export { default as SideBarCard } from "./cards/sideBarCard";
 export { default as UserActivityCard } from "./cards/userActivityCard";

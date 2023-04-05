@@ -10,7 +10,6 @@ export const Container = styled.div`
   height: 95%;
   width: 200px;
   position: fixed;
-  z-index: 1;
   top: 0;
   left: 0;
   overflow-x: hidden;
@@ -37,7 +36,6 @@ export const BottomTabContainer = styled.div`
     bottom: 0;
     position: fixed;
     display: block;
-    z-index: 2;
     background-color: ${colors.smokeWhite};
     width: 100%;
   }
