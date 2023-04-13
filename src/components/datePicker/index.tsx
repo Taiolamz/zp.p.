@@ -1,16 +1,9 @@
 import { memo, useState } from "react";
-import { ReactElement } from "react";
 import { ReactComponent as CalendarIcon } from "../../assets/svg/calender.svg";
 import DatePicker from "react-datepicker";
 import "./style.css";
 import "react-datepicker/dist/react-datepicker.css";
 import { Container } from "./style";
-import { H2 } from "../../styles";
-import { colors } from "../../utils";
-import { ActivityIndicator } from "../";
-import { DateIProps } from "../../types";
-
-const date: Date = new Date();
 
 interface IProps {
   selectedDate: any;
@@ -37,6 +30,7 @@ function RDatePicker({ selectedDate, placeholderText, required }: IProps) {
     setDate(date);
     selectedDate(date);
   };
+
   return (
     <Container>
       <DatePicker
