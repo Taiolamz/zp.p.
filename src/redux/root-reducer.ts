@@ -11,6 +11,7 @@ import {
   createEscalationTicketSliceReducer,
   getTransactionByIdSliceReducer,
   exportTransactionByIdToMailSliceReducer,
+  settlementAnalyticsSliceReducer,
 } from "./slice";
 
 const rootReducer = combineReducers({
@@ -25,6 +26,7 @@ const rootReducer = combineReducers({
   createEscalationTicket: createEscalationTicketSliceReducer,
   getTransactionById: getTransactionByIdSliceReducer,
   exportTransactionByIdToMail: exportTransactionByIdToMailSliceReducer,
+  settlementAnalytics: settlementAnalyticsSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -9,6 +9,7 @@ import {
   createEscalationTicketSliceReducer,
   getTransactionByIdSliceReducer,
   exportTransactionByIdToMailSliceReducer,
+  settlementAnalyticsSliceReducer,
 } from "./slice";
 const state = {
   login: loginSliceReducer,
@@ -21,6 +22,7 @@ const state = {
   createEscalationTicket: createEscalationTicketSliceReducer,
   getTransactionById: getTransactionByIdSliceReducer,
   exportTransactionByIdToMail: exportTransactionByIdToMailSliceReducer,
+  settlementAnalytics: settlementAnalyticsSliceReducer,
 };
 
 export const testAppSelector = (f: any) => f(state);

@@ -56,35 +56,12 @@ import {
   getTransactionByIdRequest,
   exportTransactionByIdToMailRequest,
   exportTransactionByIdToMailReset,
+  settlementAnalyticsRequest,
 } from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
 type Dictionary = {
   [key: string]: any;
 };
-
-const data = [
-  {
-    id: 1,
-    count: 45233333,
-    title: "Inflow",
-    helper: "Total Income",
-    color: colors.blueVariantOne,
-  },
-  {
-    id: 2,
-    count: 55000000,
-    title: "Outflow",
-    helper: "Total Withdrawals",
-    color: colors.orange,
-  },
-  {
-    id: 3,
-    count: 7000000,
-    title: "Profit",
-    helper: "Sharing Percentage on Transactions",
-    color: colors.greenVariantOne,
-  },
-];
 
 const tabViewData = [
   { id: 1, isSelected: true, text: "Transactions History" },
@@ -145,14 +122,16 @@ const billsHistoryHeader = {
   time: "Time",
 };
 
-const inflowData = [1000, 90, 100, 800, 500, 100, 900, 70, 80, 100, 800, 700];
-const outflowData = [100, 10, 20, 80, 100, 800, 700, 800, 90, 100, 800, 500];
-const profitData = [90, 50, 100, 91, 68, 100, 45, 70, 80, 30, 800, 50];
+const initialDate = "2022-01-01";
+const currentDate = new Date().toDateString();
+// const inflowData = [1000, 90, 100, 800, 500, 100, 900, 70, 80, 100, 800, 700];
+// const outflowData = [100, 10, 20, 80, 100, 800, 700, 800, 90, 100, 800, 500];
+// const profitData = [90, 50, 100, 91, 68, 100, 45, 70, 80, 30, 800, 50];
 const emptyData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 function Settlements() {
   const dispatch = useAppDispatch();
-  const [transactionStartDate, setTransactionStartDate] = useState("");
-  const [transactionEndDate, setTransactionEndDate] = useState("");
+  const [transactionStartDate, setTransactionStartDate] = useState(initialDate);
+  const [transactionEndDate, setTransactionEndDate] = useState(currentDate);
   const [startDisplayRecordDate, setStartDisplayRecordDate] = useState("");
   const [endDisplayRecordDate, setEndDisplayRecordDate] = useState("");
   const [transactionFilterParams, setTransactionFilterParams] = useState({
@@ -195,7 +174,11 @@ function Settlements() {
 
   const [selectedEscalateTo, setSelectedEscalateTo] = useState("");
   const [selectedPriorityLevel, setSelectedPriorityLevel] = useState("");
-
+  const [inflowData, setInflowData] = useState<any[]>([]);
+  const [outflowData, setOutflowData] = useState<any[]>([]);
+  const [profitData, setProfitData] = useState<any[]>([]);
+  const [analyticsSummaryData, setAnalyticsSummaryData] = useState<any[]>([]);
+  const [filterDate, setFilterDate] = useState(false);
   // redux state
   const transactionState = useAppSelector((state) => state.getTransactions);
   const { status: getTransactionsStatus } = transactionState;
@@ -221,6 +204,11 @@ function Settlements() {
   );
   const { status: exportTransactionByIdToMailStatus } =
     exportTransactionByIdToMailState;
+
+  const settlementAnalyticsState = useAppSelector(
+    (state) => state.settlementAnalytics
+  );
+  const { status: settlementAnalyticsStatus } = settlementAnalyticsState;
 
   const escalateCchema = yup.object().shape({
     title: yup.string().required("Title is required"),
@@ -305,6 +293,59 @@ function Settlements() {
     setSelectedTransactionActionText("");
     setSelectedFailedTransaction({});
   };
+
+  // api analytics
+
+  useEffect(() => {
+    const payload = {
+      startDate: yearDateFormat(transactionStartDate),
+      endDate: yearDateFormat(transactionEndDate),
+    };
+    dispatch(settlementAnalyticsRequest(payload));
+  }, [filterDate]);
+
+  useEffect(() => {
+    if (settlementAnalyticsStatus === "succeeded") {
+      let inflowResult: any[] = [];
+      let outflowResult: any[] = [];
+      let profitResult: any[] = [];
+      settlementAnalyticsState?.data?.transaction_analytics?.forEach(
+        (item: any) => {
+          inflowResult.push(parseFloat(item?.data?.in_flow));
+          outflowResult.push(parseFloat(item?.data?.out_flow));
+          profitResult.push(parseFloat(item?.data?.profit));
+        }
+      );
+
+      setInflowData(inflowResult);
+      setOutflowData(outflowResult);
+      setProfitData(profitResult);
+
+      setAnalyticsSummaryData([
+        {
+          id: 1,
+          amount: parseFloat(settlementAnalyticsState?.data?.inflow),
+          title: "Inflow",
+          helper: "Total Income",
+          color: colors.blueVariantOne,
+        },
+        {
+          id: 2,
+          amount: parseFloat(settlementAnalyticsState?.data?.outflow),
+          title: "Outflow",
+          helper: "Total Withdrawals",
+          color: colors.orange,
+        },
+        {
+          id: 3,
+          amount: parseFloat(settlementAnalyticsState?.data?.profit),
+          title: "Profit",
+          helper: "Sharing Percentage on Transactions",
+          color: colors.greenVariantOne,
+        },
+      ]);
+    }
+  }, [settlementAnalyticsState]);
 
   // api getTransactions
   useEffect(() => {
@@ -432,6 +473,13 @@ function Settlements() {
     }
   };
 
+  const handleSetFilterDateToday = () => {
+    setTransactionStartDate(initialDate);
+    setTransactionEndDate(currentDate);
+
+    setFilterDate(!filterDate);
+  };
+
   return (
     <AppContainer navTitle='SETTLEMENTS'>
       <div>
@@ -450,13 +498,15 @@ function Settlements() {
               <DatePicker selectedDate={setTransactionEndDate} />
             </DateContent>
             <BorderedText
-              onClick={() => {}}
+              onClick={handleSetFilterDateToday}
               backgroundColor={colors.white}
               color={colors.grey}
               text={"Today"}
             />
             <BorderedText
-              onClick={() => {}}
+              onClick={() => {
+                setFilterDate(!filterDate);
+              }}
               backgroundColor={colors.primary}
               color={colors.white}
               text={"Filter Page"}
@@ -464,13 +514,13 @@ function Settlements() {
           </AllTransactionContent>
         </AllTransactionContainer>
         <InfoCountContainer>
-          {data.map((item: any) => (
+          {analyticsSummaryData.map((item: any) => (
             <InfoCountContent key={item.id}>
               <CountInfoCard
                 title={item.title}
                 helper={item.helper}
                 color={item.color}
-                count={currencyFormat(item.count)}
+                count={currencyFormat(item.amount)}
               />
             </InfoCountContent>
           ))}
@@ -701,7 +751,10 @@ function Settlements() {
           onClick={(item) => handleMoreIconOptions(item)}
         />
         <LoaderModal
-          isModalVisible={getTransactionsStatus === "loading"}
+          isModalVisible={
+            getTransactionsStatus === "loading" ||
+            settlementAnalyticsStatus === "loading"
+          }
           text='Loading please wait...'
           closeModal={() => {}}
         />
