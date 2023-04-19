@@ -17,3 +17,7 @@ export const SearchContainer = styled.div`
   margin-bottom: ${spacing.large};
   margin-top: ${spacing.small};
 `;
+
+export const KYCTabViewContainer = styled.div`
+  margin-top: ${spacing.small};
+`;
