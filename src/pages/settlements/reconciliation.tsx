@@ -375,8 +375,7 @@ function Reconciliation() {
     dispatch(createEscalationTicketReset());
     handleCloseEscalateModal();
   };
-  console.log(selectedFailedTransaction, "iddss");
-  // console.log(transactionDataList, "transactionDataList");
+
   return (
     <AppContainer navTitle='RECONCILIATION'>
       <div style={{ marginTop: spacing.small }}>
