@@ -44,8 +44,7 @@ function TransactionCard({
   return (
     <Container
       backgroundColor={header ? "transparent" : colors.white}
-      header={header}
-      onClick={onClick}>
+      header={header}>
       <H1TextContainer>
         <H4 left color={header ? colors.primary : colors.grey}>
           {id}
