@@ -182,7 +182,7 @@ function ReconcilationUserDetails() {
       goBack={() => navigate(RECONCILIATION)}
       navTitle='RECONCILIATION'
       navHelper='USER PROFILE'>
-      <div style={{ marginTop: spacing.small }}>
+      <div style={{ marginTop: spacing.small, height: "100vh" }}>
         <div>
           {getReconciliationAccountDetailStatus !== "loading" &&
             userData.hasOwnProperty("user") && (
@@ -194,12 +194,24 @@ function ReconcilationUserDetails() {
                 data={[
                   { text: userData?.user?.telephone, helper: "Phone Number" },
                   { text: userData?.user?.email, helper: "Email" },
-                  { text: userData?.user?.kyc?.bvn_number, helper: "BVN" },
+                  {
+                    text:
+                      userData?.user?.kyc?.bvn_number.length > 1
+                        ? userData?.user?.kyc?.bvn_number
+                        : "N/A",
+                    helper: "BVN",
+                  },
                   {
                     text: userData?.user?.account?.number,
                     helper: "Account Number",
                   },
-                  { text: userData?.user?.location, helper: "Address" },
+                  {
+                    text:
+                      userData?.user?.location.length > 1
+                        ? userData?.user?.location
+                        : "N/A",
+                    helper: "Address",
+                  },
                   { text: userData?.user?.kyc_level, helper: "KYC" },
                   {
                     text: dateFormat(userData?.user?.updated_at),
@@ -214,7 +226,7 @@ function ReconcilationUserDetails() {
             )}
         </div>
 
-        <TabViewContainer>
+        {/* <TabViewContainer>
           <TabView
             data={tabViewData}
             setSelectedIndex={setTabViewSelectedIndex}
@@ -245,7 +257,7 @@ function ReconcilationUserDetails() {
               />
             </TabContentTwo>
           )}
-        </TabViewContainer>
+        </TabViewContainer> */}
 
         <PerformActionModal
           isModalVisible={reconcilationModalVisible}
