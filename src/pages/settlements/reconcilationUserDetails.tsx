@@ -110,7 +110,7 @@ function ReconcilationUserDetails() {
 
   useEffect(() => {
     dispatch(getReconciliationAccountDetailRequest({ userId: id }));
-  }, []);
+  }, [reconcileAccountState]);
 
   useEffect(() => {
     if (getTransactionsStatus === "succeeded") {
@@ -140,7 +140,7 @@ function ReconcilationUserDetails() {
     if (getReconciliationAccountDetailStatus === "succeeded") {
       setUserData(getReconciliationAccountDetailState?.data);
     }
-  }, [getReconciliationAccountDetailState]);
+  }, [getReconciliationAccountDetailState, reconcileAccountState]);
 
   const handleTransactionFilter = () => {
     setTransactionFilterParams({
@@ -173,7 +173,6 @@ function ReconcilationUserDetails() {
   useEffect(() => {
     if (reconcileAccountStatus === "succeeded") {
       setReconcilationSuccessModalVisible(true);
-      console.log(reconcileAccountState.data, "reconcileAccount");
     }
   }, [reconcileAccountState]);
 
