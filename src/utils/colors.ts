@@ -13,6 +13,7 @@ const colors = {
   greyVariantTwo: "#E7E7E7",
   greyVariantThree: "#797A81",
   greyVariantFour: "#818187",
+  greyVariantFive: "#f6f6f6",
   yellow: "#fbad39",
   green: "#089E17",
   greenVariantOne: "#2DBD9B",
@@ -25,7 +26,7 @@ const colors = {
   purpleVariantTwo: "#DDDFF7",
   purpleVariantThree: "#7780DE",
   pink: "#ffcccc",
-  smokeWhite: "#f6f6f6",
+  smokeWhite: "#fafafa",
   gold: "#FFB800",
 };
 

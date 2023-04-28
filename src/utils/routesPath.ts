@@ -13,6 +13,7 @@ const routesPath = {
   RECONCILIATIONUSERDETAILS: "/reconciliation/",
   USERS: "/users",
   SETTINGS: "/settings",
+  KYCDOC: "/kyc/",
 };
 
 export default routesPath;

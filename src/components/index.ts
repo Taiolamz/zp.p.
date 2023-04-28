@@ -7,6 +7,7 @@ export { default as Pagination } from "./pagination";
 export { default as Navbar } from "./navbar";
 export { default as DatePicker } from "./datePicker";
 export { default as BorderedText } from "./borderedText";
+export { default as OuterLabelButton } from "./outerLabelButton";
 export { default as Tab } from "./tab";
 export { default as Modal } from "./modal";
 export { default as MoreIcon } from "./moreIcon";
