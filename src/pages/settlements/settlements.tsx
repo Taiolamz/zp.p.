@@ -77,6 +77,7 @@ const transactionDataHeader = {
   type: "Transaction Type",
   status: "Status",
   time: "Date",
+  blank:"",
 };
 
 const billsHistoryData = [

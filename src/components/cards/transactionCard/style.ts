@@ -16,6 +16,7 @@ export const Container = styled.div`
   background-color: ${(p: StyleProps) =>
     p.backgroundColor ? p.backgroundColor : colors.white};
   margin-bottom: ${(p: StyleProps) => (p.header ? 0 : spacing.xsmall)};
+  column-gap: 2rem;
   @media (max-width: 768px) {
     // padding: ${spacing.xsmall};
   }

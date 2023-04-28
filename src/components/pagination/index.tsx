@@ -19,7 +19,7 @@ function RPagination({
 }: IProps) {
   return (
     <>
-      <div style={{ marginTop: spacing.small }}>
+      <div style={{ marginTop: spacing.small, marginBottom: spacing.medium }}>
         <Pagination
           {...bootstrap5PaginationPreset}
           total={totalPages}

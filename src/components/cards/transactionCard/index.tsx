@@ -52,7 +52,7 @@ function TransactionCard({
         </H4>
       </H1TextContainer>
       <MainTextContainer>
-        <H4 left color={header ? colors.primary : colors.grey}>
+        <H4 left style={{paddingRight: "2rem"}} color={header ? colors.primary : colors.grey}>
           {name}
         </H4>
       </MainTextContainer>
