@@ -10,6 +10,7 @@ import {
   ContentTwo,
   ContentThree,
 } from "./style";
+import "./style.css";
 import { colors, boxShadow } from "../../utils";
 import { H2 } from "../../styles";
 
@@ -32,6 +33,7 @@ const customStyles = {
     border: `1px solid ${colors.smokeWhite}`,
     boxShadow: boxShadow.light,
   },
+  overlay: { backgroundColor: "rgba(0,0,0,0.6)" },
 };
 
 function RModal({

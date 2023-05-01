@@ -9,6 +9,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  cursor: pointer;
 `;
 
 export const Indicator = styled.div`
@@ -44,6 +45,7 @@ export const OptionsContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  cursor: pointer;
 `;
 
 export const OptionsMainCover = styled.div`

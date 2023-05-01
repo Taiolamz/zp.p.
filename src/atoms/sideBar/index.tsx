@@ -36,8 +36,6 @@ export interface NavIProps {
 }
 const {
   DASHBOARD,
-  TOKEN,
-  LOGIN,
   KYC,
   SUPPORT,
   SETTLEMENTS,

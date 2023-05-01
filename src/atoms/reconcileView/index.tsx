@@ -66,7 +66,7 @@ function ReconcileView({
           </H1>
         </TopContentItem>
         <BorderedText
-          text='Reconsile Balance'
+          text='Reconcile Balance'
           onClick={onClick}
           backgroundColor={colors.primary}
           color={colors.white}

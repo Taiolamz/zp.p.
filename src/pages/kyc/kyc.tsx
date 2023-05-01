@@ -5,12 +5,20 @@ import {
   SearchInput,
   CurrentPageCard,
 } from "../../components";
-import { AppContainer, CountInfo } from "../../atoms";
-import { SearchContainer } from "./style";
+import { AppContainer, CountInfo, TabView } from "../../atoms";
+import { SearchContainer, KYCTabViewContainer } from "./style";
 
 import { colors } from "../../utils";
 
+const tabViewData = [
+  { id: 1, isSelected: true, text: "Verified Users" },
+  { id: 2, isSelected: false, text: "Pending Verifications" },
+];
+
 function Kyc() {
+  // states
+  const [tabViewSelectedIndex, setTabViewSelectedIndex] =
+    useState<any[number]>(1);
   const data = [
     {
       id: 1,
@@ -81,6 +89,12 @@ function Kyc() {
   return (
     <AppContainer navTitle='KYC'>
       <div>
+        <KYCTabViewContainer>
+          <TabView
+            data={tabViewData}
+            setSelectedIndex={setTabViewSelectedIndex}
+          />
+        </KYCTabViewContainer>
         <CountInfo data={data} />
         <SearchContainer>
           <CurrentPageCard pageNumber={1} />

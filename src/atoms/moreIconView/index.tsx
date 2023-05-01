@@ -34,6 +34,7 @@ function MoreIconView({
       bottom: "auto",
       boxShadow: boxShadow.light,
     },
+    overlay: { backgroundColor: "rgba(0,0,0,0.6)" },
   };
 
   const handleClick = (item: string) => {

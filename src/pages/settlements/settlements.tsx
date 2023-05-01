@@ -236,7 +236,8 @@ function Settlements() {
         channel,
         created_at,
         user: { name },
-      } = getTransactionByIdState.data.transaction;
+      } = getTransactionByIdState?.data?.transaction;
+
       const result = {
         amount,
         status,

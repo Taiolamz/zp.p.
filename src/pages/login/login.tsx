@@ -11,7 +11,7 @@ import { loginRequest } from "../../redux/slice";
 import { routesPath } from "../../utils";
 import Cookies from "js-cookie";
 
-const { DASHBOARD, REMEMBERUSER } = routesPath;
+const { DASHBOARD, REMEMBERUSER, TOKEN } = routesPath;
 function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -38,10 +38,12 @@ function Login() {
       setRememberedUserEmail("");
     }
   }, []);
-  // using this or real api call
 
+  // using this or real api call
   useEffect(() => {
-    if (loginState.status === "succeeded") {
+    const cookiesToken = Cookies.get(TOKEN);
+
+    if (cookiesToken !== undefined) {
       navigate(DASHBOARD);
     }
   }, [loginState]);
