@@ -20,6 +20,7 @@ const colors = {
   greenVariantTwo: "#52b28d",
   greenVariantThree: "#d2f4d9",
   greenVariantFour: "#30bd6f",
+  greenVariantFive: "#7bf08d",
   orange: "#FFAF56",
   purple: "#7B91F7",
   purpleVariantOne: "#EFF2FE",
