@@ -76,6 +76,13 @@ instance.interceptors.response.use(
       });
     }
 
+    if (err.response.status === 500) {
+      showMessage({
+        type: "error",
+        message: err.response.data.error.message,
+      });
+    }
+
     if (err.request) {
       return Promise.reject(err.request);
     }
