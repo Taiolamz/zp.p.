@@ -30,9 +30,7 @@ import {
 } from "../../atoms";
 import {
   colors,
-  currencyFormat,
   dateFormat,
-  getPathFromPagUrl,
   spacing,
   yearDateFormat,
   routesPath,

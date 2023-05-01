@@ -1,19 +1,39 @@
 import { useState } from "react";
+import { ImageWithLabel } from "../../components";
+import { AppContainer, KycCustomerView } from "../../atoms";
+import { H1, H5 } from "../../styles";
 import {
-  Pagination,
-  UserDetailsCard,
-  SearchInput,
-  CurrentPageCard,
-} from "../../components";
-import { AppContainer, CountInfo, TabView } from "../../atoms";
-import { SearchContainer, KYCTabViewContainer } from "./style";
+  CustomerContainer,
+  CardContainer,
+  CustomerContentOne,
+  CustomerContentTwo,
+  CustomerContentTwoVerified,
+} from "./style";
 
-import { colors } from "../../utils";
+import { colors, currencyFormat, dateFormat, images } from "../../utils";
 
 const tabViewData = [
   { id: 1, isSelected: true, text: "Verified Users" },
   { id: 2, isSelected: false, text: "Pending Verifications" },
 ];
+
+interface IPropsCard {
+  text: string;
+  helper: string;
+}
+
+function CustomerDataCard({ text, helper }: IPropsCard) {
+  return (
+    <CardContainer>
+      <H5 left color={colors.primary}>
+        {helper}
+      </H5>
+      <H5 left color={colors.grey}>
+        {text}
+      </H5>
+    </CardContainer>
+  );
+}
 
 function KycCustomer() {
   // states
@@ -42,57 +62,77 @@ function KycCustomer() {
     },
   ];
 
+  const date = new Date().toDateString();
+
   const userDetails: any = [
     {
       id: 1,
-      userName: "Wade Warren",
-      bvn: 222233434555,
-      phone: "+2348036329178",
+      helper: "Full Name",
+      text: "Wade Warren Chukwuma",
     },
 
     {
       id: 2,
-      userName: "Wade Warren",
-      bvn: 222233434555,
-      phone: "+2348036329178",
+      helper: "Email",
+      text: "wade@gmail.com",
     },
+
     {
       id: 3,
-      userName: "Wade Warren",
-      bvn: 222233434555,
-      phone: "+2348036329178",
+      helper: "Phone Number",
+      text: "2348036329157",
     },
+
     {
       id: 4,
-      userName: "Wade Warren",
-      bvn: 222233434555,
-      phone: "+2348036329178",
+      helper: "BVN",
+      text: "3094095959",
     },
+
     {
       id: 5,
-      userName: "Wade Warren",
-      bvn: 222233434555,
-      phone: "+2348036329178",
+      helper: "Residential Address",
+      text: "Ason rock",
     },
+
+    { id: 6, text: dateFormat(date), helper: "Date of Birth" },
     {
-      id: 6,
-      userName: "Wade Warren",
-      bvn: 222233434555,
-      phone: "+2348036329178",
+      id: 7,
+      helper: "ID Number",
+      text: "KKFHHFB",
     },
   ];
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [searchValue, setSearchValue] = useState("");
-  const totalPages = 5;
 
   return (
     <AppContainer navTitle='KYC'>
       <div>
-        <div>kyc customer details</div>
-        <div>kyc customer details</div>
-        <div>kyc customer details</div>
-        <div>kyc customer details</div>
+        <CustomerContainer>
+          <CustomerContentOne>
+            {userDetails.map((item: any) => (
+              <CustomerDataCard
+                key={item.id}
+                helper={item.helper}
+                text={item.text}
+              />
+            ))}
+          </CustomerContentOne>
+
+          <CustomerContentTwo>
+            <CustomerContentTwoVerified>
+              <ImageWithLabel
+                approved={true}
+                imgSrc={images.user}
+                text={"BVN Picture"}
+              />
+              <ImageWithLabel
+                approved={true}
+                imgSrc={images.user}
+                text={"Uploaded Sefie"}
+              />
+            </CustomerContentTwoVerified>
+            <KycCustomerView title={"National ID Card"} />
+          </CustomerContentTwo>
+        </CustomerContainer>
       </div>
     </AppContainer>
   );
