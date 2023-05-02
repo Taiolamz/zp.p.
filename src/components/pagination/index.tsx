@@ -19,7 +19,13 @@ function RPagination({
 }: IProps) {
   return (
     <>
-      <div style={{ marginTop: spacing.small, marginBottom: spacing.medium }}>
+      <div
+        style={{
+          marginTop: spacing.small,
+          marginBottom: spacing.medium,
+          width: "100%",
+          maxWidth: "100%",
+        }}>
         <Pagination
           {...bootstrap5PaginationPreset}
           total={totalPages}
@@ -32,7 +38,7 @@ function RPagination({
           disabledItemClassName='disabled'
           srOnlyClassName='sr-only'
           narrowStrategy='dropEllipsis'
-          maxWidth={maxWidth || 500}
+          maxWidth={maxWidth || 350}
         />
       </div>
     </>

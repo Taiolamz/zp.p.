@@ -36,13 +36,22 @@ export const InfoCountContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: stretch;
+  // align-items: stretch;
   flex-wrap: wrap;
   margin: ${spacing.small} 0px;
+  column-gap: ${spacing.small};
+  @media (max-width: 480px) {
+    flex-direction: column;
+    row-gap: ${spacing.xsmall};
+  }
 `;
 
 export const InfoCountContent = styled.div`
   width: 30%;
+  flex-grow: 1;
+  @media (max-width: 480px) {
+    width: 100%;
+  }
 `;
 
 export const TabViewContainer = styled.div`
