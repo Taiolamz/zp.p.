@@ -12,3 +12,5 @@ export { default as PerformActionModal } from "./performActionModal";
 export { default as SuccessActionModal } from "./successActionModal";
 export { default as LoaderModal } from "./loaderModal";
 export { default as KycCustomerView } from "./kycCustomerView";
+export { default as ActivityActionModal } from "./activityActionModal";
+export { default as RejectionActionModal } from "./rejectionActionModal";

@@ -1,7 +1,12 @@
 import { useState } from "react";
 import { ImageWithLabel } from "../../components";
-import { AppContainer, KycCustomerView } from "../../atoms";
-import { H1, H5 } from "../../styles";
+import {
+  AppContainer,
+  KycCustomerView,
+  ActivityActionModal,
+  RejectionActionModal,
+} from "../../atoms";
+import { H5 } from "../../styles";
 import {
   CustomerContainer,
   CardContainer,
@@ -10,7 +15,7 @@ import {
   CustomerContentTwoVerified,
 } from "./style";
 
-import { colors, currencyFormat, dateFormat, images } from "../../utils";
+import { colors, dateFormat, images } from "../../utils";
 
 const tabViewData = [
   { id: 1, isSelected: true, text: "Verified Users" },
@@ -39,28 +44,9 @@ function KycCustomer() {
   // states
   const [tabViewSelectedIndex, setTabViewSelectedIndex] =
     useState<any[number]>(1);
-  const data = [
-    {
-      id: 1,
-      count: 45,
-      title: "Level 1",
-    },
-    {
-      id: 2,
-      count: 55,
-      title: "Level 2",
-    },
-    {
-      id: 3,
-      count: 75,
-      title: "Level 3",
-    },
-    {
-      id: 4,
-      count: 45,
-      title: "Agency",
-    },
-  ];
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [rejectionIsModalVisible, setRejectionIsModalVisible] = useState(false);
+  const [rejectionReason, setRejectionReason] = useState("");
 
   const date = new Date().toDateString();
 
@@ -130,9 +116,39 @@ function KycCustomer() {
                 text={"Uploaded Sefie"}
               />
             </CustomerContentTwoVerified>
-            <KycCustomerView title={"National ID Card"} />
+            <KycCustomerView
+              title={"National ID Card"}
+              onClickApprove={() => {
+                setIsModalVisible(true);
+              }}
+              onClickReject={() => {
+                setRejectionIsModalVisible(true);
+              }}
+            />
           </CustomerContentTwo>
         </CustomerContainer>
+        <ActivityActionModal
+          actionClick={() => {}}
+          closeModal={() => setIsModalVisible(false)}
+          isModalVisible={isModalVisible}
+          text={`Are you sure you want to approve this customer's document`}
+          actionText='Submit'
+          image={images.list}
+        />
+        <RejectionActionModal
+          actionClick={() => {}}
+          closeModal={() => setRejectionIsModalVisible(false)}
+          isModalVisible={rejectionIsModalVisible}
+          title={`Select Rejection Reason`}
+          actionText='Submit'
+          image={images.reject}
+          rejectionList={[
+            { id: 1, value: "Allen", label: "Allen" },
+            { id: 2, value: "Kardic", label: "Kardic" },
+            { id: 3, value: "James", label: "James" },
+          ]}
+          rejectionValue={setRejectionReason}
+        />
       </div>
     </AppContainer>
   );
