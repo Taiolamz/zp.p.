@@ -1,11 +1,4 @@
-import {
-  TransactionContainer,
-  TableTag,
-  TD,
-  TH,
-  TR,
-  TableContainer,
-} from "./style";
+import { TableTag, TD, TH, TR, TableContainer } from "./style";
 import { TransactionCard } from "../../components";
 import { colors, currencyFormat, dateFormat } from "../../utils";
 import MoreIcon from "../moreIcon";
@@ -19,15 +12,7 @@ export interface TableIPropsIProps {
   headerData?: any;
 }
 
-function Table({
-  data,
-  backgroundColor,
-  setSelectedItem,
-  header = false,
-  headerData,
-  type,
-  onClick,
-}: any) {
+function Table({ data, setSelectedItem, headerData, type, onClick }: any) {
   const handleOnSelect = (item: any) => {
     setSelectedItem(item);
     onClick(item);
@@ -37,7 +22,6 @@ function Table({
   return (
     <TableContainer>
       <TableTag>
-        {/* <TransactionContainer> */}
         <tr>
           <TH></TH>
           <TH>{headerData.name}</TH>
@@ -92,7 +76,6 @@ function Table({
             ))}
           </div>
         )}
-        {/* </TransactionContainer> */}
       </TableTag>
     </TableContainer>
   );
