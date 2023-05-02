@@ -1,7 +1,7 @@
 import { TableTag, TD, TH, TR, TableContainer } from "./style";
-import { TransactionCard } from "../../components";
-import { colors, currencyFormat, dateFormat } from "../../utils";
-import MoreIcon from "../moreIcon";
+import { TransactionCard } from "../..";
+import { colors, currencyFormat, dateFormat } from "../../../utils";
+import MoreIcon from "../../moreIcon";
 
 export interface TableIPropsIProps {
   type: string;
@@ -12,7 +12,13 @@ export interface TableIPropsIProps {
   headerData?: any;
 }
 
-function Table({ data, setSelectedItem, headerData, type, onClick }: any) {
+function TransactionTable({
+  data,
+  setSelectedItem,
+  headerData,
+  type,
+  onClick,
+}: any) {
   const handleOnSelect = (item: any) => {
     setSelectedItem(item);
     onClick(item);
@@ -81,4 +87,4 @@ function Table({ data, setSelectedItem, headerData, type, onClick }: any) {
   );
 }
 
-export default Table;
+export default TransactionTable;

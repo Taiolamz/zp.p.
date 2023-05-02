@@ -14,6 +14,7 @@ import {
   Input,
   TextArea,
   Button,
+  TransactionTable,
 } from "../../components";
 import {
   SettlementBarChart,
@@ -60,7 +61,6 @@ import {
   settlementAnalyticsRequest,
 } from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
-import Table from "../../components/table";
 type Dictionary = {
   [key: string]: any;
 };
@@ -585,7 +585,7 @@ function Settlements() {
           )}
         </TabViewContainer>
         {tabViewSelectedIndex === 1 && (
-          <Table
+          <TransactionTable
             type={"transactions"}
             headerData={transactionDataHeader}
             header={true}

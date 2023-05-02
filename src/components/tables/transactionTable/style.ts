@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { colors, spacing } from "../../utils";
+import { colors, spacing } from "../../../utils";
 
 interface StyleProps {
   backgroundColor?: string;

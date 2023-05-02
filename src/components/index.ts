@@ -20,3 +20,4 @@ export { default as CountInfoCard } from "./cards/countInfoCard";
 export { default as UserDetailsCard } from "./cards/userDetailsCard";
 export { default as CurrentPageCard } from "./cards/currentPageCard";
 export { default as ReconcialiationCard } from "./cards/reconcialiationCard";
+export { default as TransactionTable } from "./tables/transactionTable";
