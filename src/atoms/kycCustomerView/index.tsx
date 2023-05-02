@@ -62,10 +62,12 @@ function KycCustomerView({ onClickApprove, onClickReject, title }: IProps) {
 
         <ActionBtnContainer>
           <OuterLabelButton
+            onClick={onClickApprove}
             icon={<FiCheck size={30} color={colors.white} />}
             text='Approve'
           />
           <OuterLabelButton
+            onClick={onClickReject}
             backgroundColor={colors.red}
             icon={<FiX size={30} color={colors.white} />}
             text='Reject'
