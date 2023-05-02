@@ -6,12 +6,12 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 705px;
-  @media (max-width:576px) {
-    width: width: 520px;
-  };
-  @media (max-width:480px) {
-    width: width: 370px;
-  };
+  @media (max-width: 576px) {
+    width: 520px;
+  }
+  @media (max-width: 480px) {
+    width: 370px;
+  } ;
 `;
 
 export const Content = styled.div`

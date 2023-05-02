@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import { Dashboard } from "../pages/dashboard";
 import { Login } from "../pages/login";
-import { Kyc } from "../pages/kyc";
+import { Kyc, KycCustomer } from "../pages/kyc";
 import { Support } from "../pages/support";
 import { Users } from "../pages/users";
 import {
@@ -13,7 +13,7 @@ import { Settings } from "../pages/settings";
 import { NotFound } from "../pages/notFound";
 import { PrivateRoute } from "./privateRoute";
 import { routesPath } from "../utils";
-import { useAppSelector } from "../redux/redux-hooks";
+
 function AppRoute() {
   const {
     LOGIN,
@@ -25,6 +25,7 @@ function AppRoute() {
     RECONCILIATIONUSERDETAILS,
     USERS,
     SETTINGS,
+    KYCDOC,
   } = routesPath;
   // const authState = useAppSelector((state) => state.auth);
 
@@ -45,6 +46,14 @@ function AppRoute() {
           element={
             <PrivateRoute>
               <Kyc />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={`${KYCDOC}:id`}
+          element={
+            <PrivateRoute>
+              <KycCustomer />
             </PrivateRoute>
           }
         />

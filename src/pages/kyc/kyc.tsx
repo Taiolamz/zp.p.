@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Pagination,
   UserDetailsCard,
@@ -8,14 +9,15 @@ import {
 import { AppContainer, CountInfo, TabView } from "../../atoms";
 import { SearchContainer, KYCTabViewContainer } from "./style";
 
-import { colors } from "../../utils";
+import { colors, routesPath } from "../../utils";
 
 const tabViewData = [
   { id: 1, isSelected: true, text: "Verified Users" },
   { id: 2, isSelected: false, text: "Pending Verifications" },
 ];
-
+const { KYCDOC } = routesPath;
 function Kyc() {
+  const navigate = useNavigate();
   // states
   const [tabViewSelectedIndex, setTabViewSelectedIndex] =
     useState<any[number]>(1);
@@ -124,7 +126,9 @@ function Kyc() {
               userName={item.userName}
               bvn={item.bvn}
               phoneNo={item.phone}
-              onClick={() => {}}
+              onClick={() => {
+                navigate(`${KYCDOC}${item.id}`);
+              }}
             />
           ))}
         </div>

@@ -51,7 +51,9 @@ instance.interceptors.response.use(
     if (err.response.status === 401) {
       showMessage({
         type: "error",
-        message: err.response.data.error.message[0],
+        message: Array.isArray(err.response.data.error.message)
+          ? err.response.data.error.message[0]
+          : err.response.data.error.message,
       });
     }
 
@@ -65,11 +67,20 @@ instance.interceptors.response.use(
     if (err.response.status === 422) {
       showMessage({
         type: "error",
-        message: err.response.data.error.message[0],
+        message: Array.isArray(err.response.data.error.message)
+          ? err.response.data.error.message[0]
+          : err.response.data.error.message,
       });
     }
 
     if (err.response.status === 503) {
+      showMessage({
+        type: "error",
+        message: err.response.data.error.message,
+      });
+    }
+
+    if (err.response.status === 500) {
       showMessage({
         type: "error",
         message: err.response.data.error.message,
