@@ -45,6 +45,7 @@ import {
   EscalateFormContainer,
   EscalateBtnContainer,
   CustomerNameContainer,
+  DatePickerContainer,
 } from "./style";
 
 import {
@@ -59,6 +60,7 @@ import {
   settlementAnalyticsRequest,
 } from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
+import Table from "../../components/table";
 type Dictionary = {
   [key: string]: any;
 };
@@ -77,7 +79,7 @@ const transactionDataHeader = {
   type: "Transaction Type",
   status: "Status",
   time: "Date",
-  blank:"",
+  blank: "",
 };
 
 const billsHistoryData = [
@@ -483,7 +485,7 @@ function Settlements() {
   };
 
   return (
-    <AppContainer navTitle='SETTLEMENTS'>
+    <AppContainer navTitle="SETTLEMENTS">
       <div>
         <AllTransactionContainer>
           <H3 color={colors.primary}>All Transactions</H3>
@@ -494,7 +496,8 @@ function Settlements() {
                 style={{
                   marginLeft: spacing.xsmall,
                   marginRight: spacing.xsmall,
-                }}>
+                }}
+              >
                 -
               </div>
               <DatePicker selectedDate={setTransactionEndDate} />
@@ -560,27 +563,29 @@ function Settlements() {
             <TabContentTwo>
               <SearchInput
                 backgroundColor={"transparent"}
-                name='SearchValue'
+                name="SearchValue"
                 value={searchValue}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   setSearchValue(e.target.value)
                 }
-                placeholder='Search Records'
+                placeholder="Search Records"
               />
-              <DatePicker selectedDate={setStartDisplayRecordDate} />
-              <DatePicker selectedDate={setEndDisplayRecordDate} />
+              <DatePickerContainer>
+                <DatePicker selectedDate={setStartDisplayRecordDate} />
+                <DatePicker selectedDate={setEndDisplayRecordDate} />
+              </DatePickerContainer>
               <BorderedText
                 onClick={handleTransactionFilter}
                 backgroundColor={colors.primary}
                 color={colors.white}
                 icon={<FiFilter color={colors.white} size={15} />}
-                text='Filter'
+                text="Filter"
               />
             </TabContentTwo>
           )}
         </TabViewContainer>
         {tabViewSelectedIndex === 1 && (
-          <TransactionsView
+          <Table
             type={"transactions"}
             headerData={transactionDataHeader}
             header={true}
@@ -600,7 +605,8 @@ function Settlements() {
 
         <Modal
           isModalVisible={escalateModalVisible}
-          closeModal={handleCloseEscalateModal}>
+          closeModal={handleCloseEscalateModal}
+        >
           <Formik
             initialValues={{
               title: "",
@@ -624,7 +630,8 @@ function Settlements() {
               );
 
               setSubmitting(false);
-            }}>
+            }}
+          >
             {(formikProps) => {
               const { handleChange, values, handleSubmit, errors } =
                 formikProps;
@@ -633,11 +640,11 @@ function Settlements() {
                   <EscalateFormContainer>
                     <CustomerNameContainer>
                       <Input
-                        label='Customer Name'
+                        label="Customer Name"
                         backgroundColor={colors.white}
                         borderColor={colors.grey}
-                        placeholder='Enter title'
-                        type='text'
+                        placeholder="Enter title"
+                        type="text"
                         value={selectedFailedTransaction?.name}
                         name={"name"}
                         onChange={() => {}}
@@ -645,11 +652,11 @@ function Settlements() {
                     </CustomerNameContainer>
 
                     <Input
-                      label='Title'
+                      label="Title"
                       backgroundColor={colors.white}
                       borderColor={colors.grey}
-                      placeholder='Enter title'
-                      type='text'
+                      placeholder="Enter title"
+                      type="text"
                       value={values.title}
                       name={"title"}
                       onChange={handleChange}
@@ -657,10 +664,10 @@ function Settlements() {
                     />
 
                     <TextArea
-                      label='Title'
+                      label="Title"
                       backgroundColor={colors.white}
                       borderColor={colors.grey}
-                      placeholder='Type here...'
+                      placeholder="Type here..."
                       value={values.description}
                       name={"description"}
                       onChange={handleChange}
@@ -669,17 +676,17 @@ function Settlements() {
 
                     <Picker
                       error={errors.escalateTo}
-                      label='Escalate to'
+                      label="Escalate to"
                       selectedValue={setSelectedEscalateTo}
-                      placeholder='Select Agent'
+                      placeholder="Select Agent"
                       options={escalationAgentsList}
                     />
 
                     <Picker
                       error={errors.priorityLevel}
-                      label='Priority Level'
+                      label="Priority Level"
                       selectedValue={setSelectedPriorityLevel}
-                      placeholder='Select Priority'
+                      placeholder="Select Priority"
                       options={[
                         { label: "Low", value: "low" },
                         { label: "Medium", value: "medium" },
@@ -688,8 +695,8 @@ function Settlements() {
                     />
                     <EscalateBtnContainer>
                       <Button
-                        type='submit'
-                        text='Escalate'
+                        type="submit"
+                        text="Escalate"
                         disabled={
                           createEscalationTicketStatus === "loading"
                             ? true
@@ -698,10 +705,10 @@ function Settlements() {
                       />
                       <Button
                         onClick={handleCloseEscalateModal}
-                        text='Cancel'
+                        text="Cancel"
                         disabled={false}
                         secondary
-                        borderColor='transparent'
+                        borderColor="transparent"
                         color={colors.primary}
                       />
                     </EscalateBtnContainer>
@@ -719,7 +726,7 @@ function Settlements() {
           text={"Complaint has been escalated with Ticket Id:"}
           copyIconText={"Copy Ticket:Id"}
           title={escalateSuccessfulData?.ticket_reference}
-          iconType='sent'
+          iconType="sent"
         />
 
         <TransactionDetailsModal
@@ -757,7 +764,7 @@ function Settlements() {
             getTransactionsStatus === "loading" ||
             settlementAnalyticsStatus === "loading"
           }
-          text='Loading please wait...'
+          text="Loading please wait..."
           closeModal={() => {}}
         />
       </div>

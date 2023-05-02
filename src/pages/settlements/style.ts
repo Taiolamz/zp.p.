@@ -8,7 +8,7 @@ export const AllTransactionContainer = styled.div`
   align-items: center;
   flex-wrap: wrap;
   margin-top: ${spacing.small};
-  `;
+`;
 
 export const AllTransactionContent = styled.div`
   display: flex;
@@ -17,7 +17,7 @@ export const AllTransactionContent = styled.div`
   align-items: center;
   flex-wrap: wrap;
   width: 50%;
-  gap: .5rem;
+  gap: 0.5rem;
   @media (max-width: 768px) {
     width: 90%;
   }
@@ -29,7 +29,7 @@ export const DateContent = styled.div`
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  row-gap: .5rem;
+  row-gap: 0.5rem;
 `;
 
 export const InfoCountContainer = styled.div`
@@ -52,11 +52,17 @@ export const TabViewContainer = styled.div`
   align-items: center;
   flex-wrap: wrap;
   margin: ${spacing.small} 0px;
-  
 
   @media (max-width: 870px) {
-    flex-direction: column;
-    row-gap:  ${spacing.small};
+    row-gap: ${spacing.small};
+  }
+`;
+
+export const DatePickerContainer = styled.div`
+  display: flex;
+  column-gap: ${spacing.small};
+  @media (max-width: 870px) {
+    row-gap: ${spacing.small};
   }
 `;
 
