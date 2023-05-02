@@ -16,6 +16,7 @@ import {
   Input,
   TextArea,
   Button,
+  TransactionTable,
 } from "../../components";
 import {
   SettlementBarChart,
@@ -383,7 +384,11 @@ function Reconciliation() {
           Find Profile
         </H2>
         <ReconciliationSearchContainer>
-          <div style={{ width: "70%", marginRight: spacing.small }}>
+          <div
+            style={{
+              width: "70%",
+              marginRight: spacing.small,
+            }}>
             <SearchInput
               backgroundColor={"transparent"}
               name='searchProfileValue'
@@ -449,7 +454,7 @@ function Reconciliation() {
           )}
         </TabViewContainer>
         {tabViewSelectedIndex === 1 && (
-          <TransactionsView
+          <TransactionTable
             type={"transactions"}
             headerData={transactionDataHeader}
             header={true}

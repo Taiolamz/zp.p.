@@ -19,6 +19,9 @@ export const Content = styled.div`
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
+  @media (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 
 export const BorderedTextContainer = styled.div`
@@ -28,8 +31,9 @@ export const BorderedTextContainer = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
   width: 40%;
+  row-gap: ${spacing.xsmall};
   @media (max-width: 768px) {
     margin: ${spacing.xsmall} 0px;
-    width: 45%;
+    width: 100%;
   }
 `;

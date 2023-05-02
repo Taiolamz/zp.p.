@@ -38,6 +38,7 @@ export const BottomTabContainer = styled.div`
     display: block;
     background-color: ${colors.smokeWhite};
     width: 100%;
+    z-index: 999;
   }
 `;
 
