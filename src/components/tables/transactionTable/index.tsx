@@ -1,7 +1,6 @@
 import { TableTag, TD, TH, TR, TableContainer } from "./style";
-import { TransactionCard } from "../..";
+import { TransactionCard, MoreIcon } from "../..";
 import { colors, currencyFormat, dateFormat } from "../../../utils";
-import MoreIcon from "../../moreIcon";
 
 export interface TableIPropsIProps {
   type: string;
@@ -51,8 +50,7 @@ function TransactionTable({
                     item.status === "success"
                       ? colors.greenVariantTwo
                       : colors.red
-                  }
-                >
+                  }>
                   {item.status === "success" ? "Successful" : "Unseccessful"}
                 </TD>
                 <TD>{dateFormat(item.time)}</TD>

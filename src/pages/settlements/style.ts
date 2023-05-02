@@ -128,7 +128,7 @@ export const ReconciliationSearchContainer = styled.div`
   align-items: center;
   width: 50%;
   margin: ${spacing.small} 0 ${spacing.medium} 0;
-  @media (max-width: 320px) {
+  @media (max-width: 480px) {
     width: 100%;
   }
 `;
