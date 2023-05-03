@@ -8,7 +8,6 @@ export const Container = styled.div`
   @media (max-width: 768px) {
     padding-left: 0px;
     padding-right: 0px;
-    // padding: 0px ${spacing.xsmall};
   }
 `;
 

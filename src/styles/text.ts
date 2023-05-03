@@ -106,3 +106,19 @@ export const H6 = styled.div`
     font-size: 0.7em;
   }
 `;
+
+export const H7 = styled.div`
+  font-weight: ${(p: StyleProps) =>
+    p.bold
+      ? fontWeight.bold
+      : p.semiBold
+      ? fontWeight.semiBold
+      : fontWeight.light};
+  color: ${({ color }: any) => (color ? color : colors.black)};
+  font-size: 0.3em;
+  text-align: ${(p: StyleProps) =>
+    p.right ? "right" : p.left ? "left" : "center"};
+  @media (min-width: 48rem) {
+    font-size: 0.5em;
+  }
+`;

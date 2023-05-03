@@ -15,6 +15,7 @@ export const Container = styled.div`
   background-color: ${(p: StyleProps) =>
     p.isSelected ? colors.purpleVariantTwo : p.background};
   box-shadow: ${(p: StyleProps) => p.shadow};
+  height: 100%;
   padding: ${spacing.small} ${spacing.small};
   @media (max-width: 768px) {
     padding: ${spacing.xsmall};

@@ -14,6 +14,7 @@ import {
   Input,
   TextArea,
   Button,
+  TransactionTable,
 } from "../../components";
 import {
   SettlementBarChart,
@@ -46,6 +47,7 @@ import {
   EscalateFormContainer,
   EscalateBtnContainer,
   CustomerNameContainer,
+  DatePickerContainer,
 } from "./style";
 
 import {
@@ -78,6 +80,7 @@ const transactionDataHeader = {
   type: "Transaction Type",
   status: "Status",
   time: "Date",
+  blank: "",
 };
 
 const billsHistoryData = [
@@ -576,8 +579,10 @@ function Settlements() {
                 }
                 placeholder="Search Records"
               />
-              <DatePicker selectedDate={setStartDisplayRecordDate} />
-              <DatePicker selectedDate={setEndDisplayRecordDate} />
+              <DatePickerContainer>
+                <DatePicker selectedDate={setStartDisplayRecordDate} />
+                <DatePicker selectedDate={setEndDisplayRecordDate} />
+              </DatePickerContainer>
               <BorderedText
                 onClick={handleTransactionFilter}
                 backgroundColor={colors.primary}
@@ -589,7 +594,7 @@ function Settlements() {
           )}
         </TabViewContainer>
         {tabViewSelectedIndex === 1 && (
-          <TransactionsView
+          <TransactionTable
             type={"transactions"}
             headerData={transactionDataHeader}
             header={true}

@@ -195,9 +195,9 @@ function ReconcilationUserDetails() {
                   { text: userData?.user?.email, helper: "Email" },
                   {
                     text:
-                      userData?.user?.kyc?.bvn_number.length > 1
-                        ? userData?.user?.kyc?.bvn_number
-                        : "N/A",
+                      userData?.user?.kyc?.bvn_number === null
+                        ? "N/A"
+                        : userData?.user?.kyc?.bvn_number,
                     helper: "BVN",
                   },
                   {
@@ -206,9 +206,9 @@ function ReconcilationUserDetails() {
                   },
                   {
                     text:
-                      userData?.user?.location.length > 1
-                        ? userData?.user?.location
-                        : "N/A",
+                      userData?.user?.location === null
+                        ? "N/A"
+                        : userData?.user?.location,
                     helper: "Address",
                   },
                   { text: userData?.user?.kyc_level, helper: "KYC" },
