@@ -11,6 +11,8 @@ export interface CountInfoCardIProps {
   title: string;
   helper?: string;
   color?: string;
+  background?: string;
+  shadow?: string;
 }
 
 interface IProps extends CountInfoCardIProps {
@@ -22,10 +24,17 @@ function CountInfoCard({
   title,
   color,
   helper,
+  background,
+  shadow,
   onClick,
 }: IProps) {
   return (
-    <Container isSelected={isSelected} onClick={onClick}>
+    <Container
+      background={background}
+      isSelected={isSelected}
+      onClick={onClick}
+      shadow={shadow}
+    >
       <H4 left color={colors.grey}>
         {title}
       </H4>
