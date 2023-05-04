@@ -5,9 +5,10 @@ import { CountInfoCardIProps } from "../../components/cards/countInfoCard";
 
 export interface CountInfoIProps {
   data: CountInfoCardIProps[];
+  setSelectedData?: any;
 }
 
-function CountInfo({ data }: CountInfoIProps) {
+function CountInfo({ data, setSelectedData }: CountInfoIProps) {
   const [dataList, setDataList] = useState([] as CountInfoCardIProps[]);
 
   useLayoutEffect(() => {
@@ -36,7 +37,7 @@ function CountInfo({ data }: CountInfoIProps) {
         return el;
       }
     );
-
+    setSelectedData(itemToEdit);
     setDataList(updatedData);
   };
   return (

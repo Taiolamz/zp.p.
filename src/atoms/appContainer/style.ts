@@ -16,7 +16,7 @@ export const Content = styled.div`
   display: flex;
   flex-direction: column;
   padding-left: 30px;
-
+  min-height: 100vh;
   padding-right: ${spacing.small};
   @media (max-width: 768px) {
     padding: 0px ${spacing.xsmall};
