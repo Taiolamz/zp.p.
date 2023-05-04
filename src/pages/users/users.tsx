@@ -1,15 +1,13 @@
 import { useState } from "react";
-import { AppContainer, TabView } from "../../atoms";
-import TabViewUsers from "../../atoms/tabViewUsers";
+import { AppContainer, TabView, TabViewUsers } from "../../atoms";
 import { colors } from "../../utils";
-import { SearchInput, TransactionTable } from "../../components";
+import { SearchInput, UsersTable } from "../../components";
 import {
   SearchContainer,
   TableContainer,
   UserContainer,
   UsersContainer,
 } from "./style";
-import UsersTable from "../../components/tables/usersTable";
 
 const userDataHeader = {
   id: "",
