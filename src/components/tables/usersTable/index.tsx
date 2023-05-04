@@ -1,5 +1,6 @@
 import { TableTag, TD, TH, TR, TableContainer } from "./style";
-import { TransactionCard, MoreIcon } from "../..";
+import { TransactionCard } from "../..";
+import { RxCaretRight } from "react-icons/rx";
 import { colors, currencyFormat, dateFormat } from "../../../utils";
 
 export interface TableIPropsIProps {
@@ -11,17 +12,9 @@ export interface TableIPropsIProps {
   headerData?: any;
 }
 
-function TransactionTable({
-  data,
-  setSelectedItem,
-  headerData,
-  type,
-  onClick,
-}: any) {
+function UsersTable({ data, headerData, type, onClick }: any) {
   const handleOnSelect = (item: any) => {
-    setSelectedItem(item);
     onClick(item);
-    // setMoreIsVisible(true);
   };
 
   return (
@@ -30,36 +23,25 @@ function TransactionTable({
         <thead>
           <tr>
             <TH></TH>
+            <TH>{headerData.id}</TH>
             <TH>{headerData.name}</TH>
-            <TH>{headerData.tid}</TH>
-            <TH>{headerData.amount}</TH>
-            <TH>{headerData.type}</TH>
-            <TH>{headerData.status}</TH>
-            <TH>{headerData.time}</TH>
+            <TH>{headerData.userId}</TH>
+            <TH>{headerData.walletNo}</TH>
+            <TH>{headerData.phone}</TH>
           </tr>
         </thead>
-
         {type === "transactions" && (
           <tbody>
             {data.map((item: any) => (
-              <TR>
+              <TR onClick={() => handleOnSelect(item)} key={item.id}>
+                <TD></TD>
                 <TD>{item.id}</TD>
                 <TD>{item.name}</TD>
-                <TD>{item.tid}</TD>
-                <TD>{currencyFormat(item.amount, false, item.currency)}</TD>
-                <TD>{item.type}</TD>
-                <TD
-                  color={
-                    item.status === "success"
-                      ? colors.greenVariantTwo
-                      : colors.red
-                  }
-                >
-                  {item.status === "success" ? "Successful" : "Unseccessful"}
-                </TD>
-                <TD>{dateFormat(item.time)}</TD>
+                <TD>{item.userId}</TD>
+                <TD>{item.walletNo}</TD>
+                <TD>{item.phone}</TD>
                 <TD>
-                  <MoreIcon onClick={onClick} />
+                  <RxCaretRight size={20} color={colors.grey} />
                 </TD>
               </TR>
             ))}
@@ -89,4 +71,4 @@ function TransactionTable({
   );
 }
 
-export default TransactionTable;
+export default UsersTable;

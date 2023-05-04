@@ -1,23 +1,21 @@
 import { useState } from "react";
-import { Container } from "./style";
-import { Tab } from "../../components";
+import { Container, Tab } from "./style";
+// import { Tab } from "../../components";
 import { TabIProps } from "../../components/tab";
+import { colors } from "../../utils";
+import { H1 } from "../../styles";
 
-export interface TabViewIPropsIProps {
+export interface TabViewUsersIPropsIProps {
   data: TabIProps[];
   setSelectedIndex: any[number];
   backgroundColor?: string;
-  type?: string;
-  tabViewSelectedIndex?: number;
 }
 
-function TabView({
+function TabViewUsers({
   data,
   backgroundColor,
   setSelectedIndex,
-  tabViewSelectedIndex,
-  type,
-}: TabViewIPropsIProps) {
+}: TabViewUsersIPropsIProps) {
   const [dataList, setDataList] = useState(data);
 
   const handleOnSelect = (item: TabIProps) => {
@@ -34,21 +32,27 @@ function TabView({
     setDataList(updatedData);
     setSelectedIndex(itemToEdit.id);
   };
-
   return (
     <>
       <div style={{ display: "flex" }}>
         <Container backgroundColor={backgroundColor}>
           {dataList.map((item: TabIProps) => (
-            <Tab
+            <H1
+              semiBold={item.isSelected}
+              color={item.isSelected ? colors.primary : colors.greyVariantFour}
+              style={{
+                borderBottomColor: item.isSelected
+                  ? colors.primary
+                  : "transparent",
+                borderBottomStyle: item.isSelected ? "solid" : "none",
+                borderBottomWidth: item.isSelected ? 3 : 0,
+                cursor: "pointer",
+              }}
               onClick={() => handleOnSelect(item)}
               key={item.id}
-              isSelected={item.isSelected}
-              text={item.text}
-              paddingRight={dataList.length === item.id ? false : true}
-              type={type}
-              tabViewSelectedIndex={tabViewSelectedIndex}
-            />
+            >
+              {item.text}
+            </H1>
           ))}
         </Container>
       </div>
@@ -56,4 +60,4 @@ function TabView({
   );
 }
 
-export default TabView;
+export default TabViewUsers;
