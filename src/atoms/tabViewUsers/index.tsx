@@ -1,9 +1,8 @@
-import { useState } from "react";
-import { Container, Tab } from "./style";
-// import { Tab } from "../../components";
-import { TabIProps } from "../../components/tab";
-import { colors } from "../../utils";
-import { H1 } from "../../styles";
+import { useState } from 'react';
+import { Container } from './style';
+import { TabIProps } from '../../components/tab';
+import { colors } from '../../utils';
+import { H2 } from '../../styles';
 
 export interface TabViewUsersIPropsIProps {
   data: TabIProps[];
@@ -34,25 +33,25 @@ function TabViewUsers({
   };
   return (
     <>
-      <div style={{ display: "flex" }}>
+      <div style={{ display: 'flex' }}>
         <Container backgroundColor={backgroundColor}>
           {dataList.map((item: TabIProps) => (
-            <H1
+            <H2
               semiBold={item.isSelected}
               color={item.isSelected ? colors.primary : colors.greyVariantFour}
               style={{
                 borderBottomColor: item.isSelected
                   ? colors.primary
-                  : "transparent",
-                borderBottomStyle: item.isSelected ? "solid" : "none",
+                  : 'transparent',
+                borderBottomStyle: item.isSelected ? 'solid' : 'none',
                 borderBottomWidth: item.isSelected ? 3 : 0,
-                cursor: "pointer",
+                cursor: 'pointer',
               }}
               onClick={() => handleOnSelect(item)}
               key={item.id}
             >
               {item.text}
-            </H1>
+            </H2>
           ))}
         </Container>
       </div>

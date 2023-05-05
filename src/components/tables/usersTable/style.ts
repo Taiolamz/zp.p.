@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { colors, spacing } from "../../../utils";
+import styled from 'styled-components';
+import { colors, spacing, borderRadius } from '../../../utils';
 
 interface StyleProps {
   backgroundColor?: string;
@@ -35,10 +35,10 @@ export const TD = styled.td`
   color: ${(p: StyleProps) => (p.color ? p.color : colors.primary)};
   cursor: pointer;
   :first-child {
-    border-radius: 10px 0 0 10px;
+    border-radius: ${borderRadius.medium} 0 0 ${borderRadius.medium};
   }
   :last-child {
-    border-radius: 0 10px 10px 0;
+    border-radius: 0 ${borderRadius.medium} ${borderRadius.medium} 0;
   }
 `;
 
