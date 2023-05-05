@@ -27,17 +27,20 @@ function TransactionTable({
   return (
     <TableContainer>
       <TableTag>
-        <tr>
-          <TH></TH>
-          <TH>{headerData.name}</TH>
-          <TH>{headerData.tid}</TH>
-          <TH>{headerData.amount}</TH>
-          <TH>{headerData.type}</TH>
-          <TH>{headerData.status}</TH>
-          <TH>{headerData.time}</TH>
-        </tr>
+        <thead>
+          <tr>
+            <TH></TH>
+            <TH>{headerData.name}</TH>
+            <TH>{headerData.tid}</TH>
+            <TH>{headerData.amount}</TH>
+            <TH>{headerData.type}</TH>
+            <TH>{headerData.status}</TH>
+            <TH>{headerData.time}</TH>
+          </tr>
+        </thead>
+
         {type === "transactions" && (
-          <>
+          <tbody>
             {data.map((item: any) => (
               <TR>
                 <TD>{item.id}</TD>
@@ -50,7 +53,8 @@ function TransactionTable({
                     item.status === "success"
                       ? colors.greenVariantTwo
                       : colors.red
-                  }>
+                  }
+                >
                   {item.status === "success" ? "Successful" : "Unseccessful"}
                 </TD>
                 <TD>{dateFormat(item.time)}</TD>
@@ -59,7 +63,7 @@ function TransactionTable({
                 </TD>
               </TR>
             ))}
-          </>
+          </tbody>
         )}
 
         {type === "billHistory" && (

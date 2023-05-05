@@ -8,10 +8,28 @@ export interface TabIProps {
   paddingRight?: boolean;
   isSelected: boolean;
   text: string;
+  type?: string;
+  tabViewSelectedIndex?: number;
   onClick?: () => void;
 }
 
-function Tab({ text, isSelected, onClick, paddingRight }: TabIProps) {
+function Tab({
+  text,
+  isSelected,
+  onClick,
+  paddingRight,
+  type,
+  tabViewSelectedIndex,
+}: TabIProps) {
+  const colorUser =
+    isSelected && tabViewSelectedIndex === 1
+      ? colors.green
+      : isSelected && tabViewSelectedIndex === 2
+      ? colors.red
+      : colors.grey;
+
+  const colorSettle = isSelected ? colors.primary : colors.grey;
+
   return (
     <Container paddingRight={paddingRight} onClick={onClick}>
       <H4
@@ -23,7 +41,8 @@ function Tab({ text, isSelected, onClick, paddingRight }: TabIProps) {
           borderBottomWidth: isSelected ? 2 : 0,
         }}
         semiBold
-        color={isSelected ? colors.primary : colors.grey}>
+        color={type === "user" ? colorUser : colorSettle}
+      >
         {text}
       </H4>
     </Container>

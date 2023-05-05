@@ -14,3 +14,4 @@ export { default as LoaderModal } from "./loaderModal";
 export { default as KycCustomerView } from "./kycCustomerView";
 export { default as ActivityActionModal } from "./activityActionModal";
 export { default as RejectionActionModal } from "./rejectionActionModal";
+export { default as TabViewUsers } from "./tabViewUsers";
