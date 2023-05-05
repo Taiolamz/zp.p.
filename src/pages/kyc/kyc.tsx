@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Pagination,
-  UserDetailsCard,
   SearchInput,
   CurrentPageCard,
+  KycUserTable,
 } from "../../components";
 import { CountInfoCardIProps } from "../../components/cards/countInfoCard";
-import { UserDetailsCardIProps } from "../../components/cards/userDetailsCard";
+import { KycDataTableIPropsIProps } from "../../components/tables/kycUserTable";
 import { AppContainer, CountInfo, TabView, LoaderModal } from "../../atoms";
 import { SearchContainer, KYCTabViewContainer } from "./style";
 import { Dictionary } from "../../types";
@@ -52,47 +52,9 @@ function Kyc() {
     },
   ];
 
-  const userDetails: any = [
-    {
-      id: 1,
-      userName: "Wade Warren",
-      bvn: 222233434555,
-      phone: "+2348036329178",
-    },
-
-    {
-      id: 2,
-      userName: "Wade Warren",
-      bvn: 222233434555,
-      phone: "+2348036329178",
-    },
-    {
-      id: 3,
-      userName: "Wade Warren",
-      bvn: 222233434555,
-      phone: "+2348036329178",
-    },
-    {
-      id: 4,
-      userName: "Wade Warren",
-      bvn: 222233434555,
-      phone: "+2348036329178",
-    },
-    {
-      id: 5,
-      userName: "Wade Warren",
-      bvn: 222233434555,
-      phone: "+2348036329178",
-    },
-    {
-      id: 6,
-      userName: "Wade Warren",
-      bvn: 222233434555,
-      phone: "+2348036329178",
-    },
-  ];
   const [kycData, setKycData] = useState<any[]>([]);
   const [selectedKycCard, setSelectedKycCard] = useState<Dictionary>({});
+  const [selectedKycTable, setSelectedKycTable] = useState<Dictionary>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [totalPages, setTotalPages] = useState(5);
@@ -105,14 +67,18 @@ function Kyc() {
   useEffect(() => {
     dispatch(
       getKycsRequest({
-        kycLevel: selectedKycCard?.id === 1 ? kycLevelZero : kycLevelOne,
+        kycLevel: !selectedKycCard?.hasOwnProperty("id")
+          ? kycLevelZero
+          : selectedKycCard?.id === 1
+          ? kycLevelZero
+          : kycLevelOne,
       })
     );
   }, [selectedKycCard]);
 
   useEffect(() => {
     if (kycsStatus === "succeeded") {
-      let updateData: UserDetailsCardIProps[] = [];
+      let updateData: KycDataTableIPropsIProps[] = [];
 
       kycsState.data.users.data.forEach((item: Dictionary, index: number) => {
         updateData.push({
@@ -154,26 +120,19 @@ function Kyc() {
           />
         </SearchContainer>
         <div>
-          <UserDetailsCard
-            header={true}
-            id='#'
-            userName='Profile Name'
-            bvn='BVN'
-            phoneNo='Phone Number'
-            onClick={() => {}}
+          <KycUserTable
+            setSelectedItem={setSelectedKycTable}
+            headerData={{
+              id: "#",
+              userName: "Profile Name",
+              bvn: "BVN",
+              phoneNo: "Phone Number",
+            }}
+            data={kycData}
+            onClick={() => {
+              console.log(selectedKycTable, "Clicked");
+            }}
           />
-          {kycData.map((item: UserDetailsCardIProps) => (
-            <UserDetailsCard
-              key={item.id}
-              id={item.id}
-              userName={item.userName}
-              bvn={item.bvn}
-              phoneNo={item.phoneNo}
-              onClick={() => {
-                navigate(`${KYCDOC}${item.id}`);
-              }}
-            />
-          ))}
         </div>
 
         <Pagination
