@@ -11,6 +11,7 @@ import {
   exportTransactionByIdToMailSliceReducer,
   settlementAnalyticsSliceReducer,
   getKycsSliceReducer,
+  getKycsAnalyticsSliceReducer,
 } from "./slice";
 const state = {
   login: loginSliceReducer,
@@ -25,6 +26,7 @@ const state = {
   exportTransactionByIdToMail: exportTransactionByIdToMailSliceReducer,
   settlementAnalytics: settlementAnalyticsSliceReducer,
   getKycs: getKycsSliceReducer,
+  getKycsAnalytics: getKycsAnalyticsSliceReducer,
 };
 
 export const testAppSelector = (f: any) => f(state);

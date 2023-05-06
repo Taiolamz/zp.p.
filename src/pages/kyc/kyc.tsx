@@ -12,7 +12,12 @@ import { AppContainer, CountInfo, TabView, LoaderModal } from "../../atoms";
 import { SearchContainer, KYCTabViewContainer } from "./style";
 import { Dictionary } from "../../types";
 import { colors, routesPath } from "../../utils";
-import { getKycsRequest, getKycsReset } from "../../redux/slice";
+import {
+  getKycsRequest,
+  getKycsReset,
+  getKycsAnalyticsRequest,
+  getKycsAnalyticsReset,
+} from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
 
 const tabViewData = [
@@ -27,52 +32,15 @@ const kycLevelTwo = "?level=level two&include=bvn";
 const verifiedKycLevelOne = "/verified?level=level one";
 const verifiedKycLevelTwo = "/verified?level=level two";
 
+const verifiedUsers: string = "approved";
+const pendingUsers: string = "pending";
+
 function Kyc() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   // states
   const [tabViewSelectedIndex, setTabViewSelectedIndex] =
     useState<any[number]>(1);
-  const dataVerifiedUsers: CountInfoCardIProps[] = [
-    {
-      id: 1,
-      count: 45,
-      title: "Level 1",
-    },
-    {
-      id: 2,
-      count: 55,
-      title: "Level 2",
-    },
-    {
-      id: 3,
-      count: 45,
-      title: "Agency",
-    },
-  ];
-
-  const dataPendingUsers: CountInfoCardIProps[] = [
-    {
-      id: 1,
-      count: 45,
-      title: "Level 1",
-    },
-    {
-      id: 2,
-      count: 55,
-      title: "Level 2",
-    },
-    {
-      id: 3,
-      count: 45,
-      title: "Agency (Level 3)",
-    },
-    {
-      id: 4,
-      count: 45,
-      title: "Business Address",
-    },
-  ];
 
   const [kycData, setKycData] = useState<any[]>([]);
   const [kycCountList, setKycCountList] = useState<any[]>([]);
@@ -81,22 +49,12 @@ function Kyc() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [totalPages, setTotalPages] = useState(5);
-  // const [kycLevel, setKycLevel] = useState(verifiedKycLevelOne);
 
   // redux state
   const kycsState = useAppSelector((state) => state.getKycs);
   const { status: kycsStatus } = kycsState;
-
-  useLayoutEffect(() => {
-    let result;
-    if (tabViewSelectedIndex === 1) {
-      result = dataVerifiedUsers;
-    } else {
-      result = dataPendingUsers;
-    }
-
-    setKycCountList(result);
-  }, [tabViewSelectedIndex]);
+  const kycsAnalyticsState = useAppSelector((state) => state.getKycsAnalytics);
+  const { status: kycsAnalyticsStatus } = kycsAnalyticsState;
 
   function determineKycToFetch() {
     let result: string;
@@ -133,7 +91,7 @@ function Kyc() {
   }
 
   let kycLevel = determineKycToFetch();
-  // searchValue
+
   // api
   useEffect(() => {
     dispatch(
@@ -170,7 +128,67 @@ function Kyc() {
     }
   }, [kycsState]);
 
-  console.log(kycData, "data");
+  // kycsAnalyticsStatus
+
+  useEffect(() => {
+    dispatch(
+      getKycsAnalyticsRequest({
+        kycType: tabViewSelectedIndex === 1 ? verifiedUsers : pendingUsers,
+      })
+    );
+  }, [tabViewSelectedIndex]);
+
+  useEffect(() => {
+    if (kycsAnalyticsStatus === "succeeded") {
+      let result: CountInfoCardIProps[];
+      if (tabViewSelectedIndex === 1) {
+        result = [
+          {
+            id: 1,
+            count: kycsAnalyticsState?.data?.level_one_kyc_count,
+            title: "Level 1",
+          },
+          {
+            id: 2,
+            count: kycsAnalyticsState?.data?.level_two_kyc_count,
+            title: "Level 2",
+          },
+          {
+            id: 3,
+            count: kycsAnalyticsState?.data?.level_three_kyc_count,
+            title: "Agency",
+          },
+        ];
+      } else {
+        result = [
+          {
+            id: 1,
+            count: kycsAnalyticsState?.data?.level_one_kyc_count,
+            title: "Level 1",
+          },
+          {
+            id: 2,
+            count: kycsAnalyticsState?.data?.level_two_kyc_count,
+            title: "Level 2",
+          },
+          {
+            id: 3,
+            count: kycsAnalyticsState?.data?.agency_count,
+            title: "Agency (Level 3)",
+          },
+          {
+            id: 4,
+            count: kycsAnalyticsState?.data?.business_address_count,
+            title: "Business Address",
+          },
+        ];
+      }
+
+      setKycCountList(result);
+    }
+  }, [kycsAnalyticsState]);
+
+  // console.log(kycData, "data");
   return (
     <AppContainer navTitle='KYC'>
       <div>
