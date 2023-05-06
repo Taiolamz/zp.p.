@@ -55,8 +55,8 @@ function KycCustomerView({ onClickApprove, onClickReject, title }: IProps) {
         </TitleContainer>
 
         <VerifyImageContainer>
-          {veriImage.map((item) => (
-            <ImageWithLabel imgSrc={item.img} text={item.label} />
+          {veriImage.map((item, index) => (
+            <ImageWithLabel key={index} imgSrc={item.img} text={item.label} />
           ))}
         </VerifyImageContainer>
 
@@ -79,8 +79,9 @@ function KycCustomerView({ onClickApprove, onClickReject, title }: IProps) {
         isModalVisible={compareImgIsModalVisible}
         closeModal={closeCompareImgModal}>
         <ImageComparisonContainer>
-          {veriImage.map((item) => (
+          {veriImage.map((item, index) => (
             <ImageZoom
+              key={index}
               height={"100%"}
               width={"100%"}
               imgAlt='kyc image'
