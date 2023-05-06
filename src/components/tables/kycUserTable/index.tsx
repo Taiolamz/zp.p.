@@ -44,8 +44,8 @@ function KycUserTable({
         </tr>
 
         <>
-          {data.map((item: KycDataTableIPropsIProps) => (
-            <TR>
+          {data.map((item: KycDataTableIPropsIProps, index: number) => (
+            <TR key={index}>
               <TD>{item.id}</TD>
               <TD>{item.userName}</TD>
               <TD>{item.bvn}</TD>

@@ -38,8 +38,8 @@ function TransactionTable({
         </tr>
         {type === "transactions" && (
           <>
-            {data.map((item: any) => (
-              <TR>
+            {data.map((item: any, index: number) => (
+              <TR key={index}>
                 <TD>{item.id}</TD>
                 <TD>{item.name}</TD>
                 <TD>{item.tid}</TD>
