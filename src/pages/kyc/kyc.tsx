@@ -31,6 +31,7 @@ const kycLevelTwo = "?level=level two&include=bvn";
 
 const verifiedKycLevelOne = "/verified?level=level one";
 const verifiedKycLevelTwo = "/verified?level=level two";
+const verifiedKycLevelThree = "/verified?level=level three";
 
 const verifiedUsers: string = "approved";
 const pendingUsers: string = "pending";
@@ -49,6 +50,7 @@ function Kyc() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [totalPages, setTotalPages] = useState(5);
+  const [kycLvl, setKycLvl] = useState("LEVEL 1");
 
   // redux state
   const kycsState = useAppSelector((state) => state.getKycs);
@@ -57,33 +59,34 @@ function Kyc() {
   const { status: kycsAnalyticsStatus } = kycsAnalyticsState;
 
   function determineKycToFetch() {
-    let result: string;
+    let result: Dictionary;
+
     // Tab View for verified user
     if (tabViewSelectedIndex === 1) {
       if (!selectedKycCard?.hasOwnProperty("id")) {
-        result = verifiedKycLevelOne;
+        result = { path: verifiedKycLevelOne, level: "LEVEL 1" };
       } else if (selectedKycCard?.id === 2) {
-        result = verifiedKycLevelTwo;
+        result = { path: verifiedKycLevelTwo, level: "LEVEL 2" };
       } else if (selectedKycCard?.id === 3) {
-        result = kycLevelTwo;
+        result = { path: verifiedKycLevelThree, level: "LEVEL 3" };
       } else {
-        result = verifiedKycLevelOne;
+        result = { path: verifiedKycLevelOne, level: "LEVEL 1" };
       }
     }
     // Tab View for unverified users
     else {
       if (!selectedKycCard?.hasOwnProperty("id")) {
-        result = kycLevelZero;
+        result = { path: kycLevelZero, level: "LEVEL 1" };
       } else if (selectedKycCard?.id === 1) {
-        result = kycLevelZero;
+        result = { path: kycLevelZero, level: "LEVEL 1" };
       } else if (selectedKycCard?.id === 2) {
-        result = kycLevelOne;
+        result = { path: kycLevelOne, level: "LEVEL 2" };
       } else if (selectedKycCard?.id === 3) {
-        result = kycLevelTwo;
+        result = { path: kycLevelTwo, level: "LEVEL 3" };
       } else if (selectedKycCard?.id === 4) {
-        result = kycLevelTwo;
+        result = { path: kycLevelTwo, level: "LEVEL 3" };
       } else {
-        result = kycLevelZero;
+        result = { path: kycLevelZero, level: "LEVEL 1" };
       }
     }
 
@@ -96,7 +99,7 @@ function Kyc() {
   useEffect(() => {
     dispatch(
       getKycsRequest({
-        kycLevel: `${kycLevel}&term=${searchValue}`,
+        kycLevel: `${kycLevel.path}&term=${searchValue}`,
       })
     );
   }, [selectedKycCard, tabViewSelectedIndex, searchValue]);
@@ -188,7 +191,17 @@ function Kyc() {
     }
   }, [kycsAnalyticsState]);
 
-  // console.log(kycData, "data");
+  // Navigate user to kyc doc page when user clicks on a table view button
+  useEffect(() => {
+    if (selectedKycTable.hasOwnProperty("id")) {
+      navigate(`${KYCDOC}${selectedKycTable?.detailsId}`, {
+        state: {
+          kycLvl: kycLevel?.level,
+        },
+      });
+    }
+  }, [selectedKycTable]);
+
   return (
     <AppContainer navTitle='KYC'>
       <div>
@@ -221,9 +234,7 @@ function Kyc() {
               phoneNo: "Phone Number",
             }}
             data={kycData}
-            onClick={() => {
-              console.log(selectedKycTable, "Clicked");
-            }}
+            onClick={() => {}}
           />
         </div>
 
@@ -236,7 +247,9 @@ function Kyc() {
         />
 
         <LoaderModal
-          isModalVisible={kycsStatus === "loading"}
+          isModalVisible={
+            kycsStatus === "loading" || kycsAnalyticsStatus === "loading"
+          }
           text='Loading please wait...'
           closeModal={() => {}}
         />

@@ -28,7 +28,7 @@ function KycUserTable({
 }: TableIPropsIProps) {
   const handleOnSelect = (item: any) => {
     setSelectedItem(item);
-    onClick();
+    // onClick();
     // setMoreIsVisible(true);
   };
 

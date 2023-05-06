@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { ImageWithLabel } from "../../components";
 import {
   AppContainer,
@@ -15,7 +16,10 @@ import {
   CustomerContentTwoVerified,
 } from "./style";
 
-import { colors, dateFormat, images } from "../../utils";
+import { colors, dateFormat, images, routesPath } from "../../utils";
+import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
+
+const { KYC } = routesPath;
 
 const tabViewData = [
   { id: 1, isSelected: true, text: "Verified Users" },
@@ -41,6 +45,13 @@ function CustomerDataCard({ text, helper }: IPropsCard) {
 }
 
 function KycCustomer() {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  let { id } = useParams();
+  let {
+    state: { kycLvl },
+  } = useLocation();
+  console.log(kycLvl, "id");
   // states
   const [tabViewSelectedIndex, setTabViewSelectedIndex] =
     useState<any[number]>(1);
@@ -90,7 +101,10 @@ function KycCustomer() {
   ];
 
   return (
-    <AppContainer navTitle='KYC'>
+    <AppContainer
+      goBack={() => navigate(KYC)}
+      navTitle={`KYC  |  ${kycLvl}`}
+      navHelper='CUSTOMER`S DOC'>
       <div>
         <CustomerContainer>
           <CustomerContentOne>
