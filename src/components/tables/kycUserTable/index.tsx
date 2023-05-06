@@ -8,6 +8,7 @@ export interface KycDataTableIPropsIProps {
   userName: string;
   bvn: number | string;
   phoneNo: string | number;
+  detailsId?: string;
 }
 
 export interface TableIPropsIProps {

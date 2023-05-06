@@ -22,9 +22,7 @@ export const getKycsRequest = createAsyncThunk(
     const url = `admin/kycs`;
 
     try {
-      const response = await api.get(
-        `${url}?level=${payload.kycLevel}&include=bvn`
-      );
+      const response = await api.get(`${url}${payload.kycLevel}`);
       return response?.data;
     } catch (err) {
       throw err;

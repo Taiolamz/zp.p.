@@ -23,7 +23,7 @@ function CountInfo({ data, setSelectedData }: CountInfoIProps) {
     );
 
     setDataList(result);
-  }, []);
+  }, [data]);
 
   const handleOnSelectCard = (item: CountInfoCardIProps) => {
     const itemToEdit = item;
@@ -40,6 +40,7 @@ function CountInfo({ data, setSelectedData }: CountInfoIProps) {
     setSelectedData(itemToEdit);
     setDataList(updatedData);
   };
+
   return (
     <>
       <Container>

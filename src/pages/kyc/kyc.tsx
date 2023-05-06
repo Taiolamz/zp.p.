@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useLayoutEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Pagination,
@@ -20,8 +20,12 @@ const tabViewData = [
   { id: 2, isSelected: false, text: "Pending Verifications" },
 ];
 const { KYCDOC } = routesPath;
-const kycLevelZero = "level zero";
-const kycLevelOne = "level one";
+const kycLevelZero = "?level=level zero&include=bvn";
+const kycLevelOne = "?level=level one&include=bvn";
+const kycLevelTwo = "?level=level two&include=bvn";
+
+const verifiedKycLevelOne = "/verified?level=level one";
+const verifiedKycLevelTwo = "/verified?level=level two";
 
 function Kyc() {
   const dispatch = useAppDispatch();
@@ -29,7 +33,7 @@ function Kyc() {
   // states
   const [tabViewSelectedIndex, setTabViewSelectedIndex] =
     useState<any[number]>(1);
-  const data: CountInfoCardIProps[] = [
+  const dataVerifiedUsers: CountInfoCardIProps[] = [
     {
       id: 1,
       count: 45,
@@ -42,39 +46,102 @@ function Kyc() {
     },
     {
       id: 3,
-      count: 75,
-      title: "Level 3",
-    },
-    {
-      id: 4,
       count: 45,
       title: "Agency",
     },
   ];
 
+  const dataPendingUsers: CountInfoCardIProps[] = [
+    {
+      id: 1,
+      count: 45,
+      title: "Level 1",
+    },
+    {
+      id: 2,
+      count: 55,
+      title: "Level 2",
+    },
+    {
+      id: 3,
+      count: 45,
+      title: "Agency (Level 3)",
+    },
+    {
+      id: 4,
+      count: 45,
+      title: "Business Address",
+    },
+  ];
+
   const [kycData, setKycData] = useState<any[]>([]);
+  const [kycCountList, setKycCountList] = useState<any[]>([]);
   const [selectedKycCard, setSelectedKycCard] = useState<Dictionary>({});
   const [selectedKycTable, setSelectedKycTable] = useState<Dictionary>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [totalPages, setTotalPages] = useState(5);
+  // const [kycLevel, setKycLevel] = useState(verifiedKycLevelOne);
 
   // redux state
   const kycsState = useAppSelector((state) => state.getKycs);
   const { status: kycsStatus } = kycsState;
 
+  useLayoutEffect(() => {
+    let result;
+    if (tabViewSelectedIndex === 1) {
+      result = dataVerifiedUsers;
+    } else {
+      result = dataPendingUsers;
+    }
+
+    setKycCountList(result);
+  }, [tabViewSelectedIndex]);
+
+  function determineKycToFetch() {
+    let result: string;
+    // Tab View for verified user
+    if (tabViewSelectedIndex === 1) {
+      if (!selectedKycCard?.hasOwnProperty("id")) {
+        result = verifiedKycLevelOne;
+      } else if (selectedKycCard?.id === 2) {
+        result = verifiedKycLevelTwo;
+      } else if (selectedKycCard?.id === 3) {
+        result = kycLevelTwo;
+      } else {
+        result = verifiedKycLevelOne;
+      }
+    }
+    // Tab View for unverified users
+    else {
+      if (!selectedKycCard?.hasOwnProperty("id")) {
+        result = kycLevelZero;
+      } else if (selectedKycCard?.id === 1) {
+        result = kycLevelZero;
+      } else if (selectedKycCard?.id === 2) {
+        result = kycLevelOne;
+      } else if (selectedKycCard?.id === 3) {
+        result = kycLevelTwo;
+      } else if (selectedKycCard?.id === 4) {
+        result = kycLevelTwo;
+      } else {
+        result = kycLevelZero;
+      }
+    }
+
+    return result;
+  }
+
+  let kycLevel = determineKycToFetch();
+  // searchValue
   // api
   useEffect(() => {
     dispatch(
       getKycsRequest({
-        kycLevel: !selectedKycCard?.hasOwnProperty("id")
-          ? kycLevelZero
-          : selectedKycCard?.id === 1
-          ? kycLevelZero
-          : kycLevelOne,
+        kycLevel: `${kycLevel}&term=${searchValue}`,
       })
     );
-  }, [selectedKycCard]);
+  }, [selectedKycCard, tabViewSelectedIndex, searchValue]);
 
   useEffect(() => {
     if (kycsStatus === "succeeded") {
@@ -84,8 +151,13 @@ function Kyc() {
         updateData.push({
           id: index + 1,
           userName: `${item?.bvn?.first_name} ${item?.bvn?.last_name}`,
-          bvn: `${item?.bvn?.bvn_number}`,
+          bvn: item?.bvn?.bvn_number ? ` ${item?.bvn?.bvn_number}` : "N/A",
           phoneNo: item?.telephone,
+          detailsId:
+            selectedKycCard?.hasOwnProperty("id") &&
+            item?.bvn.hasOwnProperty("id")
+              ? item?.bvn?.id
+              : item?.id,
         });
       });
       setKycData(updateData);
@@ -97,6 +169,8 @@ function Kyc() {
       setTotalPages(links.length - 2);
     }
   }, [kycsState]);
+
+  console.log(kycData, "data");
   return (
     <AppContainer navTitle='KYC'>
       <div>
@@ -106,7 +180,7 @@ function Kyc() {
             setSelectedIndex={setTabViewSelectedIndex}
           />
         </KYCTabViewContainer>
-        <CountInfo data={data} setSelectedData={setSelectedKycCard} />
+        <CountInfo data={kycCountList} setSelectedData={setSelectedKycCard} />
         <SearchContainer>
           <CurrentPageCard pageNumber={currentPage} />
           <SearchInput
