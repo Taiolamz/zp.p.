@@ -19,6 +19,12 @@ export const SearchContainer = styled.div`
   margin-top: ${spacing.small};
 `;
 
+export const SearchInputContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`;
+
 export const KYCTabViewContainer = styled.div`
   margin-top: ${spacing.small};
 `;

@@ -5,13 +5,18 @@ import {
   SearchInput,
   CurrentPageCard,
   KycUserTable,
+  BorderedText,
 } from "../../components";
 import { CountInfoCardIProps } from "../../components/cards/countInfoCard";
 import { KycDataTableIPropsIProps } from "../../components/tables/kycUserTable";
 import { AppContainer, CountInfo, TabView, LoaderModal } from "../../atoms";
-import { SearchContainer, KYCTabViewContainer } from "./style";
+import {
+  SearchContainer,
+  KYCTabViewContainer,
+  SearchInputContainer,
+} from "./style";
 import { Dictionary } from "../../types";
-import { colors, routesPath } from "../../utils";
+import { colors, routesPath, spacing } from "../../utils";
 import {
   getKycsRequest,
   getKycsReset,
@@ -50,7 +55,7 @@ function Kyc() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [totalPages, setTotalPages] = useState(5);
-  const [kycLvl, setKycLvl] = useState("LEVEL 1");
+  const [isSearching, setIsSearching] = useState(false);
 
   // redux state
   const kycsState = useAppSelector((state) => state.getKycs);
@@ -102,7 +107,7 @@ function Kyc() {
         kycLevel: `${kycLevel.path}&term=${searchValue}`,
       })
     );
-  }, [selectedKycCard, tabViewSelectedIndex, searchValue]);
+  }, [selectedKycCard, tabViewSelectedIndex, isSearching]);
 
   useEffect(() => {
     if (kycsStatus === "succeeded") {
@@ -130,8 +135,6 @@ function Kyc() {
       setTotalPages(links.length - 2);
     }
   }, [kycsState]);
-
-  // kycsAnalyticsStatus
 
   useEffect(() => {
     dispatch(
@@ -214,15 +217,28 @@ function Kyc() {
         <CountInfo data={kycCountList} setSelectedData={setSelectedKycCard} />
         <SearchContainer>
           <CurrentPageCard pageNumber={currentPage} />
-          <SearchInput
-            backgroundColor={colors.white}
-            name='SearchValue'
-            value={searchValue}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setSearchValue(e.target.value)
-            }
-            placeholder='Search Records'
-          />
+          <SearchInputContainer>
+            <SearchInput
+              backgroundColor={colors.white}
+              name='SearchValue'
+              value={searchValue}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                if (e.target.value.length === 0) {
+                  setIsSearching(!isSearching);
+                }
+                setSearchValue(e.target.value);
+              }}
+              placeholder='Search Records'
+            />
+            <div style={{ marginLeft: spacing.xsmall }}>
+              <BorderedText
+                color={colors.white}
+                backgroundColor={colors.primary}
+                text='Search'
+                onClick={() => setIsSearching(!isSearching)}
+              />
+            </div>
+          </SearchInputContainer>
         </SearchContainer>
         <div>
           <KycUserTable
