@@ -119,11 +119,13 @@ function Kyc() {
           userName: `${item?.bvn?.first_name} ${item?.bvn?.last_name}`,
           bvn: item?.bvn?.bvn_number ? ` ${item?.bvn?.bvn_number}` : "N/A",
           phoneNo: item?.telephone,
-          detailsId:
-            selectedKycCard?.hasOwnProperty("id") &&
-            item?.bvn.hasOwnProperty("id")
-              ? item?.bvn?.id
-              : item?.id,
+          // detailsId:
+          //   selectedKycCard?.hasOwnProperty("id") &&
+          //   item?.bvn.hasOwnProperty("id")
+          //     ? item?.bvn?.id
+          //     : item?.id,
+
+          detailsId: item?.id,
         });
       });
       setKycData(updateData);

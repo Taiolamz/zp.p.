@@ -14,6 +14,7 @@ import {
   settlementAnalyticsSliceReducer,
   getKycsSliceReducer,
   getKycsAnalyticsSliceReducer,
+  getKycCustomerSliceReducer,
 } from "./slice";
 
 const rootReducer = combineReducers({
@@ -31,6 +32,7 @@ const rootReducer = combineReducers({
   settlementAnalytics: settlementAnalyticsSliceReducer,
   getKycs: getKycsSliceReducer,
   getKycsAnalytics: getKycsAnalyticsSliceReducer,
+  getKycCustomer: getKycCustomerSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

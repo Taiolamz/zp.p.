@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { ImageWithLabel } from "../../components";
 import {
@@ -15,9 +15,10 @@ import {
   CustomerContentTwo,
   CustomerContentTwoVerified,
 } from "./style";
-
 import { colors, dateFormat, images, routesPath } from "../../utils";
+import { getKycCustomerRequest, getKycCustomerReset } from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
+import { Dictionary } from "../../types";
 
 const { KYC } = routesPath;
 
@@ -51,52 +52,72 @@ function KycCustomer() {
   let {
     state: { kycLvl },
   } = useLocation();
-  console.log(kycLvl, "id");
+
   // states
-  const [tabViewSelectedIndex, setTabViewSelectedIndex] =
-    useState<any[number]>(1);
+  const [customerData, setCustomerData] = useState<Dictionary>({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [rejectionIsModalVisible, setRejectionIsModalVisible] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
-
   const date = new Date().toDateString();
+
+  // redux state
+  const kycCustomerState = useAppSelector((state) => state.getKycCustomer);
+  const { status: kycCustomerStatus } = kycCustomerState;
+
+  console.log(kycCustomerStatus, "kycCustomerStatus");
+
+  useEffect(() => {
+    dispatch(
+      getKycCustomerRequest({
+        id: id,
+      })
+    );
+  }, []);
+
+  useEffect(() => {
+    if (kycCustomerStatus === "succeeded") {
+      setCustomerData(kycCustomerState?.data?.user);
+    }
+  }, [kycCustomerState]);
+
+  console.log(customerData, "customerData");
 
   const userDetails: any = [
     {
       id: 1,
       helper: "Full Name",
-      text: "Wade Warren Chukwuma",
+      text: customerData?.name,
     },
 
     {
       id: 2,
       helper: "Email",
-      text: "wade@gmail.com",
+      text: customerData?.email,
     },
 
     {
       id: 3,
       helper: "Phone Number",
-      text: "2348036329157",
+      text: customerData?.telephone,
     },
 
     {
       id: 4,
       helper: "BVN",
-      text: "3094095959",
+      text: customerData?.bvn !== null ? customerData?.bvn?.bvn_number : "N/A",
     },
 
     {
       id: 5,
       helper: "Residential Address",
-      text: "Ason rock",
+      text: customerData?.location,
     },
 
     { id: 6, text: dateFormat(date), helper: "Date of Birth" },
     {
       id: 7,
       helper: "ID Number",
-      text: "KKFHHFB",
+      text: customerData?.nin !== null ? customerData?.nin : "N/A",
     },
   ];
 

@@ -12,6 +12,7 @@ import {
   settlementAnalyticsSliceReducer,
   getKycsSliceReducer,
   getKycsAnalyticsSliceReducer,
+  getKycCustomerSliceReducer,
 } from "./slice";
 const state = {
   login: loginSliceReducer,
@@ -27,6 +28,7 @@ const state = {
   settlementAnalytics: settlementAnalyticsSliceReducer,
   getKycs: getKycsSliceReducer,
   getKycsAnalytics: getKycsAnalyticsSliceReducer,
+  getKycCustomer: getKycCustomerSliceReducer,
 };
 
 export const testAppSelector = (f: any) => f(state);

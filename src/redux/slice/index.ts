@@ -12,3 +12,4 @@ export * from "./exportTransactionByIdToMailSlice";
 export * from "./settlementAnalyticsSlice";
 export * from "./getKycsSlice";
 export * from "./getKycsAnalyticsSlice";
+export * from "./getKycCustomerSlice";
