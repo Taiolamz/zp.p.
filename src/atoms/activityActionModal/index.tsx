@@ -8,7 +8,9 @@ export interface IProps {
   closeModal: () => void;
   title?: string;
   text?: string;
+
   actionText: string;
+  secondaryActionText?: string;
   actionClick: () => void;
   image?: string;
 }
@@ -21,6 +23,7 @@ function ActivityActionModal({
   actionText,
   actionClick,
   image,
+  secondaryActionText,
 }: IProps) {
   return (
     <Modal title='' isModalVisible={isModalVisible} closeModal={closeModal}>
@@ -54,15 +57,17 @@ function ActivityActionModal({
           <BtnContainer>
             <Button text={actionText} onClick={actionClick} />
           </BtnContainer>
-          <BtnContainer>
-            <H2
-              semiBold
-              onClick={closeModal}
-              color={colors.primary}
-              style={{ cursor: "pointer" }}>
-              Cancel
-            </H2>
-          </BtnContainer>
+          {secondaryActionText && (
+            <BtnContainer>
+              <H2
+                semiBold
+                onClick={closeModal}
+                color={colors.primary}
+                style={{ cursor: "pointer" }}>
+                {secondaryActionText}
+              </H2>
+            </BtnContainer>
+          )}
         </div>
       </Container>
     </Modal>

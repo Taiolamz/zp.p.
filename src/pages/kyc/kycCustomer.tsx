@@ -16,7 +16,12 @@ import {
   CustomerContentTwoVerified,
 } from "./style";
 import { colors, dateFormat, images, routesPath } from "../../utils";
-import { getKycCustomerRequest, getKycCustomerReset } from "../../redux/slice";
+import {
+  getKycCustomerRequest,
+  getKycCustomerReset,
+  kycVerificationRequest,
+  kycVerificationReset,
+} from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
 import { Dictionary } from "../../types";
 
@@ -61,14 +66,46 @@ function KycCustomer() {
   const [mediaData, setMediaData] = useState<Dictionary>({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [rejectionIsModalVisible, setRejectionIsModalVisible] = useState(false);
+  const [successIsModalVisible, setSuccessIsModalVisible] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
+  const [userVerificationId, setUserVerificationId] = useState("");
   const date = new Date().toDateString();
 
   // redux state
   const kycCustomerState = useAppSelector((state) => state.getKycCustomer);
   const { status: kycCustomerStatus } = kycCustomerState;
 
-  // console.log(kycCustomerStatus, "kycCustomerStatus");
+  const kycVerificationState = useAppSelector((state) => state.kycVerification);
+  const { status: kycVerificationStatus } = kycVerificationState;
+
+  console.log(kycVerificationStatus, "kycVerificationStatus");
+
+  const kycLevelOneStatic: string = "LEVEL 1";
+  const kycLevelTwoStatic: string = "LEVEL 2";
+  const kycLevelThreeStatic: string = "LEVEL 3";
+
+  const kycVerificationbvn: string = "bvn-selfie-verification";
+  const kycVerificationidentityCard: string = "identity-card-verification";
+  const kycVerificationCACDocumentVerification: string =
+    "cac document verification";
+  const kycVerificationBusinessAddressVerification: string =
+    "business address verification";
+
+  function getKycVerificationIdFromVerificationList(
+    list: any[],
+    kycLevelState: string
+  ) {
+    let toFilterBy =
+      kycLevelState === kycLevelOneStatic
+        ? kycVerificationbvn
+        : kycLevelState === kycLevelTwoStatic
+        ? kycVerificationidentityCard
+        : kycVerificationCACDocumentVerification;
+
+    const result = list.filter((el) => el?.verification_type === toFilterBy);
+
+    return result[0].id;
+  }
 
   useEffect(() => {
     dispatch(
@@ -80,7 +117,12 @@ function KycCustomer() {
 
   useEffect(() => {
     if (kycCustomerStatus === "succeeded") {
-      console.log(kycCustomerState?.data, "data");
+      const userVerificationId = getKycVerificationIdFromVerificationList(
+        kycCustomerState?.data?.user?.verifications,
+        kycLvl
+      );
+      setUserVerificationId(userVerificationId);
+
       setCustomerData(kycCustomerState?.data?.user);
       let result: any;
       if (kycLvl === "LEVEL 1" && verificationType === pendingUsers)
@@ -224,6 +266,34 @@ function KycCustomer() {
     },
   ];
 
+  useEffect(() => {
+    dispatch(kycVerificationReset());
+  }, []);
+
+  useEffect(() => {
+    if (kycVerificationStatus === "succeeded") {
+      setSuccessIsModalVisible(true);
+    }
+  }, [kycVerificationState]);
+
+  const handleApproveVerification = () => {
+    dispatch(
+      kycVerificationRequest({
+        verificationId: userVerificationId,
+        status: "approved",
+      })
+    );
+  };
+
+  const handleRejectVerification = () => {
+    dispatch(
+      kycVerificationRequest({
+        verificationId: userVerificationId,
+        status: "reject",
+      })
+    );
+  };
+
   return (
     <AppContainer
       goBack={() => navigate(KYC)}
@@ -289,15 +359,16 @@ function KycCustomer() {
           </CustomerContentTwo>
         </CustomerContainer>
         <ActivityActionModal
-          actionClick={() => {}}
+          actionClick={handleApproveVerification}
           closeModal={() => setIsModalVisible(false)}
           isModalVisible={isModalVisible}
           text={`Are you sure you want to approve this customer's document`}
           actionText='Submit'
+          secondaryActionText='Cancel'
           image={images.list}
         />
         <RejectionActionModal
-          actionClick={() => {}}
+          actionClick={handleRejectVerification}
           closeModal={() => setRejectionIsModalVisible(false)}
           isModalVisible={rejectionIsModalVisible}
           title={`Select Rejection Reason`}
@@ -309,6 +380,17 @@ function KycCustomer() {
             { id: 3, value: "James", label: "James" },
           ]}
           rejectionValue={setRejectionReason}
+        />
+
+        {/*ACTIVITY CONCLUSION MODAL */}
+
+        <ActivityActionModal
+          actionClick={() => navigate(KYC)}
+          closeModal={() => navigate(KYC)}
+          isModalVisible={successIsModalVisible}
+          text={`You have successfully approved the customer's documents`}
+          actionText='Close'
+          image={images.check}
         />
       </div>
     </AppContainer>
