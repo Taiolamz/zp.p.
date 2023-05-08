@@ -6,6 +6,7 @@ import {
   KycCustomerView,
   ActivityActionModal,
   RejectionActionModal,
+  LoaderModal,
 } from "../../atoms";
 import { H5 } from "../../styles";
 import {
@@ -78,8 +79,6 @@ function KycCustomer() {
   const kycVerificationState = useAppSelector((state) => state.kycVerification);
   const { status: kycVerificationStatus } = kycVerificationState;
 
-  console.log(kycVerificationStatus, "kycVerificationStatus");
-
   const kycLevelOneStatic: string = "LEVEL 1";
   const kycLevelTwoStatic: string = "LEVEL 2";
   const kycLevelThreeStatic: string = "LEVEL 3";
@@ -104,7 +103,7 @@ function KycCustomer() {
 
     const result = list.filter((el) => el?.verification_type === toFilterBy);
 
-    return result[0].id;
+    return result.length >= 1 ? result[0].id : "";
   }
 
   useEffect(() => {
@@ -121,11 +120,12 @@ function KycCustomer() {
         kycCustomerState?.data?.user?.verifications,
         kycLvl
       );
+
       setUserVerificationId(userVerificationId);
 
       setCustomerData(kycCustomerState?.data?.user);
       let result: any;
-      if (kycLvl === "LEVEL 1" && verificationType === pendingUsers)
+      if (kycLvl === kycLevelOneStatic && verificationType === pendingUsers)
         result = {
           verifyingImageTitle: "BVN Photo",
           approvedMedia: [],
@@ -147,7 +147,7 @@ function KycCustomer() {
           ],
         };
 
-      if (kycLvl === "LEVEL 2" && verificationType === pendingUsers)
+      if (kycLvl === kycLevelTwoStatic && verificationType === pendingUsers)
         result = {
           verifyingImageTitle: "Identity Card",
           approvedMedia: [
@@ -181,7 +181,7 @@ function KycCustomer() {
           ],
         };
 
-      if (kycLvl === "LEVEL 3" && verificationType === pendingUsers)
+      if (kycLvl === kycLevelThreeStatic && verificationType === pendingUsers)
         result = {
           verifyingImageTitle: "CAC Document",
           approvedMedia: [
@@ -205,8 +205,8 @@ function KycCustomer() {
             {
               id: 1,
               img: kycCustomerState?.data?.media?.identity_card,
-              label: "CAC Document",
-              imgAlt: "CAC Document",
+              label: "Identity Card",
+              imgAlt: "Identity Card",
               approved: true,
             },
           ],
@@ -222,6 +222,112 @@ function KycCustomer() {
             },
           ],
         };
+
+      if (kycLvl === kycLevelOneStatic && verificationType === verifiedUsers) {
+        result = {
+          verifyingImageTitle: "BVN Photo",
+          approvedMedia: [
+            {
+              id: 1,
+              img: kycCustomerState?.data?.media?.bvn_photo,
+              label: "BVN Picture",
+              imgAlt: "BVN Picture",
+              approved: true,
+            },
+
+            {
+              id: 2,
+              img: kycCustomerState?.data?.media?.selfie_photos.bvn,
+              label: "Uploaded Selfie",
+              imgAlt: "Uploaded Selfie",
+              approved: true,
+            },
+          ],
+          approvedMediaId: [],
+          verifyingMedia: [],
+        };
+      }
+
+      if (kycLvl === kycLevelTwoStatic && verificationType === verifiedUsers) {
+        result = {
+          verifyingImageTitle: "BVN Photo",
+          approvedMedia: [
+            {
+              id: 1,
+              img: kycCustomerState?.data?.media?.bvn_photo,
+              label: "BVN Picture",
+              imgAlt: "BVN Picture",
+              approved: true,
+            },
+
+            {
+              id: 2,
+              img: kycCustomerState?.data?.media?.selfie_photos.bvn,
+              label: "Uploaded Selfie",
+              imgAlt: "Uploaded Selfie",
+              approved: true,
+            },
+          ],
+          approvedMediaId: [
+            {
+              id: 1,
+              img: kycCustomerState?.data?.media?.identity_card,
+              label: "Identity Document",
+              imgAlt: "Identity Document",
+              approved: true,
+            },
+          ],
+          verifyingMedia: [],
+        };
+      }
+
+      if (
+        kycLvl === kycLevelThreeStatic &&
+        verificationType === verifiedUsers
+      ) {
+        result = {
+          verifyingImageTitle: "BVN Photo",
+          approvedMedia: [
+            {
+              id: 1,
+              img: kycCustomerState?.data?.media?.bvn_photo,
+              label: "BVN Picture",
+              imgAlt: "BVN Picture",
+              approved: true,
+            },
+
+            {
+              id: 2,
+              img: kycCustomerState?.data?.media?.selfie_photos.bvn,
+              label: "Uploaded Selfie",
+              imgAlt: "Uploaded Selfie",
+              approved: true,
+            },
+          ],
+          approvedMediaId: [
+            {
+              id: 1,
+              img: kycCustomerState?.data?.media?.identity_card,
+              label: "Identity Document",
+              imgAlt: "Identity Document",
+              approved: true,
+            },
+          ],
+          approvedMediaCAC: [
+            {
+              id: 1,
+              img:
+                kycCustomerState?.data?.media?.cac_document !== null
+                  ? kycCustomerState?.data?.media?.cac_document
+                  : images.user,
+              label: "CAC Document",
+              imgAlt: "CAC Document",
+              approved: true,
+            },
+          ],
+          verifyingMedia: [],
+        };
+      }
 
       setMediaData(result);
     }
@@ -336,6 +442,20 @@ function KycCustomer() {
                 ))}
             </CustomerContentTwoVerified>
 
+            {verificationType === verifiedUsers && (
+              <CustomerContentTwoVerified>
+                {mediaData.hasOwnProperty("approvedMediaId") &&
+                  mediaData?.approvedMediaCAC?.map((item: any) => (
+                    <ImageWithLabel
+                      approved={item.approved}
+                      imgSrc={item.img}
+                      text={item.label}
+                      imgAlt={item.imgAlt}
+                    />
+                  ))}
+              </CustomerContentTwoVerified>
+            )}
+
             {verificationType === pendingUsers && (
               <KycCustomerView
                 title={
@@ -366,6 +486,7 @@ function KycCustomer() {
           actionText='Submit'
           secondaryActionText='Cancel'
           image={images.list}
+          isLoading={kycVerificationStatus === "loading"}
         />
         <RejectionActionModal
           actionClick={handleRejectVerification}
@@ -380,6 +501,7 @@ function KycCustomer() {
             { id: 3, value: "James", label: "James" },
           ]}
           rejectionValue={setRejectionReason}
+          isLoading={kycVerificationStatus === "loading"}
         />
 
         {/*ACTIVITY CONCLUSION MODAL */}
@@ -391,6 +513,12 @@ function KycCustomer() {
           text={`You have successfully approved the customer's documents`}
           actionText='Close'
           image={images.check}
+        />
+
+        <LoaderModal
+          isModalVisible={kycCustomerStatus === "loading"}
+          text='Loading please wait...'
+          closeModal={() => {}}
         />
       </div>
     </AppContainer>
