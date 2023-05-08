@@ -202,6 +202,8 @@ function Kyc() {
       navigate(`${KYCDOC}${selectedKycTable?.detailsId}`, {
         state: {
           kycLvl: kycLevel?.level,
+          verificationType:
+            tabViewSelectedIndex === 1 ? verifiedUsers : pendingUsers,
         },
       });
     }

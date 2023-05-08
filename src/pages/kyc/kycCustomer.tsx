@@ -45,16 +45,20 @@ function CustomerDataCard({ text, helper }: IPropsCard) {
   );
 }
 
+const verifiedUsers: string = "approved";
+const pendingUsers: string = "pending";
+
 function KycCustomer() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   let { id } = useParams();
   let {
-    state: { kycLvl },
+    state: { kycLvl, verificationType },
   } = useLocation();
 
   // states
   const [customerData, setCustomerData] = useState<Dictionary>({});
+  const [mediaData, setMediaData] = useState<Dictionary>({});
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [rejectionIsModalVisible, setRejectionIsModalVisible] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
@@ -64,7 +68,7 @@ function KycCustomer() {
   const kycCustomerState = useAppSelector((state) => state.getKycCustomer);
   const { status: kycCustomerStatus } = kycCustomerState;
 
-  console.log(kycCustomerStatus, "kycCustomerStatus");
+  // console.log(kycCustomerStatus, "kycCustomerStatus");
 
   useEffect(() => {
     dispatch(
@@ -76,11 +80,110 @@ function KycCustomer() {
 
   useEffect(() => {
     if (kycCustomerStatus === "succeeded") {
+      console.log(kycCustomerState?.data, "data");
       setCustomerData(kycCustomerState?.data?.user);
+      let result: any;
+      if (kycLvl === "LEVEL 1" && verificationType === pendingUsers)
+        result = {
+          verifyingImageTitle: "BVN Photo",
+          approvedMedia: [],
+          approvedMediaId: [],
+          verifyingMedia: [
+            {
+              id: 1,
+              img: kycCustomerState?.data?.media?.bvn_photo,
+              label: "BVN Picture",
+              imgAlt: "BVN Picture",
+            },
+
+            {
+              id: 2,
+              img: kycCustomerState?.data?.media?.selfie_photos.bvn,
+              label: "Uploaded Selfie",
+              imgAlt: "Uploaded Selfie",
+            },
+          ],
+        };
+
+      if (kycLvl === "LEVEL 2" && verificationType === pendingUsers)
+        result = {
+          verifyingImageTitle: "Identity Card",
+          approvedMedia: [
+            {
+              id: 1,
+              img: kycCustomerState?.data?.media?.bvn_photo,
+              label: "BVN Picture",
+              imgAlt: "BVN Picture",
+              approved: true,
+            },
+
+            {
+              id: 2,
+              img: kycCustomerState?.data?.media?.selfie_photos?.bvn,
+              label: "Uploaded Selfie",
+              imgAlt: "Uploaded Selfie",
+              approved: true,
+            },
+          ],
+          approvedMediaId: [],
+          verifyingMedia: [
+            {
+              id: 1,
+              img:
+                kycCustomerState?.data?.media?.identity_card !== null
+                  ? kycCustomerState?.data?.media?.identity_card
+                  : images.user,
+              label: "Identity Card",
+              imgAlt: "Identity Card",
+            },
+          ],
+        };
+
+      if (kycLvl === "LEVEL 3" && verificationType === pendingUsers)
+        result = {
+          verifyingImageTitle: "CAC Document",
+          approvedMedia: [
+            {
+              id: 1,
+              img: kycCustomerState?.data?.media?.bvn_photo,
+              label: "BVN Picture",
+              imgAlt: "BVN Picture",
+              approved: true,
+            },
+
+            {
+              id: 2,
+              img: kycCustomerState?.data?.media?.selfie_photos?.bvn,
+              label: "Uploaded Selfie",
+              imgAlt: "Uploaded Selfie",
+              approved: true,
+            },
+          ],
+          approvedMediaId: [
+            {
+              id: 1,
+              img: kycCustomerState?.data?.media?.identity_card,
+              label: "CAC Document",
+              imgAlt: "CAC Document",
+              approved: true,
+            },
+          ],
+          verifyingMedia: [
+            {
+              id: 1,
+              img:
+                kycCustomerState?.data?.media?.cac_document !== null
+                  ? kycCustomerState?.data?.media?.cac_document
+                  : images.user,
+              label: "CAC Document",
+              imgAlt: "CAC Document",
+            },
+          ],
+        };
+
+      setMediaData(result);
     }
   }, [kycCustomerState]);
-
-  console.log(customerData, "customerData");
 
   const userDetails: any = [
     {
@@ -140,26 +243,49 @@ function KycCustomer() {
 
           <CustomerContentTwo>
             <CustomerContentTwoVerified>
-              <ImageWithLabel
-                approved={true}
-                imgSrc={images.user}
-                text={"BVN Picture"}
-              />
-              <ImageWithLabel
-                approved={true}
-                imgSrc={images.user}
-                text={"Uploaded Sefie"}
-              />
+              {mediaData.hasOwnProperty("approvedMedia") &&
+                mediaData?.approvedMedia?.map((item: any) => (
+                  <ImageWithLabel
+                    approved={item.approved}
+                    imgSrc={item.img}
+                    text={item.label}
+                    imgAlt={item.imgAlt}
+                  />
+                ))}
             </CustomerContentTwoVerified>
-            <KycCustomerView
-              title={"National ID Card"}
-              onClickApprove={() => {
-                setIsModalVisible(true);
-              }}
-              onClickReject={() => {
-                setRejectionIsModalVisible(true);
-              }}
-            />
+
+            <CustomerContentTwoVerified>
+              {mediaData.hasOwnProperty("approvedMediaId") &&
+                mediaData?.approvedMediaId?.map((item: any) => (
+                  <ImageWithLabel
+                    approved={item.approved}
+                    imgSrc={item.img}
+                    text={item.label}
+                    imgAlt={item.imgAlt}
+                  />
+                ))}
+            </CustomerContentTwoVerified>
+
+            {verificationType === pendingUsers && (
+              <KycCustomerView
+                title={
+                  mediaData.hasOwnProperty("verifyingImageTitle")
+                    ? mediaData?.verifyingImageTitle
+                    : ""
+                }
+                verifingImages={
+                  mediaData.hasOwnProperty("verifyingMedia")
+                    ? mediaData?.verifyingMedia
+                    : []
+                }
+                onClickApprove={() => {
+                  setIsModalVisible(true);
+                }}
+                onClickReject={() => {
+                  setRejectionIsModalVisible(true);
+                }}
+              />
+            )}
           </CustomerContentTwo>
         </CustomerContainer>
         <ActivityActionModal

@@ -17,18 +17,26 @@ import { H2, H6 } from "../../styles";
 import { colors, boxShadow, spacing, images } from "../../utils";
 import { FiCheck, FiX } from "react-icons/fi";
 
+export interface VerifingImagesIProps {
+  id: number;
+  img: string;
+  imgAlt: string;
+  label: string;
+}
+
 export interface IProps {
   onClickApprove?: () => void;
   onClickReject?: () => void;
   title: string;
+  verifingImages: VerifingImagesIProps[];
 }
 
-const veriImage = [
-  { id: 1, img: images.user, label: "ID Card (Front)" },
-  { id: 2, img: images.user, label: "ID Card (Back)" },
-];
-
-function KycCustomerView({ onClickApprove, onClickReject, title }: IProps) {
+function KycCustomerView({
+  onClickApprove,
+  onClickReject,
+  title,
+  verifingImages,
+}: IProps) {
   const [compareImgIsModalVisible, setCompareImgIsModalVisible] =
     useState(false);
 
@@ -39,6 +47,7 @@ function KycCustomerView({ onClickApprove, onClickReject, title }: IProps) {
   const closeCompareImgModal = () => {
     setCompareImgIsModalVisible(false);
   };
+
   return (
     <div>
       <ContentContainer>
@@ -55,8 +64,13 @@ function KycCustomerView({ onClickApprove, onClickReject, title }: IProps) {
         </TitleContainer>
 
         <VerifyImageContainer>
-          {veriImage.map((item, index) => (
-            <ImageWithLabel key={index} imgSrc={item.img} text={item.label} />
+          {verifingImages.map((item: VerifingImagesIProps, index: number) => (
+            <ImageWithLabel
+              key={index}
+              imgSrc={item.img}
+              text={item.label}
+              imgAlt={item.imgAlt}
+            />
           ))}
         </VerifyImageContainer>
 
@@ -79,12 +93,12 @@ function KycCustomerView({ onClickApprove, onClickReject, title }: IProps) {
         isModalVisible={compareImgIsModalVisible}
         closeModal={closeCompareImgModal}>
         <ImageComparisonContainer>
-          {veriImage.map((item, index) => (
+          {verifingImages.map((item: VerifingImagesIProps, index: number) => (
             <ImageZoom
               key={index}
               height={"100%"}
               width={"100%"}
-              imgAlt='kyc image'
+              imgAlt={item.imgAlt}
               imgSrc={item.img}
               text={item.label}
             />
