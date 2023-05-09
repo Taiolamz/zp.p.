@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { borderRadius, colors, spacing } from '../../utils';
+import styled from "styled-components";
+import { borderRadius, colors, spacing } from "../../utils";
 
 export const Container = styled.div`
   background-color: ${colors.primary};

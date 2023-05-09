@@ -1,14 +1,17 @@
-import { CustomerProfile } from '../../components';
-import { AppContainer, SupportFunction } from '../../atoms';
+import { useNavigate } from "react-router-dom";
+import { CustomerProfile } from "../../components";
+import { AppContainer, UserSupportActivity } from "../../atoms";
 
-import { colors, dateFormat, routesPath } from '../../utils';
+import { colors, dateFormat, routesPath } from "../../utils";
 import {
   UsersDetailContainer,
   UserProfileContainer,
   SupportContainer,
-} from './style';
-import { H2 } from '../../styles';
-import { useNavigate } from 'react-router-dom';
+} from "./style";
+import { H2 } from "../../styles";
+
+import { UserSupportActivityIProps } from "../../atoms/userSupportActivity";
+
 const { USERS } = routesPath;
 
 function UserDetails() {
@@ -19,124 +22,124 @@ function UserDetails() {
   const customerDetails: any = [
     {
       id: 1,
-      helper: 'Full Name',
-      text: 'Wade Warren Chukwuma',
+      helper: "Full Name",
+      text: "Wade Warren Chukwuma",
     },
 
     {
       id: 2,
-      helper: 'Email',
-      text: 'wadewarren@gmail.com',
+      helper: "Email",
+      text: "wadewarren@gmail.com",
     },
 
     {
       id: 3,
-      helper: 'Phone Number',
-      text: '2348036329157',
+      helper: "Phone Number",
+      text: "2348036329157",
     },
 
     {
       id: 4,
-      helper: 'BVN',
-      text: '3094095959',
+      helper: "BVN",
+      text: "3094095959",
     },
 
     {
       id: 5,
-      helper: 'Residential Address',
-      text: '3995 Valley View Ln undefined Red Oak, Oklahoma 51671 United States',
+      helper: "Residential Address",
+      text: "3995 Valley View Ln undefined Red Oak, Oklahoma 51671 United States",
     },
 
-    { id: 6, text: dateFormat(date), helper: 'Date of Birth' },
+    { id: 6, text: dateFormat(date), helper: "Date of Birth" },
     {
       id: 7,
-      helper: 'Address Verification Status',
-      text: 'Unverified',
+      helper: "Address Verification Status",
+      text: "Unverified",
     },
     {
       id: 8,
-      helper: 'Account Number',
-      text: '77123456781',
+      helper: "Account Number",
+      text: "77123456781",
     },
     {
       id: 9,
-      helper: 'Bank Name',
-      text: 'KUDA',
+      helper: "Bank Name",
+      text: "KUDA",
     },
     {
       id: 10,
-      helper: 'Profile Level',
-      text: 'Level 1',
+      helper: "Profile Level",
+      text: "Level 1",
     },
   ];
 
   const appActivity: any = [
     {
       id: 1,
-      helper: 'Onboarding Date',
-      text: 'Jul 12, 2021',
+      helper: "Onboarding Date",
+      text: "Jul 12, 2021",
     },
 
     {
       id: 2,
-      helper: 'Last Login',
-      text: 'Jan 8, 2022',
+      helper: "Last Login",
+      text: "Jan 8, 2022",
     },
 
     {
       id: 3,
-      helper: 'Last Device Login',
-      text: 'Iphone 14 pro max',
+      helper: "Last Device Login",
+      text: "Iphone 14 pro max",
     },
 
     {
       id: 4,
-      helper: 'Profile Status',
-      text: 'Deactivated',
+      helper: "Profile Status",
+      text: "Deactivated",
     },
 
     {
       id: 5,
-      helper: 'Deactivation Comment',
-      text: 'EFCC Order',
+      helper: "Deactivation Comment",
+      text: "EFCC Order",
     },
   ];
 
-  const supportFunctionItems = [
+  const supportActivitiesData: UserSupportActivityIProps[] = [
     {
       id: 1,
-      name: 'Document Status',
-      color: colors.purpleVariantThree,
+      text: "Document Status",
+      backgroundColor: colors.purpleVariantThree,
     },
     {
       id: 2,
-      name: 'Transaction History',
-      color: colors.purpleVariantThree,
+      text: "Transaction History",
+      backgroundColor: colors.purpleVariantThree,
     },
     {
       id: 3,
-      name: 'Upload Document',
-      color: colors.purpleVariantThree,
+      text: "Upload Document",
+      backgroundColor: colors.purpleVariantThree,
     },
     {
       id: 4,
-      name: 'Document History',
-      color: colors.purpleVariantThree,
+      text: "Document History",
+      backgroundColor: colors.purpleVariantThree,
     },
     {
       id: 5,
-      name: 'Saved Banks',
-      color: colors.purpleVariantThree,
+      text: "Saved Banks",
+      backgroundColor: colors.purpleVariantThree,
     },
     {
       id: 6,
-      name: 'Login History',
-      color: colors.purpleVariantThree,
+      text: "Login History",
+      backgroundColor: colors.purpleVariantThree,
     },
     {
       id: 7,
-      name: 'Reactivate Profile',
-      color: colors.green,
+      text: "Reactivate Profile",
+      backgroundColor: colors.green,
     },
   ];
 
@@ -144,8 +147,7 @@ function UserDetails() {
     <AppContainer
       goBack={() => navigate(USERS)}
       navTitle={`Back`}
-      navHelper='Profile Review'
-    >
+      navHelper='Profile Review'>
       <div>
         <UsersDetailContainer>
           <UserProfileContainer>
@@ -166,7 +168,7 @@ function UserDetails() {
             <H2 left bold color={colors.greyVariantThree}>
               Support Functions
             </H2>
-            <SupportFunction supportFunctionItems={supportFunctionItems} />
+            <UserSupportActivity data={supportActivitiesData} />
           </SupportContainer>
         </UsersDetailContainer>
       </div>
