@@ -16,7 +16,7 @@ import {
   SearchInputContainer,
 } from "./style";
 import { Dictionary } from "../../types";
-import { colors, routesPath, spacing } from "../../utils";
+import { colors, routesPath, spacing, images } from "../../utils";
 import {
   getKycsRequest,
   getKycsReset,
@@ -33,6 +33,10 @@ const { KYCDOC } = routesPath;
 const kycLevelZero = "?level=level zero&include=bvn";
 const kycLevelOne = "?level=level one&include=bvn";
 const kycLevelTwo = "?level=level two&include=bvn";
+const kycLevelAgency =
+  "/fetchAgentVerification?level=level two&filterBy=cac document verification&include=bvn";
+const kycLevelBusinessAdress =
+  "/fetchAgentVerification?level=level two&filterBy=address verification&include=bvn";
 
 const verifiedKycLevelOne = "/verified?level=level one";
 const verifiedKycLevelTwo = "/verified?level=level two";
@@ -41,6 +45,11 @@ const verifiedKycLevelThree = "/verified?level=level three";
 const verifiedUsers: string = "approved";
 const pendingUsers: string = "pending";
 
+const emptyListCenterStyle = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+};
 function Kyc() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -87,9 +96,9 @@ function Kyc() {
       } else if (selectedKycCard?.id === 2) {
         result = { path: kycLevelOne, level: "LEVEL 2" };
       } else if (selectedKycCard?.id === 3) {
-        result = { path: kycLevelTwo, level: "LEVEL 3" };
+        result = { path: kycLevelAgency, level: "LEVEL 3" };
       } else if (selectedKycCard?.id === 4) {
-        result = { path: kycLevelTwo, level: "LEVEL 3" };
+        result = { path: kycLevelBusinessAdress, level: "LEVEL 3" };
       } else {
         result = { path: kycLevelZero, level: "LEVEL 1" };
       }
@@ -119,12 +128,6 @@ function Kyc() {
           userName: `${item?.bvn?.first_name} ${item?.bvn?.last_name}`,
           bvn: item?.bvn?.bvn_number ? ` ${item?.bvn?.bvn_number}` : "N/A",
           phoneNo: item?.telephone,
-          // detailsId:
-          //   selectedKycCard?.hasOwnProperty("id") &&
-          //   item?.bvn.hasOwnProperty("id")
-          //     ? item?.bvn?.id
-          //     : item?.id,
-
           detailsId: item?.id,
         });
       });
@@ -209,6 +212,8 @@ function Kyc() {
     }
   }, [selectedKycTable]);
 
+  console.log(kycData, "kycData");
+
   return (
     <AppContainer navTitle='KYC'>
       <div>
@@ -244,27 +249,35 @@ function Kyc() {
             </div>
           </SearchInputContainer>
         </SearchContainer>
-        <div>
-          <KycUserTable
-            setSelectedItem={setSelectedKycTable}
-            headerData={{
-              id: "#",
-              userName: "Profile Name",
-              bvn: "BVN",
-              phoneNo: "Phone Number",
-            }}
-            data={kycData}
-            onClick={() => {}}
-          />
-        </div>
+        {kycData.length >= 1 ? (
+          <div>
+            <div>
+              <KycUserTable
+                setSelectedItem={setSelectedKycTable}
+                headerData={{
+                  id: "#",
+                  userName: "Profile Name",
+                  bvn: "BVN",
+                  phoneNo: "Phone Number",
+                }}
+                data={kycData}
+                onClick={() => {}}
+              />
+            </div>
 
-        <Pagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={(selectedPage) => {
-            setCurrentPage(selectedPage);
-          }}
-        />
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={(selectedPage) => {
+                setCurrentPage(selectedPage);
+              }}
+            />
+          </div>
+        ) : (
+          <div style={emptyListCenterStyle}>
+            <img src={images.emptyList} alt='Empty container' />
+          </div>
+        )}
 
         <LoaderModal
           isModalVisible={
