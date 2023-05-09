@@ -41,8 +41,8 @@ function TransactionTable({
 
         {type === "transactions" && (
           <tbody>
-            {data.map((item: any) => (
-              <TR>
+            {data.map((item: any, index: number) => (
+              <TR key={index}>
                 <TD>{item.id}</TD>
                 <TD>{item.name}</TD>
                 <TD>{item.tid}</TD>
@@ -53,8 +53,7 @@ function TransactionTable({
                     item.status === "success"
                       ? colors.greenVariantTwo
                       : colors.red
-                  }
-                >
+                  }>
                   {item.status === "success" ? "Successful" : "Unseccessful"}
                 </TD>
                 <TD>{dateFormat(item.time)}</TD>

@@ -2,7 +2,7 @@ import Modal from "react-modal";
 import SearchIcon from "../../assets/gif/searchingFile.gif";
 import { Container } from "./style";
 
-import { H2, H6 } from "../../styles";
+import { H6 } from "../../styles";
 import { colors, boxShadow, spacing } from "../../utils";
 
 export interface IProps {
