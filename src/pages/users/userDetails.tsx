@@ -1,15 +1,19 @@
 import { CustomerProfile } from '../../components';
 import { AppContainer, SupportFunction } from '../../atoms';
 
-import { colors, dateFormat } from '../../utils';
+import { colors, dateFormat, routesPath } from '../../utils';
 import {
   UsersDetailContainer,
   UserProfileContainer,
   SupportContainer,
 } from './style';
 import { H2 } from '../../styles';
+import { useNavigate } from 'react-router-dom';
+const { USERS } = routesPath;
 
 function UserDetails() {
+  const navigate = useNavigate();
+
   const date = new Date().toDateString();
 
   const customerDetails: any = [
@@ -137,7 +141,11 @@ function UserDetails() {
   ];
 
   return (
-    <AppContainer navTitle='Profile Review'>
+    <AppContainer
+      goBack={() => navigate(USERS)}
+      navTitle={`Back`}
+      navHelper='Profile Review'
+    >
       <div>
         <UsersDetailContainer>
           <UserProfileContainer>
