@@ -22,6 +22,7 @@ function UsersTable({ data, headerData, type, onClick }: any) {
     onClick(item);
   };
 
+  // console.log()
   return (
     <TableContainer>
       <TableTag>
