@@ -11,6 +11,7 @@ import {
 import { H2 } from "../../styles";
 
 import { UserSupportActivityIProps } from "../../atoms/userSupportActivity";
+import { CustomerProfileIProps } from "../../components/customerProfile";
 
 const { USERS } = routesPath;
 
@@ -19,7 +20,7 @@ function UserDetails() {
 
   const date = new Date().toDateString();
 
-  const customerDetails: any = [
+  const customerDetails: CustomerProfileIProps[] = [
     {
       id: 1,
       helper: "Full Name",
@@ -73,7 +74,7 @@ function UserDetails() {
     },
   ];
 
-  const appActivity: any = [
+  const appActivity: CustomerProfileIProps[] = [
     {
       id: 1,
       helper: "Onboarding Date",
@@ -152,13 +153,13 @@ function UserDetails() {
         <UsersDetailContainer>
           <UserProfileContainer>
             <CustomerProfile
-              customerDetails={customerDetails}
+              data={customerDetails}
               title='Customer`s Details
 '
             />
 
             <CustomerProfile
-              customerDetails={appActivity}
+              data={appActivity}
               title='App Activity
 '
             />
