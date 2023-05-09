@@ -7,12 +7,16 @@ export interface TabViewIPropsIProps {
   data: TabIProps[];
   setSelectedIndex: any[number];
   backgroundColor?: string;
+  type?: string;
+  tabViewSelectedIndex?: number;
 }
 
 function TabView({
   data,
   backgroundColor,
   setSelectedIndex,
+  tabViewSelectedIndex,
+  type,
 }: TabViewIPropsIProps) {
   const [dataList, setDataList] = useState(data);
 
@@ -30,6 +34,7 @@ function TabView({
     setDataList(updatedData);
     setSelectedIndex(itemToEdit.id);
   };
+
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -41,6 +46,8 @@ function TabView({
               isSelected={item.isSelected}
               text={item.text}
               paddingRight={dataList.length === item.id ? false : true}
+              type={type}
+              tabViewSelectedIndex={tabViewSelectedIndex}
             />
           ))}
         </Container>
