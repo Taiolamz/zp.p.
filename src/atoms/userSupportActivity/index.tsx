@@ -10,13 +10,24 @@ export interface UserSupportActivityIProps {
 
 export interface UserSupportActivitiesIProps {
   data: UserSupportActivityIProps[];
+  onClick?: () => void;
+  setSelectedItem: any;
 }
 
-const UserSupportActivity = ({ data }: UserSupportActivitiesIProps) => {
+const UserSupportActivity = ({
+  data,
+  onClick,
+  setSelectedItem,
+}: UserSupportActivitiesIProps) => {
+  const handleSelectedItem = (item: UserSupportActivityIProps) => {
+    console.log("item");
+    setSelectedItem(item);
+  };
   return (
     <Container>
       {data?.map((item: UserSupportActivityIProps) => (
         <BorderedText
+          onClick={() => handleSelectedItem(item)}
           key={item.id}
           text={item.text}
           backgroundColor={item.backgroundColor}

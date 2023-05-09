@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CustomerProfile } from "../../components";
 import { AppContainer, UserSupportActivity } from "../../atoms";
@@ -12,6 +13,7 @@ import { H2 } from "../../styles";
 
 import { UserSupportActivityIProps } from "../../atoms/userSupportActivity";
 import { CustomerProfileIProps } from "../../components/customerProfile";
+// import {Dictionary} from '../../'
 
 const { USERS } = routesPath;
 
@@ -19,6 +21,8 @@ function UserDetails() {
   const navigate = useNavigate();
 
   const date = new Date().toDateString();
+
+  const [selectedUserActivity, setSelectedUserActivity] = useState<any>({});
 
   const customerDetails: CustomerProfileIProps[] = [
     {
@@ -144,6 +148,33 @@ function UserDetails() {
     },
   ];
 
+  useEffect(() => {
+    if (
+      selectedUserActivity.hasOwnProperty("id") &&
+      selectedUserActivity.id === 1
+    ) {
+      console.log("document status");
+    }
+
+    if (
+      selectedUserActivity.hasOwnProperty("id") &&
+      selectedUserActivity.id === 2
+    ) {
+      console.log("transaction history");
+    }
+    if (
+      selectedUserActivity.hasOwnProperty("id") &&
+      selectedUserActivity.id === 3
+    ) {
+      console.log("upload doc");
+    }
+    if (
+      selectedUserActivity.hasOwnProperty("id") &&
+      selectedUserActivity.id === 4
+    ) {
+      console.log("document history");
+    }
+  }, [selectedUserActivity]);
   return (
     <AppContainer
       goBack={() => navigate(USERS)}
@@ -169,7 +200,10 @@ function UserDetails() {
             <H2 left bold color={colors.greyVariantThree}>
               Support Functions
             </H2>
-            <UserSupportActivity data={supportActivitiesData} />
+            <UserSupportActivity
+              data={supportActivitiesData}
+              setSelectedItem={setSelectedUserActivity}
+            />
           </SupportContainer>
         </UsersDetailContainer>
       </div>
