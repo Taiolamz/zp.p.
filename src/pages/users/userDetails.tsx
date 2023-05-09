@@ -2,7 +2,12 @@ import { CustomerProfile } from '../../components';
 import { AppContainer, SupportFunction } from '../../atoms';
 
 import { colors, dateFormat } from '../../utils';
-import { UsersDetailContainer, UserProfileContainer } from './style';
+import {
+  UsersDetailContainer,
+  UserProfileContainer,
+  SupportContainer,
+} from './style';
+import { H2 } from '../../styles';
 
 function UserDetails() {
   const date = new Date().toDateString();
@@ -148,7 +153,13 @@ function UserDetails() {
 '
             />
           </UserProfileContainer>
-          <SupportFunction supportFunctionItems={supportFunctionItems} />
+
+          <SupportContainer>
+            <H2 left bold color={colors.greyVariantThree}>
+              Support Functions
+            </H2>
+            <SupportFunction supportFunctionItems={supportFunctionItems} />
+          </SupportContainer>
         </UsersDetailContainer>
       </div>
     </AppContainer>

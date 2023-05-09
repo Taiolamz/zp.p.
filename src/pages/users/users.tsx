@@ -143,10 +143,6 @@ function Users() {
                   headerData={userDataHeader}
                   header={true}
                   data={usersData}
-                  // onClick={() => {
-                  //   navigate(`${USERDETAILS}${1}`);
-                  // }}
-                  // onClick={(item: Dictionary) => setMoreIsVisible(true)}
                 />
               )}
               {tabViewUserActivitySelectedIndex === 2 && (

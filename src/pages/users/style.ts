@@ -50,3 +50,9 @@ export const SearchContainer = styled.div`
 export const TableContainer = styled.div`
   margin-bottom: ${spacing.small};
 `;
+
+export const SupportContainer = styled.div`
+  display: grid;
+  margin-top: ${spacing.small};
+  row-gap: ${spacing.small};
+`;

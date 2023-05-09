@@ -1,6 +1,7 @@
 // import React from 'react';
 
 import { BorderedText } from '../../components';
+import { H2 } from '../../styles';
 import { colors } from '../../utils';
 import { Container } from './style';
 
