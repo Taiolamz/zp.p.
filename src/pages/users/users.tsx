@@ -1,11 +1,6 @@
 import { useState } from 'react';
-import {
-  AppContainer,
-  SupportFunction,
-  TabView,
-  TabViewUsers,
-} from '../../atoms';
-import { colors } from '../../utils';
+import { AppContainer, TabView, TabViewUsers } from '../../atoms';
+import { colors, routesPath } from '../../utils';
 import { SearchInput, UsersTable } from '../../components';
 import {
   SearchContainer,
@@ -13,6 +8,8 @@ import {
   UserContainer,
   UsersContainer,
 } from './style';
+import { useNavigate } from 'react-router-dom';
+const { USERDETAILS } = routesPath;
 
 const userDataHeader = {
   id: '',
@@ -46,41 +43,43 @@ const usersData = [
   },
 ];
 
-const supportFunctionItems = [
+const userDetails: any = [
   {
     id: 1,
-    name: 'Document Status',
-    color: colors.purpleVariantThree,
+    userName: 'Wade Warren',
+    bvn: 222233434555,
+    phone: '+2348036329178',
   },
+
   {
     id: 2,
-    name: 'Transaction History',
-    color: colors.purpleVariantThree,
+    userName: 'Wade Warren',
+    bvn: 222233434555,
+    phone: '+2348036329178',
   },
   {
     id: 3,
-    name: 'Upload Document',
-    color: colors.purpleVariantThree,
+    userName: 'Wade Warren',
+    bvn: 222233434555,
+    phone: '+2348036329178',
   },
   {
     id: 4,
-    name: 'Document History',
-    color: colors.purpleVariantThree,
+    userName: 'Wade Warren',
+    bvn: 222233434555,
+    phone: '+2348036329178',
   },
   {
     id: 5,
-    name: 'Saved Banks',
-    color: colors.purpleVariantThree,
+    userName: 'Wade Warren',
+    bvn: 222233434555,
+    phone: '+2348036329178',
   },
   {
     id: 6,
-    name: 'Login History',
-    color: colors.purpleVariantThree,
-  },
-  {
-    id: 7,
-    name: 'Reactivate Profile',
-    color: colors.green,
+    userName: 'Wade Warren',
+    bvn: 222233434555,
+    phone: '+2348036329178',
   },
 ];
 
@@ -89,6 +88,8 @@ type Dictionary = {
 };
 
 function Users() {
+  const navigate = useNavigate();
+
   const tabViewUsersData = [
     { id: 1, isSelected: true, text: 'Users' },
     { id: 2, isSelected: false, text: 'Admin Users' },
@@ -142,7 +143,10 @@ function Users() {
                   headerData={userDataHeader}
                   header={true}
                   data={usersData}
-                  onClick={(item: Dictionary) => setMoreIsVisible(true)}
+                  // onClick={() => {
+                  //   navigate(`${USERDETAILS}${1}`);
+                  // }}
+                  // onClick={(item: Dictionary) => setMoreIsVisible(true)}
                 />
               )}
               {tabViewUserActivitySelectedIndex === 2 && (
@@ -158,7 +162,6 @@ function Users() {
         )}
         {tabViewUsersSelectedIndex === 2 && ''}
         {tabViewUsersSelectedIndex === 3 && ''}
-        <SupportFunction supportFunctionItems={supportFunctionItems} />
       </UserContainer>
     </AppContainer>
   );
