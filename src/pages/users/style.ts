@@ -1,5 +1,6 @@
-import styled from "styled-components";
-import { spacing } from "../../utils";
+import styled from 'styled-components';
+import { spacing } from '../../utils';
+
 export const Container = styled.div`
   display: grid;
   grid-template-columns: 50% 50%;
@@ -16,6 +17,24 @@ export const UserContainer = styled.div`
   }
 `;
 
+export const UsersDetailContainer = styled.div`
+  padding-top: ${spacing.small};
+  display: grid;
+  grid-template-columns: auto 14.75rem;
+  column-gap: ${spacing.medium};
+  align-items: start;
+  padding-bottom: ${spacing.medium};
+  @media (max-width: 1067px) {
+    grid-template-columns: 100%;
+    row-gap: ${spacing.small};
+  }
+`;
+
+export const UserProfileContainer = styled.div`
+  display: grid;
+  row-gap: ${spacing.large};
+`;
+
 export const UsersContainer = styled.div`
   margin-top: ${spacing.large};
   @media (max-width: 768px) {
@@ -26,14 +45,14 @@ export const UsersContainer = styled.div`
 export const SearchContainer = styled.div`
   max-width: 16.313em;
   margin-bottom: ${spacing.large};
-  @media (max-width: 768px) {
-    /* grid-template-columns: 100% 100%; */
-  }
 `;
 
 export const TableContainer = styled.div`
   margin-bottom: ${spacing.small};
-  @media (max-width: 768px) {
-    /* grid-template-columns: 100% 100%; */
-  }
+`;
+
+export const SupportContainer = styled.div`
+  display: grid;
+  margin-top: ${spacing.small};
+  row-gap: ${spacing.small};
 `;

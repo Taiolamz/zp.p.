@@ -1,7 +1,9 @@
 import { TableTag, TD, TH, TR, TableContainer } from "./style";
 import { TransactionCard } from "../..";
 import { RxCaretRight } from "react-icons/rx";
-import { colors, currencyFormat, dateFormat } from "../../../utils";
+import { colors, currencyFormat, dateFormat, routesPath } from "../../../utils";
+import { useNavigate } from "react-router-dom";
+const { USERDETAILS } = routesPath;
 
 export interface TableIPropsIProps {
   type: string;
@@ -10,13 +12,17 @@ export interface TableIPropsIProps {
   backgroundColor?: string;
   header?: boolean;
   headerData?: any;
+  onClick?: () => void;
 }
 
 function UsersTable({ data, headerData, type, onClick }: any) {
+  const navigate = useNavigate();
+
   const handleOnSelect = (item: any) => {
     onClick(item);
   };
 
+  // console.log()
   return (
     <TableContainer>
       <TableTag>
@@ -32,7 +38,9 @@ function UsersTable({ data, headerData, type, onClick }: any) {
         </thead>
         <tbody>
           {data.map((item: any) => (
-            <TR onClick={() => handleOnSelect(item)} key={item.id}>
+            <TR
+              key={item.id}
+              onClick={() => navigate(`${USERDETAILS}${item.id}`)}>
               <TD></TD>
               <TD>{item.id}</TD>
               <TD>{item.name}</TD>
