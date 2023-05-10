@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useLayoutEffect } from "react";
 import { Container } from "./style";
 import { Tab } from "../../components";
 import { TabIProps } from "../../components/tab";
@@ -18,8 +18,7 @@ function TabView({
   tabViewSelectedIndex,
   type,
 }: TabViewIPropsIProps) {
-  const [dataList, setDataList] = useState(data);
-
+  const [dataList, setDataList] = useState<any[]>([]);
   const handleOnSelect = (item: TabIProps) => {
     const itemToEdit = item;
     const updatedData: TabIProps[] = [...dataList].map((el: TabIProps) => {
@@ -34,6 +33,10 @@ function TabView({
     setDataList(updatedData);
     setSelectedIndex(itemToEdit.id);
   };
+
+  useLayoutEffect(() => {
+    setDataList(data);
+  }, []);
 
   return (
     <>

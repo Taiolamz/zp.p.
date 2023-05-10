@@ -79,7 +79,6 @@ function Kyc() {
   // states
   const [tabViewSelectedIndex, setTabViewSelectedIndex] =
     useState<any[number]>(1);
-
   const [kycData, setKycData] = useState<any[]>([]);
   const [kycCountList, setKycCountList] = useState<any[]>([]);
   const [selectedKycCard, setSelectedKycCard] = useState<Dictionary>({});
@@ -258,10 +257,10 @@ function Kyc() {
   }, [selectedKycTable]);
 
   // reset both kycCustomer api and verification api when the page first loads
-  useEffect(() => {
-    dispatch(kycVerificationReset());
-    dispatch(getKycCustomerReset());
-  }, []);
+  // useEffect(() => {
+  //   dispatch(kycVerificationReset());
+  //   dispatch(getKycCustomerReset());
+  // }, []);
 
   useEffect(() => {
     if (kycCustomerStatus === "succeeded") {
@@ -270,7 +269,6 @@ function Kyc() {
       );
 
       setUserVerificationId(userVerificationIdItem);
-
       setCustomerData(kycCustomerState?.data?.user);
     }
   }, [kycCustomerState]);
@@ -324,6 +322,12 @@ function Kyc() {
         status: "approved",
       })
     );
+  };
+
+  const handleKycSuccssModalClose = () => {
+    dispatch(kycVerificationReset());
+    setSuccessIsModalVisible(false);
+    setBusinessAddressIsModalVisible(false);
   };
 
   return (
@@ -404,14 +408,8 @@ function Kyc() {
         />
 
         <ActivityActionModal
-          actionClick={() => {
-            setSuccessIsModalVisible(false);
-            setBusinessAddressIsModalVisible(false);
-          }}
-          closeModal={() => {
-            setSuccessIsModalVisible(false);
-            setBusinessAddressIsModalVisible(false);
-          }}
+          actionClick={handleKycSuccssModalClose}
+          closeModal={handleKycSuccssModalClose}
           isModalVisible={successIsModalVisible}
           text={`You have successfully approved the customer's address`}
           actionText='Close'
