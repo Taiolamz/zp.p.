@@ -60,6 +60,7 @@ const emptyListCenterStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  marginTop: spacing.xlarge,
 };
 
 const kycVerificationBusinessAddressVerification: string =
@@ -83,6 +84,7 @@ function Kyc() {
   const [kycCountList, setKycCountList] = useState<any[]>([]);
   const [selectedKycCard, setSelectedKycCard] = useState<Dictionary>({});
   const [selectedKycTable, setSelectedKycTable] = useState<Dictionary>({});
+  const pageSize = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [totalPages, setTotalPages] = useState(5);
@@ -143,9 +145,11 @@ function Kyc() {
     dispatch(
       getKycsRequest({
         kycLevel: `${kycLevel.path}&term=${searchValue}`,
+        per_page: pageSize,
+        page: currentPage,
       })
     );
-  }, [selectedKycCard, tabViewSelectedIndex, isSearching]);
+  }, [selectedKycCard, tabViewSelectedIndex, isSearching, currentPage]);
 
   useEffect(() => {
     if (kycsStatus === "succeeded") {
@@ -340,33 +344,34 @@ function Kyc() {
           />
         </KYCTabViewContainer>
         <CountInfo data={kycCountList} setSelectedData={setSelectedKycCard} />
-        <SearchContainer>
-          <CurrentPageCard pageNumber={currentPage} />
-          <SearchInputContainer>
-            <SearchInput
-              backgroundColor={colors.white}
-              name='SearchValue'
-              value={searchValue}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.target.value.length === 0) {
-                  setIsSearching(!isSearching);
-                }
-                setSearchValue(e.target.value);
-              }}
-              placeholder='Search Records'
-            />
-            <div style={{ marginLeft: spacing.xsmall }}>
-              <BorderedText
-                color={colors.white}
-                backgroundColor={colors.primary}
-                text='Search'
-                onClick={() => setIsSearching(!isSearching)}
-              />
-            </div>
-          </SearchInputContainer>
-        </SearchContainer>
+
         {kycData.length >= 1 ? (
           <div>
+            <SearchContainer>
+              <CurrentPageCard pageNumber={currentPage} />
+              <SearchInputContainer>
+                <SearchInput
+                  backgroundColor={colors.white}
+                  name='SearchValue'
+                  value={searchValue}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    if (e.target.value.length === 0) {
+                      setIsSearching(!isSearching);
+                    }
+                    setSearchValue(e.target.value);
+                  }}
+                  placeholder='Search Records'
+                />
+                <div style={{ marginLeft: spacing.xsmall }}>
+                  <BorderedText
+                    color={colors.white}
+                    backgroundColor={colors.primary}
+                    text='Search'
+                    onClick={() => setIsSearching(!isSearching)}
+                  />
+                </div>
+              </SearchInputContainer>
+            </SearchContainer>
             <div>
               <KycUserTable
                 setSelectedItem={setSelectedKycTable}
@@ -395,7 +400,6 @@ function Kyc() {
           </div>
         )}
 
-        <div onClick={() => setBusinessAddressIsModalVisible(true)}>open</div>
         <BusinessAddressVerificationModal
           isLoading={
             kycCustomerStatus === "loading" ||

@@ -39,7 +39,7 @@ function RejectionActionModal({
               marginTop: spacing.xsmall,
               marginBottom: spacing.small,
             }}>
-            <img width={50} height={50} src={image} alt='loading...' />
+            <img width={50} height={50} src={image} alt='icon' />
           </div>
 
           <H2
@@ -53,6 +53,7 @@ function RejectionActionModal({
             selectedValue={rejectionValue}
             placeholder='Select options'
             options={rejectionList}
+            width={"250px"}
           />
 
           <div style={{ width: 140 }}>

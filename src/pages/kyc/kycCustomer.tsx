@@ -488,7 +488,10 @@ function KycCustomer() {
         />
         <RejectionActionModal
           actionClick={handleRejectVerification}
-          closeModal={() => setRejectionIsModalVisible(false)}
+          closeModal={() => {
+            setRejectionIsModalVisible(false);
+            setIsModalVisible(false);
+          }}
           isModalVisible={rejectionIsModalVisible}
           title={`Select Rejection Reason`}
           actionText='Submit'

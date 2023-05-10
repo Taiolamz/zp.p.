@@ -55,7 +55,7 @@ function ActivityActionModal({
               width: "100%",
               marginTop: spacing.small,
             }}>
-            <BtnContainer />
+            {/* <BtnContainer /> */}
 
             <BtnContainer>
               <Button text={actionText} onClick={actionClick} />
