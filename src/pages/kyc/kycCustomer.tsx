@@ -395,7 +395,8 @@ function KycCustomer() {
     dispatch(
       kycVerificationRequest({
         verificationId: userVerificationId,
-        status: "reject",
+        status: "rejected",
+        comment: rejectionReason,
       })
     );
   };
@@ -496,9 +497,23 @@ function KycCustomer() {
           actionText='Submit'
           image={images.reject}
           rejectionList={[
-            { id: 1, value: "Allen", label: "Allen" },
-            { id: 2, value: "Kardic", label: "Kardic" },
-            { id: 3, value: "James", label: "James" },
+            { id: 1, value: "Blurry Image", label: "Blurry Image" },
+            {
+              id: 2,
+              value: "Selfie is different from BVN Image",
+              label: "Selfie is different from BVN Image",
+            },
+            {
+              id: 3,
+              value: "Poor Background lightening",
+              label: "Poor Background lightening",
+            },
+            {
+              id: 4,
+              value: "Image not fully captured",
+              label: "Image not fully captured",
+            },
+            { id: 5, value: "Invalid Image", label: "Invalid Image" },
           ]}
           rejectionValue={setRejectionReason}
           isLoading={kycVerificationStatus === "loading"}

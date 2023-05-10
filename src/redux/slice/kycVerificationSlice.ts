@@ -19,9 +19,17 @@ const initialState = {
 export const kycVerificationRequest = createAsyncThunk(
   "kycVerification",
   async (payload: Dictionary, { dispatch }) => {
-    const { verificationId, status } = payload;
+    const { verificationId, status, comment } = payload;
     const url = `admin/verifications/${verificationId}`;
-    const verificationStatus = { status };
+    let verificationStatus;
+
+    if (status === "approved") {
+      verificationStatus = { status };
+    }
+    if (status === "rejected") {
+      verificationStatus = { status, comment };
+    }
+
     try {
       const response = await api.patch(url, verificationStatus);
       return response?.data;
