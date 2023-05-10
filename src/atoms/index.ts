@@ -15,5 +15,6 @@ export { default as KycCustomerView } from "./kycCustomerView";
 export { default as ActivityActionModal } from "./activityActionModal";
 export { default as RejectionActionModal } from "./rejectionActionModal";
 export { default as TabViewUsers } from "./tabViewUsers";
+export { default as BusinessAddressVerificationModal } from "./businessAddressVerificationModal";
 export { default as UserSupportActivity } from "./userSupportActivity";
 

@@ -28,11 +28,6 @@ import { Dictionary } from "../../types";
 
 const { KYC } = routesPath;
 
-const tabViewData = [
-  { id: 1, isSelected: true, text: "Verified Users" },
-  { id: 2, isSelected: false, text: "Pending Verifications" },
-];
-
 interface IPropsCard {
   text: string;
   helper: string;
@@ -395,10 +390,13 @@ function KycCustomer() {
     dispatch(
       kycVerificationRequest({
         verificationId: userVerificationId,
-        status: "reject",
+        status: "rejected",
+        comment: rejectionReason,
       })
     );
   };
+
+  // console.log(customerData, "cusr");
 
   return (
     <AppContainer
@@ -490,15 +488,32 @@ function KycCustomer() {
         />
         <RejectionActionModal
           actionClick={handleRejectVerification}
-          closeModal={() => setRejectionIsModalVisible(false)}
+          closeModal={() => {
+            setRejectionIsModalVisible(false);
+            setIsModalVisible(false);
+          }}
           isModalVisible={rejectionIsModalVisible}
           title={`Select Rejection Reason`}
           actionText='Submit'
           image={images.reject}
           rejectionList={[
-            { id: 1, value: "Allen", label: "Allen" },
-            { id: 2, value: "Kardic", label: "Kardic" },
-            { id: 3, value: "James", label: "James" },
+            { id: 1, value: "Blurry Image", label: "Blurry Image" },
+            {
+              id: 2,
+              value: "Selfie is different from BVN Image",
+              label: "Selfie is different from BVN Image",
+            },
+            {
+              id: 3,
+              value: "Poor Background lightening",
+              label: "Poor Background lightening",
+            },
+            {
+              id: 4,
+              value: "Image not fully captured",
+              label: "Image not fully captured",
+            },
+            { id: 5, value: "Invalid Image", label: "Invalid Image" },
           ]}
           rejectionValue={setRejectionReason}
           isLoading={kycVerificationStatus === "loading"}

@@ -23,6 +23,12 @@ export const getKycsRequest = createAsyncThunk(
 
     try {
       const response = await api.get(`${url}${payload.kycLevel}`);
+      // const response = await api.get(`${url}${payload.kycLevel}`, {
+      //   params: {
+      //     per_page: payload.per_page,
+      //     page: payload.page,
+      //   },
+      // });
       return response?.data;
     } catch (err) {
       throw err;

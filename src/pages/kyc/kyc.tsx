@@ -9,7 +9,14 @@ import {
 } from "../../components";
 import { CountInfoCardIProps } from "../../components/cards/countInfoCard";
 import { KycDataTableIPropsIProps } from "../../components/tables/kycUserTable";
-import { AppContainer, CountInfo, TabView, LoaderModal } from "../../atoms";
+import {
+  AppContainer,
+  CountInfo,
+  TabView,
+  LoaderModal,
+  BusinessAddressVerificationModal,
+  ActivityActionModal,
+} from "../../atoms";
 import {
   SearchContainer,
   KYCTabViewContainer,
@@ -22,6 +29,10 @@ import {
   getKycsReset,
   getKycsAnalyticsRequest,
   getKycsAnalyticsReset,
+  kycVerificationRequest,
+  kycVerificationReset,
+  getKycCustomerRequest,
+  getKycCustomerReset,
 } from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
 
@@ -49,29 +60,49 @@ const emptyListCenterStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
+  marginTop: spacing.xlarge,
 };
+
+const kycVerificationBusinessAddressVerification: string =
+  "business address verification";
+
+function getKycVerificationIdFromVerificationList(list: any[]) {
+  let toFilterBy = kycVerificationBusinessAddressVerification;
+
+  const result = list.filter((el) => el?.verification_type === toFilterBy);
+
+  return result.length >= 1 ? result[0].id : "";
+}
+
 function Kyc() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   // states
   const [tabViewSelectedIndex, setTabViewSelectedIndex] =
     useState<any[number]>(1);
-
   const [kycData, setKycData] = useState<any[]>([]);
   const [kycCountList, setKycCountList] = useState<any[]>([]);
   const [selectedKycCard, setSelectedKycCard] = useState<Dictionary>({});
   const [selectedKycTable, setSelectedKycTable] = useState<Dictionary>({});
+  const pageSize = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState("");
   const [totalPages, setTotalPages] = useState(5);
   const [isSearching, setIsSearching] = useState(false);
-
+  const [businessAddressIsModalVisible, setBusinessAddressIsModalVisible] =
+    useState(false);
+  const [userVerificationId, setUserVerificationId] = useState("");
+  const [customerData, setCustomerData] = useState<Dictionary>({});
+  const [successIsModalVisible, setSuccessIsModalVisible] = useState(false);
   // redux state
   const kycsState = useAppSelector((state) => state.getKycs);
   const { status: kycsStatus } = kycsState;
   const kycsAnalyticsState = useAppSelector((state) => state.getKycsAnalytics);
   const { status: kycsAnalyticsStatus } = kycsAnalyticsState;
-
+  const kycCustomerState = useAppSelector((state) => state.getKycCustomer);
+  const { status: kycCustomerStatus } = kycCustomerState;
+  const kycVerificationState = useAppSelector((state) => state.kycVerification);
+  const { status: kycVerificationStatus } = kycVerificationState;
   function determineKycToFetch() {
     let result: Dictionary;
 
@@ -114,9 +145,11 @@ function Kyc() {
     dispatch(
       getKycsRequest({
         kycLevel: `${kycLevel.path}&term=${searchValue}`,
+        per_page: pageSize,
+        page: currentPage,
       })
     );
-  }, [selectedKycCard, tabViewSelectedIndex, isSearching]);
+  }, [selectedKycCard, tabViewSelectedIndex, isSearching, currentPage]);
 
   useEffect(() => {
     if (kycsStatus === "succeeded") {
@@ -133,6 +166,8 @@ function Kyc() {
       });
       setKycData(updateData);
 
+      console.log(updateData, "dd");
+
       const {
         meta: { links },
       } = kycsState?.data?.users;
@@ -148,6 +183,8 @@ function Kyc() {
       })
     );
   }, [tabViewSelectedIndex]);
+
+  console.log(tabViewSelectedIndex, "index");
 
   useEffect(() => {
     if (kycsAnalyticsStatus === "succeeded") {
@@ -201,7 +238,10 @@ function Kyc() {
 
   // Navigate user to kyc doc page when user clicks on a table view button
   useEffect(() => {
-    if (selectedKycTable.hasOwnProperty("id")) {
+    if (
+      selectedKycTable.hasOwnProperty("id") &&
+      selectedKycCard?.title !== "Business Address"
+    ) {
       navigate(`${KYCDOC}${selectedKycTable?.detailsId}`, {
         state: {
           kycLvl: kycLevel?.level,
@@ -210,9 +250,93 @@ function Kyc() {
         },
       });
     }
+
+    if (
+      selectedKycTable.hasOwnProperty("id") &&
+      selectedKycCard?.title === "Business Address"
+    ) {
+      dispatch(
+        getKycCustomerRequest({
+          id: selectedKycTable?.detailsId,
+        })
+      );
+      setBusinessAddressIsModalVisible(true);
+    }
   }, [selectedKycTable]);
 
-  console.log(kycData, "kycData");
+  // reset both kycCustomer api and verification api when the page first loads
+  // useEffect(() => {
+  //   dispatch(kycVerificationReset());
+  //   dispatch(getKycCustomerReset());
+  // }, []);
+
+  useEffect(() => {
+    if (kycCustomerStatus === "succeeded") {
+      const userVerificationIdItem = getKycVerificationIdFromVerificationList(
+        kycCustomerState?.data?.user?.verifications
+      );
+
+      setUserVerificationId(userVerificationIdItem);
+      setCustomerData(kycCustomerState?.data?.user);
+    }
+  }, [kycCustomerState]);
+
+  const businessAddressData = [
+    {
+      id: 1,
+      text: customerData?.name,
+      helper: "Full Name",
+    },
+    {
+      id: 2,
+      text: customerData?.telephone,
+      helper: "Phone Number",
+    },
+    {
+      id: 3,
+      text: customerData?.email,
+      helper: "Email",
+    },
+    {
+      id: 4,
+      text: customerData?.bvn !== null ? customerData?.bvn?.bvn_number : "N/A",
+      helper: "BVN",
+    },
+    {
+      id: 5,
+      text: customerData?.location !== null ? customerData?.location : "N/A",
+      helper: "Residential Address",
+    },
+    {
+      id: 6,
+      text:
+        customerData?.created_at !== null
+          ? new Date(customerData?.created_at).toDateString()
+          : "N/A",
+      helper: "Date Assigned",
+    },
+  ];
+
+  useEffect(() => {
+    if (kycVerificationStatus === "succeeded") {
+      setSuccessIsModalVisible(true);
+    }
+  }, [kycVerificationState]);
+
+  const handleVerifyBusinessAddress = () => {
+    dispatch(
+      kycVerificationRequest({
+        verificationId: userVerificationId,
+        status: "approved",
+      })
+    );
+  };
+
+  const handleKycSuccssModalClose = () => {
+    dispatch(kycVerificationReset());
+    setSuccessIsModalVisible(false);
+    setBusinessAddressIsModalVisible(false);
+  };
 
   return (
     <AppContainer navTitle='KYC'>
@@ -224,33 +348,34 @@ function Kyc() {
           />
         </KYCTabViewContainer>
         <CountInfo data={kycCountList} setSelectedData={setSelectedKycCard} />
-        <SearchContainer>
-          <CurrentPageCard pageNumber={currentPage} />
-          <SearchInputContainer>
-            <SearchInput
-              backgroundColor={colors.white}
-              name='SearchValue'
-              value={searchValue}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                if (e.target.value.length === 0) {
-                  setIsSearching(!isSearching);
-                }
-                setSearchValue(e.target.value);
-              }}
-              placeholder='Search Records'
-            />
-            <div style={{ marginLeft: spacing.xsmall }}>
-              <BorderedText
-                color={colors.white}
-                backgroundColor={colors.primary}
-                text='Search'
-                onClick={() => setIsSearching(!isSearching)}
-              />
-            </div>
-          </SearchInputContainer>
-        </SearchContainer>
+
         {kycData.length >= 1 ? (
           <div>
+            <SearchContainer>
+              <CurrentPageCard pageNumber={currentPage} />
+              <SearchInputContainer>
+                <SearchInput
+                  backgroundColor={colors.white}
+                  name='SearchValue'
+                  value={searchValue}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    if (e.target.value.length === 0) {
+                      setIsSearching(!isSearching);
+                    }
+                    setSearchValue(e.target.value);
+                  }}
+                  placeholder='Search Records'
+                />
+                <div style={{ marginLeft: spacing.xsmall }}>
+                  <BorderedText
+                    color={colors.white}
+                    backgroundColor={colors.primary}
+                    text='Search'
+                    onClick={() => setIsSearching(!isSearching)}
+                  />
+                </div>
+              </SearchInputContainer>
+            </SearchContainer>
             <div>
               <KycUserTable
                 setSelectedItem={setSelectedKycTable}
@@ -278,6 +403,26 @@ function Kyc() {
             <img src={images.emptyList} alt='Empty container' />
           </div>
         )}
+
+        <BusinessAddressVerificationModal
+          isLoading={
+            kycCustomerStatus === "loading" ||
+            kycVerificationStatus === "loading"
+          }
+          data={businessAddressData}
+          isModalVisible={businessAddressIsModalVisible}
+          onClickVerify={handleVerifyBusinessAddress}
+          closeModal={() => setBusinessAddressIsModalVisible(false)}
+        />
+
+        <ActivityActionModal
+          actionClick={handleKycSuccssModalClose}
+          closeModal={handleKycSuccssModalClose}
+          isModalVisible={successIsModalVisible}
+          text={`You have successfully approved the customer's address`}
+          actionText='Close'
+          image={images.check}
+        />
 
         <LoaderModal
           isModalVisible={

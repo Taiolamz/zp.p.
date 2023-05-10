@@ -13,6 +13,7 @@ interface IProps {
   secondary?: boolean;
   borderColor?: string;
   color?: string;
+  backgroundColor?: string;
 }
 
 function Button({
@@ -24,9 +25,11 @@ function Button({
   disabled = false,
   borderColor,
   color,
+  backgroundColor = colors.primary,
 }: IProps) {
   return (
     <Container
+      backgroundColor={backgroundColor}
       borderColor={borderColor}
       secondary={secondary}
       type={type}
