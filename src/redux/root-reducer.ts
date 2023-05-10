@@ -12,6 +12,10 @@ import {
   getTransactionByIdSliceReducer,
   exportTransactionByIdToMailSliceReducer,
   settlementAnalyticsSliceReducer,
+  getKycsSliceReducer,
+  getKycsAnalyticsSliceReducer,
+  getKycCustomerSliceReducer,
+  kycVerificationSliceReducer,
 } from "./slice";
 
 const rootReducer = combineReducers({
@@ -27,6 +31,10 @@ const rootReducer = combineReducers({
   getTransactionById: getTransactionByIdSliceReducer,
   exportTransactionByIdToMail: exportTransactionByIdToMailSliceReducer,
   settlementAnalytics: settlementAnalyticsSliceReducer,
+  getKycs: getKycsSliceReducer,
+  getKycsAnalytics: getKycsAnalyticsSliceReducer,
+  getKycCustomer: getKycCustomerSliceReducer,
+  kycVerification: kycVerificationSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

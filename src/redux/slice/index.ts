@@ -10,3 +10,7 @@ export * from "./createEscalationTicketSlice";
 export * from "./getTransactionByIdSlice";
 export * from "./exportTransactionByIdToMailSlice";
 export * from "./settlementAnalyticsSlice";
+export * from "./getKycsSlice";
+export * from "./getKycsAnalyticsSlice";
+export * from "./getKycCustomerSlice";
+export * from "./kycVerificationSlice";
