@@ -166,6 +166,8 @@ function Kyc() {
       });
       setKycData(updateData);
 
+      console.log(updateData, "dd");
+
       const {
         meta: { links },
       } = kycsState?.data?.users;
@@ -181,6 +183,8 @@ function Kyc() {
       })
     );
   }, [tabViewSelectedIndex]);
+
+  console.log(tabViewSelectedIndex, "index");
 
   useEffect(() => {
     if (kycsAnalyticsStatus === "succeeded") {
