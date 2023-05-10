@@ -28,11 +28,6 @@ import { Dictionary } from "../../types";
 
 const { KYC } = routesPath;
 
-const tabViewData = [
-  { id: 1, isSelected: true, text: "Verified Users" },
-  { id: 2, isSelected: false, text: "Pending Verifications" },
-];
-
 interface IPropsCard {
   text: string;
   helper: string;
@@ -400,6 +395,8 @@ function KycCustomer() {
       })
     );
   };
+
+  // console.log(customerData, "cusr");
 
   return (
     <AppContainer
