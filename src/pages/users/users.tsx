@@ -1,5 +1,10 @@
 import { useState } from 'react';
-import { AppContainer, TabView, TabViewUsers } from '../../atoms';
+import {
+  AppContainer,
+  SupportFunction,
+  TabView,
+  TabViewUsers,
+} from '../../atoms';
 import { colors } from '../../utils';
 import { SearchInput, UsersTable } from '../../components';
 import {
@@ -38,6 +43,44 @@ const usersData = [
     userId: '001234526789',
     walletNo: '2034567584',
     phone: '08142346753',
+  },
+];
+
+const supportFunctionItems = [
+  {
+    id: 1,
+    name: 'Document Status',
+    color: colors.purpleVariantThree,
+  },
+  {
+    id: 2,
+    name: 'Transaction History',
+    color: colors.purpleVariantThree,
+  },
+  {
+    id: 3,
+    name: 'Upload Document',
+    color: colors.purpleVariantThree,
+  },
+  {
+    id: 4,
+    name: 'Document History',
+    color: colors.purpleVariantThree,
+  },
+  {
+    id: 5,
+    name: 'Saved Banks',
+    color: colors.purpleVariantThree,
+  },
+  {
+    id: 6,
+    name: 'Login History',
+    color: colors.purpleVariantThree,
+  },
+  {
+    id: 7,
+    name: 'Reactivate Profile',
+    color: colors.green,
   },
 ];
 
@@ -115,6 +158,7 @@ function Users() {
         )}
         {tabViewUsersSelectedIndex === 2 && ''}
         {tabViewUsersSelectedIndex === 3 && ''}
+        <SupportFunction supportFunctionItems={supportFunctionItems} />
       </UserContainer>
     </AppContainer>
   );
