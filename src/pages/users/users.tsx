@@ -83,6 +83,44 @@ const userDetails: any = [
   },
 ];
 
+const supportFunctionItems = [
+  {
+    id: 1,
+    name: 'Document Status',
+    color: colors.purpleVariantThree,
+  },
+  {
+    id: 2,
+    name: 'Transaction History',
+    color: colors.purpleVariantThree,
+  },
+  {
+    id: 3,
+    name: 'Upload Document',
+    color: colors.purpleVariantThree,
+  },
+  {
+    id: 4,
+    name: 'Document History',
+    color: colors.purpleVariantThree,
+  },
+  {
+    id: 5,
+    name: 'Saved Banks',
+    color: colors.purpleVariantThree,
+  },
+  {
+    id: 6,
+    name: 'Login History',
+    color: colors.purpleVariantThree,
+  },
+  {
+    id: 7,
+    name: 'Reactivate Profile',
+    color: colors.green,
+  },
+];
+
 type Dictionary = {
   [key: string]: any;
 };

@@ -40,7 +40,7 @@ function TransactionTable({
         </thead>
 
         {type === 'transactions' && (
-          <>
+          <tbody>
             {data.map((item: any, index: number) => (
               <TR key={index}>
                 <TD>{item.id}</TD>
@@ -63,7 +63,7 @@ function TransactionTable({
                 </TD>
               </TR>
             ))}
-          </>
+          </tbody>
         )}
 
         {type === 'billHistory' && (

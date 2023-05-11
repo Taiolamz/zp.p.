@@ -15,12 +15,12 @@ export const Container = styled.div`
   }
   @media (max-width: 480px) {
     width: 300px;
-  } ;
+  }
 `;
 
 export const BtnContainer = styled.div`
-  width: 100%;
+  width: 60%;
   flexgrow: 1;
-  marginleft: auto;
-  marginright: auto;
+  margin-left: auto;
+  margin-right: auto;
 `;
