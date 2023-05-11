@@ -26,3 +26,4 @@ export { default as ReconcialiationCard } from './cards/reconcialiationCard';
 export { default as TransactionTable } from './tables/transactionTable';
 export { default as UsersTable } from './tables/usersTable';
 export { default as CustomerProfile } from './customerProfile/';
+export { default as DocumentStatusTable } from './tables/documentStatusTable';
