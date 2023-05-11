@@ -7,9 +7,13 @@ export const Container = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 400px;
+  width: 40.688rem;
   margin-left: auto;
   margin-right: auto;
+  @media (max-width: 700px) {
+    width: 500px;
+    height: 500px;
+  }
   @media (max-width: 576px) {
     width: 300px;
   }

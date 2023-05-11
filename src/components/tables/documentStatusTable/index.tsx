@@ -1,6 +1,4 @@
 import { TableTag, TD, TH, TR, TableContainer, TDStatus } from './style';
-import { TransactionCard, MoreIcon } from '../..';
-import { colors, currencyFormat, dateFormat } from '../../../utils';
 
 export interface TableIPropsIProps {
   type: string;
@@ -18,13 +16,6 @@ function DocumentStatusTable({
   type,
   onClick,
 }: any) {
-  const handleOnSelect = (item: any) => {
-    setSelectedItem(item);
-    onClick(item);
-    // setMoreIsVisible(true);
-  };
-
-  console.log(data);
   return (
     <TableContainer>
       <TableTag>
@@ -36,9 +27,9 @@ function DocumentStatusTable({
           </tr>
         </thead>
 
-        <>
+        <tbody>
           {data.map((item: any, index: number) => (
-            <TR key={index}>
+            <TR key={item.id}>
               <TD>{item.document}</TD>
               <TD>{item.noOfUpload}</TD>
               <TD>
@@ -52,7 +43,7 @@ function DocumentStatusTable({
               </TD>
             </TR>
           ))}
-        </>
+        </tbody>
       </TableTag>
     </TableContainer>
   );

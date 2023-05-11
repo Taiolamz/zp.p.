@@ -1,7 +1,7 @@
-import { memo } from "react";
-import { Container } from "./style";
-import { H4 } from "../../styles";
-import { colors } from "../../utils";
+import { memo } from 'react';
+import { Container } from './style';
+import { H4 } from '../../styles';
+import { colors } from '../../utils';
 
 export interface TabIProps {
   id?: number;
@@ -36,12 +36,12 @@ function Tab({
         style={{
           borderBottomColor: isSelected
             ? colors.purpleVariantThree
-            : "transparent",
-          borderBottomStyle: isSelected ? "solid" : "none",
+            : 'transparent',
+          borderBottomStyle: isSelected ? 'solid' : 'none',
           borderBottomWidth: isSelected ? 2 : 0,
         }}
         semiBold
-        color={type === "user" ? colorUser : colorSettle}
+        color={type === 'user' ? colorUser : colorSettle}
       >
         {text}
       </H4>

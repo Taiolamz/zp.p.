@@ -17,3 +17,5 @@ export { default as RejectionActionModal } from './rejectionActionModal';
 export { default as TabViewUsers } from './tabViewUsers';
 export { default as UserSupportActivity } from './userSupportActivity';
 export { default as DocumentStatusModal } from './documentStatusModal';
+export { default as LoginHistoryModal } from './loginHistoryModal';
+export { default as TabViewLoginHistory } from './tabViewLoginHistory';
