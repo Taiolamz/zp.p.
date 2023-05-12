@@ -289,3 +289,75 @@ export const loginHistoryDataHeader2 = {
   staffName: 'Staff Name',
   machineName: 'Machine Name',
 };
+
+export const userCountData = [
+  {
+    id: 1,
+    count: 3,
+    title: 'Active Users',
+  },
+  {
+    id: 2,
+    count: 3,
+    title: 'Super Agents',
+  },
+  {
+    id: 3,
+    count: 3,
+    title: 'Inactive Users',
+  },
+];
+
+export const usersDataLastSeen = [
+  {
+    id: 1,
+    name: 'Fola Debo',
+    userId: '001234526789',
+    walletNo: '2034567584',
+    phone: '08142346753',
+    lastSeen: '12/22/2021',
+  },
+  {
+    id: 2,
+    name: 'Fola Debo',
+    userId: '001234526789',
+    walletNo: '2034567584',
+    phone: '08142346753',
+    lastSeen: '12/22/2021',
+  },
+  {
+    id: 3,
+    name: 'Fola Debo',
+    userId: '001234526789',
+    walletNo: '2034567584',
+    phone: '08142346753',
+    lastSeen: '12/22/2021',
+  },
+];
+
+export const usersDataSuperAgent = [
+  {
+    id: 1,
+    name: 'Fola Debo',
+    userId: '001234526789',
+    walletNo: '2034567584',
+    phone: '08142346753',
+    subAgents: 12,
+  },
+  {
+    id: 2,
+    name: 'Fola Debo',
+    userId: '001234526789',
+    walletNo: '2034567584',
+    phone: '08142346753',
+    subAgents: 12,
+  },
+  {
+    id: 3,
+    name: 'Fola Debo',
+    userId: '001234526789',
+    walletNo: '2034567584',
+    phone: '08142346753',
+    subAgents: 12,
+  },
+];

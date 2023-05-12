@@ -36,7 +36,7 @@ export const UserProfileContainer = styled.div`
 `;
 
 export const UsersContainer = styled.div`
-  margin-top: ${spacing.large};
+  margin-top: ${spacing.small};
   @media (max-width: 768px) {
     /* grid-template-columns: 100% 100%; */
   }
@@ -45,6 +45,7 @@ export const UsersContainer = styled.div`
 export const SearchContainer = styled.div`
   max-width: 16.313em;
   margin-bottom: ${spacing.large};
+  margin-top: ${spacing.large};
 `;
 
 export const TableContainer = styled.div`

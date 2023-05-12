@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { spacing } from "../../utils";
+import styled from 'styled-components';
+import { spacing } from '../../utils';
 
 interface StyleProps {
   isSelected?: boolean;
