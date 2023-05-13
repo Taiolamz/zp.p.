@@ -36,7 +36,7 @@ function TabView({
 
   useLayoutEffect(() => {
     setDataList(data);
-  }, []);
+  }, [data]);
 
   return (
     <>
