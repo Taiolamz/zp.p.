@@ -47,9 +47,10 @@ export const TR = styled.tr`
 `;
 
 export const ViewContent = styled.div`
-  padding: ${spacing.xxsmall} ${spacing.xsmall};
+  padding: ${spacing.xxsmall} ${spacing.xxsmall};
   border-radius: ${borderRadius.small};
   background-color: ${colors.primary};
+  cursor: pointer;
   @media (max-width: 768px) {
     // padding: ${spacing.xsmall};
   }
