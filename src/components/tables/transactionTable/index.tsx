@@ -1,6 +1,6 @@
-import { TableTag, TD, TH, TR, TableContainer } from "./style";
-import { TransactionCard, MoreIcon } from "../..";
-import { colors, currencyFormat, dateFormat } from "../../../utils";
+import { TableTag, TD, TH, TR, TableContainer } from './style';
+import { TransactionCard, MoreIcon } from '../..';
+import { colors, currencyFormat, dateFormat } from '../../../utils';
 
 export interface TableIPropsIProps {
   type: string;
@@ -39,7 +39,7 @@ function TransactionTable({
           </tr>
         </thead>
 
-        {type === "transactions" && (
+        {type === 'transactions' && (
           <tbody>
             {data.map((item: any, index: number) => (
               <TR key={index}>
@@ -50,11 +50,12 @@ function TransactionTable({
                 <TD>{item.type}</TD>
                 <TD
                   color={
-                    item.status === "success"
+                    item.status === 'success'
                       ? colors.greenVariantTwo
                       : colors.red
-                  }>
-                  {item.status === "success" ? "Successful" : "Unseccessful"}
+                  }
+                >
+                  {item.status === 'success' ? 'Successful' : 'Unseccessful'}
                 </TD>
                 <TD>{dateFormat(item.time)}</TD>
                 <TD>
@@ -65,7 +66,7 @@ function TransactionTable({
           </tbody>
         )}
 
-        {type === "billHistory" && (
+        {type === 'billHistory' && (
           <div>
             {data.map((item: any) => (
               <TransactionCard

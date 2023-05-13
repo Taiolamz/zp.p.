@@ -1,6 +1,6 @@
-import { BorderedText } from "../../components";
-import { colors } from "../../utils";
-import { Container } from "./style";
+import { BorderedText } from '../../components';
+import { colors } from '../../utils';
+import { Container } from './style';
 
 export interface UserSupportActivityIProps {
   id: number;
@@ -12,16 +12,19 @@ export interface UserSupportActivitiesIProps {
   data: UserSupportActivityIProps[];
   onClick?: () => void;
   setSelectedItem: any;
+  openModal?: any;
 }
 
 const UserSupportActivity = ({
   data,
   onClick,
   setSelectedItem,
+  openModal,
 }: UserSupportActivitiesIProps) => {
   const handleSelectedItem = (item: UserSupportActivityIProps) => {
-    console.log("item");
+    console.log('item');
     setSelectedItem(item);
+    openModal(true);
   };
   return (
     <Container>

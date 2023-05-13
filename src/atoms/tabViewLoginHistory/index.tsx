@@ -1,6 +1,6 @@
-import { useState, useLayoutEffect } from 'react';
+import { useState } from 'react';
 import { Container } from './style';
-import { Tab } from '../../components';
+import { TabButton } from '../../components';
 import { TabIProps } from '../../components/tab';
 
 export interface TabViewIPropsIProps {
@@ -11,14 +11,15 @@ export interface TabViewIPropsIProps {
   tabViewSelectedIndex?: number;
 }
 
-function TabView({
+function TabViewLoginHistory({
   data,
   backgroundColor,
   setSelectedIndex,
   tabViewSelectedIndex,
   type,
 }: TabViewIPropsIProps) {
-  const [dataList, setDataList] = useState<any[]>([]);
+  const [dataList, setDataList] = useState(data);
+
   const handleOnSelect = (item: TabIProps) => {
     const itemToEdit = item;
     const updatedData: TabIProps[] = [...dataList].map((el: TabIProps) => {
@@ -34,16 +35,12 @@ function TabView({
     setSelectedIndex(itemToEdit.id);
   };
 
-  useLayoutEffect(() => {
-    setDataList(data);
-  }, []);
-
   return (
     <>
       <div style={{ display: 'flex' }}>
         <Container backgroundColor={backgroundColor}>
           {dataList.map((item: TabIProps) => (
-            <Tab
+            <TabButton
               onClick={() => handleOnSelect(item)}
               key={item.id}
               isSelected={item.isSelected}
@@ -59,4 +56,4 @@ function TabView({
   );
 }
 
-export default TabView;
+export default TabViewLoginHistory;
