@@ -22,7 +22,6 @@ export const getKycsRequest = createAsyncThunk(
     const url = `admin/kycs`;
 
     try {
-      // const response = await api.get(`${url}${payload.kycLevel}`);
       const response = await api.get(`${url}${payload.kycLevel}`, {
         params: {
           per_page: payload.per_page,

@@ -158,7 +158,7 @@ function Kyc() {
       kycsState.data.users.data.forEach((item: Dictionary, index: number) => {
         updateData.push({
           id: index + 1,
-          userName: `${item?.bvn?.first_name} ${item?.bvn?.last_name}`,
+          userName: `${item?.name}`,
           bvn: item?.bvn?.bvn_number ? ` ${item?.bvn?.bvn_number}` : "N/A",
           phoneNo: item?.telephone,
           detailsId: item?.id,
@@ -166,15 +166,13 @@ function Kyc() {
       });
       setKycData(updateData);
 
-      console.log(updateData, "dd");
-
       const {
         meta: { links },
       } = kycsState?.data?.users;
 
       setTotalPages(links.length - 2);
     }
-  }, [kycsState]);
+  }, [kycsState, tabViewSelectedIndex]);
 
   useEffect(() => {
     dispatch(
@@ -182,9 +180,10 @@ function Kyc() {
         kycType: tabViewSelectedIndex === 1 ? verifiedUsers : pendingUsers,
       })
     );
+    setCurrentPage(1);
+    setTotalPages(5);
+    setSelectedKycCard({});
   }, [tabViewSelectedIndex]);
-
-  console.log(tabViewSelectedIndex, "index");
 
   useEffect(() => {
     if (kycsAnalyticsStatus === "succeeded") {
@@ -364,7 +363,7 @@ function Kyc() {
                     }
                     setSearchValue(e.target.value);
                   }}
-                  placeholder='Search Records'
+                  placeholder='Name, BVN or Phone number'
                 />
                 <div style={{ marginLeft: spacing.xsmall }}>
                   <BorderedText
