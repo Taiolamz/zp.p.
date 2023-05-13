@@ -1,7 +1,7 @@
-import { useState } from 'react';
-import { Container } from './style';
-import { TabButton } from '../../components';
-import { TabIProps } from '../../components/tab';
+import { useState } from "react";
+import { Container } from "./style";
+import { TabButton } from "../../components";
+import { TabIProps } from "../../components/tab";
 
 export interface TabViewIPropsIProps {
   data: TabIProps[];
@@ -37,7 +37,7 @@ function TabViewLoginHistory({
 
   return (
     <>
-      <div style={{ display: 'flex' }}>
+      <div style={{ display: "flex" }}>
         <Container backgroundColor={backgroundColor}>
           {dataList.map((item: TabIProps) => (
             <TabButton

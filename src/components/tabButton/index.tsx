@@ -1,7 +1,7 @@
-import { memo } from 'react';
-import { Container } from './style';
-import { H4 } from '../../styles';
-import { colors } from '../../utils';
+import { memo } from "react";
+import { Container } from "./style";
+import { H4 } from "../../styles";
+import { colors } from "../../utils";
 
 export interface TabIProps {
   id?: number;
@@ -26,13 +26,12 @@ function TabButton({
   return (
     <Container
       style={{
-        backgroundColor: isSelected ? colors.purpleVariantThree : 'transparent',
-        border: isSelected ? '1px solid rgba(0, 0, 0, 0.2)' : '',
+        backgroundColor: isSelected ? colors.purpleVariantThree : "transparent",
+        border: isSelected ? "1px solid rgba(0, 0, 0, 0.2)" : "",
       }}
       isSelected
       paddingRight={paddingRight}
-      onClick={onClick}
-    >
+      onClick={onClick}>
       <H4 semiBold color={color}>
         {text}
       </H4>

@@ -1,4 +1,4 @@
-import { TableTag, TD, TH, TR, TableContainer, TDStatus } from './style';
+import { TableTag, TD, TH, TR, TableContainer, TDStatus } from "./style";
 
 export interface TableIPropsIProps {
   type: string;
@@ -36,8 +36,7 @@ function DocumentStatusTable({
                 <TDStatus
                   style={{
                     backgroundColor: item.statusBG,
-                  }}
-                >
+                  }}>
                   {item.status}
                 </TDStatus>
               </TD>

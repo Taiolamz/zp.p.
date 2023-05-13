@@ -1,125 +1,125 @@
-import { useState, useEffect } from 'react';
-import { AppContainer, CountInfo, TabView, TabViewUsers } from '../../atoms';
-import { colors, routesPath } from '../../utils';
-import { SearchInput, UsersTable } from '../../components';
+import { useState, useEffect } from "react";
+import { AppContainer, CountInfo, TabView, TabViewUsers } from "../../atoms";
+import { colors, routesPath } from "../../utils";
+import { SearchInput, UsersTable } from "../../components";
 import {
   SearchContainer,
   TableContainer,
   UserContainer,
   UsersContainer,
-} from './style';
-import { useNavigate } from 'react-router-dom';
-import { userCountData, usersDataLastSeen, usersDataSuperAgent } from './data';
+} from "./style";
+import { useNavigate } from "react-router-dom";
+import { userCountData, usersDataLastSeen, usersDataSuperAgent } from "./data";
 const { USERDETAILS } = routesPath;
 
 const userDataHeader = {
-  id: '',
-  name: 'Name',
-  userId: 'User ID',
-  walletNo: 'Wallet No',
-  phone: 'Phone No',
-  lastSeen: 'Last Seen',
-  subAgents: 'Sub Agents',
+  id: "",
+  name: "Name",
+  userId: "User ID",
+  walletNo: "Wallet No",
+  phone: "Phone No",
+  lastSeen: "Last Seen",
+  subAgents: "Sub Agents",
 };
 
 const usersData = [
   {
     id: 1,
-    name: 'Fola Debo',
-    userId: '001234526789',
-    walletNo: '2034567584',
-    phone: '08142346753',
+    name: "Fola Debo",
+    userId: "001234526789",
+    walletNo: "2034567584",
+    phone: "08142346753",
   },
   {
     id: 2,
-    name: 'Fola Debo',
-    userId: '001234526789',
-    walletNo: '2034567584',
-    phone: '08142346753',
+    name: "Fola Debo",
+    userId: "001234526789",
+    walletNo: "2034567584",
+    phone: "08142346753",
   },
   {
     id: 3,
-    name: 'Fola Debo',
-    userId: '001234526789',
-    walletNo: '2034567584',
-    phone: '08142346753',
+    name: "Fola Debo",
+    userId: "001234526789",
+    walletNo: "2034567584",
+    phone: "08142346753",
   },
 ];
 
 const userDetails: any = [
   {
     id: 1,
-    userName: 'Wade Warren',
+    userName: "Wade Warren",
     bvn: 222233434555,
-    phone: '+2348036329178',
+    phone: "+2348036329178",
   },
 
   {
     id: 2,
-    userName: 'Wade Warren',
+    userName: "Wade Warren",
     bvn: 222233434555,
-    phone: '+2348036329178',
+    phone: "+2348036329178",
   },
   {
     id: 3,
-    userName: 'Wade Warren',
+    userName: "Wade Warren",
     bvn: 222233434555,
-    phone: '+2348036329178',
+    phone: "+2348036329178",
   },
   {
     id: 4,
-    userName: 'Wade Warren',
+    userName: "Wade Warren",
     bvn: 222233434555,
-    phone: '+2348036329178',
+    phone: "+2348036329178",
   },
   {
     id: 5,
-    userName: 'Wade Warren',
+    userName: "Wade Warren",
     bvn: 222233434555,
-    phone: '+2348036329178',
+    phone: "+2348036329178",
   },
   {
     id: 6,
-    userName: 'Wade Warren',
+    userName: "Wade Warren",
     bvn: 222233434555,
-    phone: '+2348036329178',
+    phone: "+2348036329178",
   },
 ];
 
 const supportFunctionItems = [
   {
     id: 1,
-    name: 'Document Status',
+    name: "Document Status",
     color: colors.purpleVariantThree,
   },
   {
     id: 2,
-    name: 'Transaction History',
+    name: "Transaction History",
     color: colors.purpleVariantThree,
   },
   {
     id: 3,
-    name: 'Upload Document',
+    name: "Upload Document",
     color: colors.purpleVariantThree,
   },
   {
     id: 4,
-    name: 'Document History',
+    name: "Document History",
     color: colors.purpleVariantThree,
   },
   {
     id: 5,
-    name: 'Saved Banks',
+    name: "Saved Banks",
     color: colors.purpleVariantThree,
   },
   {
     id: 6,
-    name: 'Login History',
+    name: "Login History",
     color: colors.purpleVariantThree,
   },
   {
     id: 7,
-    name: 'Reactivate Profile',
+    name: "Reactivate Profile",
     color: colors.green,
   },
 ];
@@ -132,13 +132,13 @@ function Users() {
   const navigate = useNavigate();
 
   const tabViewUsersData = [
-    { id: 1, isSelected: true, text: 'Customers' },
-    { id: 2, isSelected: false, text: 'Internal Users' },
-    { id: 3, isSelected: false, text: 'Roles and permission' },
+    { id: 1, isSelected: true, text: "Customers" },
+    { id: 2, isSelected: false, text: "Internal Users" },
+    { id: 3, isSelected: false, text: "Roles and permission" },
   ];
   const tabViewData = [
-    { id: 1, isSelected: true, text: 'Active Users' },
-    { id: 2, isSelected: false, text: 'Inactive Users' },
+    { id: 1, isSelected: true, text: "Active Users" },
+    { id: 2, isSelected: false, text: "Inactive Users" },
   ];
 
   const [usersCountList, setUsersCountList] = useState<any[]>([]);
@@ -151,7 +151,7 @@ function Users() {
     setTabViewUserActivitySelectedIndex,
   ] = useState<any[number]>(1);
   const [moreIsVisible, setMoreIsVisible] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     setSelectedUsersCard(userCountData[0]);
@@ -173,7 +173,7 @@ function Users() {
             <SearchContainer>
               <SearchInput
                 placeholder='Search User name, Phone number, wallet ID'
-                backgroundColor={'transparent'}
+                backgroundColor={"transparent"}
                 name='SearchValue'
                 value={searchValue}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -220,8 +220,8 @@ function Users() {
             </TableContainer>
           </UsersContainer>
         )}
-        {tabViewUsersSelectedIndex === 2 && ''}
-        {tabViewUsersSelectedIndex === 3 && ''}
+        {tabViewUsersSelectedIndex === 2 && ""}
+        {tabViewUsersSelectedIndex === 3 && ""}
       </UserContainer>
     </AppContainer>
   );
