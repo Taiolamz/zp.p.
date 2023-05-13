@@ -16,6 +16,7 @@ export const Container = styled.div`
   height: 100%;
   padding: ${spacing.small} ${spacing.small};
   cursor: pointer;
+  width: 100%;
   @media (max-width: 768px) {
     padding: ${spacing.xsmall};
   }
