@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContainer, CountInfo, TabView, TabViewUsers } from "../../atoms";
 import { colors, routesPath } from "../../utils";
-import { SearchInput, UsersTable } from "../../components";
+import { SearchInput, UsersTable, Pagination } from "../../components";
 import {
   SearchContainer,
   TableContainer,
@@ -69,7 +69,9 @@ function Users() {
   const [userCountData, setUserCountData] = useState<any[]>([]);
   const [usersData, setUsersData] = useState<any[]>([]);
   const [usersDataSuperAgent, setUsersDataSuperAgent] = useState<any[]>([]);
-
+  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(5);
   // redux state
   const usersState = useAppSelector((state) => state.getUsers);
   const { status: usersStatus } = usersState;
@@ -85,9 +87,11 @@ function Users() {
     dispatch(
       getUsersRequest({
         path: `/sort-by-status?status=${userTypeToFetch}`,
+        per_page: pageSize,
+        page: currentPage,
       })
     );
-  }, [selectedUsersCard]);
+  }, [selectedUsersCard, currentPage]);
 
   useEffect(() => {
     if (usersStatus === "succeeded") {
@@ -129,6 +133,12 @@ function Users() {
 
       setUserCountData(userCountResult);
       setUsersData(updateUsersData);
+
+      const {
+        meta: { links },
+      } = usersState?.data?.users;
+
+      setTotalPages(links.length - 2);
     }
   }, [usersState]);
 
@@ -158,8 +168,6 @@ function Users() {
       setUsersDataSuperAgent(updateUsersData);
     }
   }, [superAgentsState]);
-
-  console.log(selectedUsersCard, "super agent state");
 
   return (
     <AppContainer navTitle='USER'>
@@ -218,6 +226,14 @@ function Users() {
                   type='inactive'
                 />
               )}
+
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={(selectedPage) => {
+                  setCurrentPage(selectedPage);
+                }}
+              />
             </TableContainer>
           </UsersContainer>
         )}
