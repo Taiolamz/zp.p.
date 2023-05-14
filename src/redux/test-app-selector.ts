@@ -14,6 +14,8 @@ import {
   getKycsAnalyticsSliceReducer,
   getKycCustomerSliceReducer,
   kycVerificationSliceReducer,
+  getSuperAgentsSliceReducer,
+  getUsersSliceReducer,
 } from "./slice";
 const state = {
   login: loginSliceReducer,
@@ -31,6 +33,8 @@ const state = {
   getKycsAnalytics: getKycsAnalyticsSliceReducer,
   getKycCustomer: getKycCustomerSliceReducer,
   kycVerification: kycVerificationSliceReducer,
+  getSuperAgents: getSuperAgentsSliceReducer,
+  getUsers: getUsersSliceReducer,
 };
 
 export const testAppSelector = (f: any) => f(state);

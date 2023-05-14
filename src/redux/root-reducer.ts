@@ -16,6 +16,8 @@ import {
   getKycsAnalyticsSliceReducer,
   getKycCustomerSliceReducer,
   kycVerificationSliceReducer,
+  getSuperAgentsSliceReducer,
+  getUsersSliceReducer,
 } from "./slice";
 
 const rootReducer = combineReducers({
@@ -35,6 +37,8 @@ const rootReducer = combineReducers({
   getKycsAnalytics: getKycsAnalyticsSliceReducer,
   getKycCustomer: getKycCustomerSliceReducer,
   kycVerification: kycVerificationSliceReducer,
+  getSuperAgents: getSuperAgentsSliceReducer,
+  getUsers: getUsersSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -14,3 +14,5 @@ export * from "./getKycsSlice";
 export * from "./getKycsAnalyticsSlice";
 export * from "./getKycCustomerSlice";
 export * from "./kycVerificationSlice";
+export * from "./getSuperAgentsSlice";
+export * from "./getUsersSlice";
