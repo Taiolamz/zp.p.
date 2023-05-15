@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { AppContainer, CountInfo, TabView, TabViewUsers } from "../../atoms";
+import {
+  AppContainer,
+  CountInfo,
+  TabView,
+  TabViewUsers,
+  LoaderModal,
+} from "../../atoms";
 import { colors, routesPath } from "../../utils";
 import { SearchInput, UsersTable, Pagination } from "../../components";
 import {
@@ -172,10 +178,6 @@ function Users() {
   return (
     <AppContainer navTitle='USER'>
       <UserContainer>
-        {/* <TabViewUsers
-          data={tabViewUsersData}
-          setSelectedIndex={setTabViewUsersSelectedIndex}
-        /> */}
         <TabView
           data={tabViewUsersData}
           setSelectedIndex={setTabViewUsersSelectedIndex}
@@ -239,6 +241,14 @@ function Users() {
         )}
         {tabViewUsersSelectedIndex === 2 && ""}
         {tabViewUsersSelectedIndex === 3 && ""}
+
+        <LoaderModal
+          text='Please wait loading ...'
+          isModalVisible={
+            superAgentsStatus === "loading" || usersStatus === "loading"
+          }
+          closeModal={() => {}}
+        />
       </UserContainer>
     </AppContainer>
   );
