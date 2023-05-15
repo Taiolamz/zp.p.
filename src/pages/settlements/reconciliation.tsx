@@ -35,7 +35,7 @@ import {
   spacing,
   yearDateFormat,
   routesPath,
-  formatAMPM,
+  timeFormat,
   showMessage,
 } from "../../utils";
 import {
@@ -228,7 +228,7 @@ function Reconciliation() {
           },
           {
             id: 7,
-            text: formatAMPM(created_at),
+            text: timeFormat(created_at, true),
             helper: "Time",
           },
           {
@@ -238,8 +238,6 @@ function Reconciliation() {
           },
         ],
       };
-
-      console.log(result, "result");
 
       setTransactionByIdData(result);
     }

@@ -25,7 +25,7 @@ export const dateTimeFormat = (text: string) => {
   return datestring;
 };
 
-export function formatAMPM(date: string) {
+export function timeFormat(date: string, pmAm: boolean = false) {
   const d = new Date(date);
   let hours = d.getHours();
   let minutes: any = d.getMinutes();
@@ -36,8 +36,9 @@ export function formatAMPM(date: string) {
   minutes = minutes < 10 ? `0${minutes}` : minutes;
 
   const strTime = `${hours}:${minutes} ${ampm}`;
+  const noAmPmstrTime = `${hours}:${minutes}`;
 
-  return strTime;
+  return pmAm ? strTime : noAmPmstrTime;
 }
 
 // export default dateFormat;
