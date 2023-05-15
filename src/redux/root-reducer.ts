@@ -20,6 +20,8 @@ import {
   getUsersSliceReducer,
   getUserProfileSliceReducer,
   getUserVerificationsSliceReducer,
+  getProfileViewHistorySliceReducer,
+  getLoginHistorySliceReducer,
 } from "./slice";
 
 const rootReducer = combineReducers({
@@ -43,6 +45,8 @@ const rootReducer = combineReducers({
   getUsers: getUsersSliceReducer,
   getUserProfile: getUserProfileSliceReducer,
   getUserVerifications: getUserVerificationsSliceReducer,
+  getProfileViewHistory: getProfileViewHistorySliceReducer,
+  getLoginHistory: getLoginHistorySliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

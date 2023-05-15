@@ -10,8 +10,6 @@ import {
 } from "../../atoms";
 import {
   documentStatusDataHeader,
-  loginHistory,
-  loginHistory2,
   loginHistoryDataHeader1,
   loginHistoryDataHeader2,
   supportActivitiesData,
@@ -22,6 +20,7 @@ import {
   routesPath,
   dateFormat,
   capitalizeFirstLetter,
+  timeFormat,
 } from "../../utils";
 import {
   UsersDetailContainer,
@@ -35,10 +34,15 @@ import {
   getUserProfileReset,
   getUserVerificationsRequest,
   getUserVerificationsReset,
+  getProfileViewHistoryRequest,
+  getProfileViewHistoryReset,
+  getLoginHistoryRequest,
+  getLoginHistoryReset,
 } from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
 import { CustomerProfileIProps } from "../../components/customerProfile";
 import { DocumentStatusIProps } from "../../atoms/documentStatusModal";
+import { LoginHistoryIProps } from "../../components/tables/loginHistoryTable";
 import { Dictionary } from "../../types";
 
 const { USERS } = routesPath;
@@ -69,6 +73,10 @@ function UserDetails() {
   const [toggleClicked, setToggleClicked] = useState(false);
   const [firstMount, setFirstMount] = useState(false);
   const [docStatus, setDocStatus] = useState<DocumentStatusIProps[]>([]);
+  const [loginHistoryData, setLoginHistoryData] = useState<any[]>([]);
+  const [profileViewData, setProfileViewData] = useState<LoginHistoryIProps[]>(
+    []
+  );
   // redux state
   const userProfileState = useAppSelector((state) => state.getUserProfile);
   const { status: userProfileStatus } = userProfileState;
@@ -77,6 +85,14 @@ function UserDetails() {
     (state) => state.getUserVerifications
   );
   const { status: userVerificationsStatus } = userVerificationsState;
+
+  const profileViewHistoryState = useAppSelector(
+    (state) => state.getProfileViewHistory
+  );
+  const { status: profileViewHistoryStatus } = profileViewHistoryState;
+
+  const loginHistoryState = useAppSelector((state) => state.getLoginHistory);
+  const { status: loginHistoryStatus } = loginHistoryState;
 
   useLayoutEffect(() => {
     setFirstMount(true);
@@ -118,6 +134,8 @@ function UserDetails() {
         selectedUserActivity.id === 6
       ) {
         setLoginHistoryIsModalVisible(true);
+        dispatch(getProfileViewHistoryRequest({ userId }));
+        dispatch(getLoginHistoryRequest({ userId }));
       }
     }
   }, [selectedUserActivity, toggleClicked]);
@@ -327,6 +345,50 @@ function UserDetails() {
     setDocStatus(result);
   }, [userVerificationsState]);
 
+  useEffect(() => {
+    let resultProfile: any[] = [];
+
+    if (profileViewHistoryStatus === "succeeded") {
+      profileViewHistoryState?.data?.profile_view?.data?.forEach(
+        (el: Dictionary, index: number) => {
+          resultProfile.push({
+            id: index + 1,
+            time: `${dateFormat(el?.updated_at)} - ${timeFormat(
+              el?.updated_at
+            )}`,
+            staffName: el?.admin_name,
+            machineName: el?.device?.userAgent,
+          });
+        }
+      );
+
+      setProfileViewData(resultProfile);
+    }
+  }, [profileViewHistoryState]);
+
+  useEffect(() => {
+    let resultLoginHistory: any[] = [];
+    if (loginHistoryStatus === "succeeded") {
+      const {
+        data: { user },
+      } = userProfileState;
+
+      loginHistoryState?.data?.users?.data?.forEach(
+        (el: Dictionary, index: number) => {
+          resultLoginHistory.push({
+            id: index + 1,
+            time: `${dateFormat(el?.login_at)} - ${timeFormat(el?.login_at)}`,
+            device: el?.device_detail === null ? "N/A" : el?.device_detail,
+            location: user?.location === null ? "N/A" : user?.location,
+            ipAddress: el?.device?.userAgent,
+          });
+        }
+      );
+
+      setLoginHistoryData(resultLoginHistory);
+    }
+  }, [loginHistoryState]);
+
   const handleSupportClicked = () => {
     setToggleClicked(!toggleClicked);
   };
@@ -341,15 +403,10 @@ function UserDetails() {
           <UserProfileContainer>
             <CustomerProfile
               data={customerDetails}
-              title='Customer`s Details
-'
+              title='Customer`s Details'
             />
 
-            <CustomerProfile
-              data={appActivity}
-              title='App Activity
-'
-            />
+            <CustomerProfile data={appActivity} title='App Activity' />
           </UserProfileContainer>
 
           <SupportContainer>
@@ -379,10 +436,14 @@ function UserDetails() {
           closeModal={() => setLoginHistoryIsModalVisible(false)}
           isModalVisible={loginHistoryIsModalVisible}
           title='Login History'
-          data={loginHistory}
-          data2={loginHistory2}
+          data={loginHistoryData}
+          data2={profileViewData}
           headerData1={loginHistoryDataHeader1}
           headerData2={loginHistoryDataHeader2}
+          isLoading={
+            loginHistoryStatus === "loading" ||
+            profileViewHistoryStatus === "loading"
+          }
         />
 
         <LoaderModal

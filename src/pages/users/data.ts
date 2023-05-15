@@ -1,8 +1,4 @@
 import { DocumentStatusIProps } from "../../atoms/documentStatusModal";
-import {
-  LoginHistory2IProps,
-  LoginHistoryIProps,
-} from "../../atoms/loginHistoryModal";
 import { UserSupportActivityIProps } from "../../atoms/userSupportActivity";
 import { CustomerProfileIProps } from "../../components/customerProfile";
 import { colors, dateFormat } from "../../utils";
@@ -185,91 +181,91 @@ export const docStatus: DocumentStatusIProps[] = [
   },
 ];
 
-export const loginHistory: LoginHistoryIProps[] = [
-  {
-    id: 1,
-    time: "12/22/2021 - 22:46",
-    device: "Iphone 14 pro max",
-    location: "Lagos, Nigeria",
-    ipAddress: "192.158. 1.38",
-  },
-  {
-    id: 2,
-    time: "12/22/2021 - 22:46",
-    device: "Web",
-    location: "Lagos, Nigeria",
-    ipAddress: "192.158. 1.42",
-  },
-  {
-    id: 3,
-    time: "12/22/2021 - 22:46",
-    device: "Iphone 14 pro max",
-    location: "Lagos, Nigeria",
-    ipAddress: "192.158. 1.38",
-  },
-  {
-    id: 4,
-    time: "12/22/2021 - 22:46",
-    device: "Iphone 14 pro max",
-    location: "Lagos, Nigeria",
-    ipAddress: "192.158. 1.38",
-  },
-  {
-    id: 5,
-    time: "12/22/2021 - 22:46",
-    device: "Iphone 14 pro max",
-    location: "Lagos, Nigeria",
-    ipAddress: "192.158. 1.38",
-  },
+// export const loginHistory: LoginHistoryIProps[] = [
+//   {
+//     id: 1,
+//     time: "12/22/2021 - 22:46",
+//     device: "Iphone 14 pro max",
+//     location: "Lagos, Nigeria",
+//     ipAddress: "192.158. 1.38",
+//   },
+//   {
+//     id: 2,
+//     time: "12/22/2021 - 22:46",
+//     device: "Web",
+//     location: "Lagos, Nigeria",
+//     ipAddress: "192.158. 1.42",
+//   },
+//   {
+//     id: 3,
+//     time: "12/22/2021 - 22:46",
+//     device: "Iphone 14 pro max",
+//     location: "Lagos, Nigeria",
+//     ipAddress: "192.158. 1.38",
+//   },
+//   {
+//     id: 4,
+//     time: "12/22/2021 - 22:46",
+//     device: "Iphone 14 pro max",
+//     location: "Lagos, Nigeria",
+//     ipAddress: "192.158. 1.38",
+//   },
+//   {
+//     id: 5,
+//     time: "12/22/2021 - 22:46",
+//     device: "Iphone 14 pro max",
+//     location: "Lagos, Nigeria",
+//     ipAddress: "192.158. 1.38",
+//   },
 
-  {
-    id: 6,
-    time: "12/22/2021 - 22:46",
-    device: "Iphone 14 pro max",
-    location: "Lagos, Nigeria",
-    ipAddress: "192.158. 1.38",
-  },
-];
+//   {
+//     id: 6,
+//     time: "12/22/2021 - 22:46",
+//     device: "Iphone 14 pro max",
+//     location: "Lagos, Nigeria",
+//     ipAddress: "192.158. 1.38",
+//   },
+// ];
 
-export const loginHistory2: LoginHistory2IProps[] = [
-  {
-    id: 1,
-    time: "12/22/2021 - 22:46",
-    staffName: "Debo Dare",
-    machineName: "AIN723492",
-  },
-  {
-    id: 2,
-    time: "12/22/2021 - 22:46",
-    staffName: "Debo Dare",
-    machineName: "AIN723492",
-  },
-  {
-    id: 3,
-    time: "12/22/2021 - 22:46",
-    staffName: "Debo Dare",
-    machineName: "AIN723492",
-  },
-  {
-    id: 4,
-    time: "12/22/2021 - 22:46",
-    staffName: "Debo Dare",
-    machineName: "AIN723492",
-  },
-  {
-    id: 5,
-    time: "12/22/2021 - 22:46",
-    staffName: "Debo Dare",
-    machineName: "AIN723492",
-  },
+// export const loginHistory2: LoginHistory2IProps[] = [
+//   {
+//     id: 1,
+//     time: "12/22/2021 - 22:46",
+//     staffName: "Debo Dare",
+//     machineName: "AIN723492",
+//   },
+//   {
+//     id: 2,
+//     time: "12/22/2021 - 22:46",
+//     staffName: "Debo Dare",
+//     machineName: "AIN723492",
+//   },
+//   {
+//     id: 3,
+//     time: "12/22/2021 - 22:46",
+//     staffName: "Debo Dare",
+//     machineName: "AIN723492",
+//   },
+//   {
+//     id: 4,
+//     time: "12/22/2021 - 22:46",
+//     staffName: "Debo Dare",
+//     machineName: "AIN723492",
+//   },
+//   {
+//     id: 5,
+//     time: "12/22/2021 - 22:46",
+//     staffName: "Debo Dare",
+//     machineName: "AIN723492",
+//   },
 
-  {
-    id: 6,
-    time: "12/22/2021 - 22:46",
-    staffName: "Debo Dare",
-    machineName: "AIN723492",
-  },
-];
+//   {
+//     id: 6,
+//     time: "12/22/2021 - 22:46",
+//     staffName: "Debo Dare",
+//     machineName: "AIN723492",
+//   },
+// ];
 
 export const documentStatusDataHeader = {
   document: "Document",
