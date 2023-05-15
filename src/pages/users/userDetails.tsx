@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { CustomerProfile } from '../../components';
+import { useState, useEffect } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { CustomerProfile } from "../../components";
 import {
   AppContainer,
   UserSupportActivity,
   DocumentStatusModal,
   LoginHistoryModal,
-} from '../../atoms';
+} from "../../atoms";
 import {
   appActivity,
   customerDetails,
@@ -18,20 +18,23 @@ import {
   loginHistoryDataHeader1,
   loginHistoryDataHeader2,
   supportActivitiesData,
-} from './data';
+} from "./data";
 
-import { colors, routesPath } from '../../utils';
+import { colors, routesPath } from "../../utils";
 import {
   UsersDetailContainer,
   UserProfileContainer,
   SupportContainer,
-} from './style';
-import { H2 } from '../../styles';
+} from "./style";
+import { H2 } from "../../styles";
 
 const { USERS } = routesPath;
 
 function UserDetails() {
   const navigate = useNavigate();
+  let { id } = useParams();
+  console.log(id, "user id one");
+  console.log(id?.trim(), "user id");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const [selectedUserActivity, setSelectedUserActivity] = useState<any>({});
@@ -39,10 +42,10 @@ function UserDetails() {
 
   useEffect(() => {
     if (
-      selectedUserActivity.hasOwnProperty('id') &&
+      selectedUserActivity.hasOwnProperty("id") &&
       selectedUserActivity.id === 1
     ) {
-      console.log('document status');
+      console.log("document status");
       setModal(
         <DocumentStatusModal
           actionClick={() => {}}
@@ -56,31 +59,31 @@ function UserDetails() {
     }
 
     if (
-      selectedUserActivity.hasOwnProperty('id') &&
+      selectedUserActivity.hasOwnProperty("id") &&
       selectedUserActivity.id === 2
     ) {
-      console.log('transaction history');
+      console.log("transaction history");
     }
     if (
-      selectedUserActivity.hasOwnProperty('id') &&
+      selectedUserActivity.hasOwnProperty("id") &&
       selectedUserActivity.id === 3
     ) {
-      console.log('upload doc');
+      console.log("upload doc");
     }
     if (
-      selectedUserActivity.hasOwnProperty('id') &&
+      selectedUserActivity.hasOwnProperty("id") &&
       selectedUserActivity.id === 4
     ) {
-      console.log('document history');
+      console.log("document history");
     }
     if (
-      selectedUserActivity.hasOwnProperty('id') &&
+      selectedUserActivity.hasOwnProperty("id") &&
       selectedUserActivity.id === 5
     ) {
-      console.log('saved banks');
+      console.log("saved banks");
     }
     if (
-      selectedUserActivity.hasOwnProperty('id') &&
+      selectedUserActivity.hasOwnProperty("id") &&
       selectedUserActivity.id === 6
     ) {
       setModal(
@@ -101,8 +104,7 @@ function UserDetails() {
     <AppContainer
       goBack={() => navigate(USERS)}
       navTitle={`Back`}
-      navHelper='Profile Review'
-    >
+      navHelper='Profile Review'>
       <div>
         <UsersDetailContainer>
           <UserProfileContainer>

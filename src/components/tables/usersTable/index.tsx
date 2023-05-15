@@ -1,8 +1,8 @@
-import { TableTag, TD, TH, TR, TableContainer } from './style';
-import { TransactionCard } from '../..';
-import { RxCaretRight } from 'react-icons/rx';
-import { colors, currencyFormat, dateFormat, routesPath } from '../../../utils';
-import { useNavigate } from 'react-router-dom';
+import { TableTag, TD, TH, TR, TableContainer } from "./style";
+import { TransactionCard } from "../..";
+import { RxCaretRight } from "react-icons/rx";
+import { colors, currencyFormat, dateFormat, routesPath } from "../../../utils";
+import { useNavigate } from "react-router-dom";
 const { USERDETAILS } = routesPath;
 
 export interface userDataIProps {
@@ -32,7 +32,6 @@ function UsersTable({ data, headerData, type, onClick }: TableIPropsIProps) {
     // onClick();
   };
 
-  // console.log()
   return (
     <TableContainer>
       <TableTag>
@@ -45,9 +44,9 @@ function UsersTable({ data, headerData, type, onClick }: TableIPropsIProps) {
             <TH>{headerData.walletNo}</TH>
             <TH>{headerData.phone}</TH>
             <TH>
-              {type === 'inactive'
+              {type === "inactive"
                 ? headerData.lastSeen
-                : type === 'subagents'
+                : type === "subagents"
                 ? headerData.subAgents
                 : null}
             </TH>
@@ -57,8 +56,7 @@ function UsersTable({ data, headerData, type, onClick }: TableIPropsIProps) {
           {data.map((item: any) => (
             <TR
               key={item.id}
-              onClick={() => navigate(`${USERDETAILS}${item.id}`)}
-            >
+              onClick={() => navigate(`${USERDETAILS}${item.userId}`)}>
               <TD></TD>
               <TD>{item.id}</TD>
               <TD>{item.name}</TD>
@@ -66,9 +64,9 @@ function UsersTable({ data, headerData, type, onClick }: TableIPropsIProps) {
               <TD>{item.walletNo}</TD>
               <TD>{item.phone}</TD>
               <TD>
-                {type === 'inactive'
+                {type === "inactive"
                   ? item.lastSeen
-                  : type === 'subagents'
+                  : type === "subagents"
                   ? item.subAgents
                   : null}
               </TD>
