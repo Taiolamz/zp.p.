@@ -17,3 +17,4 @@ export * from "./kycVerificationSlice";
 export * from "./getSuperAgentsSlice";
 export * from "./getUsersSlice";
 export * from "./getUserProfileSlice";
+export * from "./getUserVerificationsSlice";

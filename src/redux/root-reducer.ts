@@ -19,6 +19,7 @@ import {
   getSuperAgentsSliceReducer,
   getUsersSliceReducer,
   getUserProfileSliceReducer,
+  getUserVerificationsSliceReducer,
 } from "./slice";
 
 const rootReducer = combineReducers({
@@ -41,6 +42,7 @@ const rootReducer = combineReducers({
   getSuperAgents: getSuperAgentsSliceReducer,
   getUsers: getUsersSliceReducer,
   getUserProfile: getUserProfileSliceReducer,
+  getUserVerifications: getUserVerificationsSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

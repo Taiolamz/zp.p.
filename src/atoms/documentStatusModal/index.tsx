@@ -1,7 +1,7 @@
-import { Container, BtnContainer } from './style';
-import { Modal, Button, DocumentStatusTable } from '../../components';
-import { H2, H3, H6 } from '../../styles';
-import { colors, spacing } from '../../utils';
+import { Container, BtnContainer } from "./style";
+import { Modal, Button, DocumentStatusTable } from "../../components";
+import { H2, H3, H5 } from "../../styles";
+import { colors, spacing } from "../../utils";
 
 export interface DocumentStatusIProps {
   id: number;
@@ -18,6 +18,7 @@ export interface IProps {
   data: DocumentStatusIProps[];
   headerData?: any;
   actionClick: () => void;
+  isLoading?: boolean;
 }
 
 function DocumentStatusModal({
@@ -27,39 +28,43 @@ function DocumentStatusModal({
   data,
   headerData,
   actionClick,
+  isLoading,
 }: IProps) {
   return (
     <Modal title='' isModalVisible={isModalVisible} closeModal={closeModal}>
-      <Container>
-        {title && (
-          <H2
-            semiBold
-            color={colors.primary}
-            style={{ marginBottom: spacing.xsmall }}
-          >
-            {title}
-          </H2>
-        )}
-
-        <DocumentStatusTable data={data} headerData={headerData} />
-        <div
-          style={{
-            width: '100%',
-            marginTop: spacing.xsmall,
-          }}
-        >
-          <BtnContainer>
-            <H3
+      {isLoading ? (
+        <Container>
+          <H5>Loading...</H5>
+        </Container>
+      ) : (
+        <Container>
+          {title && (
+            <H2
               semiBold
-              onClick={closeModal}
-              color={colors.white}
-              style={{ cursor: 'pointer' }}
-            >
-              Close
-            </H3>
-          </BtnContainer>
-        </div>
-      </Container>
+              color={colors.primary}
+              style={{ marginBottom: spacing.xsmall }}>
+              {title}
+            </H2>
+          )}
+
+          <DocumentStatusTable data={data} headerData={headerData} />
+          <div
+            style={{
+              width: "100%",
+              marginTop: spacing.xsmall,
+            }}>
+            <BtnContainer>
+              <H3
+                semiBold
+                onClick={closeModal}
+                color={colors.white}
+                style={{ cursor: "pointer" }}>
+                Close
+              </H3>
+            </BtnContainer>
+          </div>
+        </Container>
+      )}
     </Modal>
   );
 }

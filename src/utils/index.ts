@@ -11,3 +11,4 @@ export { getPathFromPagUrl, getPageNoFromUrl } from "./getPathFromUrl";
 export { default as currencyFormat } from "./currencyFormat";
 export { default as routesPath } from "./routesPath";
 export { default as showMessage } from "./showMessage";
+export { default as capitalizeFirstLetter } from "./capitalizeFirstLetter";

@@ -17,6 +17,7 @@ import {
   getSuperAgentsSliceReducer,
   getUsersSliceReducer,
   getUserProfileSliceReducer,
+  getUserVerificationsSliceReducer,
 } from "./slice";
 const state = {
   login: loginSliceReducer,
@@ -37,6 +38,7 @@ const state = {
   getSuperAgents: getSuperAgentsSliceReducer,
   getUsers: getUsersSliceReducer,
   getUserProfile: getUserProfileSliceReducer,
+  getUserVerifications: getUserVerificationsSliceReducer,
 };
 
 export const testAppSelector = (f: any) => f(state);

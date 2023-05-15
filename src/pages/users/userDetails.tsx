@@ -9,17 +9,20 @@ import {
   LoaderModal,
 } from "../../atoms";
 import {
-  docStatus,
   documentStatusDataHeader,
   loginHistory,
   loginHistory2,
-  // loginHistoryDataHeader,
   loginHistoryDataHeader1,
   loginHistoryDataHeader2,
   supportActivitiesData,
 } from "./data";
 
-import { colors, routesPath, dateFormat } from "../../utils";
+import {
+  colors,
+  routesPath,
+  dateFormat,
+  capitalizeFirstLetter,
+} from "../../utils";
 import {
   UsersDetailContainer,
   UserProfileContainer,
@@ -27,17 +30,31 @@ import {
 } from "./style";
 import { H2 } from "../../styles";
 
-import { getUserProfileRequest, getUserProfileReset } from "../../redux/slice";
+import {
+  getUserProfileRequest,
+  getUserProfileReset,
+  getUserVerificationsRequest,
+  getUserVerificationsReset,
+} from "../../redux/slice";
 import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
 import { CustomerProfileIProps } from "../../components/customerProfile";
+import { DocumentStatusIProps } from "../../atoms/documentStatusModal";
 import { Dictionary } from "../../types";
 
 const { USERS } = routesPath;
+
+const kycVerificationbvn: string = "bvn-selfie-verification";
+const kycVerificationidentityCard: string = "identity-card-verification";
+const kycVerificationCACDocumentVerification: string =
+  "cac document verification";
+const kycVerificationBusinessAddressVerification: string =
+  "business address verification";
 
 function UserDetails() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   let { id } = useParams();
+  const userId = id?.trim();
 
   const [documentIsModalVisible, setDocumentIsModalVisible] = useState(false);
   const [loginHistoryIsModalVisible, setLoginHistoryIsModalVisible] =
@@ -51,9 +68,15 @@ function UserDetails() {
   const [appActivity, setAppActivity] = useState<CustomerProfileIProps[]>([]);
   const [toggleClicked, setToggleClicked] = useState(false);
   const [firstMount, setFirstMount] = useState(false);
+  const [docStatus, setDocStatus] = useState<DocumentStatusIProps[]>([]);
   // redux state
   const userProfileState = useAppSelector((state) => state.getUserProfile);
   const { status: userProfileStatus } = userProfileState;
+
+  const userVerificationsState = useAppSelector(
+    (state) => state.getUserVerifications
+  );
+  const { status: userVerificationsStatus } = userVerificationsState;
 
   useLayoutEffect(() => {
     setFirstMount(true);
@@ -62,8 +85,8 @@ function UserDetails() {
         selectedUserActivity.hasOwnProperty("id") &&
         selectedUserActivity.id === 1
       ) {
-        console.log("document status");
         setDocumentIsModalVisible(true);
+        dispatch(getUserVerificationsRequest({ userId }));
       }
 
       if (
@@ -104,7 +127,7 @@ function UserDetails() {
   useEffect(() => {
     dispatch(
       getUserProfileRequest({
-        userId: id?.trim(),
+        userId,
       })
     );
   }, []);
@@ -226,6 +249,84 @@ function UserDetails() {
     }
   }, [userProfileState]);
 
+  function determineDocStatus(
+    verificationType: string,
+    kycLevel: string,
+    item: Dictionary
+  ) {
+    let result =
+      verificationType === kycLevel
+        ? capitalizeFirstLetter(item?.status)
+        : "Pending";
+    return result;
+  }
+
+  useEffect(() => {
+    let result: DocumentStatusIProps[] = [];
+    let verificationData: Dictionary = {};
+    if (userVerificationsStatus === "succeeded") {
+      userVerificationsState?.data?.Verifications?.forEach((el: Dictionary) => {
+        verificationData = {
+          photoStatus: determineDocStatus(
+            el.verification_type,
+            kycVerificationbvn,
+            el
+          ),
+          idCardStatus: determineDocStatus(
+            el.verification_type,
+            kycVerificationidentityCard,
+            el
+          ),
+          addressVefication: determineDocStatus(
+            el.verification_type,
+            kycVerificationCACDocumentVerification,
+            el
+          ),
+        };
+      });
+
+      result = [
+        {
+          id: 1,
+          document: "Passport",
+          noOfUpload: verificationData?.photoStatus === "Pending" ? 0 : 2,
+          status: verificationData?.photoStatus,
+          statusBG:
+            verificationData?.photoStatus === "Approved"
+              ? colors.green
+              : verificationData?.photoStatus === "Rejected"
+              ? colors.red
+              : colors.greyDark,
+        },
+        {
+          id: 2,
+          document: "ID Card",
+          noOfUpload: verificationData?.idCardStatus === "Pending" ? 0 : 1,
+          status: verificationData?.idCardStatus,
+          statusBG:
+            verificationData?.idCardStatus === "Approved"
+              ? colors.green
+              : verificationData?.idCardStatus === "Rejected"
+              ? colors.red
+              : colors.greyDark,
+        },
+        {
+          id: 3,
+          document: "Address Verification",
+          noOfUpload: verificationData?.addressVefication === "Pending" ? 0 : 1,
+          status: verificationData?.addressVefication,
+          statusBG:
+            verificationData?.addressVefication === "Approved"
+              ? colors.green
+              : verificationData?.addressVefication === "Rejected"
+              ? colors.red
+              : colors.greyDark,
+        },
+      ];
+    }
+    setDocStatus(result);
+  }, [userVerificationsState]);
+
   const handleSupportClicked = () => {
     setToggleClicked(!toggleClicked);
   };
@@ -270,6 +371,7 @@ function UserDetails() {
           title='Document Status'
           data={docStatus}
           headerData={documentStatusDataHeader}
+          isLoading={userVerificationsStatus === "loading"}
         />
 
         <LoginHistoryModal
