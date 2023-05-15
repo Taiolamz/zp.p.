@@ -29,3 +29,6 @@ export { default as CustomerProfile } from './customerProfile';
 export { default as DocumentStatusTable } from './tables/documentStatusTable';
 export { default as TabButton } from './tabButton';
 export { default as LoginHistoryTable } from './tables/loginHistoryTable';
+export { default as TransactionHistoryTable } from './tables/transactionHistoryTable';
+export { default as CountInfoCardNoHelper } from './cards/countInfoCardNoHelper';
+export { default as SavedBanksTable } from './tables/savedBanksTable';
