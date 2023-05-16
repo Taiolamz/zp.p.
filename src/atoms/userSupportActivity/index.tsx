@@ -1,6 +1,6 @@
-import { BorderedText } from '../../components';
-import { colors } from '../../utils';
-import { Container } from './style';
+import { BorderedText } from "../../components";
+import { colors } from "../../utils";
+import { Container } from "./style";
 
 export interface UserSupportActivityIProps {
   id: number;
@@ -22,12 +22,10 @@ const UserSupportActivity = ({
   openModal,
 }: UserSupportActivitiesIProps) => {
   const handleSelectedItem = (item: UserSupportActivityIProps) => {
-    console.log('item');
     setSelectedItem(item);
-    openModal(true);
   };
   return (
-    <Container>
+    <Container onClick={onClick}>
       {data?.map((item: UserSupportActivityIProps) => (
         <BorderedText
           onClick={() => handleSelectedItem(item)}

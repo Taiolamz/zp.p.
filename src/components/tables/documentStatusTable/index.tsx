@@ -1,29 +1,19 @@
 import { TableTag, TD, TH, TR, TableContainer, TDStatus } from "./style";
-
+import { Dictionary } from "../../../types";
 export interface TableIPropsIProps {
-  type: string;
   data: any[];
-  setSelectedItem?: any;
-  backgroundColor?: string;
-  header?: boolean;
-  headerData?: any;
+  headerData: Dictionary;
 }
 
-function DocumentStatusTable({
-  data,
-  setSelectedItem,
-  headerData,
-  type,
-  onClick,
-}: any) {
+function DocumentStatusTable({ data, headerData }: TableIPropsIProps) {
   return (
     <TableContainer>
       <TableTag>
         <thead>
           <tr>
-            <TH>{headerData.document}</TH>
-            <TH>{headerData.noOfUpload}</TH>
-            <TH>{headerData.status}</TH>
+            <TH>{headerData?.document}</TH>
+            <TH>{headerData?.noOfUpload}</TH>
+            <TH>{headerData?.status}</TH>
           </tr>
         </thead>
 

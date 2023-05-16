@@ -1,19 +1,19 @@
-import { Routes, Route } from 'react-router-dom';
-import { Dashboard } from '../pages/dashboard';
-import { Login } from '../pages/login';
-import { Kyc, KycCustomer } from '../pages/kyc';
-import { Support } from '../pages/support';
-import { Users } from '../pages/users';
+import { Routes, Route } from "react-router-dom";
+import { Dashboard } from "../pages/dashboard";
+import { Login } from "../pages/login";
+import { Kyc, KycCustomer } from "../pages/kyc";
+import { Support } from "../pages/support";
+import { Users } from "../pages/users";
 import {
   Settlements,
   Reconciliation,
   ReconcilationUserDetails,
-} from '../pages/settlements';
-import { Settings } from '../pages/settings';
-import { NotFound } from '../pages/notFound';
-import { PrivateRoute } from './privateRoute';
-import { routesPath } from '../utils';
-import UserDetails from '../pages/users/userDetails';
+} from "../pages/settlements";
+import { Settings } from "../pages/settings";
+import { NotFound } from "../pages/notFound";
+import { PrivateRoute } from "./privateRoute";
+import { routesPath } from "../utils";
+import UserDetails from "../pages/users/userDetails";
 
 function AppRoute() {
   const {
