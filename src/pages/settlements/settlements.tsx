@@ -182,6 +182,7 @@ function Settlements() {
   const [profitData, setProfitData] = useState<any[]>([]);
   const [analyticsSummaryData, setAnalyticsSummaryData] = useState<any[]>([]);
   const [filterDate, setFilterDate] = useState(false);
+
   // redux state
   const transactionState = useAppSelector((state) => state.getTransactions);
   const { status: getTransactionsStatus } = transactionState;
@@ -564,10 +565,10 @@ function Settlements() {
                 backgroundColor={"transparent"}
                 name='SearchValue'
                 value={searchValue}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setSearchValue(e.target.value)
-                }
-                placeholder='Search Records'
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setSearchValue(e.target.value);
+                }}
+                placeholder='Search Records by transaction ID'
               />
               <DatePickerContainer>
                 <DatePicker selectedDate={setStartDisplayRecordDate} />
@@ -602,7 +603,8 @@ function Settlements() {
           }}
           isLoading={
             getTransactionsStatus === "loading" ||
-            settlementAnalyticsStatus === "loading"
+            settlementAnalyticsStatus === "loading" ||
+            transactionDataList?.length < 1
           }
         />
 
