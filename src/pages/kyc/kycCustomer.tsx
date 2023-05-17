@@ -332,7 +332,7 @@ function KycCustomer() {
     {
       id: 1,
       helper: "Full Name",
-      text: customerData?.name,
+      text: `${customerData?.bvn?.first_name} ${customerData?.bvn?.last_name}`,
     },
 
     {
@@ -359,11 +359,21 @@ function KycCustomer() {
       text: customerData?.location,
     },
 
-    { id: 6, text: dateFormat(date), helper: "Date of Birth" },
+    {
+      id: 6,
+      text:
+        customerData?.bvn?.date_of_birth !== null
+          ? dateFormat(customerData?.bvn?.date_of_birth)
+          : "N/A",
+      helper: "Date of Birth",
+    },
     {
       id: 7,
       helper: "ID Number",
-      text: customerData?.nin !== null ? customerData?.nin : "N/A",
+      text:
+        customerData?.kyc?.card_number !== null
+          ? customerData?.kyc?.card_number
+          : "N/A",
     },
   ];
 
@@ -395,8 +405,6 @@ function KycCustomer() {
       })
     );
   };
-
-  // console.log(customerData, "cusr");
 
   return (
     <AppContainer
