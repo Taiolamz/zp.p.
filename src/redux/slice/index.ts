@@ -20,3 +20,4 @@ export * from "./getUserProfileSlice";
 export * from "./getUserVerificationsSlice";
 export * from "./getProfileViewHistorySlice";
 export * from "./getLoginHistorySlice";
+export * from "./getUserTransactionsSlice";

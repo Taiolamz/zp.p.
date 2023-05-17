@@ -22,6 +22,7 @@ import {
   getUserVerificationsSliceReducer,
   getProfileViewHistorySliceReducer,
   getLoginHistorySliceReducer,
+  getUserTransactionsSliceReducer,
 } from "./slice";
 
 const rootReducer = combineReducers({
@@ -47,6 +48,7 @@ const rootReducer = combineReducers({
   getUserVerifications: getUserVerificationsSliceReducer,
   getProfileViewHistory: getProfileViewHistorySliceReducer,
   getLoginHistory: getLoginHistorySliceReducer,
+  getUserTransactions: getUserTransactionsSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

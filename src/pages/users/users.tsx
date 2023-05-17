@@ -235,6 +235,9 @@ function Users() {
                 onPageChange={(selectedPage) => {
                   setCurrentPage(selectedPage);
                 }}
+                isLoading={
+                  superAgentsStatus === "loading" || usersStatus === "loading"
+                }
               />
             </TableContainer>
           </UsersContainer>

@@ -11,7 +11,7 @@ import { loginRequest } from "../../redux/slice";
 import { routesPath } from "../../utils";
 import Cookies from "js-cookie";
 
-const { DASHBOARD, REMEMBERUSER, TOKEN } = routesPath;
+const { DASHBOARD, REMEMBERUSER, TOKEN, KYC } = routesPath;
 function Login() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ function Login() {
     const cookiesToken = Cookies.get(TOKEN);
 
     if (cookiesToken !== undefined) {
-      navigate(DASHBOARD);
+      navigate(KYC);
     }
   }, [loginState]);
 

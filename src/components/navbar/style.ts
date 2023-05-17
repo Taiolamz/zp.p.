@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { colors, boxShadow, spacing } from '../../utils';
+import styled from "styled-components";
+import { colors, boxShadow, spacing } from "../../utils";
 
 interface StyleProps {
   helper?: string;

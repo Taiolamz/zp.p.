@@ -35,13 +35,15 @@ function KycUserTable({
   return (
     <TableContainer>
       <TableTag>
-        <tr>
-          <TH>#</TH>
-          <TH>{headerData.name}</TH>
-          <TH>{headerData.bvn}</TH>
-          <TH>{headerData.phoneNo}</TH>
-          <TH></TH>
-        </tr>
+        {data?.length >= 1 && (
+          <tr>
+            <TH>#</TH>
+            <TH>{headerData.name}</TH>
+            <TH>{headerData.bvn}</TH>
+            <TH>{headerData.phoneNo}</TH>
+            <TH></TH>
+          </tr>
+        )}
 
         <>
           {data.map((item: KycDataTableIPropsIProps, index: number) => (
