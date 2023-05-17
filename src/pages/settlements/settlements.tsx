@@ -600,6 +600,10 @@ function Settlements() {
           onPageChange={(selectedPage) => {
             setCurrentPage(selectedPage);
           }}
+          isLoading={
+            getTransactionsStatus === "loading" ||
+            settlementAnalyticsStatus === "loading"
+          }
         />
 
         <Modal

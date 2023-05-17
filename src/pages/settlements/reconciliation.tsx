@@ -466,6 +466,10 @@ function Reconciliation() {
           onPageChange={(selectedPage) => {
             setCurrentPage(selectedPage);
           }}
+          isLoading={
+            getTransactionsStatus === "loading" ||
+            getReconciliationAccountStatus === "loading"
+          }
         />
 
         <Modal
