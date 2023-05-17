@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { colors, spacing, borderRadius } from "../../../utils";
+import styled from 'styled-components';
+import { colors, spacing, borderRadius, fontWeight } from '../../../utils';
 
 interface StyleProps {
   backgroundColor?: string;
@@ -25,14 +25,23 @@ export const TableTag = styled.table`
 export const TH = styled.th`
   background-color: ${colors.smokeWhite};
   padding: 8px;
-  color: ${colors.greyVariantOne};
+  font-weight: ${fontWeight.semiBold};
+  color: ${colors.primary};
+  background-color: ${(p: StyleProps) =>
+    p.backgroundColor ? p.backgroundColor : colors.white};
+  :first-child {
+    border-radius: 10px 0 0 10px;
+  }
+  :last-child {
+    border-radius: 0 10px 10px 0;
+  }
 `;
 
 export const TD = styled.td`
   padding: 8px;
   background-color: ${(p: StyleProps) =>
     p.backgroundColor ? p.backgroundColor : colors.white};
-  color: ${(p: StyleProps) => (p.color ? p.color : colors.grey)};
+  color: ${(p: StyleProps) => (p.color ? p.color : colors.greyVariantThree)};
   :first-child {
     border-radius: 10px 0 0 10px;
   }

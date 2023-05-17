@@ -30,22 +30,24 @@ function PreviousTransactionsTable({
     setSelectedItem(item);
     // onClick();
     // setMoreIsVisible(true);
+    // console.log(item);
   };
 
   return (
     <TableContainer>
       <TableTag>
-        <tr>
-          <TH>#</TH>
+        <TR>
+          <TH></TH>
           <TH>{headerData.tType}</TH>
           <TH>{headerData.tid}</TH>
-          <TH>{headerData.phoneNo}</TH>
-          <TH></TH>
-        </tr>
+          <TH>{headerData.amount}</TH>
+          <TH>{headerData.status}</TH>
+          <TH>{headerData.date}</TH>
+        </TR>
 
         <>
           {data.map((item: PrevTransactionTableIPropsIProps, index: number) => (
-            <TR key={index}>
+            <TR key={index} onClick={() => handleOnSelect(item)}>
               <TD>{item.id}</TD>
               <TD>{item.tType}</TD>
               <TD>{item.tid}</TD>
