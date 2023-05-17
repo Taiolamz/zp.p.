@@ -1,6 +1,7 @@
-import { TableTag, TD, TH, TR, TableContainer } from "./style";
-import { TransactionCard, MoreIcon } from "../..";
-import { colors, currencyFormat, dateFormat, images } from "../../../utils";
+import { TableTag, TD, TH, TR, TableContainer } from './style';
+import { TransactionCard, MoreIcon } from '../..';
+import { colors, currencyFormat, dateFormat, capitalizeFirstLetter } from '../../../utils';
+import { ReactComponent as EmptySearchIcon } from '../../../assets/svg/emptySearch.svg';
 
 export interface TableIPropsIProps {
   type: string;
@@ -12,18 +13,12 @@ export interface TableIPropsIProps {
 }
 
 const emptyListCenterStyle = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 };
 
-function TransactionTable({
-  data,
-  setSelectedItem,
-  headerData,
-  type,
-  onClick,
-}: any) {
+function TransactionTable({ data, setSelectedItem, headerData, type, onClick }: any) {
   const handleOnSelect = (item: any) => {
     setSelectedItem(item);
     onClick(item);
@@ -32,7 +27,7 @@ function TransactionTable({
 
   return (
     <div>
-      {data?.length > 1 ? (
+      {data?.length >= 1 ? (
         <TableContainer>
           <TableTag>
             <thead>
@@ -47,7 +42,7 @@ function TransactionTable({
               </tr>
             </thead>
 
-            {type === "transactions" && (
+            {type === 'transactions' && (
               <tbody>
                 {data?.map((item: any, index: number) => (
                   <TR key={index} onClick={() => handleOnSelect(item)}>
@@ -55,16 +50,9 @@ function TransactionTable({
                     <TD>{item.name}</TD>
                     <TD>{item.tid}</TD>
                     <TD>{currencyFormat(item.amount, false, item.currency)}</TD>
-                    <TD>{item.type}</TD>
-                    <TD
-                      color={
-                        item.status === "success"
-                          ? colors.greenVariantTwo
-                          : colors.red
-                      }>
-                      {item.status === "success"
-                        ? "Successful"
-                        : "Unseccessful"}
+                    <TD>{capitalizeFirstLetter(item.type)}</TD>
+                    <TD color={item.status === 'success' ? colors.greenVariantTwo : colors.red}>
+                      {item.status === 'success' ? 'Successful' : 'Unseccessful'}
                     </TD>
                     <TD>{dateFormat(item.time)}</TD>
                     <TD>
@@ -75,7 +63,7 @@ function TransactionTable({
               </tbody>
             )}
 
-            {type === "billHistory" && (
+            {type === 'billHistory' && (
               <div>
                 {data.map((item: any) => (
                   <TransactionCard
@@ -97,7 +85,7 @@ function TransactionTable({
         </TableContainer>
       ) : (
         <div style={emptyListCenterStyle}>
-          <img src={images.emptyList} alt='Empty container' />
+          <EmptySearchIcon />
         </div>
       )}
     </div>

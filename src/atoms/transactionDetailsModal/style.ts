@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { spacing, colors } from "../../utils";
+import styled from 'styled-components';
+import { spacing, colors } from '../../utils';
 
 export const Container = styled.div`
   padding: 0 ${spacing.xsmall};
@@ -11,7 +11,10 @@ export const Container = styled.div`
   }
   @media (max-width: 480px) {
     width: 370px;
-  } ;
+  }
+  @media (max-width: 320px) {
+    width: 300px;
+  }
 `;
 
 export const Content = styled.div`

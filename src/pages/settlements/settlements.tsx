@@ -1,8 +1,8 @@
-import * as yup from "yup";
-import { useState, useEffect } from "react";
-import { Formik } from "formik";
-import { FiFilter } from "react-icons/fi";
-import { H3 } from "../../styles";
+import * as yup from 'yup';
+import { useState, useEffect } from 'react';
+import { Formik } from 'formik';
+import { FiFilter } from 'react-icons/fi';
+import { H3 } from '../../styles';
 import {
   CountInfoCard,
   DatePicker,
@@ -15,17 +15,16 @@ import {
   TextArea,
   Button,
   TransactionTable,
-} from "../../components";
+} from '../../components';
 import {
   SettlementBarChart,
   TabView,
-  TransactionsView,
   MoreIconView,
   AppContainer,
   SuccessModalWithCopy,
   TransactionDetailsModal,
   LoaderModal,
-} from "../../atoms";
+} from '../../atoms';
 import {
   colors,
   currencyFormat,
@@ -34,7 +33,8 @@ import {
   dateFormat,
   timeFormat,
   showMessage,
-} from "../../utils";
+  capitalizeFirstLetter,
+} from '../../utils';
 import {
   AllTransactionContainer,
   AllTransactionContent,
@@ -47,7 +47,7 @@ import {
   EscalateBtnContainer,
   CustomerNameContainer,
   DatePickerContainer,
-} from "./style";
+} from './style';
 
 import {
   getTransactionsRequest,
@@ -59,73 +59,73 @@ import {
   exportTransactionByIdToMailRequest,
   exportTransactionByIdToMailReset,
   settlementAnalyticsRequest,
-} from "../../redux/slice";
-import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
+} from '../../redux/slice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 type Dictionary = {
   [key: string]: any;
 };
 
 const tabViewData = [
-  { id: 1, isSelected: true, text: "Transactions History" },
+  { id: 1, isSelected: true, text: 'Transactions History' },
   // { id: 2, isSelected: false, text: "Bills History" },
   // { id: 3, isSelected: false, text: "Cash Request History" },
 ];
 
 const transactionDataHeader = {
-  id: "",
-  name: "Customer",
-  tid: "Transaction ID",
-  amount: "Amount",
-  type: "Transaction Type",
-  status: "Status",
-  time: "Date",
-  blank: "",
+  id: '',
+  name: 'Customer',
+  tid: 'Transaction ID',
+  amount: 'Amount',
+  type: 'Transaction Type',
+  status: 'Status',
+  time: 'Date',
+  blank: '',
 };
 
 const billsHistoryData = [
   {
     id: 1,
-    tid: "CRIDD44BI",
+    tid: 'CRIDD44BI',
     amount: 20000,
-    type: "Bill payment",
-    status: "System Failure",
-    time: "24/11/2021- 17:01",
+    type: 'Bill payment',
+    status: 'System Failure',
+    time: '24/11/2021- 17:01',
     icon: true,
-    name: "Allen Kardic",
+    name: 'Allen Kardic',
   },
   {
     id: 2,
-    tid: "CRIDD44BI",
+    tid: 'CRIDD44BI',
     amount: 20000,
-    type: "Bill payment",
-    status: "System Failure",
-    time: "24/11/2021- 17:01",
+    type: 'Bill payment',
+    status: 'System Failure',
+    time: '24/11/2021- 17:01',
     icon: true,
-    name: "James Brown",
+    name: 'James Brown',
   },
   {
     id: 3,
-    tid: "CRIDD44BI",
+    tid: 'CRIDD44BI',
     amount: 20000,
-    type: "Bill payment",
-    status: "System Failure",
-    time: "24/11/2021- 17:01",
+    type: 'Bill payment',
+    status: 'System Failure',
+    time: '24/11/2021- 17:01',
     icon: true,
-    name: "Enoch Yakubu",
+    name: 'Enoch Yakubu',
   },
 ];
 
 const billsHistoryHeader = {
-  id: "",
-  name: "Customer",
-  tid: "Transaction ID",
-  amount: "Amount",
-  type: "Bill Type",
-  status: "Status",
-  time: "Time",
+  id: '',
+  name: 'Customer',
+  tid: 'Transaction ID',
+  amount: 'Amount',
+  type: 'Bill Type',
+  status: 'Status',
+  time: 'Time',
 };
 
-const initialDate = "2022-01-01";
+const initialDate = '2022-01-01';
 const currentDate = new Date().toDateString();
 // const inflowData = [1000, 90, 100, 800, 500, 100, 900, 70, 80, 100, 800, 700];
 // const outflowData = [100, 10, 20, 80, 100, 800, 700, 800, 90, 100, 800, 500];
@@ -135,48 +135,40 @@ function Settlements() {
   const dispatch = useAppDispatch();
   const [transactionStartDate, setTransactionStartDate] = useState(initialDate);
   const [transactionEndDate, setTransactionEndDate] = useState(currentDate);
-  const [startDisplayRecordDate, setStartDisplayRecordDate] = useState("");
-  const [endDisplayRecordDate, setEndDisplayRecordDate] = useState("");
+  const [startDisplayRecordDate, setStartDisplayRecordDate] = useState('');
+  const [endDisplayRecordDate, setEndDisplayRecordDate] = useState('');
   const [transactionFilterParams, setTransactionFilterParams] = useState({
-    reference: "",
-    type: "",
-    status: "",
-    start_date: "",
-    end_date: "",
+    reference: '',
+    type: '',
+    status: '',
+    start_date: '',
+    end_date: '',
   });
 
   const [transactionDataList, setTransactionDataList] = useState<any[]>([]);
-  const [tabViewSelectedIndex, setTabViewSelectedIndex] =
-    useState<any[number]>(1);
-  const [barChartSelectedText, setBarChartSelectedText] = useState("All Data");
+  const [tabViewSelectedIndex, setTabViewSelectedIndex] = useState<any[number]>(1);
+  const [barChartSelectedText, setBarChartSelectedText] = useState('All Data');
   const pageSize = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(5);
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState('');
 
-  const [selectedFailedTransaction, setSelectedFailedTransaction] =
-    useState<any>({});
+  const [selectedFailedTransaction, setSelectedFailedTransaction] = useState<any>({});
   const [moreIsVisible, setMoreIsVisible] = useState(false);
   const [escalateModalVisible, setEscalateModalVisible] = useState(false);
-  const [escalateSuccessfulModalVisible, setEscalateSuccessfulModalVisible] =
-    useState(false);
+  const [escalateSuccessfulModalVisible, setEscalateSuccessfulModalVisible] = useState(false);
 
-  const [transactionDetailsModalVisible, setTransactionDetailsModalVisible] =
-    useState(false);
-  const [selectedTransactionActionText, setSelectedTransactionActionText] =
-    useState("");
-  const [escalateSuccessfulData, setEscalateSuccessfulData] =
-    useState<Dictionary>({});
+  const [transactionDetailsModalVisible, setTransactionDetailsModalVisible] = useState(false);
+  const [selectedTransactionActionText, setSelectedTransactionActionText] = useState('');
+  const [escalateSuccessfulData, setEscalateSuccessfulData] = useState<Dictionary>({});
   const [escalationAgentsList, setEscalationAgentsList] = useState<any[]>([]);
-  const [transactionByIdData, setTransactionByIdData] = useState<Dictionary>(
-    {}
-  );
-  const transactionDetails = "Transaction Details";
-  const escalate = "Escalate";
+  const [transactionByIdData, setTransactionByIdData] = useState<Dictionary>({});
+  const transactionDetails = 'Transaction Details';
+  const escalate = 'Escalate';
   const moreIconOption = [transactionDetails, escalate];
 
-  const [selectedEscalateTo, setSelectedEscalateTo] = useState("");
-  const [selectedPriorityLevel, setSelectedPriorityLevel] = useState("");
+  const [selectedEscalateTo, setSelectedEscalateTo] = useState('');
+  const [selectedPriorityLevel, setSelectedPriorityLevel] = useState('');
   const [inflowData, setInflowData] = useState<any[]>([]);
   const [outflowData, setOutflowData] = useState<any[]>([]);
   const [profitData, setProfitData] = useState<any[]>([]);
@@ -184,62 +176,45 @@ function Settlements() {
   const [filterDate, setFilterDate] = useState(false);
 
   // redux state
-  const transactionState = useAppSelector((state) => state.getTransactions);
+  const transactionState = useAppSelector(state => state.getTransactions);
   const { status: getTransactionsStatus } = transactionState;
 
-  const getTransactionByIdState = useAppSelector(
-    (state) => state.getTransactionById
-  );
+  const getTransactionByIdState = useAppSelector(state => state.getTransactionById);
 
   const { status: getTransactionByIdStatus } = getTransactionByIdState;
 
-  const getEscalationAgentsState = useAppSelector(
-    (state) => state.getEscalationAgents
-  );
+  const getEscalationAgentsState = useAppSelector(state => state.getEscalationAgents);
   const { status: getEscalationAgentsStatus } = getEscalationAgentsState;
 
-  const createEscalationTicketState = useAppSelector(
-    (state) => state.createEscalationTicket
-  );
+  const createEscalationTicketState = useAppSelector(state => state.createEscalationTicket);
   const { status: createEscalationTicketStatus } = createEscalationTicketState;
 
-  const exportTransactionByIdToMailState = useAppSelector(
-    (state) => state.exportTransactionByIdToMail
-  );
-  const { status: exportTransactionByIdToMailStatus } =
-    exportTransactionByIdToMailState;
+  const exportTransactionByIdToMailState = useAppSelector(state => state.exportTransactionByIdToMail);
+  const { status: exportTransactionByIdToMailStatus } = exportTransactionByIdToMailState;
 
-  const settlementAnalyticsState = useAppSelector(
-    (state) => state.settlementAnalytics
-  );
+  const settlementAnalyticsState = useAppSelector(state => state.settlementAnalytics);
   const { status: settlementAnalyticsStatus } = settlementAnalyticsState;
 
   const escalateCchema = yup.object().shape({
-    title: yup.string().required("Title is required"),
-    description: yup.string().required("Description is required"),
-    escalateTo:
-      selectedEscalateTo.length < 2
-        ? yup.string().required("To who is required")
-        : yup.string(),
+    title: yup.string().required('Title is required'),
+    description: yup.string().required('Description is required'),
+    escalateTo: selectedEscalateTo.length < 2 ? yup.string().required('To who is required') : yup.string(),
     priorityLevel:
-      selectedPriorityLevel.length < 2
-        ? yup.string().required("Priority level is required")
-        : yup.string(),
+      selectedPriorityLevel.length < 2 ? yup.string().required('Priority level is required') : yup.string(),
   });
 
   useEffect(() => {
-    if (getTransactionByIdStatus === "succeeded") {
+    if (getTransactionByIdStatus === 'succeeded') {
       const {
         amount,
         status,
         currency,
         transfer_purpose,
-        beneficiary_account_id,
         charge,
         channel,
         created_at,
-        user: { name },
-      } = getTransactionByIdState?.data?.transaction;
+        user: { name, email, telephone },
+      } = getTransactionByIdState.data.transaction;
 
       const result = {
         amount,
@@ -248,43 +223,44 @@ function Settlements() {
         data: [
           {
             id: 1,
-            text: transfer_purpose,
-            helper: "Transaction Type",
+            text: capitalizeFirstLetter(transfer_purpose),
+            helper: 'Transaction Type',
           },
           {
             id: 2,
             text: name,
-            helper: "Wallet Name",
+            helper: 'Wallet Name',
           },
           {
             id: 3,
-            text: name,
-            helper: "Wallet Name",
+            text: email,
+            helper: 'Email',
           },
           {
             id: 4,
-            text: beneficiary_account_id,
-            helper: "Beneficiary Account Id",
+            text: telephone,
+            helper: 'Phone Number',
           },
           {
             id: 5,
             text: `N${charge}`,
-            helper: "Charges",
+            helper: 'Charges',
           },
+
           {
             id: 6,
             text: channel,
-            helper: "Channel",
+            helper: 'Channel',
           },
           {
             id: 7,
-            text: timeFormat(created_at),
-            helper: "Time",
+            text: timeFormat(created_at, true),
+            helper: 'Time',
           },
           {
             id: 8,
             text: dateFormat(created_at),
-            helper: "Date",
+            helper: 'Date',
           },
         ],
       };
@@ -295,7 +271,7 @@ function Settlements() {
 
   const handleCloseEscalateModal = () => {
     setEscalateModalVisible(false);
-    setSelectedTransactionActionText("");
+    setSelectedTransactionActionText('');
     setSelectedFailedTransaction({});
   };
 
@@ -310,17 +286,15 @@ function Settlements() {
   }, [filterDate]);
 
   useEffect(() => {
-    if (settlementAnalyticsStatus === "succeeded") {
+    if (settlementAnalyticsStatus === 'succeeded') {
       let inflowResult: any[] = [];
       let outflowResult: any[] = [];
       let profitResult: any[] = [];
-      settlementAnalyticsState?.data?.transaction_analytics?.forEach(
-        (item: any) => {
-          inflowResult.push(parseFloat(item?.data?.in_flow));
-          outflowResult.push(parseFloat(item?.data?.out_flow));
-          profitResult.push(parseFloat(item?.data?.profit));
-        }
-      );
+      settlementAnalyticsState?.data?.transaction_analytics?.forEach((item: any) => {
+        inflowResult.push(parseFloat(item?.data?.in_flow));
+        outflowResult.push(parseFloat(item?.data?.out_flow));
+        profitResult.push(parseFloat(item?.data?.profit));
+      });
 
       setInflowData(inflowResult);
       setOutflowData(outflowResult);
@@ -330,22 +304,22 @@ function Settlements() {
         {
           id: 1,
           amount: parseFloat(settlementAnalyticsState?.data?.inflow),
-          title: "Inflow",
-          helper: "Total Income",
+          title: 'Inflow',
+          helper: 'Total Income',
           color: colors.blueVariantOne,
         },
         {
           id: 2,
           amount: parseFloat(settlementAnalyticsState?.data?.outflow),
-          title: "Outflow",
-          helper: "Total Withdrawals",
+          title: 'Outflow',
+          helper: 'Total Withdrawals',
           color: colors.orange,
         },
         {
           id: 3,
           amount: parseFloat(settlementAnalyticsState?.data?.profit),
-          title: "Profit",
-          helper: "Sharing Percentage on Transactions",
+          title: 'Profit',
+          helper: 'Sharing Percentage on Transactions',
           color: colors.greenVariantOne,
         },
       ]);
@@ -359,32 +333,30 @@ function Settlements() {
         ...transactionFilterParams,
         per_page: pageSize,
         page: currentPage,
-      })
+      }),
     );
   }, [transactionFilterParams, currentPage]);
 
   useEffect(() => {
-    if (getTransactionsStatus === "succeeded") {
+    if (getTransactionsStatus === 'succeeded') {
       let updatedList: any[] = [];
 
-      transactionState?.data?.transactions?.data.forEach(
-        (item: any, index: number) => {
-          updatedList.push({
-            id: index + 1,
-            name: item.user.name,
-            tid: item.transaction_reference,
-            amount: parseFloat(item.amount),
-            type: item.type,
-            status: item.status,
-            icon: true,
-            time: item.created_at,
-            currency: item.currency,
-            phoneNumber: item.user.telephone,
-            transId: item.id,
-            email: item.user.email,
-          });
-        }
-      );
+      transactionState?.data?.transactions?.data.forEach((item: any, index: number) => {
+        updatedList.push({
+          id: index + 1,
+          name: item.user.name,
+          tid: item.transaction_reference,
+          amount: parseFloat(item.amount),
+          type: item.type,
+          status: item.status,
+          icon: true,
+          time: item.created_at,
+          currency: item.currency,
+          phoneNumber: item.user.telephone,
+          transId: item.id,
+          email: item.user.email,
+        });
+      });
 
       const {
         meta: { links },
@@ -399,12 +371,12 @@ function Settlements() {
   useEffect(() => {
     // fetch escalation agents on when escalation is clicked from options
     if (selectedTransactionActionText === escalate) {
-      dispatch(getEscalationAgentsRequest({ id: "user" }));
+      dispatch(getEscalationAgentsRequest({ id: 'user' }));
     }
   }, [selectedTransactionActionText]);
 
   useEffect(() => {
-    if (getEscalationAgentsStatus === "succeeded") {
+    if (getEscalationAgentsStatus === 'succeeded') {
       let result: any[] = [];
       getEscalationAgentsState.data.internal_users.forEach((item: any) => {
         result.push({
@@ -417,10 +389,10 @@ function Settlements() {
   }, [getEscalationAgentsState]);
 
   useEffect(() => {
-    if (exportTransactionByIdToMailStatus === "succeeded") {
+    if (exportTransactionByIdToMailStatus === 'succeeded') {
       setTransactionDetailsModalVisible(false);
       showMessage({
-        type: "success",
+        type: 'success',
         message: exportTransactionByIdToMailState?.data?.message,
       });
       dispatch(exportTransactionByIdToMailReset());
@@ -428,7 +400,7 @@ function Settlements() {
   }, [exportTransactionByIdToMailState]);
 
   useEffect(() => {
-    if (createEscalationTicketStatus === "succeeded") {
+    if (createEscalationTicketStatus === 'succeeded') {
       setEscalateSuccessfulData(createEscalationTicketState.data.ticket);
       setEscalateSuccessfulModalVisible(true);
       setEscalateSuccessfulData({});
@@ -445,35 +417,26 @@ function Settlements() {
   const handleTransactionFilter = () => {
     setTransactionFilterParams({
       reference: searchValue,
-      type: "",
-      status: "",
-      start_date:
-        startDisplayRecordDate.length < 2
-          ? ""
-          : yearDateFormat(startDisplayRecordDate),
-      end_date:
-        endDisplayRecordDate.length < 2
-          ? ""
-          : yearDateFormat(endDisplayRecordDate),
+      type: '',
+      status: '',
+      start_date: startDisplayRecordDate.length < 2 ? '' : yearDateFormat(startDisplayRecordDate),
+      end_date: endDisplayRecordDate.length < 2 ? '' : yearDateFormat(endDisplayRecordDate),
     });
   };
 
   // handle different excalation modules
   const handleMoreIconOptions = async (item: string) => {
-    if (selectedFailedTransaction.hasOwnProperty("name") && item === escalate) {
+    if (selectedFailedTransaction.hasOwnProperty('name') && item === escalate) {
       setMoreIsVisible(false);
       setEscalateModalVisible(true);
     }
-    if (
-      selectedFailedTransaction.hasOwnProperty("name") &&
-      item === transactionDetails
-    ) {
+    if (selectedFailedTransaction.hasOwnProperty('name') && item === transactionDetails) {
       setMoreIsVisible(false);
       setTransactionDetailsModalVisible(true);
       dispatch(
         getTransactionByIdRequest({
           transId: selectedFailedTransaction.transId,
-        })
+        }),
       );
     }
   };
@@ -486,7 +449,7 @@ function Settlements() {
   };
 
   return (
-    <AppContainer navTitle='SETTLEMENTS'>
+    <AppContainer navTitle="SETTLEMENTS">
       <div>
         <AllTransactionContainer>
           <H3 color={colors.primary}>All Transactions</H3>
@@ -506,7 +469,7 @@ function Settlements() {
               onClick={handleSetFilterDateToday}
               backgroundColor={colors.white}
               color={colors.grey}
-              text={"Today"}
+              text={'Today'}
             />
             <BorderedText
               onClick={() => {
@@ -514,7 +477,7 @@ function Settlements() {
               }}
               backgroundColor={colors.primary}
               color={colors.white}
-              text={"Filter Page"}
+              text={'Filter Page'}
             />
           </AllTransactionContent>
         </AllTransactionContainer>
@@ -534,41 +497,29 @@ function Settlements() {
           <SettlementBarChart
             setBarChartSelectedText={setBarChartSelectedText}
             inflowData={
-              barChartSelectedText === "All Data" ||
-              barChartSelectedText === "Inflow"
-                ? inflowData
-                : emptyData
+              barChartSelectedText === 'All Data' || barChartSelectedText === 'Inflow' ? inflowData : emptyData
             }
             outflowData={
-              barChartSelectedText === "All Data" ||
-              barChartSelectedText === "Outflow"
-                ? outflowData
-                : emptyData
+              barChartSelectedText === 'All Data' || barChartSelectedText === 'Outflow' ? outflowData : emptyData
             }
             profitData={
-              barChartSelectedText === "All Data" ||
-              barChartSelectedText === "Profit"
-                ? profitData
-                : emptyData
+              barChartSelectedText === 'All Data' || barChartSelectedText === 'Profit' ? profitData : emptyData
             }
           />
         </div>
 
         <TabViewContainer>
-          <TabView
-            data={tabViewData}
-            setSelectedIndex={setTabViewSelectedIndex}
-          />
+          <TabView data={tabViewData} setSelectedIndex={setTabViewSelectedIndex} />
           {tabViewSelectedIndex === 1 && (
             <TabContentTwo>
               <SearchInput
-                backgroundColor={"transparent"}
-                name='SearchValue'
+                backgroundColor={'transparent'}
+                name="SearchValue"
                 value={searchValue}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setSearchValue(e.target.value);
                 }}
-                placeholder='Search by transaction ID'
+                placeholder="Search by transaction ID"
               />
               <DatePickerContainer>
                 <DatePicker selectedDate={setStartDisplayRecordDate} />
@@ -579,14 +530,14 @@ function Settlements() {
                 backgroundColor={colors.primary}
                 color={colors.white}
                 icon={<FiFilter color={colors.white} size={15} />}
-                text='Filter'
+                text="Filter"
               />
             </TabContentTwo>
           )}
         </TabViewContainer>
         {tabViewSelectedIndex === 1 && (
           <TransactionTable
-            type={"transactions"}
+            type={'transactions'}
             headerData={transactionDataHeader}
             header={true}
             data={transactionDataList}
@@ -598,25 +549,23 @@ function Settlements() {
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          onPageChange={(selectedPage) => {
+          onPageChange={selectedPage => {
             setCurrentPage(selectedPage);
           }}
           isLoading={
-            getTransactionsStatus === "loading" ||
-            settlementAnalyticsStatus === "loading" ||
+            getTransactionsStatus === 'loading' ||
+            settlementAnalyticsStatus === 'loading' ||
             transactionDataList?.length < 1
           }
         />
 
-        <Modal
-          isModalVisible={escalateModalVisible}
-          closeModal={handleCloseEscalateModal}>
+        <Modal isModalVisible={escalateModalVisible} closeModal={handleCloseEscalateModal}>
           <Formik
             initialValues={{
-              title: "",
-              description: "",
-              escalateTo: "",
-              priorityLevel: "",
+              title: '',
+              description: '',
+              escalateTo: '',
+              priorityLevel: '',
             }}
             enableReinitialize={true}
             validationSchema={escalateCchema}
@@ -630,88 +579,83 @@ function Settlements() {
                   internal_user_id: selectedEscalateTo,
                   priority_level: selectedPriorityLevel,
                   customer_telephone: selectedFailedTransaction?.phoneNumber,
-                })
+                }),
               );
 
               setSubmitting(false);
             }}>
-            {(formikProps) => {
-              const { handleChange, values, handleSubmit, errors } =
-                formikProps;
+            {formikProps => {
+              const { handleChange, values, handleSubmit, errors } = formikProps;
               return (
                 <form onSubmit={handleSubmit}>
                   <EscalateFormContainer>
                     <CustomerNameContainer>
                       <Input
-                        label='Customer Name'
+                        label="Customer Name"
                         backgroundColor={colors.white}
                         borderColor={colors.grey}
-                        placeholder='Enter title'
-                        type='text'
+                        placeholder="Enter title"
+                        type="text"
                         value={selectedFailedTransaction?.name}
-                        name={"name"}
+                        name={'name'}
                         onChange={() => {}}
                       />
                     </CustomerNameContainer>
 
                     <Input
-                      label='Title'
+                      label="Title"
                       backgroundColor={colors.white}
                       borderColor={colors.grey}
-                      placeholder='Enter title'
-                      type='text'
+                      placeholder="Enter title"
+                      type="text"
                       value={values.title}
-                      name={"title"}
+                      name={'title'}
                       onChange={handleChange}
                       error={errors.title}
                     />
 
                     <TextArea
-                      label='Title'
+                      label="Title"
                       backgroundColor={colors.white}
                       borderColor={colors.grey}
-                      placeholder='Type here...'
+                      placeholder="Type here..."
                       value={values.description}
-                      name={"description"}
+                      name={'description'}
                       onChange={handleChange}
                       error={errors.description}
                     />
 
                     <Picker
                       error={errors.escalateTo}
-                      label='Escalate to'
+                      label="Escalate to"
                       selectedValue={setSelectedEscalateTo}
-                      placeholder='Select Agent'
+                      placeholder="Select Agent"
                       options={escalationAgentsList}
                     />
 
                     <Picker
                       error={errors.priorityLevel}
-                      label='Priority Level'
+                      label="Priority Level"
                       selectedValue={setSelectedPriorityLevel}
-                      placeholder='Select Priority'
+                      placeholder="Select Priority"
                       options={[
-                        { label: "Low", value: "low" },
-                        { label: "Medium", value: "medium" },
-                        { label: "High", value: "high" },
+                        { label: 'Low', value: 'low' },
+                        { label: 'Medium', value: 'medium' },
+                        { label: 'High', value: 'high' },
                       ]}
                     />
                     <EscalateBtnContainer>
                       <Button
-                        type='submit'
-                        text='Escalate'
-                        disabled={
-                          createEscalationTicketStatus === "loading"
-                            ? true
-                            : false
-                        }
+                        type="submit"
+                        text="Escalate"
+                        disabled={createEscalationTicketStatus === 'loading' ? true : false}
                       />
                       <Button
                         onClick={handleCloseEscalateModal}
-                        text='Cancel'
+                        text="Cancel"
                         disabled={false}
                         secondary
-                        borderColor='transparent'
+                        borderColor="transparent"
                         color={colors.primary}
                       />
                     </EscalateBtnContainer>
@@ -726,10 +670,10 @@ function Settlements() {
         <SuccessModalWithCopy
           isModalVisible={escalateSuccessfulModalVisible}
           closeModal={handleCloseEscalateSuccessfulModal}
-          text={"Complaint has been escalated with Ticket Id:"}
-          copyIconText={"Copy Ticket:Id"}
+          text={'Complaint has been escalated with Ticket Id:'}
+          copyIconText={'Copy Ticket:Id'}
           title={escalateSuccessfulData?.ticket_reference}
-          iconType='sent'
+          iconType="sent"
         />
 
         <TransactionDetailsModal
@@ -743,16 +687,12 @@ function Settlements() {
               exportTransactionByIdToMailRequest({
                 transId: selectedFailedTransaction.transId,
                 email: selectedFailedTransaction.email,
-              })
+              }),
             )
           }
-          exportBtnDisabled={
-            exportTransactionByIdToMailStatus === "loading" ? true : false
-          }
+          exportBtnDisabled={exportTransactionByIdToMailStatus === 'loading' ? true : false}
           data={transactionByIdData?.data}
-          isLoading={
-            getTransactionByIdState.status === "loading" ? true : false
-          }
+          isLoading={getTransactionByIdState.status === 'loading' ? true : false}
         />
 
         <MoreIconView
@@ -760,14 +700,11 @@ function Settlements() {
           isModalVisible={moreIsVisible}
           closeModal={() => setMoreIsVisible(false)}
           options={moreIconOption}
-          onClick={(item) => handleMoreIconOptions(item)}
+          onClick={item => handleMoreIconOptions(item)}
         />
         <LoaderModal
-          isModalVisible={
-            getTransactionsStatus === "loading" ||
-            settlementAnalyticsStatus === "loading"
-          }
-          text='Loading please wait...'
+          isModalVisible={getTransactionsStatus === 'loading' || settlementAnalyticsStatus === 'loading'}
+          text="Loading please wait..."
           closeModal={() => {}}
         />
       </div>
