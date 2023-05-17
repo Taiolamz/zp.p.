@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
 import { logoutRequest } from "../../redux/slice";
 import { SideBarCard, UserActivityCard } from "../../components/index";
 import { H6 } from "../../styles";
-import { colors, images, routesPath } from "../../utils";
+import { colors, images, routesPath, capitalizeFirstLetter } from "../../utils";
 import {
   Container,
   Content,
@@ -208,7 +208,7 @@ function SideBar() {
           </div>
           <UserActivityCard
             title={name}
-            helper={activityStatus}
+            helper={capitalizeFirstLetter(activityStatus)}
             onClick={handleLogoutDesktop}
             btnDisabled={status === "loading" ? true : false}
           />
