@@ -488,7 +488,9 @@ function KycCustomer() {
           actionClick={handleApproveVerification}
           closeModal={() => setIsModalVisible(false)}
           isModalVisible={isModalVisible}
-          text={`Are you sure you want to approve this customer's document`}
+          text={`Are you sure you want to ${
+            rejectionIsModalVisible ? "reject" : "approve"
+          }  this customer's document`}
           actionText='Submit'
           secondaryActionText='Cancel'
           image={images.list}
