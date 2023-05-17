@@ -153,16 +153,16 @@ function Kyc() {
   useEffect(() => {
     if (kycsStatus === "succeeded") {
       let updateData: KycDataTableIPropsIProps[] = [];
-
       kycsState.data.users.data.forEach((item: Dictionary, index: number) => {
         updateData.push({
           id: index + 1,
-          userName: `${item?.name}`,
+          userName: `${item?.bvn?.first_name} ${item?.bvn?.last_name}`,
           bvn: item?.bvn?.bvn_number ? ` ${item?.bvn?.bvn_number}` : "N/A",
           phoneNo: item?.telephone,
           detailsId: item?.id,
         });
       });
+
       setKycData(updateData);
 
       const {
@@ -282,7 +282,7 @@ function Kyc() {
   const businessAddressData = [
     {
       id: 1,
-      text: customerData?.name,
+      text: `${customerData?.bvn?.first_name} ${customerData?.bvn?.last_name}`,
       helper: "Full Name",
     },
     {
