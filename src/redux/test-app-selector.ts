@@ -20,6 +20,7 @@ import {
   getUserVerificationsSliceReducer,
   getProfileViewHistorySliceReducer,
   getLoginHistorySliceReducer,
+  getUserTransactionsSliceReducer,
 } from "./slice";
 const state = {
   login: loginSliceReducer,
@@ -43,6 +44,7 @@ const state = {
   getUserVerifications: getUserVerificationsSliceReducer,
   getProfileViewHistory: getProfileViewHistorySliceReducer,
   getLoginHistory: getLoginHistorySliceReducer,
+  getUserTransactions: getUserTransactionsSliceReducer,
 };
 
 export const testAppSelector = (f: any) => f(state);
