@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { colors, boxShadow, spacing } from '../../utils';
+import styled from "styled-components";
+import { colors, boxShadow, spacing } from "../../utils";
 
 interface StyleProps {
   helper?: string;
@@ -19,6 +19,7 @@ export const Container = styled.div`
   width: 100%;
   padding: ${spacing.xxsmall} ${spacing.small} ${spacing.xxsmall}
     ${spacing.small};
+  z-index: 1;
 `;
 
 export const Content = styled.div`
