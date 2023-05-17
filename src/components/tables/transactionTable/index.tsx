@@ -50,7 +50,7 @@ function TransactionTable({
             {type === "transactions" && (
               <tbody>
                 {data?.map((item: any, index: number) => (
-                  <TR key={index}>
+                  <TR key={index} onClick={() => handleOnSelect(item)}>
                     <TD>{item.id}</TD>
                     <TD>{item.name}</TD>
                     <TD>{item.tid}</TD>

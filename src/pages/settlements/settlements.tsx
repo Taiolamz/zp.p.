@@ -568,7 +568,7 @@ function Settlements() {
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setSearchValue(e.target.value);
                 }}
-                placeholder='Search Records by transaction ID'
+                placeholder='Search by transaction ID'
               />
               <DatePickerContainer>
                 <DatePicker selectedDate={setStartDisplayRecordDate} />
