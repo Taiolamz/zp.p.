@@ -1,10 +1,10 @@
-import { TableTag, TD, TH, TR, TableContainer } from "./style";
-import { ReactComponent as EmptySearchIcon } from "../../../assets/svg/emptySearch.svg";
+import { TableTag, TD, TH, TR, TableContainer } from './style';
+import { ReactComponent as EmptySearchIcon } from '../../../assets/svg/emptySearch.svg';
 
 const emptyListCenterStyle = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
 };
 
 export interface PrevTransactionTableIPropsIProps {
@@ -26,12 +26,7 @@ export interface PrevTransactionIPropsIProps {
   onClick: any;
 }
 
-function PreviousTransactionsTable({
-  data,
-  setSelectedItem,
-  headerData,
-  onClick,
-}: PrevTransactionIPropsIProps) {
+function PreviousTransactionsTable({ data, setSelectedItem, headerData, onClick }: PrevTransactionIPropsIProps) {
   const handleOnSelect = (item: any) => {
     setSelectedItem(item);
     onClick(item);
@@ -56,18 +51,16 @@ function PreviousTransactionsTable({
             </TR>
 
             <>
-              {data.map(
-                (item: PrevTransactionTableIPropsIProps, index: number) => (
-                  <TR key={index} onClick={() => handleOnSelect(item)}>
-                    <TD>{item.id}</TD>
-                    <TD>{item.tType}</TD>
-                    <TD>{item.tid}</TD>
-                    <TD>{item.amount}</TD>
-                    <TD>{item.status}</TD>
-                    <TD>{item.date}</TD>
-                  </TR>
-                )
-              )}
+              {data.map((item: PrevTransactionTableIPropsIProps, index: number) => (
+                <TR key={index} onClick={() => handleOnSelect(item)}>
+                  <TD>{item.id}</TD>
+                  <TD>{item.tType}</TD>
+                  <TD>{item.tid}</TD>
+                  <TD>{item.amount}</TD>
+                  <TD>{item.status}</TD>
+                  <TD>{item.date}</TD>
+                </TR>
+              ))}
             </>
           </TableTag>
         </TableContainer>
