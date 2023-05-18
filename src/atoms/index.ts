@@ -20,5 +20,8 @@ export { default as UserSupportActivity } from './userSupportActivity';
 export { default as DocumentStatusModal } from './documentStatusModal';
 export { default as LoginHistoryModal } from './loginHistoryModal';
 export { default as TabViewLoginHistory } from './tabViewLoginHistory';
+export { default as SubAgentModal } from './subAgentModal';
+export { default as SubAgentCard } from '../components/subAgentCard';
 export { default as TransactionHistoryModal } from './transactionHistoryModal';
 export { default as SavedBanksModal } from './savedBanksModal';
+

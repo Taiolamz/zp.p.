@@ -4,7 +4,6 @@ import { CustomerProfileIProps } from '../../components/customerProfile';
 import { SavedBanksIProps } from '../../components/tables/savedBanksTable';
 import { TransactionHistoryIProps } from '../../components/tables/transactionHistoryTable';
 import { colors, dateFormat } from '../../utils';
-
 const date = new Date().toDateString();
 
 export const TransactionHistoryHeader = {
@@ -288,6 +287,74 @@ export const usersDataSuperAgent = [
     subAgents: 12,
   },
 ];
+
+
+export const subAgentData: SubAgentIPropsIprops[] = [
+  {
+    id: 1,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: true,
+  },
+  {
+    id: 2,
+    name: 'Subagent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: true,
+  },
+  {
+    id: 3,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: false,
+  },
+  {
+    id: 4,
+    name: 'Real Name',
+    dateAdded: 'Jul 12, 2021',
+    active: true,
+  },
+  {
+    id: 5,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: false,
+  },
+  {
+    id: 6,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: true,
+  },
+  {
+    id: 7,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: false,
+  },
+  {
+    id: 8,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: true,
+  },
+  {
+    id: 9,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: true,
+  },
+  {
+    id: 10,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: true,
+  },
+  {
+    id: 11,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: true,
 
 export const transactionHistoryData: TransactionHistoryIProps[] = [
   {

@@ -33,4 +33,4 @@ export { default as TransactionHistoryTable } from './tables/transactionHistoryT
 export { default as CountInfoCardNoHelper } from './cards/countInfoCardNoHelper';
 export { default as SavedBanksTable } from './tables/savedBanksTable';
 export { default as PreviousTransactionsTable } from './tables/previousTransactionsTable';
-
+export { default as SubAgentCard } from './subAgentCard';
