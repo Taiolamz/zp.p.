@@ -3,6 +3,7 @@ import { UserSupportActivityIProps } from '../../atoms/userSupportActivity';
 import { CustomerProfileIProps } from '../../components/customerProfile';
 import { SavedBanksIProps } from '../../components/tables/savedBanksTable';
 import { TransactionHistoryIProps } from '../../components/tables/transactionHistoryTable';
+import { SubAgentIPropsIprops } from '../../components/subAgentCard';
 import { colors, dateFormat } from '../../utils';
 const date = new Date().toDateString();
 
@@ -288,7 +289,6 @@ export const usersDataSuperAgent = [
   },
 ];
 
-
 export const subAgentData: SubAgentIPropsIprops[] = [
   {
     id: 1,
@@ -355,6 +355,8 @@ export const subAgentData: SubAgentIPropsIprops[] = [
     name: 'Agent Name',
     dateAdded: 'Jul 12, 2021',
     active: true,
+  },
+];
 
 export const transactionHistoryData: TransactionHistoryIProps[] = [
   {
