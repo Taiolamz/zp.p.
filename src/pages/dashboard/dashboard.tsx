@@ -1,8 +1,21 @@
 import { useState } from 'react';
-import { AppContainer, SubAgentModal } from '../../atoms';
-import { subAgentData } from '../users/data';
+import {
+  AppContainer,
+  SavedBanksModal,
+  TransactionHistoryModal,
+    SubAgentModal
+} from '../../atoms';
+import {
+  SavedBanksData,
+  TransactionHistoryHeader,
+  savedBanksDataHeader,
+  transactionHistoryData,
+  subAgentData
+} from '../users/data';
 function Dashboard() {
-  const [subAgentIsModalVisible, setSubAgentIsModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+   const [subAgentIsModalVisible, setSubAgentIsModalVisible] = useState(false);
+
 
   return (
     <AppContainer navTitle="DASHBOARD">
@@ -20,6 +33,25 @@ function Dashboard() {
           closeModal={() => setSubAgentIsModalVisible(false)}
           description="See all sub agents assigned to this user "
         />
+
+        <TransactionHistoryModal
+          actionClick={() => {}}
+          closeModal={() => setIsModalVisible(false)}
+          isModalVisible={isModalVisible}
+          title='Transaction History'
+          data={transactionHistoryData}
+          headerData={TransactionHistoryHeader}
+        />
+
+        {/* <SavedBanksModal
+          actionClick={() => {}}
+          closeModal={() => setIsModalVisible(false)}
+          isModalVisible={isModalVisible}
+          title='Bank & Cards'
+          data={SavedBanksData}
+          headerData={savedBanksDataHeader}
+        /> */}
+
       </div>
     </AppContainer>
   );

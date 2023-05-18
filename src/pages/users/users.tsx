@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -28,14 +29,15 @@ import {
 const { USERDETAILS } = routesPath;
 
 const userDataHeader = {
-  id: "",
-  name: "Name",
-  userId: "User ID",
-  walletNo: "Wallet No",
-  phone: "Phone No",
-  lastSeen: "Last Seen",
-  subAgents: "Sub Agents",
+  id: '',
+  name: 'Name',
+  userId: 'User ID',
+  walletNo: 'Wallet No',
+  phone: 'Phone No',
+  lastSeen: 'Last Seen',
+  subAgents: 'Sub Agents',
 };
+
 
 let activeUser = "active";
 let inActiveUser = "inactive";
@@ -51,6 +53,7 @@ const userTypeToFetchByActivity = (data: Dictionary) => {
   }
 
   return result;
+
 };
 
 function Users() {
@@ -58,10 +61,11 @@ function Users() {
   const navigate = useNavigate();
 
   const tabViewUsersData = [
-    { id: 1, isSelected: true, text: "Customers" },
-    { id: 2, isSelected: false, text: "Internal Users" },
-    { id: 3, isSelected: false, text: "Roles and permission" },
+    { id: 1, isSelected: true, text: 'Customers' },
+    { id: 2, isSelected: false, text: 'Internal Users' },
+    { id: 3, isSelected: false, text: 'Roles and permission' },
   ];
+
 
   const [tabViewUsersSelectedIndex, setTabViewUsersSelectedIndex] =
     useState<any[number]>(1);
@@ -98,6 +102,7 @@ function Users() {
       })
     );
   }, [selectedUsersCard, currentPage]);
+
 
   useEffect(() => {
     if (usersStatus === "succeeded") {
@@ -191,7 +196,7 @@ function Users() {
             <SearchContainer>
               <SearchInput
                 placeholder='Search User name, Phone number, wallet ID'
-                backgroundColor={"transparent"}
+                backgroundColor={'transparent'}
                 name='SearchValue'
                 value={searchValue}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>

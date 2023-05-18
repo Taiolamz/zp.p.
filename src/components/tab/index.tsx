@@ -13,14 +13,7 @@ export interface TabIProps {
   onClick?: () => void;
 }
 
-function Tab({
-  text,
-  isSelected,
-  onClick,
-  paddingRight,
-  type,
-  tabViewSelectedIndex,
-}: TabIProps) {
+function Tab({ text, isSelected, onClick, paddingRight, type, tabViewSelectedIndex }: TabIProps) {
   const colorUser =
     isSelected && tabViewSelectedIndex === 1
       ? colors.green
@@ -34,15 +27,12 @@ function Tab({
     <Container paddingRight={paddingRight} onClick={onClick}>
       <H4
         style={{
-          borderBottomColor: isSelected
-            ? colors.purpleVariantThree
-            : 'transparent',
+          borderBottomColor: isSelected ? colors.purpleVariantThree : 'transparent',
           borderBottomStyle: isSelected ? 'solid' : 'none',
           borderBottomWidth: isSelected ? 2 : 0,
         }}
         semiBold
-        color={type === 'user' ? colorUser : colorSettle}
-      >
+        color={type === 'user' ? colorUser : colorSettle}>
         {text}
       </H4>
     </Container>
