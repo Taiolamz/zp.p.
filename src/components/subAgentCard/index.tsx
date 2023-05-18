@@ -20,7 +20,7 @@ function SubAgentCard({ data }: SubAgentIProps) {
         return (
           <SubAgentCardContainer key={agent.id}>
             <DetailsContainer>
-              <Avatar>AN</Avatar>
+              <Avatar>{agent.name.match(/\b(\w)/g)?.join('')}</Avatar>
 
               <NameDateContainer>
                 <H2 lightBold left>

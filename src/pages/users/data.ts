@@ -368,7 +368,7 @@ export const subAgentData: SubAgentIPropsIprops[] = [
   },
   {
     id: 2,
-    name: 'Agent Name',
+    name: 'Subagent Name',
     dateAdded: 'Jul 12, 2021',
     active: true,
   },
@@ -380,7 +380,7 @@ export const subAgentData: SubAgentIPropsIprops[] = [
   },
   {
     id: 4,
-    name: 'Agent Name',
+    name: 'Real Name',
     dateAdded: 'Jul 12, 2021',
     active: true,
   },
