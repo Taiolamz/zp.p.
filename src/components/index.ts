@@ -30,3 +30,4 @@ export { default as DocumentStatusTable } from './tables/documentStatusTable';
 export { default as TabButton } from './tabButton';
 export { default as LoginHistoryTable } from './tables/loginHistoryTable';
 export { default as PreviousTransactionsTable } from './tables/previousTransactionsTable';
+export { default as SubAgentCard } from './subAgentCard';
