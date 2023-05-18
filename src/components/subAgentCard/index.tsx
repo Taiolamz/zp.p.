@@ -18,7 +18,7 @@ function SubAgentCard({ data }: SubAgentIProps) {
     <>
       {data.map(agent => {
         return (
-          <SubAgentCardContainer>
+          <SubAgentCardContainer key={agent.id}>
             <DetailsContainer>
               <Avatar>AN</Avatar>
 
