@@ -1,13 +1,8 @@
-import { useState, useEffect, useLayoutEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { FiFilter } from "react-icons/fi";
+import { useState, useEffect, useLayoutEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { FiFilter } from 'react-icons/fi';
 
-import {
-  DatePicker,
-  BorderedText,
-  Pagination,
-  PreviousTransactionsTable,
-} from "../../components";
+import { DatePicker, BorderedText, Pagination, PreviousTransactionsTable } from '../../components';
 import {
   AppContainer,
   ReconcileView,
@@ -15,7 +10,7 @@ import {
   SuccessActionModal,
   LoaderModal,
   TransactionDetailsModal,
-} from "../../atoms";
+} from '../../atoms';
 import {
   colors,
   dateFormat,
@@ -26,13 +21,8 @@ import {
   capitalizeFirstLetter,
   timeFormat,
   showMessage,
-} from "../../utils";
-import {
-  PrevTransactionContainer,
-  PrevHeader,
-  PrevSearch,
-  DatePickerContainer,
-} from "./style";
+} from '../../utils';
+import { PrevTransactionContainer, PrevHeader, PrevSearch, DatePickerContainer } from './style';
 
 import {
   getReconciliationAccountDetailRequest,
@@ -44,14 +34,14 @@ import {
   exportTransactionByIdToMailRequest,
   exportTransactionByIdToMailReset,
   getTransactionByIdRequest,
-} from "../../redux/slice";
-import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
-import { previousTransactionDataHeader } from "./settlmentsData";
-import { H2 } from "../../styles";
-import { PrevTransactionTableIPropsIProps } from "../../components/tables/previousTransactionsTable";
-import { Dictionary } from "../../types";
+} from '../../redux/slice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import { previousTransactionDataHeader } from './settlmentsData';
+import { H2 } from '../../styles';
+import { PrevTransactionTableIPropsIProps } from '../../components/tables/previousTransactionsTable';
+import { Dictionary } from '../../types';
 
-const initialDate = "2022-01-01";
+const initialDate = '2022-01-01';
 const currentDate = new Date().toDateString();
 const { RECONCILIATION } = routesPath;
 
@@ -59,62 +49,39 @@ function ReconcilationUserDetails() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   let { id } = useParams();
-  const [startDisplayRecordDate, setStartDisplayRecordDate] =
-    useState(initialDate);
+  const [startDisplayRecordDate, setStartDisplayRecordDate] = useState(initialDate);
   const [endDisplayRecordDate, setEndDisplayRecordDate] = useState(currentDate);
   const [transactionFilterParams, setTransactionFilterParams] = useState({
-    start_date: "",
-    end_date: "",
+    start_date: '',
+    end_date: '',
   });
-  const [reconcilationModalVisible, setReconcilationModalVisible] =
-    useState(false);
-  const [
-    reconcilationSuccessModalVisible,
-    setReconcilationSuccessModalVisible,
-  ] = useState(false);
+  const [reconcilationModalVisible, setReconcilationModalVisible] = useState(false);
+  const [reconcilationSuccessModalVisible, setReconcilationSuccessModalVisible] = useState(false);
   const [userData, setUserData] = useState<Dictionary>({});
   const pageSize = 10;
   const [totalPages, setTotalPages] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedPrevTransactionItem, setSelectedPrevTransactionItem] =
-    useState<Dictionary>({});
-  const [previousTransactionData, setPreviousTransactionData] = useState<
-    PrevTransactionTableIPropsIProps[]
-  >([]);
+  const [selectedPrevTransactionItem, setSelectedPrevTransactionItem] = useState<Dictionary>({});
+  const [previousTransactionData, setPreviousTransactionData] = useState<PrevTransactionTableIPropsIProps[]>([]);
   const [filterDate, setFilterDate] = useState(false);
-  const [transactionDetailsModalVisible, setTransactionDetailsModalVisible] =
-    useState(false);
-  const [transactionByIdData, setTransactionByIdData] = useState<Dictionary>(
-    {}
-  );
-  const [userEmail, setUserEmail] = useState("");
+  const [transactionDetailsModalVisible, setTransactionDetailsModalVisible] = useState(false);
+  const [transactionByIdData, setTransactionByIdData] = useState<Dictionary>({});
+  const [userEmail, setUserEmail] = useState('');
   // redux state
 
-  const getReconciliationAccountDetailState = useAppSelector(
-    (state) => state.getReconciliationAccountDetail
-  );
-  const { status: getReconciliationAccountDetailStatus } =
-    getReconciliationAccountDetailState;
+  const getReconciliationAccountDetailState = useAppSelector(state => state.getReconciliationAccountDetail);
+  const { status: getReconciliationAccountDetailStatus } = getReconciliationAccountDetailState;
 
-  const reconcileAccountState = useAppSelector(
-    (state) => state.reconcileAccount
-  );
+  const reconcileAccountState = useAppSelector(state => state.reconcileAccount);
   const { status: reconcileAccountStatus } = reconcileAccountState;
 
-  const userTransactionsState = useAppSelector(
-    (state) => state.getUserTransactions
-  );
+  const userTransactionsState = useAppSelector(state => state.getUserTransactions);
   const { status: userTransactionsStatus } = userTransactionsState;
 
-  const exportTransactionByIdToMailState = useAppSelector(
-    (state) => state.exportTransactionByIdToMail
-  );
-  const { status: exportTransactionByIdToMailStatus } =
-    exportTransactionByIdToMailState;
+  const exportTransactionByIdToMailState = useAppSelector(state => state.exportTransactionByIdToMail);
+  const { status: exportTransactionByIdToMailStatus } = exportTransactionByIdToMailState;
 
-  const getTransactionByIdState = useAppSelector(
-    (state) => state.getTransactionById
-  );
+  const getTransactionByIdState = useAppSelector(state => state.getTransactionById);
 
   const { status: getTransactionByIdStatus } = getTransactionByIdState;
 
@@ -124,7 +91,7 @@ function ReconcilationUserDetails() {
   }, [reconcileAccountState]);
 
   useEffect(() => {
-    if (getReconciliationAccountDetailStatus === "succeeded") {
+    if (getReconciliationAccountDetailStatus === 'succeeded') {
       setUserData(getReconciliationAccountDetailState?.data);
     }
   }, [getReconciliationAccountDetailState, reconcileAccountState]);
@@ -137,7 +104,7 @@ function ReconcilationUserDetails() {
   };
 
   useEffect(() => {
-    if (reconcileAccountStatus === "succeeded") {
+    if (reconcileAccountStatus === 'succeeded') {
       setReconcilationSuccessModalVisible(true);
     }
   }, [reconcileAccountState]);
@@ -149,33 +116,25 @@ function ReconcilationUserDetails() {
         userId: id,
         per_page: pageSize,
         page: currentPage,
-      })
+      }),
     );
   }, [transactionFilterParams, currentPage, filterDate]);
 
   useEffect(() => {
-    if (userTransactionsStatus === "succeeded") {
+    if (userTransactionsStatus === 'succeeded') {
       let updatedList: PrevTransactionTableIPropsIProps[] = [];
 
-      userTransactionsState?.data?.transactions?.data?.forEach(
-        (item: Dictionary, index: number) => {
-          updatedList.push({
-            id: index + 1,
-            tType: item?.transfer_purpose,
-            tid: item?.transaction_reference,
-            amount: currencyFormat(
-              parseFloat(item?.amount),
-              false,
-              item?.currency
-            ),
-            status: capitalizeFirstLetter(item?.status),
-            date: `${dateFormat(item?.created_at)} - ${timeFormat(
-              item?.created_at
-            )}`,
-            transId: item?.id,
-          });
-        }
-      );
+      userTransactionsState?.data?.transactions?.data?.forEach((item: Dictionary, index: number) => {
+        updatedList.push({
+          id: index + 1,
+          tType: item?.transfer_purpose,
+          tid: item?.transaction_reference,
+          amount: currencyFormat(parseFloat(item?.amount), false, item?.currency),
+          status: capitalizeFirstLetter(item?.status),
+          date: `${dateFormat(item?.created_at)} - ${timeFormat(item?.created_at)}`,
+          transId: item?.id,
+        });
+      });
 
       const {
         meta: { links },
@@ -187,7 +146,7 @@ function ReconcilationUserDetails() {
   }, [userTransactionsState]);
 
   useEffect(() => {
-    if (getTransactionByIdStatus === "succeeded") {
+    if (getTransactionByIdStatus === 'succeeded') {
       const {
         amount,
         status,
@@ -197,7 +156,9 @@ function ReconcilationUserDetails() {
         charge,
         channel,
         created_at,
-        user: { name, email },
+        external_account_name,
+        source,
+        user: { name, email, telephone },
       } = getTransactionByIdState.data.transaction;
       const result = {
         amount,
@@ -206,43 +167,48 @@ function ReconcilationUserDetails() {
         data: [
           {
             id: 1,
-            text: transfer_purpose,
-            helper: "Transaction Type",
+            text: capitalizeFirstLetter(transfer_purpose),
+            helper: 'Transaction Type',
           },
           {
             id: 2,
             text: name,
-            helper: "Wallet Name",
+            helper: 'Wallet Name',
           },
           {
             id: 3,
-            text: name,
-            helper: "Wallet Name",
+            text: email,
+            helper: 'Email',
           },
           {
             id: 4,
-            text: beneficiary_account_id,
-            helper: "Beneficiary Account Id",
+            text: telephone,
+            helper: 'Phone Number',
           },
           {
             id: 5,
             text: `N${charge}`,
-            helper: "Charges",
+            helper: 'Charges',
           },
           {
             id: 6,
-            text: channel,
-            helper: "Channel",
+            text: source !== null ? source?.name : external_account_name,
+            helper: 'Sender Name',
           },
           {
             id: 7,
-            text: timeFormat(created_at, true),
-            helper: "Time",
+            text: channel,
+            helper: 'Channel',
           },
           {
             id: 8,
+            text: timeFormat(created_at, true),
+            helper: 'Time',
+          },
+          {
+            id: 9,
             text: dateFormat(created_at),
-            helper: "Date",
+            helper: 'Date',
           },
         ],
       };
@@ -252,10 +218,10 @@ function ReconcilationUserDetails() {
   }, [getTransactionByIdState]);
 
   useEffect(() => {
-    if (exportTransactionByIdToMailStatus === "succeeded") {
+    if (exportTransactionByIdToMailStatus === 'succeeded') {
       setTransactionDetailsModalVisible(false);
       showMessage({
-        type: "success",
+        type: 'success',
         message: exportTransactionByIdToMailState?.data?.message,
       });
       dispatch(exportTransactionByIdToMailReset());
@@ -274,7 +240,7 @@ function ReconcilationUserDetails() {
     dispatch(
       reconcileAccountRequest({
         account_number: userData?.user?.account?.number,
-      })
+      }),
     );
   };
 
@@ -293,57 +259,47 @@ function ReconcilationUserDetails() {
     dispatch(
       getTransactionByIdRequest({
         transId: item.transId,
-      })
+      }),
     );
   };
 
   return (
-    <AppContainer
-      goBack={() => navigate(RECONCILIATION)}
-      navTitle='RECONCILIATION'
-      navHelper='USER PROFILE'>
+    <AppContainer goBack={() => navigate(RECONCILIATION)} navTitle="RECONCILIATION" navHelper="USER PROFILE">
       <div style={{ marginTop: spacing.small, paddingBottom: spacing.medium }}>
         <div>
-          {getReconciliationAccountDetailStatus !== "loading" &&
-            userData.hasOwnProperty("user") && (
-              <ReconcileView
-                name={userData?.user?.name}
-                zojaBalance={userData?.user?.account?.available_balance}
-                kudaBalance={userData?.kuda_balance.toString()}
-                onClick={() => setReconcilationModalVisible(true)}
-                data={[
-                  { text: userData?.user?.telephone, helper: "Phone Number" },
-                  { text: userData?.user?.email, helper: "Email" },
-                  {
-                    text:
-                      userData?.user?.kyc?.bvn_number === null
-                        ? "N/A"
-                        : userData?.user?.kyc?.bvn_number,
-                    helper: "BVN",
-                  },
-                  {
-                    text: userData?.user?.account?.number,
-                    helper: "Account Number",
-                  },
-                  {
-                    text:
-                      userData?.user?.location === null
-                        ? "N/A"
-                        : userData?.user?.location,
-                    helper: "Address",
-                  },
-                  { text: userData?.user?.kyc_level, helper: "KYC" },
-                  {
-                    text: dateFormat(userData?.user?.updated_at),
-                    helper: "Last Login",
-                  },
-                  {
-                    text: dateFormat(userData?.user?.created_at),
-                    helper: "Date of Onboarding",
-                  },
-                ]}
-              />
-            )}
+          {getReconciliationAccountDetailStatus !== 'loading' && userData.hasOwnProperty('user') && (
+            <ReconcileView
+              name={userData?.user?.name}
+              zojaBalance={userData?.user?.account?.available_balance}
+              kudaBalance={userData?.kuda_balance.toString()}
+              onClick={() => setReconcilationModalVisible(true)}
+              data={[
+                { text: userData?.user?.telephone, helper: 'Phone Number' },
+                { text: userData?.user?.email, helper: 'Email' },
+                {
+                  text: userData?.user?.kyc?.bvn_number === null ? 'N/A' : userData?.user?.kyc?.bvn_number,
+                  helper: 'BVN',
+                },
+                {
+                  text: userData?.user?.account?.number,
+                  helper: 'Account Number',
+                },
+                {
+                  text: userData?.user?.location === null ? 'N/A' : userData?.user?.location,
+                  helper: 'Address',
+                },
+                { text: userData?.user?.kyc_level, helper: 'KYC' },
+                {
+                  text: dateFormat(userData?.user?.updated_at),
+                  helper: 'Last Login',
+                },
+                {
+                  text: dateFormat(userData?.user?.created_at),
+                  helper: 'Date of Onboarding',
+                },
+              ]}
+            />
+          )}
         </div>
         <PrevTransactionContainer>
           <PrevHeader>
@@ -360,14 +316,14 @@ function ReconcilationUserDetails() {
                 onClick={handleSetFilterDateToday}
                 backgroundColor={colors.white}
                 color={colors.grey}
-                text='Today'
+                text="Today"
               />
               <BorderedText
                 onClick={handleTransactionFilter}
                 backgroundColor={colors.primary}
                 color={colors.white}
                 icon={<FiFilter color={colors.white} size={15} />}
-                text='Search'
+                text="Search"
               />
             </PrevSearch>
           </PrevHeader>
@@ -385,13 +341,10 @@ function ReconcilationUserDetails() {
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          onPageChange={(selectedPage) => {
+          onPageChange={selectedPage => {
             setCurrentPage(selectedPage);
           }}
-          isLoading={
-            getReconciliationAccountDetailStatus === "loading" ||
-            userTransactionsStatus === "loading"
-          }
+          isLoading={getReconciliationAccountDetailStatus === 'loading' || userTransactionsStatus === 'loading'}
         />
 
         <TransactionDetailsModal
@@ -405,42 +358,35 @@ function ReconcilationUserDetails() {
               exportTransactionByIdToMailRequest({
                 transId: selectedPrevTransactionItem?.transId,
                 email: userEmail,
-              })
+              }),
             )
           }
-          exportBtnDisabled={
-            exportTransactionByIdToMailStatus === "loading" ? true : false
-          }
+          exportBtnDisabled={exportTransactionByIdToMailStatus === 'loading' ? true : false}
           data={transactionByIdData?.data}
-          isLoading={
-            getTransactionByIdState.status === "loading" ? true : false
-          }
+          isLoading={getTransactionByIdState.status === 'loading' ? true : false}
         />
 
         <PerformActionModal
           isModalVisible={reconcilationModalVisible}
           actionClick={handleReconcileBalance}
           closeModal={handleCloseReconcilationModal}
-          actionText='Proceed'
-          title='You Are About To Perform A Reconciliation'
-          isLoading={reconcileAccountStatus === "loading" ? true : false}
-          text='This will revert the account balance of the user on ZojaPay to match their account balance on KUDA'
+          actionText="Proceed"
+          title="You Are About To Perform A Reconciliation"
+          isLoading={reconcileAccountStatus === 'loading' ? true : false}
+          text="This will revert the account balance of the user on ZojaPay to match their account balance on KUDA"
         />
 
         <SuccessActionModal
           isModalVisible={reconcilationSuccessModalVisible}
-          actionText='Finish'
+          actionText="Finish"
           closeModal={handleCloseReconcilationSuccessModal}
-          title='Reconciliation Successful'
-          text='User will be sent a notification informing them of the reversal.'
+          title="Reconciliation Successful"
+          text="User will be sent a notification informing them of the reversal."
         />
 
         <LoaderModal
-          isModalVisible={
-            getReconciliationAccountDetailStatus === "loading" ||
-            userTransactionsStatus === "loading"
-          }
-          text='Loading please wait...'
+          isModalVisible={getReconciliationAccountDetailStatus === 'loading' || userTransactionsStatus === 'loading'}
+          text="Loading please wait..."
           closeModal={() => {}}
         />
       </div>

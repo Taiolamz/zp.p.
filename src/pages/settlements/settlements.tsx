@@ -213,6 +213,8 @@ function Settlements() {
         charge,
         channel,
         created_at,
+        external_account_name,
+        source,
         user: { name, email, telephone },
       } = getTransactionByIdState.data.transaction;
 
@@ -246,19 +248,23 @@ function Settlements() {
             text: `N${charge}`,
             helper: 'Charges',
           },
-
           {
             id: 6,
+            text: source !== null ? source?.name : external_account_name,
+            helper: 'Sender Name',
+          },
+          {
+            id: 7,
             text: channel,
             helper: 'Channel',
           },
           {
-            id: 7,
+            id: 8,
             text: timeFormat(created_at, true),
             helper: 'Time',
           },
           {
-            id: 8,
+            id: 9,
             text: dateFormat(created_at),
             helper: 'Date',
           },
