@@ -1,8 +1,25 @@
 import { DocumentStatusIProps } from '../../atoms/documentStatusModal';
 import { UserSupportActivityIProps } from '../../atoms/userSupportActivity';
 import { CustomerProfileIProps } from '../../components/customerProfile';
+import { SavedBanksIProps } from '../../components/tables/savedBanksTable';
+import { TransactionHistoryIProps } from '../../components/tables/transactionHistoryTable';
+import { SubAgentIPropsIprops } from '../../components/subAgentCard';
 import { colors, dateFormat } from '../../utils';
 const date = new Date().toDateString();
+
+export const TransactionHistoryHeader = {
+  time: 'Time',
+  transactionType: 'Transaction Type',
+  amount: 'Amount',
+  status: 'Status',
+  recipient: 'Recipient',
+};
+
+export const savedBanksDataHeader = {
+  accNo: 'Acct No',
+  accName: 'Acct Name',
+  bank: 'Bank',
+};
 
 export const customerDetails: CustomerProfileIProps[] = [
   {
@@ -180,92 +197,6 @@ export const docStatus: DocumentStatusIProps[] = [
   },
 ];
 
-// export const loginHistory: LoginHistoryIProps[] = [
-//   {
-//     id: 1,
-//     time: "12/22/2021 - 22:46",
-//     device: "Iphone 14 pro max",
-//     location: "Lagos, Nigeria",
-//     ipAddress: "192.158. 1.38",
-//   },
-//   {
-//     id: 2,
-//     time: "12/22/2021 - 22:46",
-//     device: "Web",
-//     location: "Lagos, Nigeria",
-//     ipAddress: "192.158. 1.42",
-//   },
-//   {
-//     id: 3,
-//     time: "12/22/2021 - 22:46",
-//     device: "Iphone 14 pro max",
-//     location: "Lagos, Nigeria",
-//     ipAddress: "192.158. 1.38",
-//   },
-//   {
-//     id: 4,
-//     time: "12/22/2021 - 22:46",
-//     device: "Iphone 14 pro max",
-//     location: "Lagos, Nigeria",
-//     ipAddress: "192.158. 1.38",
-//   },
-//   {
-//     id: 5,
-//     time: "12/22/2021 - 22:46",
-//     device: "Iphone 14 pro max",
-//     location: "Lagos, Nigeria",
-//     ipAddress: "192.158. 1.38",
-//   },
-
-//   {
-//     id: 6,
-//     time: "12/22/2021 - 22:46",
-//     device: "Iphone 14 pro max",
-//     location: "Lagos, Nigeria",
-//     ipAddress: "192.158. 1.38",
-//   },
-// ];
-
-// export const loginHistory2: LoginHistory2IProps[] = [
-//   {
-//     id: 1,
-//     time: "12/22/2021 - 22:46",
-//     staffName: "Debo Dare",
-//     machineName: "AIN723492",
-//   },
-//   {
-//     id: 2,
-//     time: "12/22/2021 - 22:46",
-//     staffName: "Debo Dare",
-//     machineName: "AIN723492",
-//   },
-//   {
-//     id: 3,
-//     time: "12/22/2021 - 22:46",
-//     staffName: "Debo Dare",
-//     machineName: "AIN723492",
-//   },
-//   {
-//     id: 4,
-//     time: "12/22/2021 - 22:46",
-//     staffName: "Debo Dare",
-//     machineName: "AIN723492",
-//   },
-//   {
-//     id: 5,
-//     time: "12/22/2021 - 22:46",
-//     staffName: "Debo Dare",
-//     machineName: "AIN723492",
-//   },
-
-//   {
-//     id: 6,
-//     time: "12/22/2021 - 22:46",
-//     staffName: "Debo Dare",
-//     machineName: "AIN723492",
-//   },
-// ];
-
 export const documentStatusDataHeader = {
   document: 'Document',
   noOfUpload: 'No of Upload',
@@ -354,5 +285,126 @@ export const usersDataSuperAgent = [
     walletNo: '2034567584',
     phone: '08142346753',
     subAgents: 12,
+  },
+];
+
+export const subAgentData: SubAgentIPropsIprops[] = [
+  {
+    id: 1,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: true,
+  },
+  {
+    id: 2,
+    name: 'Subagent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: true,
+  },
+  {
+    id: 3,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: false,
+  },
+  {
+    id: 4,
+    name: 'Real Name',
+    dateAdded: 'Jul 12, 2021',
+    active: true,
+  },
+  {
+    id: 5,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: false,
+  },
+  {
+    id: 6,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: true,
+  },
+  {
+    id: 7,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: false,
+  },
+  {
+    id: 8,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: true,
+  },
+  {
+    id: 9,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: true,
+  },
+  {
+    id: 10,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: true,
+  },
+  {
+    id: 11,
+    name: 'Agent Name',
+    dateAdded: 'Jul 12, 2021',
+    active: true,
+  },
+];
+
+export const transactionHistoryData: TransactionHistoryIProps[] = [
+  {
+    id: 1,
+    time: '12/22/2021 - 22:46',
+    transactionType: 'Cash Request',
+    amount: 2500,
+    status: 'In Progress',
+    recipient: 'In Progress',
+  },
+  {
+    id: 2,
+    time: '12/22/2021 - 22:46',
+    transactionType: 'Cash Request -3rd Party',
+    amount: 2500,
+    status: 'Failed- Declined',
+    recipient: '3rd Party - Folashade Gabriel',
+  },
+  {
+    id: 3,
+    time: '12/22/2021 - 22:46',
+    transactionType: 'Cash Provide',
+    amount: 2500,
+    status: 'Successful',
+    recipient: 'Gbemi Faloun',
+  },
+  {
+    id: 4,
+    time: '12/22/2021 - 22:46',
+    transactionType: 'Bills - Data(MTN)',
+    amount: 2500,
+    status: 'Successful',
+    recipient: '0812345678',
+  },
+  {
+    id: 5,
+    time: '12/22/2021 - 22:46',
+    transactionType: 'Cash Request',
+    amount: 2500,
+    status: 'Successful',
+    recipient: 'Wade williams',
+  },
+];
+
+export const SavedBanksData: SavedBanksIProps[] = [
+  {
+    id: 1,
+    accNo: '20***90',
+    accName: 'Wade Warren Chukwuma',
+    bank: 'Zenith',
   },
 ];
