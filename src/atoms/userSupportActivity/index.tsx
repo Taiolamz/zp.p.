@@ -1,6 +1,8 @@
-import { BorderedText } from "../../components";
-import { colors } from "../../utils";
-import { Container } from "./style";
+import { BorderedText } from '../../components';
+import { Dictionary } from '../../types';
+import { colors } from '../../utils';
+import { Container } from './style';
+import { namedViewSubAgents, namedDeactivateProfile, namedReactivateProfile } from '../../pages/users/data';
 
 export interface UserSupportActivityIProps {
   id: number;
@@ -10,22 +12,29 @@ export interface UserSupportActivityIProps {
 
 export interface UserSupportActivitiesIProps {
   data: UserSupportActivityIProps[];
-  onClick?: () => void;
+  onClick: (item: Dictionary) => void;
   setSelectedItem: any;
-  openModal?: any;
+  onClickProfileToggle: () => void;
+  profileToggleText: string;
+  kycLevel: string;
+  onClickViewSubAgent: () => void;
 }
 
 const UserSupportActivity = ({
   data,
   onClick,
   setSelectedItem,
-  openModal,
+  onClickProfileToggle,
+  onClickViewSubAgent,
+  profileToggleText,
+  kycLevel,
 }: UserSupportActivitiesIProps) => {
   const handleSelectedItem = (item: UserSupportActivityIProps) => {
     setSelectedItem(item);
+    onClick(item);
   };
   return (
-    <Container onClick={onClick}>
+    <Container>
       {data?.map((item: UserSupportActivityIProps) => (
         <BorderedText
           onClick={() => handleSelectedItem(item)}
@@ -35,6 +44,20 @@ const UserSupportActivity = ({
           color={colors.white}
         />
       ))}
+      <BorderedText
+        onClick={onClickProfileToggle}
+        text={profileToggleText}
+        backgroundColor={profileToggleText === namedReactivateProfile ? colors.green : colors.red}
+        color={colors.white}
+      />
+      {kycLevel === 'Level 3' && (
+        <BorderedText
+          onClick={onClickViewSubAgent}
+          text={profileToggleText}
+          backgroundColor={colors.purpleVariantThree}
+          color={colors.white}
+        />
+      )}
     </Container>
   );
 };
