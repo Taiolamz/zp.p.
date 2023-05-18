@@ -107,41 +107,40 @@ export const appActivity: CustomerProfileIProps[] = [
   },
 ];
 
+export const namedDocumentStatus = 'Document Status';
+export const namedTransactionHistory = 'Transaction History';
+export const namedDocumentHistory = 'Document History';
+export const namedSavedBanks = 'Saved Banks';
+export const namedLoginHistory = 'Login History';
+export const namedReactivateProfile = 'Reactivate Profile';
+export const namedDeactivateProfile = 'Deactivate Profile';
+export const namedViewSubAgents = 'View Sub Agents';
+
 export const supportActivitiesData: UserSupportActivityIProps[] = [
   {
     id: 1,
-    text: 'Document Status',
+    text: namedDocumentStatus,
     backgroundColor: colors.purpleVariantThree,
   },
   {
     id: 2,
-    text: 'Transaction History',
+    text: namedTransactionHistory,
     backgroundColor: colors.purpleVariantThree,
   },
   {
     id: 3,
-    text: 'Upload Document',
+    text: namedDocumentHistory,
     backgroundColor: colors.purpleVariantThree,
   },
   {
     id: 4,
-    text: 'Document History',
+    text: namedSavedBanks,
     backgroundColor: colors.purpleVariantThree,
   },
   {
     id: 5,
-    text: 'Saved Banks',
+    text: namedLoginHistory,
     backgroundColor: colors.purpleVariantThree,
-  },
-  {
-    id: 6,
-    text: 'Login History',
-    backgroundColor: colors.purpleVariantThree,
-  },
-  {
-    id: 7,
-    text: 'Reactivate Profile',
-    backgroundColor: colors.green,
   },
 ];
 
