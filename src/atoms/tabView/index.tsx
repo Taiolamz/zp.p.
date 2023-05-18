@@ -11,13 +11,7 @@ export interface TabViewIPropsIProps {
   tabViewSelectedIndex?: number;
 }
 
-function TabView({
-  data,
-  backgroundColor,
-  setSelectedIndex,
-  tabViewSelectedIndex,
-  type,
-}: TabViewIPropsIProps) {
+function TabView({ data, backgroundColor, setSelectedIndex, tabViewSelectedIndex, type }: TabViewIPropsIProps) {
   const [dataList, setDataList] = useState<any[]>([]);
   const handleOnSelect = (item: TabIProps) => {
     const itemToEdit = item;

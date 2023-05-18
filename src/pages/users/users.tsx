@@ -1,15 +1,31 @@
-import { useState, useEffect } from 'react';
-import { AppContainer, CountInfo, TabView, TabViewUsers } from '../../atoms';
-import { colors, routesPath } from '../../utils';
-import { SearchInput, UsersTable } from '../../components';
+
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  AppContainer,
+  CountInfo,
+  TabView,
+  TabViewUsers,
+  LoaderModal,
+} from "../../atoms";
+import { colors, routesPath } from "../../utils";
+import { SearchInput, UsersTable, Pagination } from "../../components";
 import {
   SearchContainer,
   TableContainer,
   UserContainer,
   UsersContainer,
-} from './style';
-import { useNavigate } from 'react-router-dom';
-import { userCountData, usersDataLastSeen, usersDataSuperAgent } from './data';
+} from "./style";
+
+import { usersDataLastSeen } from "./data";
+import { Dictionary } from "../../types";
+import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
+import {
+  getUsersRequest,
+  getUsersReset,
+  getSuperAgentsRequest,
+  getSuperAgentsReset,
+} from "../../redux/slice";
 const { USERDETAILS } = routesPath;
 
 const userDataHeader = {
@@ -22,113 +38,26 @@ const userDataHeader = {
   subAgents: 'Sub Agents',
 };
 
-const usersData = [
-  {
-    id: 1,
-    name: 'Fola Debo',
-    userId: '001234526789',
-    walletNo: '2034567584',
-    phone: '08142346753',
-  },
-  {
-    id: 2,
-    name: 'Fola Debo',
-    userId: '001234526789',
-    walletNo: '2034567584',
-    phone: '08142346753',
-  },
-  {
-    id: 3,
-    name: 'Fola Debo',
-    userId: '001234526789',
-    walletNo: '2034567584',
-    phone: '08142346753',
-  },
-];
 
-const userDetails: any = [
-  {
-    id: 1,
-    userName: 'Wade Warren',
-    bvn: 222233434555,
-    phone: '+2348036329178',
-  },
+let activeUser = "active";
+let inActiveUser = "inactive";
 
-  {
-    id: 2,
-    userName: 'Wade Warren',
-    bvn: 222233434555,
-    phone: '+2348036329178',
-  },
-  {
-    id: 3,
-    userName: 'Wade Warren',
-    bvn: 222233434555,
-    phone: '+2348036329178',
-  },
-  {
-    id: 4,
-    userName: 'Wade Warren',
-    bvn: 222233434555,
-    phone: '+2348036329178',
-  },
-  {
-    id: 5,
-    userName: 'Wade Warren',
-    bvn: 222233434555,
-    phone: '+2348036329178',
-  },
-  {
-    id: 6,
-    userName: 'Wade Warren',
-    bvn: 222233434555,
-    phone: '+2348036329178',
-  },
-];
+const userTypeToFetchByActivity = (data: Dictionary) => {
+  let result: string = "";
+  if (!data?.hasOwnProperty("id") || data?.id === 1) {
+    result = activeUser;
+  }
 
-const supportFunctionItems = [
-  {
-    id: 1,
-    name: 'Document Status',
-    color: colors.purpleVariantThree,
-  },
-  {
-    id: 2,
-    name: 'Transaction History',
-    color: colors.purpleVariantThree,
-  },
-  {
-    id: 3,
-    name: 'Upload Document',
-    color: colors.purpleVariantThree,
-  },
-  {
-    id: 4,
-    name: 'Document History',
-    color: colors.purpleVariantThree,
-  },
-  {
-    id: 5,
-    name: 'Saved Banks',
-    color: colors.purpleVariantThree,
-  },
-  {
-    id: 6,
-    name: 'Login History',
-    color: colors.purpleVariantThree,
-  },
-  {
-    id: 7,
-    name: 'Reactivate Profile',
-    color: colors.green,
-  },
-];
+  if (data?.id === 3) {
+    result = inActiveUser;
+  }
 
-type Dictionary = {
-  [key: string]: any;
+  return result;
+
 };
 
 function Users() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const tabViewUsersData = [
@@ -136,32 +65,125 @@ function Users() {
     { id: 2, isSelected: false, text: 'Internal Users' },
     { id: 3, isSelected: false, text: 'Roles and permission' },
   ];
-  const tabViewData = [
-    { id: 1, isSelected: true, text: 'Active Users' },
-    { id: 2, isSelected: false, text: 'Inactive Users' },
-  ];
 
-  const [usersCountList, setUsersCountList] = useState<any[]>([]);
-  const [selectedUsersCard, setSelectedUsersCard] = useState<Dictionary>({});
 
   const [tabViewUsersSelectedIndex, setTabViewUsersSelectedIndex] =
     useState<any[number]>(1);
-  const [
-    tabViewUserActivitySelectedIndex,
-    setTabViewUserActivitySelectedIndex,
-  ] = useState<any[number]>(1);
+  const [selectedUsersCard, setSelectedUsersCard] = useState<Dictionary>({
+    id: 1,
+    count: 0,
+    title: "Active Users",
+  });
 
-  const [moreIsVisible, setMoreIsVisible] = useState(false);
-  const [searchValue, setSearchValue] = useState('');
+  const [searchValue, setSearchValue] = useState("");
+  const [userCountData, setUserCountData] = useState<any[]>([]);
+  const [usersData, setUsersData] = useState<any[]>([]);
+  const [usersDataSuperAgent, setUsersDataSuperAgent] = useState<any[]>([]);
+  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(5);
+  // redux state
+  const usersState = useAppSelector((state) => state.getUsers);
+  const { status: usersStatus } = usersState;
+
+  const superAgentsState = useAppSelector((state) => state.getSuperAgents);
+  const { status: superAgentsStatus } = superAgentsState;
+
+  // api
+
+  // get users by status
+  const userTypeToFetch = userTypeToFetchByActivity(selectedUsersCard);
+  useEffect(() => {
+    dispatch(
+      getUsersRequest({
+        path: `/sort-by-status?status=${userTypeToFetch}`,
+        per_page: pageSize,
+        page: currentPage,
+      })
+    );
+  }, [selectedUsersCard, currentPage]);
+
 
   useEffect(() => {
-    setSelectedUsersCard(userCountData[0]);
+    if (usersStatus === "succeeded") {
+      let userCountResult: any[] = [];
+
+      userCountResult = [
+        {
+          id: 1,
+          count: usersState?.data?.active_users_count,
+          title: "Active Users",
+        },
+        {
+          id: 2,
+          count: usersState?.data?.super_agent_count,
+          title: "Super Agents",
+        },
+        {
+          id: 3,
+          count: usersState?.data?.inactive_users_count,
+          title: "Inactive Users",
+        },
+      ];
+
+      let updateUsersData: any[] = [];
+
+      usersState?.data?.users?.data?.forEach(
+        (item: Dictionary, index: number) => {
+          updateUsersData.push({
+            id: index + 1,
+            name: item?.name !== null ? `${item?.name}` : "N/A",
+            userId: item?.account?.user_id
+              ? ` ${item?.account?.user_id}`
+              : "N/A",
+            walletNo: item?.account?.number ? item?.account?.number : "N/A",
+            phone: item?.telephone,
+          });
+        }
+      );
+
+      setUserCountData(userCountResult);
+      setUsersData(updateUsersData);
+
+      const {
+        meta: { links },
+      } = usersState?.data?.users;
+
+      setTotalPages(links.length - 2);
+    }
+  }, [usersState]);
+
+  useEffect(() => {
+    dispatch(getSuperAgentsRequest({}));
   }, []);
+
+  useEffect(() => {
+    if (superAgentsStatus === "succeeded") {
+      let updateUsersData: any[] = [];
+
+      superAgentsState?.data?.forEach((item: Dictionary, index: number) => {
+        updateUsersData.push({
+          id: index + 1,
+          name: item?.user?.name !== null ? `${item?.user?.name}` : "N/A",
+          userId: item?.user?.account?.user_id
+            ? ` ${item?.user?.account?.user_id}`
+            : "N/A",
+          walletNo: item?.user?.account?.number
+            ? item?.user?.account?.number
+            : "N/A",
+          phone: item?.user?.telephone ? item?.user?.telephone : "N/A",
+          subAgents: item?.sub_agent_count,
+        });
+      });
+
+      setUsersDataSuperAgent(updateUsersData);
+    }
+  }, [superAgentsState]);
 
   return (
     <AppContainer navTitle='USER'>
       <UserContainer>
-        <TabViewUsers
+        <TabView
           data={tabViewUsersData}
           setSelectedIndex={setTabViewUsersSelectedIndex}
         />
@@ -182,13 +204,6 @@ function Users() {
                 }
               />
             </SearchContainer>
-
-            {/* <TabView
-              data={tabViewData}
-              setSelectedIndex={setTabViewUserActivitySelectedIndex}
-              type={"user"}
-              tabViewSelectedIndex={tabViewUserActivitySelectedIndex}
-            /> */}
 
             <TableContainer>
               {selectedUsersCard.id === 1 && (
@@ -218,11 +233,30 @@ function Users() {
                   type='inactive'
                 />
               )}
+
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={(selectedPage) => {
+                  setCurrentPage(selectedPage);
+                }}
+                isLoading={
+                  superAgentsStatus === "loading" || usersStatus === "loading"
+                }
+              />
             </TableContainer>
           </UsersContainer>
         )}
-        {tabViewUsersSelectedIndex === 2 && ''}
-        {tabViewUsersSelectedIndex === 3 && ''}
+        {tabViewUsersSelectedIndex === 2 && ""}
+        {tabViewUsersSelectedIndex === 3 && ""}
+
+        <LoaderModal
+          text='Please wait loading ...'
+          isModalVisible={
+            superAgentsStatus === "loading" || usersStatus === "loading"
+          }
+          closeModal={() => {}}
+        />
       </UserContainer>
     </AppContainer>
   );

@@ -14,6 +14,13 @@ import {
   getKycsAnalyticsSliceReducer,
   getKycCustomerSliceReducer,
   kycVerificationSliceReducer,
+  getSuperAgentsSliceReducer,
+  getUsersSliceReducer,
+  getUserProfileSliceReducer,
+  getUserVerificationsSliceReducer,
+  getProfileViewHistorySliceReducer,
+  getLoginHistorySliceReducer,
+  getUserTransactionsSliceReducer,
 } from "./slice";
 const state = {
   login: loginSliceReducer,
@@ -31,6 +38,13 @@ const state = {
   getKycsAnalytics: getKycsAnalyticsSliceReducer,
   getKycCustomer: getKycCustomerSliceReducer,
   kycVerification: kycVerificationSliceReducer,
+  getSuperAgents: getSuperAgentsSliceReducer,
+  getUsers: getUsersSliceReducer,
+  getUserProfile: getUserProfileSliceReducer,
+  getUserVerifications: getUserVerificationsSliceReducer,
+  getProfileViewHistory: getProfileViewHistorySliceReducer,
+  getLoginHistory: getLoginHistorySliceReducer,
+  getUserTransactions: getUserTransactionsSliceReducer,
 };
 
 export const testAppSelector = (f: any) => f(state);
