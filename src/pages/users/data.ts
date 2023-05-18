@@ -1,8 +1,43 @@
-import { DocumentStatusIProps } from "../../atoms/documentStatusModal";
-import { UserSupportActivityIProps } from "../../atoms/userSupportActivity";
-import { CustomerProfileIProps } from "../../components/customerProfile";
-import { colors, dateFormat } from "../../utils";
+
+import { DocumentStatusIProps } from '../../atoms/documentStatusModal';
+import {
+  LoginHistory2IProps,
+  LoginHistoryIProps,
+} from '../../atoms/loginHistoryModal';
+import { UserSupportActivityIProps } from '../../atoms/userSupportActivity';
+import { CustomerProfileIProps } from '../../components/customerProfile';
+import { SavedBanksIProps } from '../../components/tables/savedBanksTable';
+import { TransactionHistoryIProps } from '../../components/tables/transactionHistoryTable';
+import { colors, dateFormat } from '../../utils';
+
 const date = new Date().toDateString();
+
+export const loginHistoryDataHeader1 = {
+  time: 'Time',
+  device: 'Device',
+  location: 'Location',
+  ipAddress: 'IP Address',
+};
+
+export const TransactionHistoryHeader = {
+  time: 'Time',
+  transactionType: 'Transaction Type',
+  amount: 'Amount',
+  status: 'Status',
+  recipient: 'Recipient',
+};
+
+export const loginHistoryDataHeader2 = {
+  time: 'Time',
+  staffName: 'Staff Name',
+  machineName: 'Machine Name',
+};
+
+export const savedBanksDataHeader = {
+  accNo: 'Acct No',
+  accName: 'Acct Name',
+  bank: 'Bank',
+};
 
 export const customerDetails: CustomerProfileIProps[] = [
   {
@@ -273,6 +308,7 @@ export const documentStatusDataHeader = {
   status: "Status",
 };
 
+
 export const loginHistoryDataHeader1 = {
   time: "Time",
   device: "Device",
@@ -355,5 +391,57 @@ export const usersDataSuperAgent = [
     walletNo: "2034567584",
     phone: "08142346753",
     subAgents: 12,
+  },
+];
+
+export const transactionHistoryData: TransactionHistoryIProps[] = [
+  {
+    id: 1,
+    time: '12/22/2021 - 22:46',
+    transactionType: 'Cash Request',
+    amount: 2500,
+    status: 'In Progress',
+    recipient: 'In Progress',
+  },
+  {
+    id: 2,
+    time: '12/22/2021 - 22:46',
+    transactionType: 'Cash Request -3rd Party',
+    amount: 2500,
+    status: 'Failed- Declined',
+    recipient: '3rd Party - Folashade Gabriel',
+  },
+  {
+    id: 3,
+    time: '12/22/2021 - 22:46',
+    transactionType: 'Cash Provide',
+    amount: 2500,
+    status: 'Successful',
+    recipient: 'Gbemi Faloun',
+  },
+  {
+    id: 4,
+    time: '12/22/2021 - 22:46',
+    transactionType: 'Bills - Data(MTN)',
+    amount: 2500,
+    status: 'Successful',
+    recipient: '0812345678',
+  },
+  {
+    id: 5,
+    time: '12/22/2021 - 22:46',
+    transactionType: 'Cash Request',
+    amount: 2500,
+    status: 'Successful',
+    recipient: 'Wade williams',
+  },
+];
+
+export const SavedBanksData: SavedBanksIProps[] = [
+  {
+    id: 1,
+    accNo: '20***90',
+    accName: 'Wade Warren Chukwuma',
+    bank: 'Zenith',
   },
 ];
