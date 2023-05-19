@@ -199,7 +199,10 @@ function UserDetails() {
         {
           id: 3,
           helper: 'Last Device Login',
-          text: user?.last_login === null ? 'N/A' : user?.last_login,
+          text:
+            user?.last_login === null
+              ? 'N/A'
+              : ` ${dateFormat(user?.last_login)} - ${timeFormat(user?.last_login, true)}`,
         },
         {
           id: 4,
