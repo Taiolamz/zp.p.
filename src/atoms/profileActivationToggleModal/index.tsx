@@ -24,23 +24,28 @@ function ProfileActivationToggleModal({
   };
 
   const handleActionClicked = () => {
-    setDeactiveMessage(message);
     if (activityStatus === 'active' && message.length < 1) {
       showMessage({ type: 'info', message: 'Message is required' });
     } else {
       actionClicked();
+      handleCloseModal();
     }
+  };
+
+  const handleOnChange = (e: any) => {
+    setDeactiveMessage(e.target.value);
+    setMessage(e.target.value);
   };
 
   return (
     <div>
       <ActivityActionModal
-        actionText={activityStatus === 'active' ? 'Reactivate' : 'Deactivate'}
+        actionText={activityStatus === 'active' ? 'Deactivate' : 'Reactivate'}
         title=""
         text={
           activityStatus === 'active'
             ? 'Please Input reason for deactivation'
-            : 'Arse tou sure you want to reactivate this user`s profile?'
+            : 'Are you sure you want to reactivate this user`s profile?'
         }
         isModalVisible={isModalVisible}
         closeModal={handleCloseModal}
@@ -56,7 +61,8 @@ function ProfileActivationToggleModal({
                 name="message"
                 placeholder="Type here..."
                 value={message}
-                onChange={(e: any) => setMessage(e.target.value)}
+                // onChange={(e: any) => setMessage(e.target.value)}
+                onChange={(e: any) => handleOnChange(e)}
                 backgroundColor={colors.white}
                 borderColor={colors.grey}
               />

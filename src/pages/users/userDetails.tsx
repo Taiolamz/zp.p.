@@ -9,6 +9,7 @@ import {
   LoaderModal,
   SavedBanksModal,
   ProfileActivationToggleModal,
+  ActivityActionModal,
 } from '../../atoms';
 import {
   documentStatusDataHeader,
@@ -25,7 +26,7 @@ import {
   namedViewSubAgents,
 } from './data';
 
-import { colors, routesPath, dateFormat, capitalizeFirstLetter, timeFormat } from '../../utils';
+import { colors, routesPath, dateFormat, capitalizeFirstLetter, timeFormat, images } from '../../utils';
 import { UsersDetailContainer, UserProfileContainer, SupportContainer } from './style';
 import { H2 } from '../../styles';
 
@@ -41,6 +42,8 @@ import {
   getUserSavedBanksRequest,
   deleteUserSavedBankRequest,
   deleteUserSavedBankReset,
+  updateUserStatusRequest,
+  updateUserStatusReset,
 } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { CustomerProfileIProps } from '../../components/customerProfile';
@@ -76,6 +79,7 @@ function UserDetails() {
   const [selectedUserBank, setSelectedUserBank] = useState<Dictionary>({});
   const [userAccountStatus, setUserAccountStatus] = useState('');
   const [profileActivationIsModalVisible, setProfileActivationIsModalVisible] = useState(false);
+  const [profileActivationSuccessIsModalVisible, setProfileActivationSuccessIsModalVisible] = useState(false);
   const [deactiveMessage, setDeactiveMessage] = useState('');
   // redux state
   const userProfileState = useAppSelector(state => state.getUserProfile);
@@ -96,13 +100,16 @@ function UserDetails() {
   const deleteUserSavedBankState = useAppSelector(state => state.deleteUserSavedBank);
   const { status: deleteUserSavedBankStatus } = deleteUserSavedBankState;
 
-  const detmineKycLevel = (verifications: any[]) => {
+  const updateUserStatusState = useAppSelector(state => state.updateUserStatus);
+  const { status: updateUserStatusStatus } = updateUserStatusState;
+
+  const detmineKycLevel = (level: string) => {
     let result =
-      verifications?.length === 0
+      level === 'level zero'
         ? 'Level 0'
-        : verifications?.length === 1
+        : level === 'level one'
         ? 'Level 1'
-        : verifications?.length === 2
+        : level === 'level two'
         ? 'Level 2'
         : 'Level 3';
     return result;
@@ -116,7 +123,7 @@ function UserDetails() {
         userId,
       }),
     );
-  }, []);
+  }, [updateUserStatusState]);
 
   useEffect(() => {
     if (userProfileStatus === 'succeeded') {
@@ -124,7 +131,6 @@ function UserDetails() {
         data: { user },
       } = userProfileState;
 
-      // console.log(user?.account?.status, 'user acount status');
       let customerDetailsResult: CustomerProfileIProps[];
       let appActivityResult: CustomerProfileIProps[];
       customerDetailsResult = [
@@ -146,22 +152,22 @@ function UserDetails() {
         {
           id: 4,
           helper: 'BVN',
-          text: user?.kyc?.bvn_number === null ? 'N/A' : user?.kyc?.bvn_number,
+          text: user?.bvn?.bvn_number === null ? 'N/A' : user?.bvn?.bvn_number,
         },
         {
           id: 5,
-          text: user?.hasOwnProperty('dob') ? dateFormat(user?.dob) : 'N/A',
+          text: user?.bvn === null ? 'N/A' : dateFormat(user?.bvn?.date_of_birth),
           helper: 'Date of birth',
         },
         {
           id: 6,
           helper: 'Profile Level',
-          text: detmineKycLevel(user?.verifications),
+          text: capitalizeFirstLetter(user?.kyc_level),
         },
         {
           id: 7,
           helper: 'Address Verification Status',
-          text: user?.kyc?.business_registration_number === null ? 'Unverified' : 'Verified',
+          text: user?.agent?.business_address === null ? 'Unverified' : 'Verified',
         },
         {
           id: 8,
@@ -193,7 +199,7 @@ function UserDetails() {
         {
           id: 3,
           helper: 'Last Device Login',
-          text: user?.device_detail,
+          text: user?.last_login === null ? 'N/A' : user?.last_login,
         },
         {
           id: 4,
@@ -206,8 +212,9 @@ function UserDetails() {
           text: user?.comment === null ? 'N/A' : user?.comment,
         },
       ];
-      setUserAccountStatus(user?.account?.status);
-      setKycLevel(detmineKycLevel(user?.verifications));
+
+      setUserAccountStatus(user?.status);
+      setKycLevel(detmineKycLevel(user?.kyc_level));
       setCustomerDetails(customerDetailsResult);
       setAppActivity(appActivityResult);
     }
@@ -335,6 +342,13 @@ function UserDetails() {
     }
   }, [deleteUserSavedBankState]);
 
+  // successful deactivate or reactivate user
+  useEffect(() => {
+    if (updateUserStatusStatus === 'succeeded') {
+      setProfileActivationSuccessIsModalVisible(true);
+    }
+  }, [updateUserStatusState]);
+
   const handleSupportClicked = (item: any) => {
     // console.log(item, 'item');
     // setToggleClicked(!toggleClicked);
@@ -371,10 +385,35 @@ function UserDetails() {
   };
 
   const handleUserProfileActivity = () => {
-    console.log('clicked');
+    let payload: Dictionary;
+    if (userAccountStatus === 'active') {
+      payload = {
+        userId,
+        data: {
+          status: 'inactive',
+          comment: deactiveMessage,
+        },
+      };
+    } else {
+      payload = {
+        userId,
+        data: {
+          status: 'active',
+        },
+      };
+    }
+
+    console.log(payload, 'comments');
+    dispatch(updateUserStatusRequest(payload));
   };
 
-  console.log(deactiveMessage, 'deactiveMessage');
+  // console.log(deactiveMessage, 'deactiveMessage');
+  console.log(userAccountStatus, 'userAccountStatus');
+
+  const handleProfileActivationSuccessClose = () => {
+    setProfileActivationSuccessIsModalVisible(false);
+    dispatch(updateUserStatusReset());
+  };
 
   return (
     <AppContainer goBack={() => navigate(USERS)} navTitle={`Back`} navHelper="Profile Review">
@@ -445,9 +484,35 @@ function UserDetails() {
           setDeactiveMessage={setDeactiveMessage}
         />
 
+        {/* this modal shows when admin successfully activate or deactivate a user */}
+        <ActivityActionModal
+          isModalVisible={profileActivationSuccessIsModalVisible}
+          closeModal={handleProfileActivationSuccessClose}
+          actionClick={handleProfileActivationSuccessClose}
+          image={images.check}
+          isLoading={false}
+          actionText="Close"
+          title=""
+          text={
+            userAccountStatus === 'active'
+              ? 'Profile has been successfuly deactivated'
+              : 'Profile has been successfuly reactivated'
+          }
+        />
+
         <LoaderModal
-          text={deleteUserSavedBankStatus === 'loading' ? 'Deleting user bank' : 'Loading please wait....'}
-          isModalVisible={deleteUserSavedBankStatus === 'loading' || userProfileStatus === 'loading'}
+          text={
+            updateUserStatusStatus === 'loading'
+              ? 'Please wait...'
+              : deleteUserSavedBankStatus === 'loading'
+              ? 'Deleting user bank'
+              : 'Loading please wait....'
+          }
+          isModalVisible={
+            updateUserStatusStatus === 'loading' ||
+            deleteUserSavedBankStatus === 'loading' ||
+            userProfileStatus === 'loading'
+          }
           closeModal={() => {}}
         />
       </div>
