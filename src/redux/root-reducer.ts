@@ -1,4 +1,4 @@
-import { combineReducers } from "@reduxjs/toolkit";
+import { combineReducers } from '@reduxjs/toolkit';
 import {
   loginSliceReducer,
   authSliceReducer,
@@ -23,7 +23,8 @@ import {
   getProfileViewHistorySliceReducer,
   getLoginHistorySliceReducer,
   getUserTransactionsSliceReducer,
-} from "./slice";
+  getUserSavedBanksSliceReducer,
+} from './slice';
 
 const rootReducer = combineReducers({
   login: loginSliceReducer,
@@ -49,6 +50,7 @@ const rootReducer = combineReducers({
   getProfileViewHistory: getProfileViewHistorySliceReducer,
   getLoginHistory: getLoginHistorySliceReducer,
   getUserTransactions: getUserTransactionsSliceReducer,
+  getUserSavedBanks: getUserSavedBanksSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

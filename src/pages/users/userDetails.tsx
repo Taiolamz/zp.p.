@@ -37,12 +37,14 @@ import {
   getProfileViewHistoryReset,
   getLoginHistoryRequest,
   getLoginHistoryReset,
+  getUserSavedBanksRequest,
 } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { CustomerProfileIProps } from '../../components/customerProfile';
 import { DocumentStatusIProps } from '../../atoms/documentStatusModal';
 import { LoginHistoryIProps } from '../../components/tables/loginHistoryTable';
 import { Dictionary } from '../../types';
+import { SavedBanksIProps } from '../../components/tables/savedBanksTable';
 
 const { USERS } = routesPath;
 
@@ -67,6 +69,8 @@ function UserDetails() {
   const [loginHistoryData, setLoginHistoryData] = useState<any[]>([]);
   const [profileViewData, setProfileViewData] = useState<LoginHistoryIProps[]>([]);
   const [savedBankIsModalVisible, setSavedBankIsModalVisible] = useState(false);
+  const [savedBanksData, setSavedBanksData] = useState<SavedBanksIProps[]>([]);
+  const [selectedUserBank, setSelectedUserBank] = useState<Dictionary>({});
   // redux state
   const userProfileState = useAppSelector(state => state.getUserProfile);
   const { status: userProfileStatus } = userProfileState;
@@ -79,6 +83,9 @@ function UserDetails() {
 
   const loginHistoryState = useAppSelector(state => state.getLoginHistory);
   const { status: loginHistoryStatus } = loginHistoryState;
+
+  const userSavedBanksState = useAppSelector(state => state.getUserSavedBanks);
+  const { status: userSavedBanksStatus } = userSavedBanksState;
 
   const detmineKycLevel = (verifications: any[]) => {
     let result =
@@ -297,6 +304,23 @@ function UserDetails() {
     }
   }, [loginHistoryState]);
 
+  // get user banks successful
+  useEffect(() => {
+    if (userSavedBanksStatus === 'succeeded') {
+      let result: SavedBanksIProps[] = [];
+      userSavedBanksState?.data?.user_banks?.data?.forEach((item: Dictionary) => {
+        result.push({
+          id: item?.id,
+          accNo: item?.account_number,
+          accName: item?.account_name,
+          bank: item?.bank_name,
+        });
+      });
+
+      setSavedBanksData(result);
+    }
+  }, [userSavedBanksState]);
+
   const handleSupportClicked = (item: any) => {
     console.log(item, 'item');
     // setToggleClicked(!toggleClicked);
@@ -313,6 +337,7 @@ function UserDetails() {
       console.log('upload doc');
     }
     if (text === namedSavedBanks) {
+      dispatch(getUserSavedBanksRequest({ userId }));
       setSavedBankIsModalVisible(true);
     }
     if (text === namedLoginHistory) {
@@ -322,6 +347,7 @@ function UserDetails() {
     }
   };
 
+  console.log(selectedUserBank, 'selectedUserBank');
   return (
     <AppContainer goBack={() => navigate(USERS)} navTitle={`Back`} navHelper="Profile Review">
       <div>
@@ -374,11 +400,13 @@ function UserDetails() {
 
         <SavedBanksModal
           title="Banks"
-          data={[{ id: 1, accNo: '33333', accName: 'Allen', bank: 'Commercial' }]}
+          data={savedBanksData}
           isModalVisible={savedBankIsModalVisible}
           closeModal={() => setSavedBankIsModalVisible(false)}
           headerData={{ accNo: 'Acct No', accName: 'Acct Name', bank: 'Bank' }}
           deleteAction={() => console.log('hello')}
+          isFetchingBanks={userSavedBanksStatus === 'loading'}
+          setSelectedItem={setSelectedUserBank}
         />
 
         <LoaderModal
