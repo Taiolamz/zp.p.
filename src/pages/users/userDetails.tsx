@@ -8,6 +8,7 @@ import {
   LoginHistoryModal,
   LoaderModal,
   SavedBanksModal,
+  ProfileActivationToggleModal,
 } from '../../atoms';
 import {
   documentStatusDataHeader,
@@ -73,6 +74,9 @@ function UserDetails() {
   const [savedBankIsModalVisible, setSavedBankIsModalVisible] = useState(false);
   const [savedBanksData, setSavedBanksData] = useState<SavedBanksIProps[]>([]);
   const [selectedUserBank, setSelectedUserBank] = useState<Dictionary>({});
+  const [userAccountStatus, setUserAccountStatus] = useState('');
+  const [profileActivationIsModalVisible, setProfileActivationIsModalVisible] = useState(false);
+  const [deactiveMessage, setDeactiveMessage] = useState('');
   // redux state
   const userProfileState = useAppSelector(state => state.getUserProfile);
   const { status: userProfileStatus } = userProfileState;
@@ -119,6 +123,8 @@ function UserDetails() {
       const {
         data: { user },
       } = userProfileState;
+
+      // console.log(user?.account?.status, 'user acount status');
       let customerDetailsResult: CustomerProfileIProps[];
       let appActivityResult: CustomerProfileIProps[];
       customerDetailsResult = [
@@ -200,6 +206,7 @@ function UserDetails() {
           text: user?.comment === null ? 'N/A' : user?.comment,
         },
       ];
+      setUserAccountStatus(user?.account?.status);
       setKycLevel(detmineKycLevel(user?.verifications));
       setCustomerDetails(customerDetailsResult);
       setAppActivity(appActivityResult);
@@ -353,11 +360,21 @@ function UserDetails() {
       dispatch(getProfileViewHistoryRequest({ userId }));
       dispatch(getLoginHistoryRequest({ userId }));
     }
+    if (text === namedReactivateProfile || text === namedDeactivateProfile) {
+      console.log('activtive ');
+      setProfileActivationIsModalVisible(true);
+    }
   };
 
   const handleDaleteUserBank = () => {
     dispatch(deleteUserSavedBankRequest({ beneficiaryId: selectedUserBank?.id }));
   };
+
+  const handleUserProfileActivity = () => {
+    console.log('clicked');
+  };
+
+  console.log(deactiveMessage, 'deactiveMessage');
 
   return (
     <AppContainer goBack={() => navigate(USERS)} navTitle={`Back`} navHelper="Profile Review">
@@ -376,11 +393,11 @@ function UserDetails() {
             <UserSupportActivity
               data={supportActivitiesData}
               setSelectedItem={setSelectedUserActivity}
-              onClick={(item: any) => {
+              onClick={(item: Dictionary) => {
                 handleSupportClicked(item);
               }}
-              onClickProfileToggle={() => {}}
-              profileToggleText={namedReactivateProfile}
+              onClickProfileToggle={() => setProfileActivationIsModalVisible(true)}
+              profileToggleText={userAccountStatus === 'active' ? namedDeactivateProfile : namedReactivateProfile}
               onClickViewSubAgent={() => {}}
               kycLevel={kycLevel}
             />
@@ -418,6 +435,14 @@ function UserDetails() {
           deleteAction={handleDaleteUserBank}
           isFetchingBanks={userSavedBanksStatus === 'loading'}
           setSelectedItem={setSelectedUserBank}
+        />
+
+        <ProfileActivationToggleModal
+          isModalVisible={profileActivationIsModalVisible}
+          activityStatus={userAccountStatus}
+          actionClicked={handleUserProfileActivity}
+          closeModal={() => setProfileActivationIsModalVisible(false)}
+          setDeactiveMessage={setDeactiveMessage}
         />
 
         <LoaderModal
