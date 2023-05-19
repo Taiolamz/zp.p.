@@ -1,7 +1,14 @@
-import { useState, useEffect, useLayoutEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { CustomerProfile } from '../../components';
-import { AppContainer, UserSupportActivity, DocumentStatusModal, LoginHistoryModal, LoaderModal } from '../../atoms';
+import {
+  AppContainer,
+  UserSupportActivity,
+  DocumentStatusModal,
+  LoginHistoryModal,
+  LoaderModal,
+  SavedBanksModal,
+} from '../../atoms';
 import {
   documentStatusDataHeader,
   loginHistoryDataHeader1,
@@ -59,7 +66,7 @@ function UserDetails() {
   const [docStatus, setDocStatus] = useState<DocumentStatusIProps[]>([]);
   const [loginHistoryData, setLoginHistoryData] = useState<any[]>([]);
   const [profileViewData, setProfileViewData] = useState<LoginHistoryIProps[]>([]);
-
+  const [savedBankIsModalVisible, setSavedBankIsModalVisible] = useState(false);
   // redux state
   const userProfileState = useAppSelector(state => state.getUserProfile);
   const { status: userProfileStatus } = userProfileState;
@@ -306,7 +313,7 @@ function UserDetails() {
       console.log('upload doc');
     }
     if (text === namedSavedBanks) {
-      console.log('saved banks');
+      setSavedBankIsModalVisible(true);
     }
     if (text === namedLoginHistory) {
       setLoginHistoryIsModalVisible(true);
@@ -363,6 +370,15 @@ function UserDetails() {
           headerData1={loginHistoryDataHeader1}
           headerData2={loginHistoryDataHeader2}
           isLoading={loginHistoryStatus === 'loading' || profileViewHistoryStatus === 'loading'}
+        />
+
+        <SavedBanksModal
+          title="Banks"
+          data={[{ id: 1, accNo: '33333', accName: 'Allen', bank: 'Commercial' }]}
+          isModalVisible={savedBankIsModalVisible}
+          closeModal={() => setSavedBankIsModalVisible(false)}
+          headerData={{ accNo: 'Acct No', accName: 'Acct Name', bank: 'Bank' }}
+          deleteAction={() => console.log('hello')}
         />
 
         <LoaderModal

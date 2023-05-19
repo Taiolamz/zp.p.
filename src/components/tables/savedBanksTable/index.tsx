@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import Button from '../../button';
+import { Dictionary } from '../../../types';
+import { Button } from '../..';
 import { TableTag, TD, TH, TR, TableContainer } from './style';
 
 export interface SavedBanksIProps {
@@ -15,15 +15,10 @@ export interface TableIPropsIProps {
   backgroundColor?: string;
   header?: boolean;
   headerData?: any;
-  onClick: () => void;
+  onClick: (item: Dictionary) => any;
 }
 
-function SavedBanksTable({
-  data,
-  setSelectedItem,
-  headerData,
-  onClick,
-}: TableIPropsIProps) {
+function SavedBanksTable({ data, setSelectedItem, headerData, onClick }: TableIPropsIProps) {
   return (
     <TableContainer>
       <TableTag>
@@ -41,7 +36,7 @@ function SavedBanksTable({
               <TD>{item.accName}</TD>
               <TD>{item.bank}</TD>
               <TD>
-                <Button text='Delete' onClick={onClick} />
+                <Button text="Delete" onClick={() => onClick(item)} />
               </TD>
             </TR>
           ))}

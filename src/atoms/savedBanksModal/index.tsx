@@ -1,56 +1,65 @@
+import { useState } from 'react';
 import { Container, SubContainer } from './style';
 import { Modal, SavedBanksTable } from '../../components';
 import { H2, H3 } from '../../styles';
-import { colors, spacing } from '../../utils';
+import { colors, spacing, images } from '../../utils';
 import { SavedBanksIProps } from '../../components/tables/savedBanksTable';
-import { useState } from 'react';
+import { SuccessActionModal, ActivityActionModal } from '..';
+import { Dictionary } from '../../types';
 
 export interface IProps {
   isModalVisible: boolean;
   closeModal: () => void;
-  title?: string;
+  title: string;
   data: SavedBanksIProps[];
   headerData?: any;
-  actionClick: () => void;
+  deleteAction: () => void;
+  // actionClick: () => void;
 }
 
-function SavedBanksModal({
-  isModalVisible,
-  closeModal,
-  title,
-  data,
-  headerData,
-  actionClick,
-}: IProps) {
+const beforeDeleteAction = 'Delete';
+const afterDeleteAction = 'Close';
+function SavedBanksModal({ isModalVisible, closeModal, title, data, headerData, deleteAction }: IProps) {
   const [deleteIsModalVisible, setDeleteIsModalVisible] = useState(false);
-
-  const handleDeleteModalOpen = () => {
+  const [actionText, setActionText] = useState(beforeDeleteAction);
+  const handleDeleteModalOpen = (item: Dictionary) => {
     setDeleteIsModalVisible(true);
   };
+
+  const handleActionClick = () => {
+    if (actionText === beforeDeleteAction) {
+      deleteAction();
+      setActionText(afterDeleteAction);
+    } else {
+      setDeleteIsModalVisible(false);
+    }
+  };
   return (
-    <Modal title='' isModalVisible={isModalVisible} closeModal={closeModal}>
-      <Container>
-        {title && (
-          <H2
-            semiBold
-            color={colors.primary}
-            style={{ marginBottom: spacing.xsmall }}
-          >
-            {title}
-          </H2>
-        )}
-
-        <SubContainer>
-          <H3 left>Bank</H3>
-        </SubContainer>
-
-        <SavedBanksTable
-          data={data}
-          headerData={headerData}
-          onClick={handleDeleteModalOpen}
-        />
-      </Container>
-    </Modal>
+    <div>
+      <Modal title={title} isModalVisible={isModalVisible} closeModal={closeModal}>
+        <Container>
+          <SubContainer>
+            <H3 left>Bank</H3>
+          </SubContainer>
+          <SavedBanksTable data={data} headerData={headerData} onClick={item => handleDeleteModalOpen(item)} />
+        </Container>
+      </Modal>
+      <ActivityActionModal
+        actionText={actionText}
+        title=""
+        text={
+          actionText === beforeDeleteAction
+            ? 'Are you sure you want to delete this record?'
+            : 'Record has been successfully deleted'
+        }
+        isModalVisible={deleteIsModalVisible}
+        closeModal={() => setDeleteIsModalVisible(false)}
+        actionClick={handleActionClick}
+        image={actionText === beforeDeleteAction ? images.reject : images.check}
+        isLoading={false}
+        secondaryActionText={actionText === beforeDeleteAction ? 'Cancel' : ''}
+      />
+    </div>
   );
 }
 
