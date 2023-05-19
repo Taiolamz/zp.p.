@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { Container, SubContainer } from './style';
 import { Modal, SavedBanksTable } from '../../components';
-import { H2, H3, H5 } from '../../styles';
-import { colors, spacing, images } from '../../utils';
+import { H3, H5 } from '../../styles';
+import { images } from '../../utils';
 import { SavedBanksIProps } from '../../components/tables/savedBanksTable';
-import { SuccessActionModal, ActivityActionModal } from '..';
+import { ActivityActionModal } from '..';
 import { Dictionary } from '../../types';
 
 export interface IProps {
@@ -16,7 +16,6 @@ export interface IProps {
   deleteAction: () => void;
   isFetchingBanks: boolean;
   setSelectedItem: any;
-  // actionClick: () => void;
 }
 
 const beforeDeleteAction = 'Delete';
@@ -39,13 +38,20 @@ function SavedBanksModal({
   };
 
   const handleActionClick = () => {
-    if (actionText === beforeDeleteAction) {
+    if (actionText === beforeDeleteAction && deleteIsModalVisible === true) {
       deleteAction();
       setActionText(afterDeleteAction);
     } else {
+      setActionText(beforeDeleteAction);
       setDeleteIsModalVisible(false);
     }
   };
+
+  const handleCloseModal = () => {
+    setActionText(beforeDeleteAction);
+    setDeleteIsModalVisible(false);
+  };
+
   return (
     <div>
       <Modal title={title} isModalVisible={isModalVisible} closeModal={closeModal}>
@@ -71,7 +77,7 @@ function SavedBanksModal({
             : 'Record has been successfully deleted'
         }
         isModalVisible={deleteIsModalVisible}
-        closeModal={() => setDeleteIsModalVisible(false)}
+        closeModal={handleCloseModal}
         actionClick={handleActionClick}
         image={actionText === beforeDeleteAction ? images.reject : images.check}
         isLoading={false}

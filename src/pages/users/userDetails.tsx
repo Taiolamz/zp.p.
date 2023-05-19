@@ -38,6 +38,8 @@ import {
   getLoginHistoryRequest,
   getLoginHistoryReset,
   getUserSavedBanksRequest,
+  deleteUserSavedBankRequest,
+  deleteUserSavedBankReset,
 } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { CustomerProfileIProps } from '../../components/customerProfile';
@@ -86,6 +88,9 @@ function UserDetails() {
 
   const userSavedBanksState = useAppSelector(state => state.getUserSavedBanks);
   const { status: userSavedBanksStatus } = userSavedBanksState;
+
+  const deleteUserSavedBankState = useAppSelector(state => state.deleteUserSavedBank);
+  const { status: deleteUserSavedBankStatus } = deleteUserSavedBankState;
 
   const detmineKycLevel = (verifications: any[]) => {
     let result =
@@ -220,10 +225,6 @@ function UserDetails() {
         };
       });
 
-      // console.log(verificationData, 'aa');
-
-      // console.log(verificationData, 'verificationData');
-
       result = [
         {
           id: 1,
@@ -321,8 +322,14 @@ function UserDetails() {
     }
   }, [userSavedBanksState]);
 
+  useEffect(() => {
+    if (deleteUserSavedBankStatus === 'succeeded') {
+      setSavedBankIsModalVisible(false);
+    }
+  }, [deleteUserSavedBankState]);
+
   const handleSupportClicked = (item: any) => {
-    console.log(item, 'item');
+    // console.log(item, 'item');
     // setToggleClicked(!toggleClicked);
     const { text } = item;
     if (text === namedDocumentStatus) {
@@ -337,6 +344,7 @@ function UserDetails() {
       console.log('upload doc');
     }
     if (text === namedSavedBanks) {
+      dispatch(deleteUserSavedBankReset());
       dispatch(getUserSavedBanksRequest({ userId }));
       setSavedBankIsModalVisible(true);
     }
@@ -347,7 +355,10 @@ function UserDetails() {
     }
   };
 
-  console.log(selectedUserBank, 'selectedUserBank');
+  const handleDaleteUserBank = () => {
+    dispatch(deleteUserSavedBankRequest({ beneficiaryId: selectedUserBank?.id }));
+  };
+
   return (
     <AppContainer goBack={() => navigate(USERS)} navTitle={`Back`} navHelper="Profile Review">
       <div>
@@ -404,14 +415,14 @@ function UserDetails() {
           isModalVisible={savedBankIsModalVisible}
           closeModal={() => setSavedBankIsModalVisible(false)}
           headerData={{ accNo: 'Acct No', accName: 'Acct Name', bank: 'Bank' }}
-          deleteAction={() => console.log('hello')}
+          deleteAction={handleDaleteUserBank}
           isFetchingBanks={userSavedBanksStatus === 'loading'}
           setSelectedItem={setSelectedUserBank}
         />
 
         <LoaderModal
-          text="Loading please wait...."
-          isModalVisible={userProfileStatus === 'loading'}
+          text={deleteUserSavedBankStatus === 'loading' ? 'Deleting user bank' : 'Loading please wait....'}
+          isModalVisible={deleteUserSavedBankStatus === 'loading' || userProfileStatus === 'loading'}
           closeModal={() => {}}
         />
       </div>
