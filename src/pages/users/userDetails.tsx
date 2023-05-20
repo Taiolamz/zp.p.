@@ -26,7 +26,15 @@ import {
   namedViewSubAgents,
 } from './data';
 
-import { colors, routesPath, dateFormat, capitalizeFirstLetter, timeFormat, images } from '../../utils';
+import {
+  colors,
+  routesPath,
+  dateFormat,
+  capitalizeFirstLetter,
+  timeFormat,
+  images,
+  determineVericationDocState,
+} from '../../utils';
 import { UsersDetailContainer, UserProfileContainer, SupportContainer } from './style';
 import { H2 } from '../../styles';
 
@@ -54,10 +62,10 @@ import { SavedBanksIProps } from '../../components/tables/savedBanksTable';
 
 const { USERS } = routesPath;
 
-const kycVerificationbvn: string = 'bvn-selfie-verification';
-const kycVerificationidentityCard: string = 'identity-card-verification';
-const kycVerificationCACDocumentVerification: string = 'cac document verification';
-const kycVerificationBusinessAddressVerification: string = 'business address verification';
+const kycVerificationbvn: string = 'bvnselfieverification';
+const kycVerificationidentityCard: string = 'identitycardverification';
+const kycVerificationCACDocumentVerification: string = 'cacdocumentverification';
+const kycVerificationBusinessAddressVerification: string = 'businessaddressverification';
 
 function UserDetails() {
   const navigate = useNavigate();
@@ -223,61 +231,101 @@ function UserDetails() {
     }
   }, [userProfileState]);
 
-  function determineDocStatus(verificationType: string, kycLevel: string, item: Dictionary) {
-    let result = verificationType === kycLevel ? capitalizeFirstLetter(item?.status) : 'Pending';
-    // console.log(result, 'results');
-    return result;
-  }
-
   useEffect(() => {
     let result: DocumentStatusIProps[] = [];
-    let verificationData: Dictionary = {};
+
+    const uniqueVerificationTypes: Dictionary = {};
     if (userVerificationsStatus === 'succeeded') {
-      console.log(userVerificationsState?.data, 'dataff');
-      userVerificationsState?.data?.Verifications?.forEach((el: Dictionary) => {
-        verificationData = {
-          photoStatus: determineDocStatus(el.verification_type, kycVerificationbvn, el),
-          idCardStatus: determineDocStatus(el.verification_type, kycVerificationidentityCard, el),
-          addressVefication: determineDocStatus(el.verification_type, kycVerificationCACDocumentVerification, el),
-        };
-      });
+      const numberOfVerificationLength = userVerificationsState?.data?.Verifications.length;
+
+      const updateVerificationTypeNaming = (string: string) => {
+        var new_string = string.replace(/-|\s/g, '');
+        return new_string;
+      };
+
+      for (const obj of userVerificationsState?.data?.Verifications) {
+        const { verification_type, status, upload_count } = obj;
+        const camelCaseVerificationType = updateVerificationTypeNaming(verification_type);
+
+        if (!uniqueVerificationTypes.hasOwnProperty(camelCaseVerificationType)) {
+          uniqueVerificationTypes[camelCaseVerificationType] = {
+            status,
+            upload_count,
+          };
+        }
+      }
 
       result = [
         {
           id: 1,
           document: 'Passport',
-          noOfUpload: verificationData?.photoStatus === 'Pending' ? 0 : 2,
-          status: verificationData?.photoStatus,
-          statusBG:
-            verificationData?.photoStatus === 'Approved'
-              ? colors.green
-              : verificationData?.photoStatus === 'Rejected'
-              ? colors.red
-              : colors.greyDark,
+          noOfUpload: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationbvn,
+          ).count,
+          status: determineVericationDocState(numberOfVerificationLength, uniqueVerificationTypes, kycVerificationbvn)
+            .status,
+          statusBG: determineVericationDocState(numberOfVerificationLength, uniqueVerificationTypes, kycVerificationbvn)
+            .statusBG,
         },
         {
           id: 2,
           document: 'ID Card',
-          noOfUpload: verificationData?.idCardStatus === 'Pending' ? 0 : 1,
-          status: verificationData?.idCardStatus,
-          statusBG:
-            verificationData?.idCardStatus === 'Approved'
-              ? colors.green
-              : verificationData?.idCardStatus === 'Rejected'
-              ? colors.red
-              : colors.greyDark,
+          noOfUpload: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationidentityCard,
+          ).count,
+          status: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationidentityCard,
+          ).status,
+          statusBG: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationidentityCard,
+          ).statusBG,
         },
+
         {
           id: 3,
+          document: 'CAC Document',
+          noOfUpload: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationCACDocumentVerification,
+          ).count,
+          status: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationCACDocumentVerification,
+          ).status,
+          statusBG: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationCACDocumentVerification,
+          ).statusBG,
+        },
+        {
+          id: 4,
           document: 'Address Verification',
-          noOfUpload: verificationData?.addressVefication === 'Pending' ? 0 : 1,
-          status: verificationData?.addressVefication,
-          statusBG:
-            verificationData?.addressVefication === 'Approved'
-              ? colors.green
-              : verificationData?.addressVefication === 'Rejected'
-              ? colors.red
-              : colors.greyDark,
+          noOfUpload: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationBusinessAddressVerification,
+          ).count,
+          status: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationBusinessAddressVerification,
+          ).status,
+          statusBG: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationBusinessAddressVerification,
+          ).statusBG,
         },
       ];
     }
@@ -411,7 +459,7 @@ function UserDetails() {
   };
 
   // console.log(deactiveMessage, 'deactiveMessage');
-  console.log(userAccountStatus, 'userAccountStatus');
+  // console.log(userAccountStatus, 'userAccountStatus');
 
   const handleProfileActivationSuccessClose = () => {
     setProfileActivationSuccessIsModalVisible(false);
