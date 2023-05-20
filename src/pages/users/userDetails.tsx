@@ -426,7 +426,6 @@ function UserDetails() {
       dispatch(getLoginHistoryRequest({ userId }));
     }
     if (text === namedReactivateProfile || text === namedDeactivateProfile) {
-      console.log('activtive ');
       setProfileActivationIsModalVisible(true);
     }
   };
@@ -454,12 +453,8 @@ function UserDetails() {
       };
     }
 
-    console.log(payload, 'comments');
     dispatch(updateUserStatusRequest(payload));
   };
-
-  // console.log(deactiveMessage, 'deactiveMessage');
-  // console.log(userAccountStatus, 'userAccountStatus');
 
   const handleProfileActivationSuccessClose = () => {
     setProfileActivationSuccessIsModalVisible(false);
