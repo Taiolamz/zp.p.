@@ -8,7 +8,7 @@ export interface CountInfoIProps {
   setSelectedData?: any;
 }
 
-function CountInfo({ data, setSelectedData }: CountInfoIProps) {
+function CountInfoStatic({ data, setSelectedData }: CountInfoIProps) {
   const [dataList, setDataList] = useState(data as CountInfoCardIProps[]);
 
   useLayoutEffect(() => {
@@ -23,7 +23,7 @@ function CountInfo({ data, setSelectedData }: CountInfoIProps) {
     );
 
     setDataList(result);
-  }, [data]);
+  }, []);
 
   const handleOnSelectCard = (item: CountInfoCardIProps) => {
     const itemToEdit = item;
@@ -58,4 +58,4 @@ function CountInfo({ data, setSelectedData }: CountInfoIProps) {
   );
 }
 
-export default CountInfo;
+export default CountInfoStatic;

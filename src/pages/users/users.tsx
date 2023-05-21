@@ -121,6 +121,8 @@ function Users() {
         }
       });
 
+      console.log(userCountResult, 'userdd');
+
       setUserCountData(userCountResult);
       setUsersData(updateUsersData);
 
