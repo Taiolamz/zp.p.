@@ -16,6 +16,7 @@ export interface IProps {
   image?: string;
   isLoading?: boolean;
   children?: ReactElement;
+  actionBtnBackgroundColor?: string;
 }
 
 function ActivityActionModal({
@@ -29,6 +30,7 @@ function ActivityActionModal({
   secondaryActionText,
   isLoading,
   children,
+  actionBtnBackgroundColor = colors.primary,
 }: IProps) {
   return (
     <Modal title="" isModalVisible={isModalVisible} closeModal={closeModal}>
@@ -62,7 +64,7 @@ function ActivityActionModal({
             {secondaryActionText && <BtnContainer />}
 
             <BtnContainer>
-              <Button text={actionText} onClick={actionClick} />
+              <Button backgroundColor={actionBtnBackgroundColor} text={actionText} onClick={actionClick} />
             </BtnContainer>
             {secondaryActionText && (
               <BtnContainer>

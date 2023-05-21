@@ -52,7 +52,8 @@ function ProfileActivationToggleModal({
         actionClick={handleActionClicked}
         image={activityStatus === 'active' ? images.deactivateUser : images.reactivateUser}
         isLoading={false}
-        secondaryActionText={'Cancel'}>
+        secondaryActionText={'Cancel'}
+        actionBtnBackgroundColor={activityStatus === 'active' ? colors.red : colors.primary}>
         <div>
           {activityStatus === 'active' && (
             <div style={{ width: '100%' }}>
