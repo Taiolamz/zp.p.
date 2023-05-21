@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppContainer, CountInfo, TabView, LoaderModal } from '../../atoms';
+import { AppContainer, CountInfoStatic, TabView, LoaderModal } from '../../atoms';
 import { colors, dateFormat, routesPath, spacing } from '../../utils';
 import { SearchInput, UsersTable, Pagination, BorderedText } from '../../components';
 import { SearchContainer, TableContainer, UserContainer, UsersContainer } from './style';
@@ -121,8 +121,6 @@ function Users() {
         }
       });
 
-      console.log(userCountResult, 'userdd');
-
       setUserCountData(userCountResult);
       setUsersData(updateUsersData);
 
@@ -164,7 +162,7 @@ function Users() {
         <TabView data={tabViewUsersData} setSelectedIndex={setTabViewUsersSelectedIndex} />
         {tabViewUsersSelectedIndex === 1 && (
           <UsersContainer>
-            <CountInfo data={userCountData} setSelectedData={setSelectedUsersCard} />
+            <CountInfoStatic data={userCountData} setSelectedData={setSelectedUsersCard} />
 
             <SearchContainer>
               <SearchInput
