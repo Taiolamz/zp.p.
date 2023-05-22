@@ -5,6 +5,7 @@ import { SavedBanksIProps } from '../../components/tables/savedBanksTable';
 import { TransactionHistoryIProps } from '../../components/tables/transactionHistoryTable';
 import { SubAgentIPropsIprops } from '../../components/subAgentCard';
 import { colors, dateFormat } from '../../utils';
+import { InternalUsersTableIPropsIProps } from '../../components/tables/internalUsersTable';
 const date = new Date().toDateString();
 
 export const userDataHeader = {
@@ -30,6 +31,15 @@ export const savedBanksDataHeader = {
   accNo: 'Acct No',
   accName: 'Acct Name',
   bank: 'Bank',
+};
+
+export const internalUsersDataHeader = {
+  name: 'Name',
+  email: 'Email',
+  role: 'Role',
+  status: 'Status',
+  lastSeen: 'Last Seen',
+  dateEnrolled: 'Date Enrolled',
 };
 
 export const customerDetails: CustomerProfileIProps[] = [
@@ -417,5 +427,35 @@ export const SavedBanksData: SavedBanksIProps[] = [
     accNo: '20***90',
     accName: 'Wade Warren Chukwuma',
     bank: 'Zenith',
+  },
+];
+
+export const InternalUsersData: InternalUsersTableIPropsIProps[] = [
+  {
+    id: 1,
+    name: 'Fola Debo',
+    email: 'fdebo@zojapay.com',
+    role: 'Inputter',
+    status: true,
+    lastSeen: '24/11/2021',
+    dateEnrolled: '24/11/2021',
+  },
+  {
+    id: 2,
+    name: 'Fola Debo',
+    email: 'fdebo@zojapay.com',
+    role: 'Inputter',
+    status: false,
+    lastSeen: '24/11/2021',
+    dateEnrolled: '24/11/2021',
+  },
+  {
+    id: 3,
+    name: 'Fola Debo',
+    email: 'fdebo@zojapay.com',
+    role: 'Inputter',
+    status: true,
+    lastSeen: '24/11/2021',
+    dateEnrolled: '24/11/2021',
   },
 ];

@@ -1,14 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppContainer, CountInfoStatic, TabView, LoaderModal } from '../../atoms';
+import { AppContainer, CountInfoStatic, TabView, LoaderModal, MoreIconView } from '../../atoms';
 import { colors, dateFormat, routesPath, spacing } from '../../utils';
-import { SearchInput, UsersTable, Pagination, BorderedText } from '../../components';
-import { SearchContainer, TableContainer, UserContainer, UsersContainer } from './style';
+import { SearchInput, UsersTable, Pagination, BorderedText, InternaUsersTable } from '../../components';
+import {
+  InternalUserTop,
+  InternalUsersContainer,
+  SearchContainer,
+  TableContainer,
+  UserContainer,
+  UsersContainer,
+} from './style';
 
-import { userDataHeader } from './data';
+import { InternalUsersData, internalUsersDataHeader, userDataHeader } from './data';
 import { Dictionary } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { getUsersRequest, getUsersReset, getSuperAgentsRequest, getSuperAgentsReset } from '../../redux/slice';
+import { AiOutlinePlus } from 'react-icons/ai';
 const { USERDETAILS } = routesPath;
 
 let activeUser = 'active';
@@ -49,15 +57,36 @@ function Users() {
   const [userCountData, setUserCountData] = useState<any[]>([]);
   const [usersData, setUsersData] = useState<any[]>([]);
   const [usersDataSuperAgent, setUsersDataSuperAgent] = useState<any[]>([]);
+  const [selectedInternalUserItem, setSelectedInternalUserItem] = useState<Dictionary>({});
+  const [moreIconIsVisible, setMoreIconIsVisible] = useState(false);
   const pageSize = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(5);
+  const [selectedTransactionActionText, setSelectedTransactionActionText] = useState('');
+  const [searchInternalUserValue, setSearchInternalUserValue] = useState('');
+
   // redux state
   const usersState = useAppSelector(state => state.getUsers);
   const { status: usersStatus } = usersState;
 
+  //More Icon for Internal Users
+  const moreIconOption = ['Edit', 'Deactivate', 'Reactivate', 'Reset Password', 'View Login History'];
+
+  // handle different excalation modules
+  const handleMoreIconOptions = async (item: string) => {};
+
+  // Function opens more item when the more icon in internal users table is clicked
+  const handleItemModalOpen = (item: Dictionary) => {
+    setSelectedInternalUserItem(item);
+    setMoreIconIsVisible(true);
+  };
+
   const superAgentsState = useAppSelector(state => state.getSuperAgents);
   const { status: superAgentsStatus } = superAgentsState;
+
+  useEffect(() => {
+    console.log(selectedInternalUserItem);
+  }, [selectedInternalUserItem]);
 
   // api
 
@@ -159,7 +188,11 @@ function Users() {
   return (
     <AppContainer navTitle="USER">
       <UserContainer>
-        <TabView data={tabViewUsersData} setSelectedIndex={setTabViewUsersSelectedIndex} />
+        <TabView
+          data={tabViewUsersData}
+          setSelectedIndex={setTabViewUsersSelectedIndex}
+          tabViewSelectedIndex={tabViewUsersSelectedIndex}
+        />
         {tabViewUsersSelectedIndex === 1 && (
           <UsersContainer>
             <CountInfoStatic data={userCountData} setSelectedData={setSelectedUsersCard} />
@@ -231,9 +264,40 @@ function Users() {
             </TableContainer>
           </UsersContainer>
         )}
-        {tabViewUsersSelectedIndex === 2 && ''}
+        {tabViewUsersSelectedIndex === 2 && (
+          <InternalUsersContainer>
+            <InternalUserTop>
+              <BorderedText
+                text="New User"
+                icon={<AiOutlinePlus color={colors.white} size={15} />}
+                backgroundColor={colors.primary}
+                color={colors.white}
+              />
+              <SearchInput
+                backgroundColor={'transparent'}
+                name="searchProfileValue"
+                value={searchInternalUserValue}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchInternalUserValue(e.target.value)}
+                placeholder="Search by Phone Number or Account Number"
+              />
+            </InternalUserTop>
+            <InternaUsersTable
+              data={InternalUsersData}
+              headerData={internalUsersDataHeader}
+              onClick={(item: Dictionary) => handleItemModalOpen(item)}
+              setSelectedItem={setSelectedInternalUserItem}
+            />
+          </InternalUsersContainer>
+        )}
         {tabViewUsersSelectedIndex === 3 && ''}
 
+        <MoreIconView
+          setSelectedText={setSelectedTransactionActionText}
+          isModalVisible={moreIconIsVisible}
+          closeModal={() => setMoreIconIsVisible(false)}
+          options={moreIconOption}
+          onClick={item => handleMoreIconOptions(item)}
+        />
         <LoaderModal
           text="Please wait loading ..."
           isModalVisible={superAgentsStatus === 'loading' || usersStatus === 'loading'}

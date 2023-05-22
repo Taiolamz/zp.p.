@@ -61,3 +61,14 @@ export const SupportContainer = styled.div`
   margin-top: ${spacing.small};
   row-gap: ${spacing.small};
 `;
+
+export const InternalUsersContainer = styled.div`
+  margin-top: ${spacing.xlarge};
+`;
+
+export const InternalUserTop = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: ${spacing.large};
+`;
