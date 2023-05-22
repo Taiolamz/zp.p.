@@ -25,4 +25,3 @@ export { default as SubAgentCard } from '../components/subAgentCard';
 export { default as TransactionHistoryModal } from './transactionHistoryModal';
 export { default as SavedBanksModal } from './savedBanksModal';
 export { default as ProfileActivationToggleModal } from './profileActivationToggleModal';
-export { default as CountInfoStatic } from './countInfoStatic';

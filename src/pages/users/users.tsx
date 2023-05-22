@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppContainer, CountInfoStatic, TabView, LoaderModal, MoreIconView } from '../../atoms';
+import { AppContainer, CountInfo, TabView, LoaderModal, MoreIconView } from '../../atoms';
 import { colors, dateFormat, routesPath, spacing } from '../../utils';
 import { SearchInput, UsersTable, Pagination, BorderedText, InternaUsersTable } from '../../components';
 import {
@@ -65,6 +65,7 @@ function Users() {
   const [selectedTransactionActionText, setSelectedTransactionActionText] = useState('');
   const [searchInternalUserValue, setSearchInternalUserValue] = useState('');
 
+  const [firstMount, setFirstMount] = useState(true);
   // redux state
   const usersState = useAppSelector(state => state.getUsers);
   const { status: usersStatus } = usersState;
@@ -120,7 +121,7 @@ function Users() {
   }, [selectedUsersCard, currentPage, isSearchingUsers]);
 
   useEffect(() => {
-    if (usersStatus === 'succeeded') {
+    if (usersStatus === 'succeeded' && tabViewUsersSelectedIndex === 1) {
       let userCountResult: any[] = [];
 
       userCountResult = [
@@ -166,9 +167,12 @@ function Users() {
         }
       });
 
-      setUserCountData(userCountResult);
+      // this is because i want this to set just one time
+      if (firstMount === true) {
+        setUserCountData(userCountResult);
+      }
       setUsersData(updateUsersData);
-
+      setFirstMount(false);
       const {
         meta: { links },
       } = usersState?.data?.users;
@@ -211,7 +215,7 @@ function Users() {
         />
         {tabViewUsersSelectedIndex === 1 && (
           <UsersContainer>
-            <CountInfoStatic data={userCountData} setSelectedData={setSelectedUsersCard} />
+            <CountInfo data={userCountData} setSelectedData={setSelectedUsersCard} />
 
             <SearchContainer>
               <SearchInput
