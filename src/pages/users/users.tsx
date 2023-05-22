@@ -72,8 +72,24 @@ function Users() {
   //More Icon for Internal Users
   const moreIconOption = ['Edit', 'Deactivate', 'Reactivate', 'Reset Password', 'View Login History'];
 
-  // handle different excalation modules
-  const handleMoreIconOptions = async (item: string) => {};
+  // handle different modules
+  const handleMoreIconOptions = async (item: string) => {
+    if (item === 'Edit') {
+      console.log('Edit');
+    }
+    if (item === 'Deactivate') {
+      console.log('Deactivate');
+    }
+    if (item === 'Reactivate') {
+      console.log('Reactivate');
+    }
+    if (item === 'Reset Password') {
+      console.log('Reset Password');
+    }
+    if (item === 'View Login History') {
+      console.log('View Login History');
+    }
+  };
 
   // Function opens more item when the more icon in internal users table is clicked
   const handleItemModalOpen = (item: Dictionary) => {
