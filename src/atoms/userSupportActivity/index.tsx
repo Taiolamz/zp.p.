@@ -53,7 +53,7 @@ const UserSupportActivity = ({
       {kycLevel === 'Level 3' && (
         <BorderedText
           onClick={onClickViewSubAgent}
-          text={profileToggleText}
+          text={namedViewSubAgents}
           backgroundColor={colors.purpleVariantThree}
           color={colors.white}
         />

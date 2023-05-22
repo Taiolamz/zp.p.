@@ -1,56 +1,51 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../../api/api";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import api from '../../api/api';
 type Dictionary = {
   [key: string]: any;
 };
 
 interface InitState {
   data: Dictionary;
-  status: "idle" | "loading" | "succeeded" | "failed";
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: any;
 }
 
 const initialState = {
   data: {},
-  status: "idle",
+  status: 'idle',
   error: null,
 } as InitState;
 
-export const getUserProfileRequest = createAsyncThunk(
-  "getUserProfile",
-  async (payload: Dictionary, { dispatch }) => {
-    const url = `admin/user-profile/`;
+export const getUserProfileRequest = createAsyncThunk('getUserProfile', async (payload: Dictionary, { dispatch }) => {
+  const url = `admin/user-profile/`;
 
-    try {
-      const response = await api.get(
-        `${url}${payload.userId}?include=account,kyc,agent,verifications`
-      );
-      return response?.data;
-    } catch (err) {
-      throw err;
-    }
+  try {
+    const response = await api.get(`${url}${payload.userId}?include=account,agent,bvn`);
+    return response?.data;
+  } catch (err) {
+    throw err;
   }
-);
+});
 
 const getUserProfileSlice = createSlice({
-  name: "getUserProfile",
+  name: 'getUserProfile',
   initialState,
   reducers: {
-    reset: (state) => {
+    reset: state => {
       Object.assign(state, initialState);
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(getUserProfileRequest.pending, (state) => {
-      state.status = "loading";
+  extraReducers: builder => {
+    builder.addCase(getUserProfileRequest.pending, state => {
+      state.status = 'loading';
     });
     builder.addCase(getUserProfileRequest.fulfilled, (state, action) => {
-      state.status = "succeeded";
+      state.status = 'succeeded';
       state.data = action.payload;
       state.error = null;
     });
     builder.addCase(getUserProfileRequest.rejected, (state, action) => {
-      state.status = "failed";
+      state.status = 'failed';
       state.error = action.payload;
     });
   },

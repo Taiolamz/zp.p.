@@ -43,9 +43,13 @@ export const UsersContainer = styled.div`
 `;
 
 export const SearchContainer = styled.div`
-  max-width: 16.313em;
+  // max-width: 16.313em;
+  max-width: 20.313em;
   margin-bottom: ${spacing.large};
   margin-top: ${spacing.large};
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 `;
 
 export const TableContainer = styled.div`

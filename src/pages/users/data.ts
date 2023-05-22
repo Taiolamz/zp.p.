@@ -7,6 +7,17 @@ import { SubAgentIPropsIprops } from '../../components/subAgentCard';
 import { colors, dateFormat } from '../../utils';
 const date = new Date().toDateString();
 
+export const userDataHeader = {
+  id: '',
+  name: 'Name',
+  userId: 'User ID',
+  walletNo: 'Account No',
+  phone: 'Phone No',
+  lastSeen: 'Last Seen',
+  subAgents: 'Sub Agents',
+  email: 'Email',
+};
+
 export const TransactionHistoryHeader = {
   time: 'Time',
   transactionType: 'Transaction Type',

@@ -1,5 +1,6 @@
-import { TableTag, TD, TH, TR, TableContainer, TDStatus } from "./style";
-import { Dictionary } from "../../../types";
+import { TableTag, TD, TH, TR, TableContainer, TDStatus } from './style';
+import { Dictionary } from '../../../types';
+import { capitalizeFirstLetter } from '../../../utils';
 export interface TableIPropsIProps {
   data: any[];
   headerData: Dictionary;
@@ -18,7 +19,7 @@ function DocumentStatusTable({ data, headerData }: TableIPropsIProps) {
         </thead>
 
         <tbody>
-          {data.map((item: any, index: number) => (
+          {data?.map((item: any, index: number) => (
             <TR key={item.id}>
               <TD>{item.document}</TD>
               <TD>{item.noOfUpload}</TD>
@@ -27,7 +28,7 @@ function DocumentStatusTable({ data, headerData }: TableIPropsIProps) {
                   style={{
                     backgroundColor: item.statusBG,
                   }}>
-                  {item.status}
+                  {capitalizeFirstLetter(item.status)}
                 </TDStatus>
               </TD>
             </TR>

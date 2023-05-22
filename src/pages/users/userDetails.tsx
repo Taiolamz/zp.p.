@@ -1,7 +1,16 @@
-import { useState, useEffect, useLayoutEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { CustomerProfile } from '../../components';
-import { AppContainer, UserSupportActivity, DocumentStatusModal, LoginHistoryModal, LoaderModal } from '../../atoms';
+import {
+  AppContainer,
+  UserSupportActivity,
+  DocumentStatusModal,
+  LoginHistoryModal,
+  LoaderModal,
+  SavedBanksModal,
+  ProfileActivationToggleModal,
+  ActivityActionModal,
+} from '../../atoms';
 import {
   documentStatusDataHeader,
   loginHistoryDataHeader1,
@@ -17,7 +26,15 @@ import {
   namedViewSubAgents,
 } from './data';
 
-import { colors, routesPath, dateFormat, capitalizeFirstLetter, timeFormat } from '../../utils';
+import {
+  colors,
+  routesPath,
+  dateFormat,
+  capitalizeFirstLetter,
+  timeFormat,
+  images,
+  determineVericationDocState,
+} from '../../utils';
 import { UsersDetailContainer, UserProfileContainer, SupportContainer } from './style';
 import { H2 } from '../../styles';
 
@@ -30,19 +47,25 @@ import {
   getProfileViewHistoryReset,
   getLoginHistoryRequest,
   getLoginHistoryReset,
+  getUserSavedBanksRequest,
+  deleteUserSavedBankRequest,
+  deleteUserSavedBankReset,
+  updateUserStatusRequest,
+  updateUserStatusReset,
 } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { CustomerProfileIProps } from '../../components/customerProfile';
 import { DocumentStatusIProps } from '../../atoms/documentStatusModal';
 import { LoginHistoryIProps } from '../../components/tables/loginHistoryTable';
 import { Dictionary } from '../../types';
+import { SavedBanksIProps } from '../../components/tables/savedBanksTable';
 
 const { USERS } = routesPath;
 
-const kycVerificationbvn: string = 'bvn-selfie-verification';
-const kycVerificationidentityCard: string = 'identity-card-verification';
-const kycVerificationCACDocumentVerification: string = 'cac document verification';
-const kycVerificationBusinessAddressVerification: string = 'business address verification';
+const kycVerificationbvn: string = 'bvnselfieverification';
+const kycVerificationidentityCard: string = 'identitycardverification';
+const kycVerificationCACDocumentVerification: string = 'cacdocumentverification';
+const kycVerificationBusinessAddressVerification: string = 'businessaddressverification';
 
 function UserDetails() {
   const navigate = useNavigate();
@@ -59,7 +82,13 @@ function UserDetails() {
   const [docStatus, setDocStatus] = useState<DocumentStatusIProps[]>([]);
   const [loginHistoryData, setLoginHistoryData] = useState<any[]>([]);
   const [profileViewData, setProfileViewData] = useState<LoginHistoryIProps[]>([]);
-
+  const [savedBankIsModalVisible, setSavedBankIsModalVisible] = useState(false);
+  const [savedBanksData, setSavedBanksData] = useState<SavedBanksIProps[]>([]);
+  const [selectedUserBank, setSelectedUserBank] = useState<Dictionary>({});
+  const [userAccountStatus, setUserAccountStatus] = useState('');
+  const [profileActivationIsModalVisible, setProfileActivationIsModalVisible] = useState(false);
+  const [profileActivationSuccessIsModalVisible, setProfileActivationSuccessIsModalVisible] = useState(false);
+  const [deactiveMessage, setDeactiveMessage] = useState('');
   // redux state
   const userProfileState = useAppSelector(state => state.getUserProfile);
   const { status: userProfileStatus } = userProfileState;
@@ -73,13 +102,22 @@ function UserDetails() {
   const loginHistoryState = useAppSelector(state => state.getLoginHistory);
   const { status: loginHistoryStatus } = loginHistoryState;
 
-  const detmineKycLevel = (verifications: any[]) => {
+  const userSavedBanksState = useAppSelector(state => state.getUserSavedBanks);
+  const { status: userSavedBanksStatus } = userSavedBanksState;
+
+  const deleteUserSavedBankState = useAppSelector(state => state.deleteUserSavedBank);
+  const { status: deleteUserSavedBankStatus } = deleteUserSavedBankState;
+
+  const updateUserStatusState = useAppSelector(state => state.updateUserStatus);
+  const { status: updateUserStatusStatus } = updateUserStatusState;
+
+  const detmineKycLevel = (level: string) => {
     let result =
-      verifications?.length === 0
+      level === 'level zero'
         ? 'Level 0'
-        : verifications?.length === 1
+        : level === 'level one'
         ? 'Level 1'
-        : verifications?.length === 2
+        : level === 'level two'
         ? 'Level 2'
         : 'Level 3';
     return result;
@@ -93,13 +131,14 @@ function UserDetails() {
         userId,
       }),
     );
-  }, []);
+  }, [updateUserStatusState]);
 
   useEffect(() => {
     if (userProfileStatus === 'succeeded') {
       const {
         data: { user },
       } = userProfileState;
+
       let customerDetailsResult: CustomerProfileIProps[];
       let appActivityResult: CustomerProfileIProps[];
       customerDetailsResult = [
@@ -121,22 +160,22 @@ function UserDetails() {
         {
           id: 4,
           helper: 'BVN',
-          text: user?.kyc?.bvn_number === null ? 'N/A' : user?.kyc?.bvn_number,
+          text: user?.bvn?.bvn_number === null ? 'N/A' : user?.bvn?.bvn_number,
         },
         {
           id: 5,
-          text: user?.hasOwnProperty('dob') ? dateFormat(user?.dob) : 'N/A',
+          text: user?.bvn === null ? 'N/A' : dateFormat(user?.bvn?.date_of_birth),
           helper: 'Date of birth',
         },
         {
           id: 6,
           helper: 'Profile Level',
-          text: detmineKycLevel(user?.verifications),
+          text: capitalizeFirstLetter(user?.kyc_level),
         },
         {
           id: 7,
           helper: 'Address Verification Status',
-          text: user?.kyc?.business_registration_number === null ? 'Unverified' : 'Verified',
+          text: user?.agent?.business_address === null ? 'Unverified' : 'Verified',
         },
         {
           id: 8,
@@ -168,7 +207,10 @@ function UserDetails() {
         {
           id: 3,
           helper: 'Last Device Login',
-          text: user?.device_detail,
+          text:
+            user?.last_login === null
+              ? 'N/A'
+              : ` ${dateFormat(user?.last_login)} - ${timeFormat(user?.last_login, true)}`,
         },
         {
           id: 4,
@@ -181,71 +223,109 @@ function UserDetails() {
           text: user?.comment === null ? 'N/A' : user?.comment,
         },
       ];
-      setKycLevel(detmineKycLevel(user?.verifications));
+
+      setUserAccountStatus(user?.status);
+      setKycLevel(detmineKycLevel(user?.kyc_level));
       setCustomerDetails(customerDetailsResult);
       setAppActivity(appActivityResult);
     }
   }, [userProfileState]);
 
-  function determineDocStatus(verificationType: string, kycLevel: string, item: Dictionary) {
-    let result = verificationType === kycLevel ? capitalizeFirstLetter(item?.status) : 'Pending';
-    // console.log(result, 'results');
-    return result;
-  }
-
   useEffect(() => {
     let result: DocumentStatusIProps[] = [];
-    let verificationData: Dictionary = {};
+
+    const uniqueVerificationTypes: Dictionary = {};
     if (userVerificationsStatus === 'succeeded') {
-      console.log(userVerificationsState?.data, 'dataff');
-      userVerificationsState?.data?.Verifications?.forEach((el: Dictionary) => {
-        verificationData = {
-          photoStatus: determineDocStatus(el.verification_type, kycVerificationbvn, el),
-          idCardStatus: determineDocStatus(el.verification_type, kycVerificationidentityCard, el),
-          addressVefication: determineDocStatus(el.verification_type, kycVerificationCACDocumentVerification, el),
-        };
-      });
+      const numberOfVerificationLength = userVerificationsState?.data?.Verifications.length;
 
-      // console.log(verificationData, 'aa');
+      const updateVerificationTypeNaming = (string: string) => {
+        var new_string = string.replace(/-|\s/g, '');
+        return new_string;
+      };
 
-      // console.log(verificationData, 'verificationData');
+      for (const obj of userVerificationsState?.data?.Verifications) {
+        const { verification_type, status, upload_count } = obj;
+        const camelCaseVerificationType = updateVerificationTypeNaming(verification_type);
+
+        if (!uniqueVerificationTypes.hasOwnProperty(camelCaseVerificationType)) {
+          uniqueVerificationTypes[camelCaseVerificationType] = {
+            status,
+            upload_count,
+          };
+        }
+      }
 
       result = [
         {
           id: 1,
           document: 'Passport',
-          noOfUpload: verificationData?.photoStatus === 'Pending' ? 0 : 2,
-          status: verificationData?.photoStatus,
-          statusBG:
-            verificationData?.photoStatus === 'Approved'
-              ? colors.green
-              : verificationData?.photoStatus === 'Rejected'
-              ? colors.red
-              : colors.greyDark,
+          noOfUpload: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationbvn,
+          ).count,
+          status: determineVericationDocState(numberOfVerificationLength, uniqueVerificationTypes, kycVerificationbvn)
+            .status,
+          statusBG: determineVericationDocState(numberOfVerificationLength, uniqueVerificationTypes, kycVerificationbvn)
+            .statusBG,
         },
         {
           id: 2,
           document: 'ID Card',
-          noOfUpload: verificationData?.idCardStatus === 'Pending' ? 0 : 1,
-          status: verificationData?.idCardStatus,
-          statusBG:
-            verificationData?.idCardStatus === 'Approved'
-              ? colors.green
-              : verificationData?.idCardStatus === 'Rejected'
-              ? colors.red
-              : colors.greyDark,
+          noOfUpload: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationidentityCard,
+          ).count,
+          status: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationidentityCard,
+          ).status,
+          statusBG: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationidentityCard,
+          ).statusBG,
         },
+
         {
           id: 3,
+          document: 'CAC Document',
+          noOfUpload: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationCACDocumentVerification,
+          ).count,
+          status: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationCACDocumentVerification,
+          ).status,
+          statusBG: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationCACDocumentVerification,
+          ).statusBG,
+        },
+        {
+          id: 4,
           document: 'Address Verification',
-          noOfUpload: verificationData?.addressVefication === 'Pending' ? 0 : 1,
-          status: verificationData?.addressVefication,
-          statusBG:
-            verificationData?.addressVefication === 'Approved'
-              ? colors.green
-              : verificationData?.addressVefication === 'Rejected'
-              ? colors.red
-              : colors.greyDark,
+          noOfUpload: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationBusinessAddressVerification,
+          ).count,
+          status: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationBusinessAddressVerification,
+          ).status,
+          statusBG: determineVericationDocState(
+            numberOfVerificationLength,
+            uniqueVerificationTypes,
+            kycVerificationBusinessAddressVerification,
+          ).statusBG,
         },
       ];
     }
@@ -290,8 +370,38 @@ function UserDetails() {
     }
   }, [loginHistoryState]);
 
+  // get user banks successful
+  useEffect(() => {
+    if (userSavedBanksStatus === 'succeeded') {
+      let result: SavedBanksIProps[] = [];
+      userSavedBanksState?.data?.user_banks?.data?.forEach((item: Dictionary) => {
+        result.push({
+          id: item?.id,
+          accNo: item?.account_number,
+          accName: item?.account_name,
+          bank: item?.bank_name,
+        });
+      });
+
+      setSavedBanksData(result);
+    }
+  }, [userSavedBanksState]);
+
+  useEffect(() => {
+    if (deleteUserSavedBankStatus === 'succeeded') {
+      setSavedBankIsModalVisible(false);
+    }
+  }, [deleteUserSavedBankState]);
+
+  // successful deactivate or reactivate user
+  useEffect(() => {
+    if (updateUserStatusStatus === 'succeeded') {
+      setProfileActivationSuccessIsModalVisible(true);
+    }
+  }, [updateUserStatusState]);
+
   const handleSupportClicked = (item: any) => {
-    console.log(item, 'item');
+    // console.log(item, 'item');
     // setToggleClicked(!toggleClicked);
     const { text } = item;
     if (text === namedDocumentStatus) {
@@ -306,13 +416,49 @@ function UserDetails() {
       console.log('upload doc');
     }
     if (text === namedSavedBanks) {
-      console.log('saved banks');
+      dispatch(deleteUserSavedBankReset());
+      dispatch(getUserSavedBanksRequest({ userId }));
+      setSavedBankIsModalVisible(true);
     }
     if (text === namedLoginHistory) {
       setLoginHistoryIsModalVisible(true);
       dispatch(getProfileViewHistoryRequest({ userId }));
       dispatch(getLoginHistoryRequest({ userId }));
     }
+    if (text === namedReactivateProfile || text === namedDeactivateProfile) {
+      setProfileActivationIsModalVisible(true);
+    }
+  };
+
+  const handleDaleteUserBank = () => {
+    dispatch(deleteUserSavedBankRequest({ beneficiaryId: selectedUserBank?.id }));
+  };
+
+  const handleUserProfileActivity = () => {
+    let payload: Dictionary;
+    if (userAccountStatus === 'active') {
+      payload = {
+        userId,
+        data: {
+          status: 'inactive',
+          comment: deactiveMessage,
+        },
+      };
+    } else {
+      payload = {
+        userId,
+        data: {
+          status: 'active',
+        },
+      };
+    }
+
+    dispatch(updateUserStatusRequest(payload));
+  };
+
+  const handleProfileActivationSuccessClose = () => {
+    setProfileActivationSuccessIsModalVisible(false);
+    dispatch(updateUserStatusReset());
   };
 
   return (
@@ -332,11 +478,11 @@ function UserDetails() {
             <UserSupportActivity
               data={supportActivitiesData}
               setSelectedItem={setSelectedUserActivity}
-              onClick={(item: any) => {
+              onClick={(item: Dictionary) => {
                 handleSupportClicked(item);
               }}
-              onClickProfileToggle={() => {}}
-              profileToggleText={namedReactivateProfile}
+              onClickProfileToggle={() => setProfileActivationIsModalVisible(true)}
+              profileToggleText={userAccountStatus === 'active' ? namedDeactivateProfile : namedReactivateProfile}
               onClickViewSubAgent={() => {}}
               kycLevel={kycLevel}
             />
@@ -365,9 +511,54 @@ function UserDetails() {
           isLoading={loginHistoryStatus === 'loading' || profileViewHistoryStatus === 'loading'}
         />
 
+        <SavedBanksModal
+          title="Banks"
+          data={savedBanksData}
+          isModalVisible={savedBankIsModalVisible}
+          closeModal={() => setSavedBankIsModalVisible(false)}
+          headerData={{ accNo: 'Acct No', accName: 'Acct Name', bank: 'Bank' }}
+          deleteAction={handleDaleteUserBank}
+          isFetchingBanks={userSavedBanksStatus === 'loading'}
+          setSelectedItem={setSelectedUserBank}
+        />
+
+        <ProfileActivationToggleModal
+          isModalVisible={profileActivationIsModalVisible}
+          activityStatus={userAccountStatus}
+          actionClicked={handleUserProfileActivity}
+          closeModal={() => setProfileActivationIsModalVisible(false)}
+          setDeactiveMessage={setDeactiveMessage}
+        />
+
+        {/* this modal shows when admin successfully activate or deactivate a user */}
+        <ActivityActionModal
+          isModalVisible={profileActivationSuccessIsModalVisible}
+          closeModal={handleProfileActivationSuccessClose}
+          actionClick={handleProfileActivationSuccessClose}
+          image={images.check}
+          isLoading={false}
+          actionText="Close"
+          title=""
+          text={
+            userAccountStatus === 'active'
+              ? 'Profile has been successfuly deactivated'
+              : 'Profile has been successfuly reactivated'
+          }
+        />
+
         <LoaderModal
-          text="Loading please wait...."
-          isModalVisible={userProfileStatus === 'loading'}
+          text={
+            updateUserStatusStatus === 'loading'
+              ? 'Please wait...'
+              : deleteUserSavedBankStatus === 'loading'
+              ? 'Deleting user bank'
+              : 'Loading please wait....'
+          }
+          isModalVisible={
+            updateUserStatusStatus === 'loading' ||
+            deleteUserSavedBankStatus === 'loading' ||
+            userProfileStatus === 'loading'
+          }
           closeModal={() => {}}
         />
       </div>
