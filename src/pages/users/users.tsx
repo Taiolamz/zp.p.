@@ -19,8 +19,14 @@ import { getUsersRequest, getUsersReset, getSuperAgentsRequest, getSuperAgentsRe
 import { AiOutlinePlus } from 'react-icons/ai';
 const { USERDETAILS } = routesPath;
 
-let activeUser = 'active';
-let inActiveUser = 'inactive';
+const activeUser = 'active';
+const inActiveUser = 'inactive';
+
+const namedEdit = 'Edit';
+const namedDeactivate = 'Deactivate';
+const namedReactivate = 'Reactivate';
+const namedResetPassword = 'Reset Password';
+const namedViewLoginHistory = 'View Login History';
 
 const userTypeToFetchByActivity = (data: Dictionary) => {
   let result: string = '';
@@ -71,32 +77,7 @@ function Users() {
   const { status: usersStatus } = usersState;
 
   //More Icon for Internal Users
-  const moreIconOption = ['Edit', 'Deactivate', 'Reactivate', 'Reset Password', 'View Login History'];
-
-  // handle different modules
-  const handleMoreIconOptions = async (item: string) => {
-    if (item === 'Edit') {
-      console.log('Edit');
-    }
-    if (item === 'Deactivate') {
-      console.log('Deactivate');
-    }
-    if (item === 'Reactivate') {
-      console.log('Reactivate');
-    }
-    if (item === 'Reset Password') {
-      console.log('Reset Password');
-    }
-    if (item === 'View Login History') {
-      console.log('View Login History');
-    }
-  };
-
-  // Function opens more item when the more icon in internal users table is clicked
-  const handleItemModalOpen = (item: Dictionary) => {
-    setSelectedInternalUserItem(item);
-    setMoreIconIsVisible(true);
-  };
+  const moreIconOption = [namedEdit, namedDeactivate, namedReactivate, namedResetPassword, namedViewLoginHistory];
 
   const superAgentsState = useAppSelector(state => state.getSuperAgents);
   const { status: superAgentsStatus } = superAgentsState;
@@ -204,6 +185,31 @@ function Users() {
       setUsersDataSuperAgent(updateUsersData);
     }
   }, [superAgentsState]);
+
+  // handle different modules
+  const handleMoreIconOptions = async (item: string) => {
+    if (item === namedEdit) {
+      console.log('Edit');
+    }
+    if (item === namedDeactivate) {
+      console.log('Deactivate');
+    }
+    if (item === namedReactivate) {
+      console.log('Reactivate');
+    }
+    if (item === namedResetPassword) {
+      console.log('Reset Password');
+    }
+    if (item === namedResetPassword) {
+      console.log('View Login History');
+    }
+  };
+
+  // Function opens more item when the more icon in internal users table is clicked
+  const handleItemModalOpen = (item: Dictionary) => {
+    setSelectedInternalUserItem(item);
+    setMoreIconIsVisible(true);
+  };
 
   return (
     <AppContainer navTitle="USER">
