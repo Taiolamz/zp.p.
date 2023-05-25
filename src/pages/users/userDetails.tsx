@@ -10,6 +10,7 @@ import {
   SavedBanksModal,
   ProfileActivationToggleModal,
   ActivityActionModal,
+  TransactionHistoryModal,
 } from '../../atoms';
 import {
   documentStatusDataHeader,
@@ -138,6 +139,8 @@ function UserDetails() {
       const {
         data: { user },
       } = userProfileState;
+
+      // console.log(user, 'users');
 
       let customerDetailsResult: CustomerProfileIProps[];
       let appActivityResult: CustomerProfileIProps[];
@@ -355,14 +358,14 @@ function UserDetails() {
       const {
         data: { user },
       } = userProfileState;
-
+      console.log(loginHistoryState?.data?.users, 'ddd');
       loginHistoryState?.data?.users?.data?.forEach((el: Dictionary, index: number) => {
         resultLoginHistory.push({
           id: index + 1,
           time: `${dateFormat(el?.login_at)} - ${timeFormat(el?.login_at)}`,
-          device: el?.device_detail === null ? 'N/A' : el?.device_detail,
+          device: el?.data?.userAgent === null ? 'N/A' : el?.data?.userAgent,
           location: user?.location === null ? 'N/A' : user?.location,
-          ipAddress: el?.data?.userAgent === null ? 'N/A' : el?.data?.userAgent,
+          ipAddress: '-',
         });
       });
 
@@ -545,6 +548,12 @@ function UserDetails() {
               : 'Profile has been successfuly reactivated'
           }
         />
+
+        {/* Transaction History modal */}
+        {/* <TransactionHistoryModal
+        title='Transaction Hisory'
+
+        /> */}
 
         <LoaderModal
           text={

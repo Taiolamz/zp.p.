@@ -94,7 +94,10 @@ function Users() {
   useEffect(() => {
     dispatch(
       getUsersRequest({
-        path: searchValue?.length >= 1 ? `?term=${searchValue}` : `/sort-by-status?status=${userTypeToFetch}`,
+        path:
+          searchValue?.length >= 1
+            ? `?term=${searchValue}&include=account`
+            : `/sort-by-status?status=${userTypeToFetch}`,
         per_page: pageSize,
         page: currentPage,
       }),
