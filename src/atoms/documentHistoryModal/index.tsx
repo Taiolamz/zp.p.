@@ -15,7 +15,7 @@ export interface IProps {
   closeModal: () => void;
   title?: string;
   data?: DocumentHistoryIProps[];
-  isLoading?: boolean;
+  isLoading: boolean;
 }
 
 function DocumentHistoryCard(item: DocumentHistoryIProps) {
@@ -39,7 +39,7 @@ function DocumentHistoryModal({ isModalVisible, closeModal, title, data, isLoadi
     <Modal title={title} isModalVisible={isModalVisible} closeModal={closeModal}>
       {isLoading ? (
         <Container>
-          <H5>Loading...</H5>
+          <H5>Please wait loading...</H5>
         </Container>
       ) : (
         <Container>

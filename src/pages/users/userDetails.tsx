@@ -57,6 +57,8 @@ import {
   updateUserStatusReset,
   getUserProfileTransactionRequest,
   getUserProfileTransactionReset,
+  getDocumentHistoryRequest,
+  getDocumentHistoryReset,
 } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { CustomerProfileIProps } from '../../components/customerProfile';
@@ -106,6 +108,7 @@ function UserDetails() {
   const pageSize = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(5);
+  const [documentHistoryData, setDocumentHistoryData] = useState<any[]>([]);
 
   // redux state
   const userProfileState = useAppSelector(state => state.getUserProfile);
@@ -131,6 +134,9 @@ function UserDetails() {
 
   const userProfileTransactionState = useAppSelector(state => state.getUserProfileTransaction);
   const { status: userProfileTransactionStatus } = userProfileTransactionState;
+
+  const documentHistoryState = useAppSelector(state => state.getDocumentHistory);
+  const { status: documentHistoryStatus } = documentHistoryState;
 
   const detmineKycLevel = (level: string) => {
     let result =
@@ -159,8 +165,6 @@ function UserDetails() {
       const {
         data: { user },
       } = userProfileState;
-
-      // console.log(user, 'users');
 
       let customerDetailsResult: CustomerProfileIProps[];
       let appActivityResult: CustomerProfileIProps[];
@@ -378,7 +382,7 @@ function UserDetails() {
       const {
         data: { user },
       } = userProfileState;
-      console.log(loginHistoryState?.data?.users, 'ddd');
+
       loginHistoryState?.data?.users?.data?.forEach((el: Dictionary, index: number) => {
         resultLoginHistory.push({
           id: index + 1,
@@ -457,6 +461,34 @@ function UserDetails() {
     }
   }, [userProfileTransactionState]);
 
+  // successful document history
+  useEffect(() => {
+    if (documentHistoryStatus === 'succeeded') {
+      const { bvn_photo, identity_card, cac_document } = documentHistoryState?.data;
+      const result = [
+        {
+          id: 1,
+          text: 'Passport',
+          image: bvn_photo !== null ? bvn_photo : images.user,
+          imgAlt: 'Passport photograph',
+        },
+        {
+          id: 2,
+          text: 'ID Card',
+          image: identity_card !== null ? identity_card[0] : images.user,
+          imgAlt: 'User Identification Card',
+        },
+        {
+          id: 2,
+          text: 'Agency Doc',
+          image: cac_document !== null ? cac_document : images.user,
+          imgAlt: 'Agency Document',
+        },
+      ];
+      setDocumentHistoryData(result);
+    }
+  }, [documentHistoryState]);
+
   const handleSupportClicked = (item: any) => {
     const { text } = item;
     if (text === namedDocumentStatus) {
@@ -469,7 +501,7 @@ function UserDetails() {
       setTransactionHistoryIsModalVisible(true);
     }
     if (text === namedDocumentHistory) {
-      console.log('upload doc');
+      dispatch(getDocumentHistoryRequest({ userId }));
       setDocumentHistoryIsModalVisible(true);
     }
     if (text === namedSavedBanks) {
@@ -631,14 +663,10 @@ function UserDetails() {
 
         <DocumentHistoryModal
           title="Document History"
-          data={[
-            { id: 1, image: images.user, text: 'Hello', imgAlt: 'Profile image' },
-            { id: 2, image: images.user, text: 'Hello', imgAlt: 'Profile image' },
-            { id: 3, image: images.user, text: 'Hello', imgAlt: 'Profile image' },
-          ]}
+          data={documentHistoryData}
           isModalVisible={documentHistoryIsModalVisible}
           closeModal={() => setDocumentHistoryIsModalVisible(false)}
-          isLoading={false}
+          isLoading={documentHistoryStatus === 'loading'}
         />
 
         <LoaderModal

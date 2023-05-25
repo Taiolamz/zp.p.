@@ -27,6 +27,7 @@ import {
   deleteUserSavedBankSliceReducer,
   updateUserStatusSliceReducer,
   getUserProfileTransactionSliceReducer,
+  getDocumentHistorySliceReducer,
 } from './slice';
 
 const rootReducer = combineReducers({
@@ -57,6 +58,7 @@ const rootReducer = combineReducers({
   deleteUserSavedBank: deleteUserSavedBankSliceReducer,
   updateUserStatus: updateUserStatusSliceReducer,
   getUserProfileTransaction: getUserProfileTransactionSliceReducer,
+  getDocumentHistory: getDocumentHistorySliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -11,7 +11,6 @@ export const Container = styled.div`
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
-  //   border: 1px solid green;
   @media (max-width: 700px) {
     width: 80vw;
   }
@@ -30,7 +29,6 @@ export const Content = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
   column-gap: 1em;
-  //   border: 1px solid red;
 `;
 
 export const CardContainer = styled.div`
