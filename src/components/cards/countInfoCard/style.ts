@@ -17,6 +17,8 @@ export const Container = styled.div`
   box-shadow: ${(p: StyleProps) => p.shadow};
   height: 100%;
   padding: ${spacing.small} ${spacing.small};
+  cursor: pointer;
+  width: 100%;
   @media (max-width: 768px) {
     padding: ${spacing.xsmall};
   }

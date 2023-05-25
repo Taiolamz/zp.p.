@@ -8,6 +8,7 @@ interface StyleProps {
   disabled?: boolean;
   borderColor?: string;
   color?: string;
+  backgroundColor?: string;
 }
 
 export const Container = styled.button`
@@ -21,10 +22,14 @@ export const Container = styled.button`
       ? colors.greyVariantThree
       : p.secondary
       ? "transparent"
+      : p.backgroundColor
+      ? p.backgroundColor
       : colors.primary};
   box-shadow: ${boxShadow.light};
   height: 50px;
   width: 100%;
+  border-width: 1px;
+  border-style: solid;
   border-color: ${(p: StyleProps) =>
     p.disabled
       ? colors.greyVariantThree

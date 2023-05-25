@@ -1,39 +1,101 @@
-import { AppContainer } from "../../atoms";
-import { CountInfoCard } from "../../components";
-import { colors, currencyFormat } from "../../utils";
+import { Activecard, CountInfoCard, CountInfoCardNoHelper } from '../../components';
+import { colors, currencyFormat } from '../../utils';
+import { useState } from 'react';
+import { AppContainer, AllUsersStat, KycDistributionStat } from '../../atoms';
+import {
+  CardsContainer,
+  FourBoxContainer,
+  StatCount,
+  TwoBoxActive,
+  TwoBoxContainerBottom,
+  TwoBoxContainerTop,
+  TwoBoxItemActive,
+  TwoBoxItemBottom,
+  TwoBoxItemTop,
+} from './style';
+import { kycLevelData } from './data';
+
 function Dashboard() {
   return (
     <AppContainer navTitle="DASHBOARD">
       <div>
-        <CountInfoCard
-          title="Inflow"
-          helper="Total Income"
-          background="transparent"
-          color={colors.blueVariantOne}
-          count={currencyFormat(19990560)}
-          // shadow="none"
-        />
-        <CountInfoCard
-          title="Outflow"
-          helper="Total Withdrawals"
-          background="transparent"
-          color={colors.orange}
-          count={currencyFormat(10590000)}
-        />
-        <CountInfoCard
-          title="Revenue"
-          helper="Tansaction Profit"
-          background="transparent"
-          color={colors.green}
-          count={currencyFormat(1450000)}
-        />
-        <CountInfoCard
-          title="Current In-App Balance"
-          helper="Transaction Aggregate"
-          background="transparent"
-          color={colors.greenVariantOne}
-          count={currencyFormat(9400000)}
-        />
+        <StatCount>
+          <CountInfoCard
+            title="Inflow"
+            helper="Total Income"
+            background="transparent"
+            color={colors.blueVariantOne}
+            count={currencyFormat(19990560)}
+            // shadow="none"
+          />
+          <CountInfoCard
+            title="Outflow"
+            helper="Total Withdrawals"
+            background="transparent"
+            color={colors.orange}
+            count={currencyFormat(10590000)}
+          />
+          <CountInfoCard
+            title="Revenue"
+            helper="Tansaction Profit"
+            background="transparent"
+            color={colors.green}
+            count={currencyFormat(1450000)}
+          />
+          <CountInfoCard
+            title="Current In-App Balance"
+            helper="Transaction Aggregate"
+            background="transparent"
+            color={colors.greenVariantOne}
+            count={currencyFormat(9400000)}
+          />
+        </StatCount>
+        <CardsContainer>
+          <AllUsersStat />
+          <KycDistributionStat kycLevelData={kycLevelData} />
+          <FourBoxContainer>
+            <TwoBoxContainerTop>
+              <TwoBoxItemTop>
+                <CountInfoCardNoHelper
+                  title="Refferals"
+                  // backgroundColor={colors.white}
+                  color={colors.primary}
+                  count={'4,324'}
+                />
+              </TwoBoxItemTop>
+              <TwoBoxItemTop>
+                <CountInfoCardNoHelper
+                  title="Complaints"
+                  // backgroundColor={colors.white}
+                  color={colors.primary}
+                  count={'345'}
+                />
+              </TwoBoxItemTop>
+            </TwoBoxContainerTop>
+            <TwoBoxContainerBottom>
+              <TwoBoxItemBottom>
+                <CountInfoCardNoHelper
+                  title="Complaints"
+                  backgroundColor={colors.white}
+                  color={colors.primary}
+                  count={'345'}
+                />
+              </TwoBoxItemBottom>
+              <TwoBoxItemActive>
+                <CountInfoCardNoHelper
+                  title="Complaints"
+                  backgroundColor={colors.white}
+                  color={colors.primary}
+                  count={'345'}
+                />
+                <TwoBoxActive>
+                  <Activecard count="7900" title="ACTIVE" />
+                  <Activecard count="1400" title="INACTIVE" />
+                </TwoBoxActive>
+              </TwoBoxItemActive>
+            </TwoBoxContainerBottom>
+          </FourBoxContainer>
+        </CardsContainer>
       </div>
     </AppContainer>
   );

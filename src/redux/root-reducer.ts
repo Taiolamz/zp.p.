@@ -1,4 +1,4 @@
-import { combineReducers } from "@reduxjs/toolkit";
+import { combineReducers } from '@reduxjs/toolkit';
 import {
   loginSliceReducer,
   authSliceReducer,
@@ -12,7 +12,21 @@ import {
   getTransactionByIdSliceReducer,
   exportTransactionByIdToMailSliceReducer,
   settlementAnalyticsSliceReducer,
-} from "./slice";
+  getKycsSliceReducer,
+  getKycsAnalyticsSliceReducer,
+  getKycCustomerSliceReducer,
+  kycVerificationSliceReducer,
+  getSuperAgentsSliceReducer,
+  getUsersSliceReducer,
+  getUserProfileSliceReducer,
+  getUserVerificationsSliceReducer,
+  getProfileViewHistorySliceReducer,
+  getLoginHistorySliceReducer,
+  getUserTransactionsSliceReducer,
+  getUserSavedBanksSliceReducer,
+  deleteUserSavedBankSliceReducer,
+  updateUserStatusSliceReducer,
+} from './slice';
 
 const rootReducer = combineReducers({
   login: loginSliceReducer,
@@ -27,6 +41,20 @@ const rootReducer = combineReducers({
   getTransactionById: getTransactionByIdSliceReducer,
   exportTransactionByIdToMail: exportTransactionByIdToMailSliceReducer,
   settlementAnalytics: settlementAnalyticsSliceReducer,
+  getKycs: getKycsSliceReducer,
+  getKycsAnalytics: getKycsAnalyticsSliceReducer,
+  getKycCustomer: getKycCustomerSliceReducer,
+  kycVerification: kycVerificationSliceReducer,
+  getSuperAgents: getSuperAgentsSliceReducer,
+  getUsers: getUsersSliceReducer,
+  getUserProfile: getUserProfileSliceReducer,
+  getUserVerifications: getUserVerificationsSliceReducer,
+  getProfileViewHistory: getProfileViewHistorySliceReducer,
+  getLoginHistory: getLoginHistorySliceReducer,
+  getUserTransactions: getUserTransactionsSliceReducer,
+  getUserSavedBanks: getUserSavedBanksSliceReducer,
+  deleteUserSavedBank: deleteUserSavedBankSliceReducer,
+  updateUserStatus: updateUserStatusSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

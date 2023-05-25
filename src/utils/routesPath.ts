@@ -14,6 +14,7 @@ const routesPath = {
   USERS: "/users",
   SETTINGS: "/settings",
   KYCDOC: "/kyc/",
+  USERDETAILS: "/user/profile/",
 };
 
 export default routesPath;

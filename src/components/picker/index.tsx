@@ -20,6 +20,7 @@ interface IProps {
   selectedValue: any;
   error?: string;
   marginBottom?: number | string;
+  width?: number | string;
 }
 
 function Picker({
@@ -31,6 +32,7 @@ function Picker({
   selectedValue,
   error,
   marginBottom,
+  width = "160px",
 }: IProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [value, setValue] = useState<any>("");
@@ -53,6 +55,7 @@ function Picker({
       )}
 
       <Container
+        width={width}
         error={value.length < 2 && error ? "error" : ""}
         onClick={() => setIsVisible(!isVisible)}
         height={height}

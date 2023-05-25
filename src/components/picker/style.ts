@@ -4,11 +4,12 @@ import { spacing, colors, borderRadius } from "../../utils";
 interface StyleProps {
   backgroundColor?: string;
   height?: number | string;
+  width?: number | string;
   error?: string;
 }
 
 export const Container = styled.div`
-  width: 160px;
+  width: ${(p: StyleProps) => (p.width && p.width ? p.width : "160px")};
   padding: 0px ${spacing.xxsmall};
   border-radius: ${borderRadius.medium};
   align-self: flex-start;

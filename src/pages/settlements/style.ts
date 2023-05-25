@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { spacing } from "../../utils";
+import styled from 'styled-components';
+import { spacing } from '../../utils';
 
 export const AllTransactionContainer = styled.div`
   display: flex;
@@ -130,5 +130,42 @@ export const ReconciliationSearchContainer = styled.div`
   margin: ${spacing.small} 0 ${spacing.medium} 0;
   @media (max-width: 480px) {
     width: 100%;
+  }
+`;
+
+export const PrevTransactionContainer = styled.div``;
+
+export const PrevHeader = styled.div`
+  display: flex;
+
+  justify-content: space-between;
+  margin-top: ${spacing.medium};
+  margin-bottom: ${spacing.small};
+
+  @media (max-width: 1044px) {
+    flex-direction: column;
+    row-gap: ${spacing.xsmall};
+  }
+`;
+
+export const PrevSearch = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  flex-wrap: wrap;
+
+  @media (max-width: 1044px) {
+    width: 50%;
+  }
+
+  column-gap: ${spacing.small};
+
+  @media (max-width: 1044px) {
+    grid-template-columns: repeat(2, auto);
+    row-gap: ${spacing.xsmall};
+  }
+
+  @media (max-width: 500px) {
+    grid-template-columns: auto;
+    row-gap: ${spacing.xsmall};
   }
 `;

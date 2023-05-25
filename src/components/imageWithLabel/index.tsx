@@ -12,6 +12,7 @@ interface IProps {
   width?: string | number;
   borderRadius?: string | number;
   approved?: boolean;
+  imgAlt?: string;
 }
 
 const verifiedStyle = {
@@ -29,6 +30,7 @@ function ImageWithLabel({
   height,
   width,
   approved = false,
+  imgAlt,
 }: IProps) {
   return (
     <Container>
@@ -51,6 +53,7 @@ function ImageWithLabel({
             width={width}
             height={height}
             backgroundColor={backgroundColor}
+            alt={imgAlt}
           />
         </div>
       )}
@@ -63,6 +66,7 @@ function ImageWithLabel({
             width={width}
             height={height}
             backgroundColor={backgroundColor}
+            alt={imgAlt}
           />
           <H5 semiBold left color={labelColor ? labelColor : colors.grey}>
             {text}

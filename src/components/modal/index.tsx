@@ -1,6 +1,6 @@
-import Modal from "react-modal";
-import { FiX } from "react-icons/fi";
-import { memo, ReactElement } from "react";
+import Modal from 'react-modal';
+import { FiX } from 'react-icons/fi';
+import { memo, ReactElement } from 'react';
 import {
   Container,
   Content,
@@ -9,10 +9,10 @@ import {
   ContentOne,
   ContentTwo,
   ContentThree,
-} from "./style";
-import "./style.css";
-import { colors, boxShadow } from "../../utils";
-import { H2 } from "../../styles";
+} from './style';
+import './style.css';
+import { colors, boxShadow } from '../../utils';
+import { H2 } from '../../styles';
 
 interface IProps {
   closeModal: () => void;
@@ -24,16 +24,16 @@ interface IProps {
 
 const customStyles = {
   content: {
-    top: "50%",
-    left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
-    transform: "translate(-50%, -50%)",
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
     border: `1px solid ${colors.smokeWhite}`,
     boxShadow: boxShadow.light,
   },
-  overlay: { backgroundColor: "rgba(0,0,0,0.6)" },
+  overlay: { backgroundColor: 'rgba(0,0,0,0.6)' },
 };
 
 function RModal({
@@ -47,7 +47,7 @@ function RModal({
 
   function afterOpenModal() {
     // references are now sync'd and can be accessed.
-    subtitle.style.color = "#f00";
+    subtitle.style.color = '#f00';
   }
 
   return (
@@ -57,7 +57,8 @@ function RModal({
       onAfterOpen={afterOpenModal}
       onRequestClose={closeModal}
       style={customStyles}
-      contentLabel='Example Modal'>
+      contentLabel='Example Modal'
+    >
       <Container backgroundColor={backgroundColor}>
         <Content>
           <ContentOne></ContentOne>

@@ -1,8 +1,8 @@
-import { memo } from "react";
+import { memo } from 'react';
 
-import { H1, H4 } from "../../../styles";
-import { colors } from "../../../utils";
-import { Container } from "./style";
+import { H1, H4 } from '../../../styles';
+import { colors } from '../../../utils';
+import { Container } from './style';
 
 export interface CountInfoCardIProps {
   id?: number;
@@ -42,7 +42,7 @@ function CountInfoCard({
         {count}
       </H1>
       <H4 left color={colors.grey}>
-        {helper ? helper : "Total Records"}
+        {helper ? helper : 'Total Records'}
       </H4>
     </Container>
   );

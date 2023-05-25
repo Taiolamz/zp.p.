@@ -21,7 +21,7 @@ function PerformActionModal({
   title,
   text,
   actionClick,
-  isLoading,
+  isLoading = false,
   actionText,
 }: IProps) {
   return (

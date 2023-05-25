@@ -1,11 +1,10 @@
-import * as yup from "yup";
-import { useState, useEffect } from "react";
-import { Formik } from "formik";
-import { useNavigate } from "react-router-dom";
-import { FiFilter } from "react-icons/fi";
-import { H2, H3 } from "../../styles";
+import * as yup from 'yup';
+import { useState, useEffect } from 'react';
+import { Formik } from 'formik';
+import { useNavigate } from 'react-router-dom';
+import { FiFilter } from 'react-icons/fi';
+import { H2 } from '../../styles';
 import {
-  CountInfoCard,
   DatePicker,
   BorderedText,
   Pagination,
@@ -17,75 +16,64 @@ import {
   TextArea,
   Button,
   TransactionTable,
-} from "../../components";
+} from '../../components';
 import {
-  SettlementBarChart,
   TabView,
-  TransactionsView,
   MoreIconView,
   AppContainer,
-  ReconcileView,
   LoaderModal,
   SuccessModalWithCopy,
   TransactionDetailsModal,
-} from "../../atoms";
+} from '../../atoms';
 import {
   colors,
   dateFormat,
   spacing,
   yearDateFormat,
   routesPath,
-  formatAMPM,
+  timeFormat,
   showMessage,
-} from "../../utils";
+  capitalizeFirstLetter,
+} from '../../utils';
 import {
-  AllTransactionContainer,
-  AllTransactionContent,
-  DateContent,
-  InfoCountContainer,
-  InfoCountContent,
   TabViewContainer,
   TabContentTwo,
   ReconciliationSearchContainer,
   EscalateFormContainer,
   EscalateBtnContainer,
   CustomerNameContainer,
-} from "./style";
+} from './style';
 
 import {
   getTransactionsRequest,
   getTransactionsReset,
-  getReconciliationAccountDetailRequest,
-  getReconciliationAccountDetailReset,
   getEscalationAgentsRequest,
   getTransactionByIdRequest,
   createEscalationTicketRequest,
   createEscalationTicketReset,
   getReconciliationAccountRequest,
   getReconciliationAccountReset,
-  reconcileAccountRequest,
-  reconcileAccountReset,
   exportTransactionByIdToMailRequest,
   exportTransactionByIdToMailReset,
-} from "../../redux/slice";
-import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
+} from '../../redux/slice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 type Dictionary = {
   [key: string]: any;
 };
 const tabViewData = [
-  { id: 1, isSelected: true, text: "Transactions History" },
+  { id: 1, isSelected: true, text: 'Transactions History' },
   // { id: 2, isSelected: false, text: "Bills History" },
   // { id: 3, isSelected: false, text: "Cash Request History" },
 ];
 
 const transactionDataHeader = {
-  id: "",
-  name: "Customer",
-  tid: "Transaction ID",
-  amount: "Amount",
-  type: "Transaction Type",
-  status: "Status",
-  time: "Date",
+  id: '',
+  name: 'Customer',
+  tid: 'Transaction ID',
+  amount: 'Amount',
+  type: 'Transaction Type',
+  status: 'Status',
+  time: 'Date',
 };
 
 const { RECONCILIATIONUSERDETAILS } = routesPath;
@@ -93,104 +81,81 @@ const { RECONCILIATIONUSERDETAILS } = routesPath;
 function Reconciliation() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [selectedFailedTransaction, setSelectedFailedTransaction] =
-    useState<any>({});
-  const [tabViewSelectedIndex, setTabViewSelectedIndex] =
-    useState<any[number]>(1);
-  const [startDisplayRecordDate, setStartDisplayRecordDate] = useState("");
-  const [endDisplayRecordDate, setEndDisplayRecordDate] = useState("");
+  const [selectedFailedTransaction, setSelectedFailedTransaction] = useState<any>({});
+  const [tabViewSelectedIndex, setTabViewSelectedIndex] = useState<any[number]>(1);
+  const [startDisplayRecordDate, setStartDisplayRecordDate] = useState('');
+  const [endDisplayRecordDate, setEndDisplayRecordDate] = useState('');
   const [transactionDataList, setTransactionDataList] = useState<any[]>([]);
   const [transactionFilterParams, setTransactionFilterParams] = useState({
-    reference: "",
-    type: "",
-    status: "",
-    start_date: "",
-    end_date: "",
+    reference: '',
+    type: '',
+    status: '',
+    start_date: '',
+    end_date: '',
   });
 
   const [userData, setUserData] = useState<Dictionary>({});
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(5);
-  const [searchValue, setSearchValue] = useState("");
-  const [searchProfileValue, setSearchProfileValue] = useState("");
-  const [selectedTransactionActionText, setSelectedTransactionActionText] =
-    useState("");
+  const [searchValue, setSearchValue] = useState('');
+  const [searchProfileValue, setSearchProfileValue] = useState('');
+  const [selectedTransactionActionText, setSelectedTransactionActionText] = useState('');
   const [escalationAgentsList, setEscalationAgentsList] = useState<any[]>([]);
   const [moreIsVisible, setMoreIsVisible] = useState(false);
   const [escalateModalVisible, setEscalateModalVisible] = useState(false);
-  const [transactionDetailsModalVisible, setTransactionDetailsModalVisible] =
-    useState(false);
-  const [selectedEscalateTo, setSelectedEscalateTo] = useState("");
-  const [selectedPriorityLevel, setSelectedPriorityLevel] = useState("");
-  const [transactionByIdData, setTransactionByIdData] = useState<Dictionary>(
-    {}
-  );
-  const [escalateSuccessfulModalVisible, setEscalateSuccessfulModalVisible] =
-    useState(false);
-  const [escalateSuccessfulData, setEscalateSuccessfulData] =
-    useState<Dictionary>({});
-  const transactionDetails = "Transaction Details";
-  const escalate = "Escalate";
+  const [transactionDetailsModalVisible, setTransactionDetailsModalVisible] = useState(false);
+  const [selectedEscalateTo, setSelectedEscalateTo] = useState('');
+  const [selectedPriorityLevel, setSelectedPriorityLevel] = useState('');
+  const [transactionByIdData, setTransactionByIdData] = useState<Dictionary>({});
+  const [escalateSuccessfulModalVisible, setEscalateSuccessfulModalVisible] = useState(false);
+  const [escalateSuccessfulData, setEscalateSuccessfulData] = useState<Dictionary>({});
+  const transactionDetails = 'Transaction Details';
+  const escalate = 'Escalate';
   const moreIconOption = [transactionDetails, escalate];
 
   // redux state
-  const transactionState = useAppSelector((state) => state.getTransactions);
+  const transactionState = useAppSelector(state => state.getTransactions);
   const { status: getTransactionsStatus } = transactionState;
 
-  const getEscalationAgentsState = useAppSelector(
-    (state) => state.getEscalationAgents
-  );
+  const getEscalationAgentsState = useAppSelector(state => state.getEscalationAgents);
   const { status: getEscalationAgentsStatus } = getEscalationAgentsState;
 
-  const getReconciliationAccountState = useAppSelector(
-    (state) => state.getReconciliationAccount
-  );
-  const { status: getReconciliationAccountStatus } =
-    getReconciliationAccountState;
+  const getReconciliationAccountState = useAppSelector(state => state.getReconciliationAccount);
+  const { status: getReconciliationAccountStatus } = getReconciliationAccountState;
 
-  const createEscalationTicketState = useAppSelector(
-    (state) => state.createEscalationTicket
-  );
+  const createEscalationTicketState = useAppSelector(state => state.createEscalationTicket);
   const { status: createEscalationTicketStatus } = createEscalationTicketState;
 
-  const exportTransactionByIdToMailState = useAppSelector(
-    (state) => state.exportTransactionByIdToMail
-  );
-  const { status: exportTransactionByIdToMailStatus } =
-    exportTransactionByIdToMailState;
+  const exportTransactionByIdToMailState = useAppSelector(state => state.exportTransactionByIdToMail);
+  const { status: exportTransactionByIdToMailStatus } = exportTransactionByIdToMailState;
 
-  const getTransactionByIdState = useAppSelector(
-    (state) => state.getTransactionById
-  );
+  const getTransactionByIdState = useAppSelector(state => state.getTransactionById);
 
   const { status: getTransactionByIdStatus } = getTransactionByIdState;
 
   const escalateCchema = yup.object().shape({
-    title: yup.string().required("Title is required"),
-    description: yup.string().required("Description is required"),
-    escalateTo:
-      selectedEscalateTo.length < 2
-        ? yup.string().required("To who is required")
-        : yup.string(),
+    title: yup.string().required('Title is required'),
+    description: yup.string().required('Description is required'),
+    escalateTo: selectedEscalateTo.length < 2 ? yup.string().required('To who is required') : yup.string(),
     priorityLevel:
-      selectedPriorityLevel.length < 2
-        ? yup.string().required("Priority level is required")
-        : yup.string(),
+      selectedPriorityLevel.length < 2 ? yup.string().required('Priority level is required') : yup.string(),
   });
 
   useEffect(() => {
-    if (getTransactionByIdStatus === "succeeded") {
+    if (getTransactionByIdStatus === 'succeeded') {
       const {
         amount,
         status,
         currency,
         transfer_purpose,
-        beneficiary_account_id,
         charge,
         channel,
         created_at,
-        user: { name },
+        external_account_name,
+        source,
+        user: { name, email, telephone },
       } = getTransactionByIdState.data.transaction;
+
       const result = {
         amount,
         status,
@@ -198,55 +163,58 @@ function Reconciliation() {
         data: [
           {
             id: 1,
-            text: transfer_purpose,
-            helper: "Transaction Type",
+            text: capitalizeFirstLetter(transfer_purpose),
+            helper: 'Transaction Type',
           },
           {
             id: 2,
             text: name,
-            helper: "Wallet Name",
+            helper: 'Wallet Name',
           },
           {
             id: 3,
-            text: name,
-            helper: "Wallet Name",
+            text: email,
+            helper: 'Email',
           },
           {
             id: 4,
-            text: beneficiary_account_id,
-            helper: "Beneficiary Account Id",
+            text: telephone,
+            helper: 'Phone Number',
           },
           {
             id: 5,
             text: `N${charge}`,
-            helper: "Charges",
+            helper: 'Charges',
           },
           {
             id: 6,
-            text: channel,
-            helper: "Channel",
+            text: source !== null ? source?.name : external_account_name,
+            helper: 'Sender Name',
           },
           {
             id: 7,
-            text: formatAMPM(created_at),
-            helper: "Time",
+            text: channel,
+            helper: 'Channel',
           },
           {
             id: 8,
+            text: timeFormat(created_at, true),
+            helper: 'Time',
+          },
+          {
+            id: 9,
             text: dateFormat(created_at),
-            helper: "Date",
+            helper: 'Date',
           },
         ],
       };
-
-      console.log(result, "result");
 
       setTransactionByIdData(result);
     }
   }, [getTransactionByIdState]);
 
   useEffect(() => {
-    if (createEscalationTicketStatus === "succeeded") {
+    if (createEscalationTicketStatus === 'succeeded') {
       setEscalateSuccessfulData(createEscalationTicketState.data.ticket);
       setEscalateSuccessfulModalVisible(true);
       setEscalateSuccessfulData({});
@@ -254,10 +222,10 @@ function Reconciliation() {
   }, [createEscalationTicketState]);
 
   useEffect(() => {
-    if (exportTransactionByIdToMailStatus === "succeeded") {
+    if (exportTransactionByIdToMailStatus === 'succeeded') {
       setTransactionDetailsModalVisible(false);
       showMessage({
-        type: "success",
+        type: 'success',
         message: exportTransactionByIdToMailState?.data?.message,
       });
       dispatch(exportTransactionByIdToMailReset());
@@ -270,27 +238,25 @@ function Reconciliation() {
   }, [transactionFilterParams]);
 
   useEffect(() => {
-    if (getTransactionsStatus === "succeeded") {
+    if (getTransactionsStatus === 'succeeded') {
       let updatedList: any[] = [];
 
-      transactionState?.data?.transactions?.data.forEach(
-        (item: any, index: number) => {
-          updatedList.push({
-            id: index + 1,
-            name: item.user.name,
-            tid: item.transaction_reference,
-            amount: parseFloat(item.amount),
-            type: item.type,
-            status: item.status,
-            icon: true,
-            time: item.created_at,
-            currency: item.currency,
-            phoneNumber: item.user.telephone,
-            transId: item.id,
-            email: item.user.email,
-          });
-        }
-      );
+      transactionState?.data?.transactions?.data.forEach((item: any, index: number) => {
+        updatedList.push({
+          id: index + 1,
+          name: item.user.name,
+          tid: item.transaction_reference,
+          amount: parseFloat(item.amount),
+          type: item.type,
+          status: item.status,
+          icon: true,
+          time: item.created_at,
+          currency: item.currency,
+          phoneNumber: item.user.telephone,
+          transId: item.id,
+          email: item.user.email,
+        });
+      });
 
       const {
         meta: { links },
@@ -303,7 +269,7 @@ function Reconciliation() {
   }, [transactionState]);
 
   useEffect(() => {
-    if (getReconciliationAccountStatus === "succeeded") {
+    if (getReconciliationAccountStatus === 'succeeded') {
       setUserData(getReconciliationAccountState?.data?.user);
     }
   }, [getReconciliationAccountState]);
@@ -311,12 +277,12 @@ function Reconciliation() {
   useEffect(() => {
     // fetch escalation agents on when escalation is clicked from options
     if (selectedTransactionActionText === escalate) {
-      dispatch(getEscalationAgentsRequest({ id: "user" }));
+      dispatch(getEscalationAgentsRequest({ id: 'user' }));
     }
   }, [selectedTransactionActionText]);
 
   useEffect(() => {
-    if (getEscalationAgentsStatus === "succeeded") {
+    if (getEscalationAgentsStatus === 'succeeded') {
       let result: any[] = [];
       getEscalationAgentsState.data.internal_users.forEach((item: any) => {
         result.push({
@@ -331,10 +297,10 @@ function Reconciliation() {
   const handleTransactionFilter = () => {
     setTransactionFilterParams({
       reference: searchValue,
-      type: "",
-      status: "",
-      start_date: yearDateFormat(startDisplayRecordDate),
-      end_date: yearDateFormat(endDisplayRecordDate),
+      type: '',
+      status: '',
+      start_date: startDisplayRecordDate.length < 2 ? '' : yearDateFormat(startDisplayRecordDate),
+      end_date: endDisplayRecordDate.length < 2 ? '' : yearDateFormat(endDisplayRecordDate),
     });
   };
 
@@ -344,27 +310,24 @@ function Reconciliation() {
 
   // handle different excalation modules
   const handleMoreIconOptions = async (item: string) => {
-    if (selectedFailedTransaction.hasOwnProperty("name") && item === escalate) {
+    if (selectedFailedTransaction.hasOwnProperty('name') && item === escalate) {
       setMoreIsVisible(false);
       setEscalateModalVisible(true);
     }
-    if (
-      selectedFailedTransaction.hasOwnProperty("name") &&
-      item === transactionDetails
-    ) {
+    if (selectedFailedTransaction.hasOwnProperty('name') && item === transactionDetails) {
       setMoreIsVisible(false);
       setTransactionDetailsModalVisible(true);
       dispatch(
         getTransactionByIdRequest({
           transId: selectedFailedTransaction.transId,
-        })
+        }),
       );
     }
   };
 
   const handleCloseEscalateModal = () => {
     setEscalateModalVisible(false);
-    setSelectedTransactionActionText("");
+    setSelectedTransactionActionText('');
     setSelectedFailedTransaction({});
   };
 
@@ -376,7 +339,7 @@ function Reconciliation() {
   };
 
   return (
-    <AppContainer navTitle='RECONCILIATION'>
+    <AppContainer navTitle="RECONCILIATION">
       <div style={{ marginTop: spacing.small }}>
         <H2 semiBold color={colors.primary} left>
           Find Profile
@@ -384,17 +347,15 @@ function Reconciliation() {
         <ReconciliationSearchContainer>
           <div
             style={{
-              width: "70%",
+              width: '70%',
               marginRight: spacing.small,
             }}>
             <SearchInput
-              backgroundColor={"transparent"}
-              name='searchProfileValue'
+              backgroundColor={'transparent'}
+              name="searchProfileValue"
               value={searchProfileValue}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setSearchProfileValue(e.target.value)
-              }
-              placeholder='Search by Phone Number or Account Number'
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchProfileValue(e.target.value)}
+              placeholder="Search by Phone Number or Account Number"
             />
           </div>
 
@@ -402,12 +363,12 @@ function Reconciliation() {
             onClick={handleSearchUserReconciliation}
             backgroundColor={colors.primary}
             color={colors.white}
-            text='Search Records'
+            text="Search Records"
           />
         </ReconciliationSearchContainer>
 
         <div style={{ marginBottom: spacing.large }}>
-          {userData.hasOwnProperty("name") && (
+          {userData.hasOwnProperty('name') && (
             <ReconcialiationCard
               onClick={() => {
                 navigate(`${RECONCILIATIONUSERDETAILS}${userData.id}`);
@@ -420,21 +381,16 @@ function Reconciliation() {
         </div>
 
         <TabViewContainer>
-          <TabView
-            data={tabViewData}
-            setSelectedIndex={setTabViewSelectedIndex}
-          />
+          <TabView data={tabViewData} setSelectedIndex={setTabViewSelectedIndex} />
 
           {tabViewSelectedIndex === 1 && (
             <TabContentTwo>
               <SearchInput
-                backgroundColor={"transparent"}
-                name='SearchValue'
+                backgroundColor={'transparent'}
+                name="SearchValue"
                 value={searchValue}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setSearchValue(e.target.value)
-                }
-                placeholder='Search Records'
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchValue(e.target.value)}
+                placeholder="Search by transaction ID"
               />
 
               <DatePicker selectedDate={setStartDisplayRecordDate} />
@@ -446,14 +402,14 @@ function Reconciliation() {
                 backgroundColor={colors.primary}
                 color={colors.white}
                 icon={<FiFilter color={colors.white} size={15} />}
-                text='Filter'
+                text="Filter"
               />
             </TabContentTwo>
           )}
         </TabViewContainer>
         {tabViewSelectedIndex === 1 && (
           <TransactionTable
-            type={"transactions"}
+            type={'transactions'}
             headerData={transactionDataHeader}
             header={true}
             data={transactionDataList}
@@ -465,20 +421,23 @@ function Reconciliation() {
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}
-          onPageChange={(selectedPage) => {
+          onPageChange={selectedPage => {
             setCurrentPage(selectedPage);
           }}
+          isLoading={
+            getTransactionsStatus === 'loading' ||
+            getReconciliationAccountStatus === 'loading' ||
+            transactionDataList?.length < 1
+          }
         />
 
-        <Modal
-          isModalVisible={escalateModalVisible}
-          closeModal={handleCloseEscalateModal}>
+        <Modal isModalVisible={escalateModalVisible} closeModal={handleCloseEscalateModal}>
           <Formik
             initialValues={{
-              title: "",
-              description: "",
-              escalateTo: "",
-              priorityLevel: "",
+              title: '',
+              description: '',
+              escalateTo: '',
+              priorityLevel: '',
             }}
             enableReinitialize={true}
             validationSchema={escalateCchema}
@@ -492,89 +451,83 @@ function Reconciliation() {
                   internal_user_id: selectedEscalateTo,
                   priority_level: selectedPriorityLevel,
                   customer_telephone: selectedFailedTransaction?.phoneNumber,
-                })
+                }),
               );
 
               setSubmitting(false);
             }}>
-            {(formikProps) => {
-              const { handleChange, values, handleSubmit, errors } =
-                formikProps;
+            {formikProps => {
+              const { handleChange, values, handleSubmit, errors } = formikProps;
               return (
                 <form onSubmit={handleSubmit}>
                   <EscalateFormContainer>
                     <CustomerNameContainer>
-                      <div>dgfjkdkj</div>
                       <Input
-                        label='Customer Name'
+                        label="Customer Name"
                         backgroundColor={colors.white}
                         borderColor={colors.grey}
-                        placeholder='Enter title'
-                        type='text'
+                        placeholder="Enter title"
+                        type="text"
                         value={selectedFailedTransaction?.name}
-                        name={"name"}
+                        name={'name'}
                         onChange={() => {}}
                       />
                     </CustomerNameContainer>
 
                     <Input
-                      label='Title'
+                      label="Title"
                       backgroundColor={colors.white}
                       borderColor={colors.grey}
-                      placeholder='Enter title'
-                      type='text'
+                      placeholder="Enter title"
+                      type="text"
                       value={values.title}
-                      name={"title"}
+                      name={'title'}
                       onChange={handleChange}
                       error={errors.title}
                     />
 
                     <TextArea
-                      label='Title'
+                      label="Title"
                       backgroundColor={colors.white}
                       borderColor={colors.grey}
-                      placeholder='Type here...'
+                      placeholder="Type here..."
                       value={values.description}
-                      name={"description"}
+                      name={'description'}
                       onChange={handleChange}
                       error={errors.description}
                     />
 
                     <Picker
                       error={errors.escalateTo}
-                      label='Escalate to'
+                      label="Escalate to"
                       selectedValue={setSelectedEscalateTo}
-                      placeholder='Select Agent'
+                      placeholder="Select Agent"
                       options={escalationAgentsList}
                     />
 
                     <Picker
                       error={errors.priorityLevel}
-                      label='Priority Level'
+                      label="Priority Level"
                       selectedValue={setSelectedPriorityLevel}
-                      placeholder='Select Priority'
+                      placeholder="Select Priority"
                       options={[
-                        { label: "Low", value: "low" },
-                        { label: "Medium", value: "medium" },
-                        { label: "High", value: "high" },
+                        { label: 'Low', value: 'low' },
+                        { label: 'Medium', value: 'medium' },
+                        { label: 'High', value: 'high' },
                       ]}
                     />
                     <EscalateBtnContainer>
                       <Button
-                        type='submit'
-                        text='Escalate'
-                        disabled={
-                          createEscalationTicketStatus === "loading"
-                            ? true
-                            : false
-                        }
+                        type="submit"
+                        text="Escalate"
+                        disabled={createEscalationTicketStatus === 'loading' ? true : false}
                       />
                       <Button
                         onClick={handleCloseEscalateModal}
-                        text='Cancel'
+                        text="Cancel"
                         disabled={false}
                         secondary
-                        borderColor='transparent'
+                        borderColor="transparent"
                         color={colors.primary}
                       />
                     </EscalateBtnContainer>
@@ -589,10 +542,10 @@ function Reconciliation() {
         <SuccessModalWithCopy
           isModalVisible={escalateSuccessfulModalVisible}
           closeModal={handleCloseEscalateSuccessfulModal}
-          text={"Complaint has been escalated with Ticket Id:"}
-          copyIconText={"Copy Ticket:Id"}
+          text={'Complaint has been escalated with Ticket Id:'}
+          copyIconText={'Copy Ticket:Id'}
           title={escalateSuccessfulData?.ticket_reference}
-          iconType='sent'
+          iconType="sent"
         />
 
         <TransactionDetailsModal
@@ -606,16 +559,12 @@ function Reconciliation() {
               exportTransactionByIdToMailRequest({
                 transId: selectedFailedTransaction.transId,
                 email: selectedFailedTransaction.email,
-              })
+              }),
             )
           }
-          exportBtnDisabled={
-            exportTransactionByIdToMailStatus === "loading" ? true : false
-          }
+          exportBtnDisabled={exportTransactionByIdToMailStatus === 'loading' ? true : false}
           data={transactionByIdData?.data}
-          isLoading={
-            getTransactionByIdState.status === "loading" ? true : false
-          }
+          isLoading={getTransactionByIdState.status === 'loading' ? true : false}
         />
 
         <MoreIconView
@@ -623,15 +572,12 @@ function Reconciliation() {
           isModalVisible={moreIsVisible}
           closeModal={() => setMoreIsVisible(false)}
           options={moreIconOption}
-          onClick={(item) => handleMoreIconOptions(item)}
+          onClick={item => handleMoreIconOptions(item)}
         />
 
         <LoaderModal
-          isModalVisible={
-            getTransactionsStatus === "loading" ||
-            getReconciliationAccountStatus === "loading"
-          }
-          text='Loading please wait...'
+          isModalVisible={getTransactionsStatus === 'loading' || getReconciliationAccountStatus === 'loading'}
+          text="Loading please wait..."
           closeModal={() => {}}
         />
       </div>

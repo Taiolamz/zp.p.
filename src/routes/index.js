@@ -13,6 +13,7 @@ import { Settings } from "../pages/settings";
 import { NotFound } from "../pages/notFound";
 import { PrivateRoute } from "./privateRoute";
 import { routesPath } from "../utils";
+import UserDetails from "../pages/users/userDetails";
 
 function AppRoute() {
   const {
@@ -26,6 +27,7 @@ function AppRoute() {
     USERS,
     SETTINGS,
     KYCDOC,
+    USERDETAILS,
   } = routesPath;
   // const authState = useAppSelector((state) => state.auth);
 
@@ -54,6 +56,14 @@ function AppRoute() {
           element={
             <PrivateRoute>
               <KycCustomer />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={`${USERDETAILS}:id`}
+          element={
+            <PrivateRoute>
+              <UserDetails />
             </PrivateRoute>
           }
         />

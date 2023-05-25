@@ -1,14 +1,15 @@
-import { useState, useLayoutEffect } from "react";
-import { CountInfoCard } from "../../components";
-import { Container, Content } from "./style";
-import { CountInfoCardIProps } from "../../components/cards/countInfoCard";
+import { useState, useLayoutEffect } from 'react';
+import { CountInfoCard } from '../../components';
+import { Container, Content } from './style';
+import { CountInfoCardIProps } from '../../components/cards/countInfoCard';
 
 export interface CountInfoIProps {
   data: CountInfoCardIProps[];
+  setSelectedData?: any;
 }
 
-function CountInfo({ data }: CountInfoIProps) {
-  const [dataList, setDataList] = useState([] as CountInfoCardIProps[]);
+function CountInfo({ data, setSelectedData }: CountInfoIProps) {
+  const [dataList, setDataList] = useState(data as CountInfoCardIProps[]);
 
   useLayoutEffect(() => {
     let result: CountInfoCardIProps[] = [];
@@ -18,27 +19,27 @@ function CountInfo({ data }: CountInfoIProps) {
         isSelected: item.id === 1 ? true : false,
         count: item.count,
         title: item.title,
-      })
+      }),
     );
 
     setDataList(result);
-  }, []);
+  }, [data]);
 
   const handleOnSelectCard = (item: CountInfoCardIProps) => {
     const itemToEdit = item;
-    const updatedData: CountInfoCardIProps[] = [...dataList].map(
-      (el: CountInfoCardIProps) => {
-        if (itemToEdit.title === el.title) {
-          el.isSelected = true;
-        } else {
-          el.isSelected = false;
-        }
-        return el;
+    const updatedData: CountInfoCardIProps[] = [...dataList].map((el: CountInfoCardIProps) => {
+      if (itemToEdit.title === el.title) {
+        el.isSelected = true;
+      } else {
+        el.isSelected = false;
       }
-    );
+      return el;
+    });
 
+    setSelectedData(itemToEdit);
     setDataList(updatedData);
   };
+
   return (
     <>
       <Container>
