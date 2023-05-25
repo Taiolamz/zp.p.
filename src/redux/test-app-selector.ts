@@ -24,6 +24,7 @@ import {
   getUserSavedBanksSliceReducer,
   deleteUserSavedBankSliceReducer,
   updateUserStatusSliceReducer,
+  getUserProfileTransactionSliceReducer,
 } from './slice';
 const state = {
   login: loginSliceReducer,
@@ -51,6 +52,7 @@ const state = {
   getUserSavedBanks: getUserSavedBanksSliceReducer,
   deleteUserSavedBank: deleteUserSavedBankSliceReducer,
   updateUserStatus: updateUserStatusSliceReducer,
+  getUserProfileTransaction: getUserProfileTransactionSliceReducer,
 };
 
 export const testAppSelector = (f: any) => f(state);

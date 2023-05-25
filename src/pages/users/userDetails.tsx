@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { CustomerProfile } from '../../components';
+import { CustomerProfile, Pagination } from '../../components';
 import {
   AppContainer,
   UserSupportActivity,
@@ -25,6 +25,7 @@ import {
   namedReactivateProfile,
   namedDeactivateProfile,
   namedViewSubAgents,
+  TransactionHistoryHeader,
 } from './data';
 
 import {
@@ -53,6 +54,8 @@ import {
   deleteUserSavedBankReset,
   updateUserStatusRequest,
   updateUserStatusReset,
+  getUserProfileTransactionRequest,
+  getUserProfileTransactionReset,
 } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { CustomerProfileIProps } from '../../components/customerProfile';
@@ -60,6 +63,7 @@ import { DocumentStatusIProps } from '../../atoms/documentStatusModal';
 import { LoginHistoryIProps } from '../../components/tables/loginHistoryTable';
 import { Dictionary } from '../../types';
 import { SavedBanksIProps } from '../../components/tables/savedBanksTable';
+import { TransactionHistoryIProps } from '../../components/tables/transactionHistoryTable';
 
 const { USERS } = routesPath;
 
@@ -90,6 +94,17 @@ function UserDetails() {
   const [profileActivationIsModalVisible, setProfileActivationIsModalVisible] = useState(false);
   const [profileActivationSuccessIsModalVisible, setProfileActivationSuccessIsModalVisible] = useState(false);
   const [deactiveMessage, setDeactiveMessage] = useState('');
+  const [transactionHistoryIsModalVisible, setTransactionHistoryIsModalVisible] = useState(false);
+  const [transactionHistoryData, setTransactionHistoryData] = useState<TransactionHistoryIProps[]>([]);
+  const [transactionHistoryCounts, setTransactionHistoryCounts] = useState<Dictionary>({
+    cashRequest: 0,
+    cashDelivery: 0,
+    billTransaction: 0,
+  });
+  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(5);
+
   // redux state
   const userProfileState = useAppSelector(state => state.getUserProfile);
   const { status: userProfileStatus } = userProfileState;
@@ -111,6 +126,9 @@ function UserDetails() {
 
   const updateUserStatusState = useAppSelector(state => state.updateUserStatus);
   const { status: updateUserStatusStatus } = updateUserStatusState;
+
+  const userProfileTransactionState = useAppSelector(state => state.getUserProfileTransaction);
+  const { status: userProfileTransactionStatus } = userProfileTransactionState;
 
   const detmineKycLevel = (level: string) => {
     let result =
@@ -403,9 +421,36 @@ function UserDetails() {
     }
   }, [updateUserStatusState]);
 
+  // successful user transactions table
+  useEffect(() => {
+    if (userProfileTransactionStatus === 'succeeded') {
+      let result: TransactionHistoryIProps[] = [];
+      userProfileTransactionState?.data?.transactions?.data?.forEach((item: Dictionary) => {
+        result.push({
+          id: item?.id,
+          time: item?.created_at,
+          transactionType: item?.transfer_purpose,
+          amount: parseFloat(item?.amount),
+          status: item?.status,
+          recipient: item?.external_account_name !== null ? item.external_account_name : 'N/A',
+        });
+      });
+      setTransactionHistoryCounts({
+        cashRequest: userProfileTransactionState?.data?.cash_request_count,
+        cashDelivery: userProfileTransactionState?.data?.cash_deliveries_count,
+        billTransaction: userProfileTransactionState?.data?.bills_count,
+      });
+      setTransactionHistoryData(result);
+
+      const {
+        meta: { links },
+      } = userProfileTransactionState?.data?.transactions;
+
+      setTotalPages(links.length - 2);
+    }
+  }, [userProfileTransactionState]);
+
   const handleSupportClicked = (item: any) => {
-    // console.log(item, 'item');
-    // setToggleClicked(!toggleClicked);
     const { text } = item;
     if (text === namedDocumentStatus) {
       setDocumentIsModalVisible(true);
@@ -413,7 +458,8 @@ function UserDetails() {
     }
 
     if (text === namedTransactionHistory) {
-      console.log('transaction history');
+      dispatch(getUserProfileTransactionRequest({ userId, per_page: pageSize, page: currentPage }));
+      setTransactionHistoryIsModalVisible(true);
     }
     if (text === namedDocumentHistory) {
       console.log('upload doc');
@@ -550,10 +596,28 @@ function UserDetails() {
         />
 
         {/* Transaction History modal */}
-        {/* <TransactionHistoryModal
-        title='Transaction Hisory'
-
-        /> */}
+        <TransactionHistoryModal
+          title="Transaction Hisory"
+          isModalVisible={transactionHistoryIsModalVisible}
+          firstCount={transactionHistoryCounts.cashRequest}
+          secondCount={transactionHistoryCounts.cashDelivery}
+          thirdCount={transactionHistoryCounts.billTransaction}
+          data={transactionHistoryData}
+          headerData={TransactionHistoryHeader}
+          closeModal={() => setTransactionHistoryIsModalVisible(false)}
+          actionClick={() => {}}
+          isLoading={userProfileTransactionStatus === 'loading'}>
+          <div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={selectedPage => {
+                setCurrentPage(selectedPage);
+              }}
+              isLoading={userProfileTransactionStatus === 'loading'}
+            />
+          </div>
+        </TransactionHistoryModal>
 
         <LoaderModal
           text={
