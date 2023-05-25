@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { Container, SubCardContainer } from './style';
 import { Modal, SubAgentCard } from '../../components';
 import { H2, H5 } from '../../styles';
@@ -12,20 +13,18 @@ export interface IProps {
   headerData?: any;
   isLoading?: boolean;
   description?: string;
+  children?: ReactElement;
 }
 
-function SubAgentModal({ isModalVisible, closeModal, data, isLoading, description, title }: IProps) {
+function SubAgentModal({ isModalVisible, closeModal, data, isLoading, description, title, children }: IProps) {
   return (
-    <Modal title="" isModalVisible={isModalVisible} closeModal={closeModal}>
+    <Modal title={title} isModalVisible={isModalVisible} closeModal={closeModal}>
       {isLoading ? (
         <Container>
           <H5>Loading...</H5>
         </Container>
       ) : (
         <Container>
-          <H2 bold left>
-            {title}
-          </H2>
           <H5 left>{description}</H5>
           <SubCardContainer>
             <SubAgentCard data={data} />
@@ -35,6 +34,7 @@ function SubAgentModal({ isModalVisible, closeModal, data, isLoading, descriptio
               width: '100%',
               marginTop: spacing.xsmall,
             }}></div>
+          {children && <div>{children}</div>}
         </Container>
       )}
     </Modal>
