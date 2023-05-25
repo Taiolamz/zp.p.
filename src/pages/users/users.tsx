@@ -172,16 +172,16 @@ function Users() {
   useEffect(() => {
     if (superAgentsStatus === 'succeeded') {
       let updateUsersData: any[] = [];
-
+      console.log(superAgentsState?.data[0], 'items');
       superAgentsState?.data?.forEach((item: Dictionary, index: number) => {
         updateUsersData.push({
           id: index + 1,
           name: item?.user?.name !== null ? `${item?.user?.name}` : 'N/A',
-          userId: item?.id,
+          userId: item?.user?.id,
           walletNo: item?.user?.account?.number ? item?.user?.account?.number : 'N/A',
           phone: item?.user?.telephone ? item?.user?.telephone : 'N/A',
           subAgents: item?.sub_agent_count,
-          email: item?.email,
+          email: item?.user?.email,
         });
       });
 

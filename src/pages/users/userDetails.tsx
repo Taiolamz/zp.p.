@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { CustomerProfile, Pagination } from '../../components';
 import {
   AppContainer,
@@ -12,6 +12,7 @@ import {
   ActivityActionModal,
   TransactionHistoryModal,
   DocumentHistoryModal,
+  SubAgentModal,
 } from '../../atoms';
 import {
   documentStatusDataHeader,
@@ -25,7 +26,6 @@ import {
   namedDocumentHistory,
   namedReactivateProfile,
   namedDeactivateProfile,
-  namedViewSubAgents,
   TransactionHistoryHeader,
 } from './data';
 
@@ -59,6 +59,8 @@ import {
   getUserProfileTransactionReset,
   getDocumentHistoryRequest,
   getDocumentHistoryReset,
+  getUserSubAgentsRequest,
+  getUserSubAgentsReset,
 } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { CustomerProfileIProps } from '../../components/customerProfile';
@@ -67,6 +69,7 @@ import { LoginHistoryIProps } from '../../components/tables/loginHistoryTable';
 import { Dictionary } from '../../types';
 import { SavedBanksIProps } from '../../components/tables/savedBanksTable';
 import { TransactionHistoryIProps } from '../../components/tables/transactionHistoryTable';
+import { SubAgentIPropsIprops } from '../../components/subAgentCard';
 
 const { USERS } = routesPath;
 
@@ -99,7 +102,9 @@ function UserDetails() {
   const [profileActivationSuccessIsModalVisible, setProfileActivationSuccessIsModalVisible] = useState(false);
   const [deactiveMessage, setDeactiveMessage] = useState('');
   const [transactionHistoryIsModalVisible, setTransactionHistoryIsModalVisible] = useState(false);
+  const [userSubAgentsIsModalVisible, setUserSubAgentsIsModalVisible] = useState(false);
   const [transactionHistoryData, setTransactionHistoryData] = useState<TransactionHistoryIProps[]>([]);
+  const [subAgentData, setSubAgentData] = useState<SubAgentIPropsIprops[]>([]);
   const [transactionHistoryCounts, setTransactionHistoryCounts] = useState<Dictionary>({
     cashRequest: 0,
     cashDelivery: 0,
@@ -108,6 +113,8 @@ function UserDetails() {
   const pageSize = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(5);
+  const [subAgentCurrentPage, setSubAgentCurrentPage] = useState(1);
+  const [subAgentTotalPages, setSubAgentTotalPages] = useState(5);
   const [documentHistoryData, setDocumentHistoryData] = useState<any[]>([]);
 
   // redux state
@@ -137,6 +144,9 @@ function UserDetails() {
 
   const documentHistoryState = useAppSelector(state => state.getDocumentHistory);
   const { status: documentHistoryStatus } = documentHistoryState;
+
+  const userSubAgentsState = useAppSelector(state => state.getUserSubAgents);
+  const { status: userSubAgentsStatus } = userSubAgentsState;
 
   const detmineKycLevel = (level: string) => {
     let result =
@@ -489,6 +499,29 @@ function UserDetails() {
     }
   }, [documentHistoryState]);
 
+  // successful sub agents
+  useEffect(() => {
+    if (userSubAgentsStatus === 'succeeded') {
+      let result: SubAgentIPropsIprops[] = [];
+
+      userSubAgentsState?.data?.users?.data?.forEach((item: Dictionary, index: number) => {
+        result.push({
+          id: index + 1,
+          name: item?.name,
+          dateAdded: item?.created_at,
+          active: item.status === 'inactive' ? false : true,
+        });
+      });
+
+      const {
+        users: { links },
+      } = userSubAgentsState?.data;
+
+      setSubAgentTotalPages(links.length - 2);
+      setSubAgentData(result);
+    }
+  }, [userSubAgentsState]);
+
   const handleSupportClicked = (item: any) => {
     const { text } = item;
     if (text === namedDocumentStatus) {
@@ -550,6 +583,11 @@ function UserDetails() {
     dispatch(updateUserStatusReset());
   };
 
+  const handleOnClickSubAgent = (selectedPage: number) => {
+    setUserSubAgentsIsModalVisible(true);
+    dispatch(getUserSubAgentsRequest({ userId, per_page: subAgentTotalPages, page: selectedPage }));
+  };
+
   return (
     <AppContainer goBack={() => navigate(USERS)} navTitle={`Back`} navHelper="Profile Review">
       <div>
@@ -572,7 +610,7 @@ function UserDetails() {
               }}
               onClickProfileToggle={() => setProfileActivationIsModalVisible(true)}
               profileToggleText={userAccountStatus === 'active' ? namedDeactivateProfile : namedReactivateProfile}
-              onClickViewSubAgent={() => {}}
+              onClickViewSubAgent={() => handleOnClickSubAgent(1)}
               kycLevel={kycLevel}
             />
           </SupportContainer>
@@ -660,7 +698,6 @@ function UserDetails() {
         </TransactionHistoryModal>
 
         {/* document history */}
-
         <DocumentHistoryModal
           title="Document History"
           data={documentHistoryData}
@@ -669,6 +706,26 @@ function UserDetails() {
           isLoading={documentHistoryStatus === 'loading'}
         />
 
+        {/* user subAgents */}
+        <SubAgentModal
+          isModalVisible={userSubAgentsIsModalVisible}
+          title="Sub-Agents"
+          description="See all sub agents assigned to this user"
+          data={subAgentData}
+          isLoading={userSubAgentsStatus === 'loading'}
+          closeModal={() => setUserSubAgentsIsModalVisible(false)}>
+          <div>
+            <Pagination
+              currentPage={subAgentCurrentPage}
+              totalPages={subAgentTotalPages}
+              onPageChange={selectedPage => {
+                setSubAgentCurrentPage(selectedPage);
+                handleOnClickSubAgent(selectedPage);
+              }}
+              isLoading={userProfileTransactionStatus === 'loading'}
+            />
+          </div>
+        </SubAgentModal>
         <LoaderModal
           text={
             updateUserStatusStatus === 'loading'

@@ -36,12 +36,6 @@ const emptyListCenterStyle = {
 };
 
 function UsersTable({ data, headerData, type, onClick }: TableIPropsIProps) {
-  const navigate = useNavigate();
-
-  const handleOnSelect = (item: any) => {
-    // onClick();
-  };
-
   return (
     <div>
       {data?.length >= 1 ? (
@@ -62,7 +56,6 @@ function UsersTable({ data, headerData, type, onClick }: TableIPropsIProps) {
             </thead>
             <tbody>
               {data?.map((item: any) => (
-                // <TR key={item.id} onClick={() => navigate(`${USERDETAILS}${item.userId}`)}>
                 <TR key={item.id} onClick={() => onClick(item)}>
                   <TD></TD>
                   <TD>{item.id}</TD>

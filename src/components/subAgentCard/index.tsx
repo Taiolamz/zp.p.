@@ -3,7 +3,7 @@ import { H2, H3, H4 } from '../../styles';
 import { colors } from '../../utils';
 
 export interface SubAgentIPropsIprops {
-  id: number;
+  id: number | string;
   name: string;
   dateAdded: string;
   active: boolean;
@@ -16,7 +16,7 @@ export interface SubAgentIProps {
 function SubAgentCard({ data }: SubAgentIProps) {
   return (
     <>
-      {data.map(agent => {
+      {data?.map(agent => {
         return (
           <SubAgentCardContainer key={agent.id}>
             <DetailsContainer>

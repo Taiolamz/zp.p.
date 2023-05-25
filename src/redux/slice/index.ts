@@ -26,3 +26,4 @@ export * from './deleteUserSavedBankSlice';
 export * from './updateUserStatusSlice';
 export * from './getUserProfileTransactionSlice';
 export * from './getDocumentHistorySlice';
+export * from './getUserSubAgentsSlice';
