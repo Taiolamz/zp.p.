@@ -11,6 +11,7 @@ import {
   ProfileActivationToggleModal,
   ActivityActionModal,
   TransactionHistoryModal,
+  DocumentHistoryModal,
 } from '../../atoms';
 import {
   documentStatusDataHeader,
@@ -88,6 +89,7 @@ function UserDetails() {
   const [loginHistoryData, setLoginHistoryData] = useState<any[]>([]);
   const [profileViewData, setProfileViewData] = useState<LoginHistoryIProps[]>([]);
   const [savedBankIsModalVisible, setSavedBankIsModalVisible] = useState(false);
+  const [documentHistoryIsModalVisible, setDocumentHistoryIsModalVisible] = useState(false);
   const [savedBanksData, setSavedBanksData] = useState<SavedBanksIProps[]>([]);
   const [selectedUserBank, setSelectedUserBank] = useState<Dictionary>({});
   const [userAccountStatus, setUserAccountStatus] = useState('');
@@ -432,7 +434,12 @@ function UserDetails() {
           transactionType: item?.transfer_purpose,
           amount: parseFloat(item?.amount),
           status: item?.status,
-          recipient: item?.external_account_name !== null ? item.external_account_name : 'N/A',
+          recipient:
+            item?.transfer_purpose === 'Wallet Credit'
+              ? 'N/A'
+              : item?.external_account_name !== null
+              ? item.external_account_name
+              : 'N/A',
         });
       });
       setTransactionHistoryCounts({
@@ -463,6 +470,7 @@ function UserDetails() {
     }
     if (text === namedDocumentHistory) {
       console.log('upload doc');
+      setDocumentHistoryIsModalVisible(true);
     }
     if (text === namedSavedBanks) {
       dispatch(deleteUserSavedBankReset());
@@ -618,6 +626,20 @@ function UserDetails() {
             />
           </div>
         </TransactionHistoryModal>
+
+        {/* document history */}
+
+        <DocumentHistoryModal
+          title="Document History"
+          data={[
+            { id: 1, image: images.user, text: 'Hello', imgAlt: 'Profile image' },
+            { id: 2, image: images.user, text: 'Hello', imgAlt: 'Profile image' },
+            { id: 3, image: images.user, text: 'Hello', imgAlt: 'Profile image' },
+          ]}
+          isModalVisible={documentHistoryIsModalVisible}
+          closeModal={() => setDocumentHistoryIsModalVisible(false)}
+          isLoading={false}
+        />
 
         <LoaderModal
           text={
