@@ -27,3 +27,6 @@ export { default as SavedBanksModal } from './savedBanksModal';
 export { default as ProfileActivationToggleModal } from './profileActivationToggleModal';
 export { default as AllUsersStat } from './allUsersStat';
 export { default as KycDistributionStat } from './kycDistributionStat';
+export { default as TransactionVolume } from './transactionVolume';
+export { default as CustomerGrowth } from './customerGrowth';
+export { default as DashboardBarChart } from './dashboardBarChart';

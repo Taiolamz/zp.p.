@@ -2,16 +2,18 @@ import styled from 'styled-components';
 import { colors, spacing } from '../../utils';
 export const Container = styled.div`
   display: grid;
-  grid-template-columns: 50% 50%;
-  height: 100vh;
+  padding: ${spacing.small} 0;
+  row-gap: ${spacing.small};
+
   @media (max-width: 768px) {
-    grid-template-columns: 100% 100%;
   }
 `;
 
 export const StatCount = styled.div`
-  display: flex;
-  @media (max-width: 768px) {
+  display: grid;
+  grid-template-columns: repeat(4, auto);
+  @media (max-width: 940px) {
+    grid-template-columns: repeat(2, auto);
   }
 `;
 
@@ -20,7 +22,15 @@ export const CardsContainer = styled.div`
   grid-template-columns: 20.7% 36.6% 36%;
   justify-content: space-between;
   height: 100%;
-  @media (max-width: 768px) {
+
+  @media (max-width: 1050px) {
+    grid-template-columns: repeat(2, 50%);
+    row-gap: ${spacing.small_2};
+    column-gap: ${spacing.small_2};
+  }
+
+  @media (max-width: 940px) {
+    grid-template-columns: auto;
   }
 `;
 
@@ -88,4 +98,18 @@ export const TwoBoxItemActive = styled.div`
 export const TwoBoxActive = styled.div`
   display: grid;
   row-gap: ${spacing.small_2};
+`;
+
+export const ChartsContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 48%);
+  justify-content: space-between;
+  row-gap: ${spacing.small_2};
+  column-gap: ${spacing.small_2};
+
+  @media (max-width: 980px) {
+    grid-template-columns: auto;
+    row-gap: ${spacing.small_2};
+    column-gap: ${spacing.small_2};
+  }
 `;

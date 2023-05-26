@@ -26,3 +26,32 @@ export const kycLevelData = [
     iconColor: colors.primary,
   },
 ];
+
+export const transactionVolumeChartData = [
+  {
+    id: 1,
+    name: 'Cash Requests',
+    percentage: 49,
+    backgroundColor: colors.green,
+  },
+  {
+    id: 2,
+    name: 'TV Subscription',
+    count: 19,
+    backgroundColor: colors.orange,
+  },
+  {
+    id: 3,
+    name: 'Airtime & Data Bills',
+    count: 2300,
+    backgroundColor: colors.blue,
+  },
+  {
+    id: 4,
+    name: 'Other Bills',
+    count: 150,
+    backgroundColor: colors.purple,
+  },
+];
+
+export const dashboardBarData = [1000, 600, 1200, 687, 800, 1200, 1000, 800, 594, 797, 392, 500];

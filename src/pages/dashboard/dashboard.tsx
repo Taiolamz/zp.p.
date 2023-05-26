@@ -1,9 +1,11 @@
 import { Activecard, CountInfoCard, CountInfoCardNoHelper } from '../../components';
 import { colors, currencyFormat } from '../../utils';
 import { useState } from 'react';
-import { AppContainer, AllUsersStat, KycDistributionStat } from '../../atoms';
+import { AppContainer, AllUsersStat, KycDistributionStat, TransactionVolume, CustomerGrowth } from '../../atoms';
 import {
   CardsContainer,
+  ChartsContainer,
+  Container,
   FourBoxContainer,
   StatCount,
   TwoBoxActive,
@@ -13,12 +15,12 @@ import {
   TwoBoxItemBottom,
   TwoBoxItemTop,
 } from './style';
-import { kycLevelData } from './data';
+import { kycLevelData, transactionVolumeChartData } from './data';
 
 function Dashboard() {
   return (
     <AppContainer navTitle="DASHBOARD">
-      <div>
+      <Container>
         <StatCount>
           <CountInfoCard
             title="Inflow"
@@ -96,7 +98,11 @@ function Dashboard() {
             </TwoBoxContainerBottom>
           </FourBoxContainer>
         </CardsContainer>
-      </div>
+        <ChartsContainer>
+          <TransactionVolume transactionVolumeChartData={transactionVolumeChartData} />
+          <CustomerGrowth transactionVolumeChartData={transactionVolumeChartData} />
+        </ChartsContainer>
+      </Container>
     </AppContainer>
   );
 }
