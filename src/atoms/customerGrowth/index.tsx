@@ -37,19 +37,19 @@ const CustomerGrowth = ({ transactionVolumeChartData }: TransactionVolumeIProps)
       </CustomerGrowthHeader>
       <CustomerGrowthMain>
         <CustomerGrowthStat>
-          <CountInfoCardNoHelper title="Total Customer" count={'5,234'} />
-          <CountInfoCardNoHelper title="New Customers" count={'2164'} />
+          <CountInfoCardNoHelper title="Total Customer" count={'5,234'} type={'small'} />
+          <CountInfoCardNoHelper title="New Customers" count={'2164'} type={'small'} />
         </CustomerGrowthStat>
 
         <CustomerGrowthChart>
           <H4 left>3% growth in the past year</H4>
+          <DashboardBarChart
+            setBarChartSelectedText={setBarChartSelectedText}
+            dailyData={barChartSelectedText === 'Daily' ? dashboardBarData : emptyData}
+            weeklyData={barChartSelectedText === 'Weekly' ? dashboardBarData : emptyData}
+            monthlyData={barChartSelectedText === 'Montthly' ? dashboardBarData : emptyData}
+          />
         </CustomerGrowthChart>
-        <DashboardBarChart
-          setBarChartSelectedText={setBarChartSelectedText}
-          dailyData={barChartSelectedText === 'Daily' ? dashboardBarData : emptyData}
-          weeklyData={barChartSelectedText === 'Weekly' ? dashboardBarData : emptyData}
-          monthlyData={barChartSelectedText === 'Montthly' ? dashboardBarData : emptyData}
-        />
       </CustomerGrowthMain>
     </Container>
   );

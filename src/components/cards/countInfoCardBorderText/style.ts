@@ -13,10 +13,10 @@ export const Container = styled.div`
   /* padding: ${spacing.small} ${spacing.small}; */
   width: 100%;
   cursor: pointer;
-  transition: all 0.3s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  padding: ${spacing.xsmall};
   :hover {
     border: 2px ${(p: StyleProps) => p.borderTextColor} solid;
-    padding: ${spacing.xsmall};
     border-radius: 5px;
     transform: scaleX(1.03);
     transform-origin: right center;

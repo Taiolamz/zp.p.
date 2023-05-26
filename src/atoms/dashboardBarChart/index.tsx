@@ -3,7 +3,7 @@ import { useState, useLayoutEffect } from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 
-import { Container, BorderedTextContainer, Content } from './style';
+import { Container } from './style';
 import { colors, spacing } from '../../utils';
 import { BorderedText } from '../../components';
 import { H3 } from '../../styles';
@@ -109,9 +109,6 @@ function DashboardBarChart({ setBarChartSelectedText, dailyData, weeklyData, mon
   return (
     <>
       <Container>
-        <Content>
-          <BorderedTextContainer></BorderedTextContainer>
-        </Content>
         <BarChart dailyData={dailyData} weeklyData={weeklyData} monthlyData={monthlyData} />
       </Container>
     </>

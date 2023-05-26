@@ -9,7 +9,7 @@ import {
 import { LevelCardIPropsIProps } from '../../components/cards/levelCard';
 import { H1 } from '../../styles';
 import { colors, currencyFormat } from '../../utils';
-import { Bottom, Container, Top } from './style';
+import { Bottom, Container, Top, TopItemOne } from './style';
 
 export interface KycDistributionStatIProps {
   kycLevelData: LevelCardIPropsIProps[];
@@ -23,12 +23,14 @@ const KycDistributionStat = ({ kycLevelData }: KycDistributionStatIProps) => {
           KYC Distribution
         </H1>
         <Top>
-          <CountInfoCardNoHelper
-            title="Total Customers"
-            backgroundColor="transparent"
-            color={colors.primary}
-            count={'11,234'}
-          />
+          <TopItemOne>
+            <CountInfoCardNoHelper
+              title="Total Customers"
+              backgroundColor="transparent"
+              color={colors.primary}
+              count={'11,234'}
+            />
+          </TopItemOne>
           <CountInfoCardBorderText
             title="Pending Verification"
             backgroundColor="transparent"

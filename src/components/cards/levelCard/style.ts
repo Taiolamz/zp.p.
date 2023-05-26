@@ -10,10 +10,9 @@ export const Container = styled.div`
   background-color: ${(p: StyleProps) => p.backgroundColor};
   display: flex;
   align-items: center;
-  position: relative;
   column-gap: ${spacing.xxsmall};
-
   &:not(:last-child) {
+    position: relative;
     ::after {
       content: '|';
       position: absolute;

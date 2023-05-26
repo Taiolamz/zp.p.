@@ -14,6 +14,7 @@ export const CustomerGrowthHeader = styled.div`
   width: 100%;
   justify-content: space-between;
   border-bottom: 1px solid ${colors.primary};
+  margin-bottom: ${spacing.xsmall};
 `;
 
 export const CustomerGrowthMain = styled.div`
@@ -45,4 +46,6 @@ export const TransactionMainLegend = styled.div`
   }
 `;
 
-export const CustomerGrowthChart = styled.div``;
+export const CustomerGrowthChart = styled.div`
+  max-width: 95%;
+`;

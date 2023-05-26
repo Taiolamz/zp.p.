@@ -63,14 +63,16 @@ function Dashboard() {
                   // backgroundColor={colors.white}
                   color={colors.primary}
                   count={'4,324'}
+                  type={'small'}
                 />
               </TwoBoxItemTop>
               <TwoBoxItemTop>
                 <CountInfoCardNoHelper
-                  title="Complaints"
+                  title="Active Cash Requests"
                   // backgroundColor={colors.white}
                   color={colors.primary}
-                  count={'345'}
+                  count={'4,324'}
+                  type={'small'}
                 />
               </TwoBoxItemTop>
             </TwoBoxContainerTop>
@@ -85,7 +87,7 @@ function Dashboard() {
               </TwoBoxItemBottom>
               <TwoBoxItemActive>
                 <CountInfoCardNoHelper
-                  title="Complaints"
+                  title="Agents"
                   backgroundColor={colors.white}
                   color={colors.primary}
                   count={'345'}

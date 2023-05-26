@@ -10,15 +10,17 @@ export const Container = styled.div`
   /* width: 40.688rem; */
   margin-left: auto;
   margin-right: auto;
-  @media (max-width: 700px) {
-    width: 500px;
-    height: 500px;
+  max-width: 980px;
+  width: 60vw;
+  max-height: 80vh;
+  @media (max-width: 760px) {
+    width: 80vw;
   }
   @media (max-width: 576px) {
-    width: 300px;
+    width: 80vw;
   }
   @media (max-width: 480px) {
-    width: 300px;
+    width: 80vw;
   }
 `;
 
@@ -39,6 +41,6 @@ export const SearchContainer = styled.div`
 
 export const CountInfoContainer = styled.div`
   display: grid;
-  width: 100%;
+  width: 60%;
   grid-template-columns: repeat(3, 1fr);
 `;

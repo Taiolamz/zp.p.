@@ -10,7 +10,7 @@ export const Container = styled.div`
   border-radius: ${borderRadius.small};
   background-color: ${(p: StyleProps) => p.backgroundColor};
   padding: ${spacing.xsmall} ${spacing.xsmall};
-  height: 100%;
+  height: max-content;
   @media (max-width: 768px) {
     padding: ${spacing.xsmall};
   }

@@ -15,6 +15,7 @@ export const Container = styled.div`
 export const Top = styled.div`
   display: flex;
   align-items: stretch;
+  column-gap: ${spacing.small_2};
 `;
 export const Bottom = styled.div`
   display: flex;

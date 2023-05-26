@@ -1,8 +1,9 @@
-import { colors } from '../../../utils';
+import { capitalizeFirstLetter, colors, currencyFormat, dateFormat, spacing, timeFormat } from '../../../utils';
 import { TableTag, TD, TH, TR, TableContainer, TDStatus } from './style';
+import { H1 } from '../../../styles';
 
 export interface TransactionHistoryIProps {
-  id: number;
+  id: string | number;
   time: string;
   transactionType: string;
   amount: number;
@@ -19,12 +20,7 @@ export interface TableIPropsIProps {
   onClick: () => void;
 }
 
-function TransactionHistoryTable({
-  data,
-  setSelectedItem,
-  headerData,
-  onClick,
-}: TableIPropsIProps) {
+function TransactionHistoryTable({ data, setSelectedItem, headerData, onClick }: TableIPropsIProps) {
   return (
     <TableContainer>
       <TableTag>
@@ -38,28 +34,32 @@ function TransactionHistoryTable({
           </tr>
         </thead>
         <tbody>
-          {data.map((item: any, index: number) => (
+          {data?.map((item: any) => (
             <TR key={item.id}>
-              <TD>{item.time}</TD>
+              <TD>{`${dateFormat(item.time)} - ${timeFormat(item.time)}`}</TD>
               <TD>{item.transactionType}</TD>
-              <TD>{item.amount}</TD>
+              <TD>{currencyFormat(item.amount)}</TD>
               <TD
                 style={{
                   color:
                     item.status === 'In Progress'
                       ? colors.primary
-                      : item.status === 'Failed- Declined'
+                      : item.status === 'failed'
                       ? colors.red
                       : colors.green,
-                }}
-              >
-                {item.status}
+                }}>
+                {capitalizeFirstLetter(item.status)}
               </TD>
               <TD>{item.recipient}</TD>
             </TR>
           ))}
         </tbody>
       </TableTag>
+      {data.length < 1 && (
+        <H1 style={{ marginTop: spacing.small }} center semiBold color={colors.grey}>
+          No transaction found
+        </H1>
+      )}
     </TableContainer>
   );
 }

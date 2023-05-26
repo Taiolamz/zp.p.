@@ -12,20 +12,37 @@ export interface CountInfoCardNoHelperIProps {
   helper?: string;
   color?: string;
   backgroundColor?: string;
+  type?: string;
 }
 
-interface IProps extends CountInfoCardNoHelperIProps {
-  onClick?: () => void;
-}
-function CountInfoCardNoHelper({ isSelected, count, title, color, helper, backgroundColor, onClick }: IProps) {
+function CountInfoCardNoHelper({
+  isSelected,
+  count,
+  title,
+  color,
+  backgroundColor,
+  type,
+}: CountInfoCardNoHelperIProps) {
   return (
-    <Container backgroundColor={backgroundColor} isSelected={isSelected} onClick={onClick}>
-      <H2 left color={colors.primary}>
-        {title}
-      </H2>
-      <H1 left bold color={color ? color : colors.primary}>
-        {count}
-      </H1>
+    <Container backgroundColor={backgroundColor} isSelected={isSelected}>
+      {type === 'small' ? (
+        <H4 left color={colors.primary}>
+          {title}
+        </H4>
+      ) : (
+        <H2 left color={colors.primary}>
+          {title}
+        </H2>
+      )}
+      {type === 'small' ? (
+        <H2 left bold color={color ? color : colors.primary}>
+          {count}
+        </H2>
+      ) : (
+        <H1 left bold color={color ? color : colors.primary}>
+          {count}
+        </H1>
+      )}
     </Container>
   );
 }

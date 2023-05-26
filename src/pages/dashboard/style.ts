@@ -30,7 +30,7 @@ export const CardsContainer = styled.div`
   }
 
   @media (max-width: 940px) {
-    grid-template-columns: auto;
+    grid-template-columns: 100%;
   }
 `;
 
@@ -108,7 +108,7 @@ export const ChartsContainer = styled.div`
   column-gap: ${spacing.small_2};
 
   @media (max-width: 980px) {
-    grid-template-columns: auto;
+    grid-template-columns: 100%;
     row-gap: ${spacing.small_2};
     column-gap: ${spacing.small_2};
   }

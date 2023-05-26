@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
-import { CustomerProfile } from '../../components';
+import { useNavigate, useParams } from 'react-router-dom';
+import { CustomerProfile, Pagination } from '../../components';
 import {
   AppContainer,
   UserSupportActivity,
@@ -10,6 +10,9 @@ import {
   SavedBanksModal,
   ProfileActivationToggleModal,
   ActivityActionModal,
+  TransactionHistoryModal,
+  DocumentHistoryModal,
+  SubAgentModal,
 } from '../../atoms';
 import {
   documentStatusDataHeader,
@@ -23,7 +26,7 @@ import {
   namedDocumentHistory,
   namedReactivateProfile,
   namedDeactivateProfile,
-  namedViewSubAgents,
+  TransactionHistoryHeader,
 } from './data';
 
 import {
@@ -52,6 +55,12 @@ import {
   deleteUserSavedBankReset,
   updateUserStatusRequest,
   updateUserStatusReset,
+  getUserProfileTransactionRequest,
+  getUserProfileTransactionReset,
+  getDocumentHistoryRequest,
+  getDocumentHistoryReset,
+  getUserSubAgentsRequest,
+  getUserSubAgentsReset,
 } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { CustomerProfileIProps } from '../../components/customerProfile';
@@ -59,6 +68,8 @@ import { DocumentStatusIProps } from '../../atoms/documentStatusModal';
 import { LoginHistoryIProps } from '../../components/tables/loginHistoryTable';
 import { Dictionary } from '../../types';
 import { SavedBanksIProps } from '../../components/tables/savedBanksTable';
+import { TransactionHistoryIProps } from '../../components/tables/transactionHistoryTable';
+import { SubAgentIPropsIprops } from '../../components/subAgentCard';
 
 const { USERS } = routesPath;
 
@@ -83,12 +94,29 @@ function UserDetails() {
   const [loginHistoryData, setLoginHistoryData] = useState<any[]>([]);
   const [profileViewData, setProfileViewData] = useState<LoginHistoryIProps[]>([]);
   const [savedBankIsModalVisible, setSavedBankIsModalVisible] = useState(false);
+  const [documentHistoryIsModalVisible, setDocumentHistoryIsModalVisible] = useState(false);
   const [savedBanksData, setSavedBanksData] = useState<SavedBanksIProps[]>([]);
   const [selectedUserBank, setSelectedUserBank] = useState<Dictionary>({});
   const [userAccountStatus, setUserAccountStatus] = useState('');
   const [profileActivationIsModalVisible, setProfileActivationIsModalVisible] = useState(false);
   const [profileActivationSuccessIsModalVisible, setProfileActivationSuccessIsModalVisible] = useState(false);
   const [deactiveMessage, setDeactiveMessage] = useState('');
+  const [transactionHistoryIsModalVisible, setTransactionHistoryIsModalVisible] = useState(false);
+  const [userSubAgentsIsModalVisible, setUserSubAgentsIsModalVisible] = useState(false);
+  const [transactionHistoryData, setTransactionHistoryData] = useState<TransactionHistoryIProps[]>([]);
+  const [subAgentData, setSubAgentData] = useState<SubAgentIPropsIprops[]>([]);
+  const [transactionHistoryCounts, setTransactionHistoryCounts] = useState<Dictionary>({
+    cashRequest: 0,
+    cashDelivery: 0,
+    billTransaction: 0,
+  });
+  const pageSize = 10;
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(5);
+  const [subAgentCurrentPage, setSubAgentCurrentPage] = useState(1);
+  const [subAgentTotalPages, setSubAgentTotalPages] = useState(5);
+  const [documentHistoryData, setDocumentHistoryData] = useState<any[]>([]);
+
   // redux state
   const userProfileState = useAppSelector(state => state.getUserProfile);
   const { status: userProfileStatus } = userProfileState;
@@ -110,6 +138,15 @@ function UserDetails() {
 
   const updateUserStatusState = useAppSelector(state => state.updateUserStatus);
   const { status: updateUserStatusStatus } = updateUserStatusState;
+
+  const userProfileTransactionState = useAppSelector(state => state.getUserProfileTransaction);
+  const { status: userProfileTransactionStatus } = userProfileTransactionState;
+
+  const documentHistoryState = useAppSelector(state => state.getDocumentHistory);
+  const { status: documentHistoryStatus } = documentHistoryState;
+
+  const userSubAgentsState = useAppSelector(state => state.getUserSubAgents);
+  const { status: userSubAgentsStatus } = userSubAgentsState;
 
   const detmineKycLevel = (level: string) => {
     let result =
@@ -360,9 +397,9 @@ function UserDetails() {
         resultLoginHistory.push({
           id: index + 1,
           time: `${dateFormat(el?.login_at)} - ${timeFormat(el?.login_at)}`,
-          device: el?.device_detail === null ? 'N/A' : el?.device_detail,
+          device: el?.data?.userAgent === null ? 'N/A' : el?.data?.userAgent,
           location: user?.location === null ? 'N/A' : user?.location,
-          ipAddress: el?.data?.userAgent === null ? 'N/A' : el?.data?.userAgent,
+          ipAddress: '-',
         });
       });
 
@@ -400,9 +437,92 @@ function UserDetails() {
     }
   }, [updateUserStatusState]);
 
+  // successful user transactions table
+  useEffect(() => {
+    if (userProfileTransactionStatus === 'succeeded') {
+      let result: TransactionHistoryIProps[] = [];
+      userProfileTransactionState?.data?.transactions?.data?.forEach((item: Dictionary) => {
+        result.push({
+          id: item?.id,
+          time: item?.created_at,
+          transactionType: item?.transfer_purpose,
+          amount: parseFloat(item?.amount),
+          status: item?.status,
+          recipient:
+            item?.transfer_purpose === 'Wallet Credit'
+              ? 'N/A'
+              : item?.external_account_name !== null
+              ? item.external_account_name
+              : 'N/A',
+        });
+      });
+      setTransactionHistoryCounts({
+        cashRequest: userProfileTransactionState?.data?.cash_request_count,
+        cashDelivery: userProfileTransactionState?.data?.cash_deliveries_count,
+        billTransaction: userProfileTransactionState?.data?.bills_count,
+      });
+      setTransactionHistoryData(result);
+
+      const {
+        meta: { links },
+      } = userProfileTransactionState?.data?.transactions;
+
+      setTotalPages(links.length - 2);
+    }
+  }, [userProfileTransactionState]);
+
+  // successful document history
+  useEffect(() => {
+    if (documentHistoryStatus === 'succeeded') {
+      const { bvn_photo, identity_card, cac_document } = documentHistoryState?.data;
+      const result = [
+        {
+          id: 1,
+          text: 'Passport',
+          image: bvn_photo !== null ? bvn_photo : images.user,
+          imgAlt: 'Passport photograph',
+        },
+        {
+          id: 2,
+          text: 'ID Card',
+          image: identity_card !== null ? identity_card[0] : images.user,
+          imgAlt: 'User Identification Card',
+        },
+        {
+          id: 2,
+          text: 'Agency Doc',
+          image: cac_document !== null ? cac_document : images.user,
+          imgAlt: 'Agency Document',
+        },
+      ];
+      setDocumentHistoryData(result);
+    }
+  }, [documentHistoryState]);
+
+  // successful sub agents
+  useEffect(() => {
+    if (userSubAgentsStatus === 'succeeded') {
+      let result: SubAgentIPropsIprops[] = [];
+
+      userSubAgentsState?.data?.users?.data?.forEach((item: Dictionary, index: number) => {
+        result.push({
+          id: index + 1,
+          name: item?.name,
+          dateAdded: item?.created_at,
+          active: item.status === 'inactive' ? false : true,
+        });
+      });
+
+      const {
+        users: { links },
+      } = userSubAgentsState?.data;
+
+      setSubAgentTotalPages(links.length - 2);
+      setSubAgentData(result);
+    }
+  }, [userSubAgentsState]);
+
   const handleSupportClicked = (item: any) => {
-    // console.log(item, 'item');
-    // setToggleClicked(!toggleClicked);
     const { text } = item;
     if (text === namedDocumentStatus) {
       setDocumentIsModalVisible(true);
@@ -410,10 +530,12 @@ function UserDetails() {
     }
 
     if (text === namedTransactionHistory) {
-      console.log('transaction history');
+      dispatch(getUserProfileTransactionRequest({ userId, per_page: pageSize, page: currentPage }));
+      setTransactionHistoryIsModalVisible(true);
     }
     if (text === namedDocumentHistory) {
-      console.log('upload doc');
+      dispatch(getDocumentHistoryRequest({ userId }));
+      setDocumentHistoryIsModalVisible(true);
     }
     if (text === namedSavedBanks) {
       dispatch(deleteUserSavedBankReset());
@@ -461,6 +583,11 @@ function UserDetails() {
     dispatch(updateUserStatusReset());
   };
 
+  const handleOnClickSubAgent = (selectedPage: number) => {
+    setUserSubAgentsIsModalVisible(true);
+    dispatch(getUserSubAgentsRequest({ userId, per_page: subAgentTotalPages, page: selectedPage }));
+  };
+
   return (
     <AppContainer goBack={() => navigate(USERS)} navTitle={`Back`} navHelper="Profile Review">
       <div>
@@ -483,7 +610,7 @@ function UserDetails() {
               }}
               onClickProfileToggle={() => setProfileActivationIsModalVisible(true)}
               profileToggleText={userAccountStatus === 'active' ? namedDeactivateProfile : namedReactivateProfile}
-              onClickViewSubAgent={() => {}}
+              onClickViewSubAgent={() => handleOnClickSubAgent(1)}
               kycLevel={kycLevel}
             />
           </SupportContainer>
@@ -546,6 +673,59 @@ function UserDetails() {
           }
         />
 
+        {/* Transaction History modal */}
+        <TransactionHistoryModal
+          title="Transaction Hisory"
+          isModalVisible={transactionHistoryIsModalVisible}
+          firstCount={transactionHistoryCounts.cashRequest}
+          secondCount={transactionHistoryCounts.cashDelivery}
+          thirdCount={transactionHistoryCounts.billTransaction}
+          data={transactionHistoryData}
+          headerData={TransactionHistoryHeader}
+          closeModal={() => setTransactionHistoryIsModalVisible(false)}
+          actionClick={() => {}}
+          isLoading={userProfileTransactionStatus === 'loading'}>
+          <div>
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={selectedPage => {
+                setCurrentPage(selectedPage);
+              }}
+              isLoading={userProfileTransactionStatus === 'loading'}
+            />
+          </div>
+        </TransactionHistoryModal>
+
+        {/* document history */}
+        <DocumentHistoryModal
+          title="Document History"
+          data={documentHistoryData}
+          isModalVisible={documentHistoryIsModalVisible}
+          closeModal={() => setDocumentHistoryIsModalVisible(false)}
+          isLoading={documentHistoryStatus === 'loading'}
+        />
+
+        {/* user subAgents */}
+        <SubAgentModal
+          isModalVisible={userSubAgentsIsModalVisible}
+          title="Sub-Agents"
+          description="See all sub agents assigned to this user"
+          data={subAgentData}
+          isLoading={userSubAgentsStatus === 'loading'}
+          closeModal={() => setUserSubAgentsIsModalVisible(false)}>
+          <div>
+            <Pagination
+              currentPage={subAgentCurrentPage}
+              totalPages={subAgentTotalPages}
+              onPageChange={selectedPage => {
+                setSubAgentCurrentPage(selectedPage);
+                handleOnClickSubAgent(selectedPage);
+              }}
+              isLoading={userProfileTransactionStatus === 'loading'}
+            />
+          </div>
+        </SubAgentModal>
         <LoaderModal
           text={
             updateUserStatusStatus === 'loading'
