@@ -1,6 +1,5 @@
 import { Activecard, CountInfoCard, CountInfoCardNoHelper } from '../../components';
 import { colors, currencyFormat } from '../../utils';
-import { useState } from 'react';
 import { AppContainer, AllUsersStat, KycDistributionStat, TransactionVolume, CustomerGrowth } from '../../atoms';
 import {
   CardsContainer,
@@ -102,7 +101,7 @@ function Dashboard() {
         </CardsContainer>
         <ChartsContainer>
           <TransactionVolume transactionVolumeChartData={transactionVolumeChartData} />
-          <CustomerGrowth transactionVolumeChartData={transactionVolumeChartData} />
+          <CustomerGrowth />
         </ChartsContainer>
       </Container>
     </AppContainer>

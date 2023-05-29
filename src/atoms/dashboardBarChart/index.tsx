@@ -1,12 +1,10 @@
-import { useState, useLayoutEffect } from 'react';
+import { useState } from 'react';
 
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Tooltip } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 
 import { Container } from './style';
 import { colors, spacing } from '../../utils';
-import { BorderedText } from '../../components';
-import { H3 } from '../../styles';
 
 export interface BarChartIProps {
   dailyData: number[];

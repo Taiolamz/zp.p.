@@ -12,6 +12,7 @@ export const CustomerGrowthHeader = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
+  padding-bottom: ${spacing.xsmall};
   justify-content: space-between;
   border-bottom: 1px solid ${colors.primary};
   margin-bottom: ${spacing.xsmall};
@@ -19,8 +20,6 @@ export const CustomerGrowthHeader = styled.div`
 
 export const CustomerGrowthMain = styled.div`
   display: grid;
-  /* grid-template-columns: 50% 50%; */
-  /* justify-content: space-between; */
 `;
 
 export const CustomerGrowthStat = styled.div`

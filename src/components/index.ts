@@ -40,3 +40,4 @@ export { default as Activecard } from './cards/activeCard';
 export { default as CountInfoCardBorderText } from './cards/countInfoCardBorderText';
 export { default as LevelCard } from './cards/levelCard';
 export { default as DoughnutChart } from './doughnutChart';
+export { default as CustomSelect } from './customSelect';
