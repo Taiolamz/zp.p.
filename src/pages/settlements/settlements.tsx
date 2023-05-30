@@ -495,8 +495,6 @@ function Settlements() {
                 helper={item.helper}
                 color={item.color}
                 count={currencyFormat(item.amount)}
-                background={item.background}
-                shadow={item.shadow}
               />
             </InfoCountContent>
           ))}
