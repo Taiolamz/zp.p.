@@ -239,15 +239,15 @@ function UserDetails() {
         {
           id: 2,
           helper: 'Last Login',
-          text: user?.last_login === null ? 'N/A' : dateFormat(user?.last_login),
-        },
-        {
-          id: 3,
-          helper: 'Last Device Login',
           text:
             user?.last_login === null
               ? 'N/A'
               : ` ${dateFormat(user?.last_login)} - ${timeFormat(user?.last_login, true)}`,
+        },
+        {
+          id: 3,
+          helper: 'Last Device Login',
+          text: user?.device_detail === null ? 'N/A' : ` ${user?.device_detail}`,
         },
         {
           id: 4,
