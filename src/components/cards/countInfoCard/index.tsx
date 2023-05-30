@@ -24,17 +24,12 @@ function CountInfoCard({
   title,
   color,
   helper,
-  background,
+  background = colors.white,
   shadow,
   onClick,
 }: IProps) {
   return (
-    <Container
-      background={background}
-      isSelected={isSelected}
-      onClick={onClick}
-      shadow={shadow}
-    >
+    <Container background={background} isSelected={isSelected} onClick={onClick} shadow={shadow}>
       <H4 left color={colors.grey}>
         {title}
       </H4>
