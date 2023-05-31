@@ -63,6 +63,25 @@ function TransactionTable({ data, setSelectedItem, headerData, type, onClick }: 
               </tbody>
             )}
 
+            {type === 'mainTransactions' && (
+              <tbody>
+                {data?.map((item: any, index: number) => (
+                  <TR style={{ cursor: 'pointer' }} key={index} onClick={() => onClick(item)}>
+                    <TD>{item.id}</TD>
+                    <TD>{item.name}</TD>
+                    <TD>{item.tid}</TD>
+                    <TD>{currencyFormat(item.amount, false, item.currency)}</TD>
+                    <TD>{capitalizeFirstLetter(item.type)}</TD>
+                    <TD color={item.status === 'success' ? colors.greenVariantTwo : colors.red}>
+                      {item.status === 'success' ? 'Successful' : 'Unseccessful'}
+                    </TD>
+                    <TD>{dateFormat(item.time)}</TD>
+                    <TD>{/* <MoreIcon onClick={onClick} /> */}</TD>
+                  </TR>
+                ))}
+              </tbody>
+            )}
+
             {type === 'billHistory' && (
               <div>
                 {data.map((item: any) => (

@@ -1,13 +1,13 @@
-import { ReactElement, useEffect, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { ReactElement, useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-import { AiOutlineUser, AiOutlineDollarCircle } from "react-icons/ai";
-import { FiUsers, FiMail, FiTrendingUp, FiSettings } from "react-icons/fi";
-import { useAppDispatch, useAppSelector } from "../../redux/redux-hooks";
-import { logoutRequest } from "../../redux/slice";
-import { SideBarCard, UserActivityCard } from "../../components/index";
-import { H6 } from "../../styles";
-import { colors, images, routesPath, capitalizeFirstLetter } from "../../utils";
+import { AiOutlineUser, AiOutlineDollarCircle } from 'react-icons/ai';
+import { FiUsers, FiMail, FiTrendingUp, FiSettings, FiCreditCard, FiUser } from 'react-icons/fi';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import { logoutRequest } from '../../redux/slice';
+import { SideBarCard, UserActivityCard } from '../../components/index';
+import { H6 } from '../../styles';
+import { colors, images, routesPath, capitalizeFirstLetter } from '../../utils';
 import {
   Container,
   Content,
@@ -17,7 +17,7 @@ import {
   BottomTabContent,
   ImgContainer,
   Img,
-} from "./style";
+} from './style';
 
 interface IProps {
   text: string;
@@ -34,15 +34,7 @@ export interface NavIProps {
   path: string;
   options?: any[];
 }
-const {
-  DASHBOARD,
-  KYC,
-  SUPPORT,
-  SETTLEMENTS,
-  RECONCILIATION,
-  USERS,
-  SETTINGS,
-} = routesPath;
+const { DASHBOARD, KYC, SUPPORT, SETTLEMENTS, RECONCILIATION, USERS, SETTINGS, TRANSACTIONS } = routesPath;
 function TabNav({ text, icon, isSelected, onClick }: IProps) {
   return (
     <TabNavContainer onClick={onClick}>
@@ -58,14 +50,14 @@ function SideBar() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { status } = useAppSelector((state) => state.logout);
+  const { status } = useAppSelector(state => state.logout);
   const {
     data: { name, status: activityStatus },
-  } = useAppSelector((state) => state.auth);
+  } = useAppSelector(state => state.auth);
 
   const location = useLocation();
   const currentPath = location.pathname;
-  const [innerNav, setInnerNav] = useState("");
+  const [innerNav, setInnerNav] = useState('');
   const [toggleBtn, setToggleBtn] = useState(false);
 
   function navigationPath() {
@@ -73,40 +65,40 @@ function SideBar() {
       {
         id: 1,
         isSelected: currentPath === DASHBOARD ? true : false,
-        text: "Dashboard",
+        text: 'Dashboard',
         icon: <AiOutlineUser />,
         path: DASHBOARD,
       },
       {
         id: 2,
         isSelected: currentPath === KYC ? true : false,
-        text: "KYC",
+        text: 'KYC',
         icon: <FiUsers />,
         path: KYC,
       },
       {
         id: 3,
         isSelected: currentPath === SUPPORT ? true : false,
-        text: "Support",
+        text: 'Support',
         icon: <FiMail />,
         path: SUPPORT,
       },
       {
         id: 4,
         isSelected: toggleBtn,
-        text: currentPath === RECONCILIATION ? "Reconciliation" : "Settlements",
-        icon: <FiTrendingUp />,
+        text: currentPath === RECONCILIATION ? 'Reconciliation' : 'Settlements',
+        icon: <AiOutlineDollarCircle />,
         path: SETTLEMENTS,
         options: [
           {
             id: 1,
-            text: "Settlements",
+            text: 'Settlements',
             isSelected: currentPath === SETTLEMENTS ? true : false,
             path: SETTLEMENTS,
           },
           {
             id: 2,
-            text: "Reconciliation",
+            text: 'Reconciliation',
             isSelected: currentPath === RECONCILIATION ? true : false,
             path: RECONCILIATION,
           },
@@ -115,14 +107,21 @@ function SideBar() {
       {
         id: 5,
         isSelected: currentPath === USERS ? true : false,
-        text: "Users",
-        icon: <AiOutlineDollarCircle />,
+        text: 'Users',
+        icon: <FiUser />,
         path: USERS,
       },
       {
         id: 6,
+        isSelected: currentPath === TRANSACTIONS ? true : false,
+        text: 'Transactions',
+        icon: <FiCreditCard />,
+        path: TRANSACTIONS,
+      },
+      {
+        id: 7,
         isSelected: currentPath === SETTINGS ? true : false,
-        text: "Settings",
+        text: 'Settings',
         icon: <FiSettings />,
         path: SETTINGS,
       },
@@ -132,23 +131,23 @@ function SideBar() {
   const dataBottomTab = [
     {
       isSelected: true,
-      text: "Portfolio",
+      text: 'Portfolio',
       icon: <AiOutlineUser />,
     },
     {
       isSelected: false,
-      text: "Logout",
+      text: 'Logout',
       icon: <FiUsers />,
     },
     {
       isSelected: false,
-      text: "Messages",
+      text: 'Messages',
       icon: <FiMail />,
     },
 
     {
       isSelected: false,
-      text: "Settings",
+      text: 'Settings',
       icon: <FiSettings />,
     },
   ];
@@ -175,7 +174,7 @@ function SideBar() {
   };
 
   const handleLogout = (item: any) => {
-    if (item.text === "Logout") {
+    if (item.text === 'Logout') {
       dispatch(logoutRequest());
     }
   };
@@ -189,9 +188,9 @@ function SideBar() {
         <Content>
           <div>
             <ImgContainer>
-              <Img src={images.logoMain} alt='logo' />
+              <Img src={images.logoMain} alt="logo" />
             </ImgContainer>
-            {navigationPath().map((item) => (
+            {navigationPath().map(item => (
               <SideBarCard
                 key={item.id}
                 onClick={() => {
@@ -210,7 +209,7 @@ function SideBar() {
             title={name}
             helper={capitalizeFirstLetter(activityStatus)}
             onClick={handleLogoutDesktop}
-            btnDisabled={status === "loading" ? true : false}
+            btnDisabled={status === 'loading' ? true : false}
           />
         </Content>
       </Container>
