@@ -1,9 +1,7 @@
-import { useState, useEffect, useLayoutEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { FiFilter } from 'react-icons/fi';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ReactComponent as DownloadIcon } from '../../assets/svg/downloadBtn.svg';
-import { DatePicker, BorderedText, Pagination } from '../../components';
-import { TransactionTable, CustomSelect } from '../../components';
+import { DatePicker, BorderedText, Pagination, TransactionTable, CustomSelect } from '../../components';
 import {
   AppContainer,
   ReconcileView,
@@ -22,6 +20,7 @@ import {
   capitalizeFirstLetter,
   timeFormat,
   showMessage,
+  replaceStringWithBackslach,
 } from '../../utils';
 
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
@@ -32,26 +31,33 @@ import { Dictionary } from '../../types';
 
 import { CustomSelectOptionsIProps } from '../../components/customSelect';
 import { DatePickerContainer, HeaderContainer, HeaderContent } from './style';
+import { getAllTransactionsRequest, getAllTransactionsReset } from '../../redux/slice';
 
-const initialDate = '2022-01-01';
-const currentDate = new Date().toDateString();
+// const initialDate = '2022-01-01';
+// const currentDate = new Date().toDateString();
 const { RECONCILIATION } = routesPath;
 
 function Transactions() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [selectedTransaction, setSelectedTransaction] = useState({});
-  let dd = new Date();
+
+  //   redux state
+  const allTransactionsState = useAppSelector(state => state.getAllTransactions);
+  const { status: allTransactionsStatus } = allTransactionsState;
+
   const initialDate = '2022-01-01';
   const currentDate = new Date().toDateString();
   const tTypesOption: CustomSelectOptionsIProps[] = [
-    { key: 'daily', value: 'Daily' },
-    { key: 'weekly', value: 'Weekly' },
-    { key: 'monthly', value: 'Monthly' },
+    { key: `App,Models,CashTransfer`, value: 'CashTransfer' },
+    { key: `App,Models,CashRequest`, value: 'CashRequest' },
+    { key: `App,Models,WalletCredit`, value: 'WalletCredit' },
+    { key: `App,Models,WalletDebit`, value: 'WalletDebit' },
+    { key: `App,Models,Bill`, value: 'Bill' },
   ];
 
   const tStatusOption: CustomSelectOptionsIProps[] = [
-    { key: 'successful', value: 'Successful' },
+    { key: 'success', value: 'Successful' },
     { key: 'failed', value: 'Failed' },
     { key: 'pending', value: 'Pending' },
   ];
@@ -61,6 +67,54 @@ function Transactions() {
   const [startDisplayRecordDate, setStartDisplayRecordDate] = useState(initialDate);
   const [endDisplayRecordDate, setEndDisplayRecordDate] = useState(currentDate);
   const [transactionDetailsModalVisible, setTransactionDetailsModalVisible] = useState(false);
+  const [transactionData, setTransactionData] = useState<any[]>([]);
+  const [toggleFilter, setToggleFilter] = useState(false);
+  const pageSize = 10;
+  const [totalPages, setTotalPages] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
+  console.log(tTypes[0], 'tTypesOption');
+  useEffect(() => {
+    dispatch(
+      getAllTransactionsRequest({
+        model_type: tTypes[0] !== 'Transaction Type' ? replaceStringWithBackslach(tTypes[0]) : '',
+        status: tStatus[0] !== 'Transaction Status' ? tStatus[0] : '',
+        start_date: startDisplayRecordDate,
+        end_date: endDisplayRecordDate,
+        per_page: pageSize,
+        page: currentPage,
+      }),
+    );
+  }, [toggleFilter, currentPage]);
+
+  useEffect(() => {
+    if (allTransactionsStatus === 'succeeded') {
+      const updatedList: any[] = [];
+
+      allTransactionsState?.data?.transactions?.data.forEach((item: Dictionary, index: number) => {
+        updatedList.push({
+          id: index + 1,
+          name: item?.user.name,
+          tid: item?.model_type,
+          amount: parseFloat(item?.amount),
+          type: item?.transaction_reference,
+          status: item.status,
+          icon: false,
+          time: item?.created_at,
+          currency: item?.currency,
+          phoneNumber: item?.user?.telephone,
+          transId: item?.id,
+          email: item?.user?.email,
+        });
+      });
+
+      const {
+        meta: { links },
+      } = allTransactionsState?.data?.transactions;
+
+      setTotalPages(links.length - 2);
+      setTransactionData(updatedList);
+    }
+  }, [allTransactionsState]);
 
   const handleOnClick = (item: Dictionary) => {
     console.log(item, 'item');
@@ -101,7 +155,9 @@ function Transactions() {
             </DatePickerContainer>
             <BorderedText
               text="Filter"
-              onClick={() => {}}
+              onClick={() => {
+                setToggleFilter(!toggleFilter);
+              }}
               backgroundColor={colors.greyVariantFive}
               color={colors.primary}
             />
@@ -118,28 +174,22 @@ function Transactions() {
             time: 'Date-Time',
           }}
           header={true}
-          data={[
-            {
-              id: 1,
-              name: 'allen k',
-              tid: 'lgflksj',
-              amount: parseFloat('2000'),
-              type: 'item.type',
-              status: 'item.status',
-              icon: false,
-              time: dd,
-              currency: 'N',
-              phoneNumber: '333',
-              transId: '2333',
-              email: 'aliakwe',
-            },
-          ]}
+          data={transactionData}
           setSelectedItem={setSelectedTransaction}
           onClick={(item: any) => handleOnClick(item)}
         />
         <DownloadIcon
-          style={{ position: 'absolute', right: 30, top: '60vh', cursor: 'pointer' }}
+          style={{ position: 'fixed', right: 30, top: '60vh', cursor: 'pointer' }}
           onClick={() => setTransactionDetailsModalVisible(true)}
+        />
+
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={selectedPage => {
+            setCurrentPage(selectedPage);
+          }}
+          isLoading={allTransactionsStatus === 'loading'}
         />
 
         <TransactionDetailsModal
@@ -153,7 +203,11 @@ function Transactions() {
           data={[{ id: 1, text: 'hello', helper: 'me me' }]}
           isLoading={false}
         />
-        <LoaderModal isModalVisible={false} text="Loading please wait..." closeModal={() => {}} />
+        <LoaderModal
+          isModalVisible={allTransactionsStatus === 'loading'}
+          text="Loading please wait..."
+          closeModal={() => {}}
+        />
       </div>
     </AppContainer>
   );

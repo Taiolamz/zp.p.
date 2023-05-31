@@ -27,6 +27,7 @@ import {
   getUserProfileTransactionSliceReducer,
   getDocumentHistorySliceReducer,
   getUserSubAgentsSliceReducer,
+  getAllTransactionsSliceReducer,
 } from './slice';
 const state = {
   login: loginSliceReducer,
@@ -57,6 +58,7 @@ const state = {
   getUserProfileTransaction: getUserProfileTransactionSliceReducer,
   getDocumentHistory: getDocumentHistorySliceReducer,
   getUserSubAgents: getUserSubAgentsSliceReducer,
+  getAllTransactions: getAllTransactionsSliceReducer,
 };
 
 export const testAppSelector = (f: any) => f(state);

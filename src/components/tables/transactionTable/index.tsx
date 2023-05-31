@@ -1,6 +1,6 @@
 import { TableTag, TD, TH, TR, TableContainer } from './style';
 import { TransactionCard, MoreIcon } from '../..';
-import { colors, currencyFormat, dateFormat, capitalizeFirstLetter } from '../../../utils';
+import { colors, currencyFormat, dateFormat, capitalizeFirstLetter, timeFormat } from '../../../utils';
 import { ReactComponent as EmptySearchIcon } from '../../../assets/svg/emptySearch.svg';
 
 export interface TableIPropsIProps {
@@ -75,7 +75,7 @@ function TransactionTable({ data, setSelectedItem, headerData, type, onClick }: 
                     <TD color={item.status === 'success' ? colors.greenVariantTwo : colors.red}>
                       {item.status === 'success' ? 'Successful' : 'Unseccessful'}
                     </TD>
-                    <TD>{dateFormat(item.time)}</TD>
+                    <TD>{`${dateFormat(item.time)} - ${timeFormat(item.time)}`}</TD>
                     <TD>{/* <MoreIcon onClick={onClick} /> */}</TD>
                   </TR>
                 ))}
