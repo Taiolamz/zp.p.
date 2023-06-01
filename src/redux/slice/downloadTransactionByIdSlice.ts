@@ -29,14 +29,19 @@ export const downloadTransactionByIdRequest = createAsyncThunk(
       //   'Content-Disposition': 'attachment; filename="transaction.pdf"',
     };
     try {
-      const response = await api.get(url, {
+      const response = await api.get<any, Blob>(url, {
         // responseType: 'blob',
         // responseType: 'arraybuffer',
         responseType: 'blob',
         // headers: headers,
       });
 
-      const uri = window.URL.createObjectURL(new Blob([response.data]));
+
+
+      const uri = window.URL.createObjectURL(response);
+
+      // console.log('Here o..... : ', uri);
+
       const link = document.createElement('a');
       link.href = uri;
       link.setAttribute('download', 'transaction.pdf');
