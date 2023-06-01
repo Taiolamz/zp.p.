@@ -3,6 +3,8 @@ import { colors, spacing, borderRadius, boxShadow } from "../../../utils";
 
 interface StyleProps {
   isSelected?: boolean;
+  background?: string;
+  shadow?: string;
 }
 
 export const Container = styled.div`
@@ -11,8 +13,8 @@ export const Container = styled.div`
   justify-content: space-between;
   border-radius: ${borderRadius.small};
   background-color: ${(p: StyleProps) =>
-    p.isSelected ? colors.purpleVariantTwo : colors.white};
-  box-shadow: ${boxShadow.light};
+    p.isSelected ? colors.purpleVariantTwo : p.background};
+  box-shadow: ${(p: StyleProps) => p.shadow};
   height: 100%;
   padding: ${spacing.small} ${spacing.small};
   cursor: pointer;

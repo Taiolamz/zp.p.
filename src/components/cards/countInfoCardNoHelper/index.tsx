@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-import { H1, H4 } from '../../../styles';
+import { H1, H2, H4 } from '../../../styles';
 import { colors } from '../../../utils';
 import { Container } from './style';
 
@@ -12,30 +12,37 @@ export interface CountInfoCardNoHelperIProps {
   helper?: string;
   color?: string;
   backgroundColor?: string;
+  type?: string;
 }
 
-interface IProps extends CountInfoCardNoHelperIProps {
-  onClick?: () => void;
-}
 function CountInfoCardNoHelper({
   isSelected,
   count,
   title,
   color,
-  helper,
   backgroundColor,
-  onClick,
-}: IProps) {
+  type,
+}: CountInfoCardNoHelperIProps) {
   return (
-    <Container
-      backgroundColor={backgroundColor}
-      isSelected={isSelected}
-      onClick={onClick}
-    >
-      <H4 color={colors.primary}>{title}</H4>
-      <H1 bold color={color ? color : colors.primary}>
-        {count}
-      </H1>
+    <Container backgroundColor={backgroundColor} isSelected={isSelected}>
+      {type === 'small' ? (
+        <H4 left color={colors.primary}>
+          {title}
+        </H4>
+      ) : (
+        <H2 left color={colors.primary}>
+          {title}
+        </H2>
+      )}
+      {type === 'small' ? (
+        <H2 left bold color={color ? color : colors.primary}>
+          {count}
+        </H2>
+      ) : (
+        <H1 left bold color={color ? color : colors.primary}>
+          {count}
+        </H1>
+      )}
     </Container>
   );
 }

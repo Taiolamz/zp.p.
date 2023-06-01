@@ -8,10 +8,19 @@ interface StyleProps {
 
 export const Container = styled.div`
   background-color: ${(p: StyleProps) => p.backgroundColor};
-  height: 100%;
-  /* padding: ${spacing.small} ${spacing.small}; */
-  /* width: 100%; */
+  display: flex;
+  align-items: center;
+  column-gap: ${spacing.xxsmall};
+  &:not(:last-child) {
+    position: relative;
+    ::after {
+      content: '|';
+      position: absolute;
+      right: -6px;
+      top: -5px;
+    }
+  }
   @media (max-width: 768px) {
-    /* padding: ${spacing.xsmall}; */
+    padding: ${spacing.xsmall};
   }
 `;

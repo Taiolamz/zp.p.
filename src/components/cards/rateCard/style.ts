@@ -7,11 +7,11 @@ interface StyleProps {
 }
 
 export const Container = styled.div`
+  border-radius: ${borderRadius.small};
   background-color: ${(p: StyleProps) => p.backgroundColor};
-  height: 100%;
-  /* padding: ${spacing.small} ${spacing.small}; */
-  /* width: 100%; */
+  padding: ${spacing.xsmall} ${spacing.xsmall};
+  height: max-content;
   @media (max-width: 768px) {
-    /* padding: ${spacing.xsmall}; */
+    padding: ${spacing.xsmall};
   }
 `;

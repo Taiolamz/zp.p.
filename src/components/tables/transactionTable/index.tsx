@@ -1,6 +1,6 @@
 import { TableTag, TD, TH, TR, TableContainer } from './style';
 import { TransactionCard, MoreIcon } from '../..';
-import { colors, currencyFormat, dateFormat, capitalizeFirstLetter } from '../../../utils';
+import { colors, currencyFormat, dateFormat, capitalizeFirstLetter, timeFormat } from '../../../utils';
 import { ReactComponent as EmptySearchIcon } from '../../../assets/svg/emptySearch.svg';
 
 export interface TableIPropsIProps {
@@ -58,6 +58,25 @@ function TransactionTable({ data, setSelectedItem, headerData, type, onClick }: 
                     <TD>
                       <MoreIcon onClick={onClick} />
                     </TD>
+                  </TR>
+                ))}
+              </tbody>
+            )}
+
+            {type === 'mainTransactions' && (
+              <tbody>
+                {data?.map((item: any, index: number) => (
+                  <TR style={{ cursor: 'pointer' }} key={index} onClick={() => onClick(item)}>
+                    <TD>{item.id}</TD>
+                    <TD>{item.name}</TD>
+                    <TD>{item.tid}</TD>
+                    <TD>{currencyFormat(item.amount, false, item.currency)}</TD>
+                    <TD>{capitalizeFirstLetter(item.type)}</TD>
+                    <TD color={item.status === 'success' ? colors.greenVariantTwo : colors.red}>
+                      {item.status === 'success' ? 'Successful' : 'Unseccessful'}
+                    </TD>
+                    <TD>{`${dateFormat(item.time)} - ${timeFormat(item.time)}`}</TD>
+                    <TD>{/* <MoreIcon onClick={onClick} /> */}</TD>
                   </TR>
                 ))}
               </tbody>

@@ -1,23 +1,18 @@
-import {
-  Container,
-  Content,
-  ContentItem,
-  ContentItemTwo,
-  CardContainer,
-} from "./style";
-import { Modal, BorderedText, Button } from "../../components";
-import { H1, H5 } from "../../styles";
-import { colors, currencyFormat, spacing } from "../../utils";
+import { Container, Content, ContentItem, ContentItemTwo, CardContainer } from './style';
+import { Modal, BorderedText, Button } from '../../components';
+import { H1, H5 } from '../../styles';
+import { colors, currencyFormat, spacing } from '../../utils';
 export interface IProps {
   isModalVisible: boolean;
   closeModal: () => void;
-  status: "success" | "failed";
+  status: 'success' | 'failed';
   data: any[];
   amount: string;
   currency: string;
   onClickExportBtn?: () => void;
   isLoading?: boolean;
   exportBtnDisabled: boolean;
+  actionBtnText?: string;
 }
 
 interface IPropsCard {
@@ -48,12 +43,10 @@ function TransactionDetailsModal({
   onClickExportBtn,
   isLoading,
   exportBtnDisabled,
+  actionBtnText,
 }: IProps) {
   return (
-    <Modal
-      title='Transaction Details'
-      isModalVisible={isModalVisible}
-      closeModal={closeModal}>
+    <Modal title="Transaction Details" isModalVisible={isModalVisible} closeModal={closeModal}>
       <div>
         {isLoading ? (
           <Container>
@@ -67,14 +60,7 @@ function TransactionDetailsModal({
             </H1>
             <Content>
               <ContentItem>
-                {data &&
-                  data.map((item) => (
-                    <TransactionDataCard
-                      key={item.id}
-                      text={item.text}
-                      helper={item.helper}
-                    />
-                  ))}
+                {data && data.map(item => <TransactionDataCard key={item.id} text={item.text} helper={item.helper} />)}
               </ContentItem>
               <ContentItemTwo>
                 <H5 left>Status</H5>
@@ -84,22 +70,14 @@ function TransactionDetailsModal({
                     marginTop: spacing.xxsmall,
                   }}>
                   <BorderedText
-                    text={status === "success" ? "Successful" : "Failed"}
-                    backgroundColor={
-                      status === "success"
-                        ? colors.greenVariantThree
-                        : colors.pink
-                    }
-                    color={
-                      status === "success"
-                        ? colors.greenVariantFour
-                        : colors.red
-                    }
+                    text={status === 'success' ? 'Successful' : 'Failed'}
+                    backgroundColor={status === 'success' ? colors.greenVariantThree : colors.pink}
+                    color={status === 'success' ? colors.greenVariantFour : colors.red}
                   />
                 </div>
                 <Button
                   disabled={exportBtnDisabled}
-                  text='Export To Email'
+                  text={actionBtnText ? actionBtnText : 'Export To Email'}
                   onClick={onClickExportBtn}
                 />
               </ContentItemTwo>
