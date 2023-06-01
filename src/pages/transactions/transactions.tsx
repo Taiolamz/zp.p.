@@ -2,21 +2,11 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as DownloadIcon } from '../../assets/svg/downloadBtn.svg';
 import { DatePicker, BorderedText, Pagination, TransactionTable, CustomSelect } from '../../components';
-import {
-  AppContainer,
-  ReconcileView,
-  PerformActionModal,
-  SuccessActionModal,
-  LoaderModal,
-  TransactionDetailsModal,
-} from '../../atoms';
+import { AppContainer, LoaderModal, TransactionDetailsModal } from '../../atoms';
 import {
   colors,
   dateFormat,
   spacing,
-  yearDateFormat,
-  routesPath,
-  currencyFormat,
   capitalizeFirstLetter,
   timeFormat,
   showMessage,
@@ -28,8 +18,6 @@ import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { H2 } from '../../styles';
 
 import { Dictionary } from '../../types';
-
-import * as html2canvas from 'html2canvas';
 
 import { CustomSelectOptionsIProps } from '../../components/customSelect';
 import { DatePickerContainer, HeaderContainer, HeaderContent } from './style';
@@ -90,7 +78,6 @@ function Transactions() {
   const [totalPages, setTotalPages] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
 
-  //   console.log(transactionByIdStatus, 'id');
   useEffect(() => {
     dispatch(
       getAllTransactionsRequest({
@@ -207,13 +194,13 @@ function Transactions() {
 
   useEffect(() => {
     if (downloadTransactionByIdStatus === 'succeeded') {
-      //   console.log(downloadTransactionByIdState, 'downloadTransactionByIdState');
+      //  do something
     }
   }, [downloadTransactionByIdState]);
 
   useEffect(() => {
     if (downloadTransactionsStatus === 'succeeded') {
-      //   console.log(downloadTransactionByIdState, 'downloadTransactionByIdState');
+      //  do something
     }
   }, [downloadTransactionsState]);
 
@@ -237,8 +224,6 @@ function Transactions() {
       }),
     );
   };
-
-  console.log(downloadTransactionsState, 'state');
 
   return (
     <AppContainer navTitle="TRANSACTIONS">
@@ -299,7 +284,7 @@ function Transactions() {
           setSelectedItem={setSelectedTransaction}
           onClick={(item: any) => handleOnClick(item)}
         />
-        {tTypes[0] !== 'Transaction Type' && (
+        {tTypes[0] !== 'Transaction Type' && startDisplayRecordDate !== initialDate && (
           <DownloadIcon
             style={{ position: 'fixed', right: 30, top: '60vh', cursor: 'pointer' }}
             onClick={handleOnClickDownloadIcon}
@@ -328,7 +313,7 @@ function Transactions() {
           actionBtnText="Download"
         />
         <LoaderModal
-          isModalVisible={allTransactionsStatus === 'loading'}
+          isModalVisible={allTransactionsStatus === 'loading' || downloadTransactionsStatus === 'loading'}
           text="Loading please wait..."
           closeModal={() => {}}
         />
