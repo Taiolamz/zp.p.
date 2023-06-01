@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { AppContainer } from '../../atoms';
 import { BorderedTexts, ChartContainer, ChartWrapper, Container, StatsCount } from './style';
 import { BorderedText, ChartLegend, HorizontalInfoCount, TransactionInfoBarChart } from '../../components';
-import { colors } from '../../utils';
+import { colors, routesPath } from '../../utils';
 import { transactionInfoBarData, transactionInformationStats, transactionVolumeChartData } from './data';
+import { useNavigate } from 'react-router-dom';
+const { DASHBOARD } = routesPath;
 
 const TransactionInformation = () => {
+  const navigate = useNavigate();
+
   return (
     <div>
-      <AppContainer navTitle="Transaction Information">
+      <AppContainer goBack={() => navigate(DASHBOARD)} navTitle={`DASHBOARD`} navHelper="Transaction Information">
         <Container>
           <BorderedTexts>
             <BorderedText backgroundColor={colors.secondary} text="Filter by" color={colors.primary} />
