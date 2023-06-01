@@ -29,6 +29,8 @@ import { H2 } from '../../styles';
 
 import { Dictionary } from '../../types';
 
+import * as html2canvas from 'html2canvas';
+
 import { CustomSelectOptionsIProps } from '../../components/customSelect';
 import { DatePickerContainer, HeaderContainer, HeaderContent } from './style';
 import {
@@ -38,10 +40,6 @@ import {
   getTransactionByIdReset,
   downloadTransactionByIdRequest,
 } from '../../redux/slice';
-
-// const initialDate = '2022-01-01';
-// const currentDate = new Date().toDateString();
-const { RECONCILIATION } = routesPath;
 
 function Transactions() {
   const dispatch = useAppDispatch();
@@ -205,7 +203,7 @@ function Transactions() {
 
   useEffect(() => {
     if (downloadTransactionByIdStatus === 'succeeded') {
-      console.log(downloadTransactionByIdState, 'downloadTransactionByIdState');
+      //   console.log(downloadTransactionByIdState, 'downloadTransactionByIdState');
     }
   }, [downloadTransactionByIdState]);
 
@@ -298,7 +296,7 @@ function Transactions() {
           onClickExportBtn={handleOnClickDownloadSingleTransaction}
           exportBtnDisabled={downloadTransactionByIdStatus === 'loading'}
           data={transactionByIdData?.data}
-          isLoading={transactionByIdStatus === 'loading'}
+          isLoading={transactionByIdStatus === 'loading' || transactionDetailsModalVisible === false}
           actionBtnText="Download"
         />
         <LoaderModal

@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/api';
-import { replaceStringWithBackslach } from '../../utils';
+
 type Dictionary = {
   [key: string]: any;
 };
@@ -22,10 +22,28 @@ export const downloadTransactionByIdRequest = createAsyncThunk(
   async (payload: Dictionary, { dispatch }) => {
     const { transId } = payload;
     const url = `admin/transactions/${transId}/download`;
-
+    const headers = {
+      'Content-Type': 'application/pdf',
+      //   Accept: 'application/json',
+      //   encoding: 'UTF-8',
+      'Content-Disposition': 'attachment; filename="transaction.pdf"',
+    };
     try {
-      const response = await api.get(url);
-      return response?.data;
+      const response = await api.get(url, {
+        // responseType: 'blob',
+        // responseType: 'arraybuffer',
+        responseType: 'blob',
+        // headers: headers,
+      });
+
+      const uri = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = uri;
+      link.setAttribute('download', 'transaction.pdf');
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      return response;
     } catch (err) {
       throw err;
     }
