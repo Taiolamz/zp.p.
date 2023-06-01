@@ -55,6 +55,7 @@ import {
   getReconciliationAccountReset,
   exportTransactionByIdToMailRequest,
   exportTransactionByIdToMailReset,
+  downloadTransactionByIdRequest,
 } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 type Dictionary = {
@@ -132,6 +133,9 @@ function Reconciliation() {
   const getTransactionByIdState = useAppSelector(state => state.getTransactionById);
 
   const { status: getTransactionByIdStatus } = getTransactionByIdState;
+
+  const downloadTransactionByIdState = useAppSelector(state => state.downloadTransactionById);
+  const { status: downloadTransactionByIdStatus } = downloadTransactionByIdState;
 
   const escalateCchema = yup.object().shape({
     title: yup.string().required('Title is required'),
@@ -556,13 +560,12 @@ function Reconciliation() {
           closeModal={() => setTransactionDetailsModalVisible(false)}
           onClickExportBtn={() =>
             dispatch(
-              exportTransactionByIdToMailRequest({
+              downloadTransactionByIdRequest({
                 transId: selectedFailedTransaction.transId,
-                email: selectedFailedTransaction.email,
               }),
             )
           }
-          exportBtnDisabled={exportTransactionByIdToMailStatus === 'loading' ? true : false}
+          exportBtnDisabled={downloadTransactionByIdStatus === 'loading' ? true : false}
           data={transactionByIdData?.data}
           isLoading={getTransactionByIdState.status === 'loading' ? true : false}
         />

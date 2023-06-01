@@ -34,6 +34,7 @@ import {
   exportTransactionByIdToMailRequest,
   exportTransactionByIdToMailReset,
   getTransactionByIdRequest,
+  downloadTransactionByIdRequest,
 } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { previousTransactionDataHeader } from './settlmentsData';
@@ -84,6 +85,9 @@ function ReconcilationUserDetails() {
   const getTransactionByIdState = useAppSelector(state => state.getTransactionById);
 
   const { status: getTransactionByIdStatus } = getTransactionByIdState;
+
+  const downloadTransactionByIdState = useAppSelector(state => state.downloadTransactionById);
+  const { status: downloadTransactionByIdStatus } = downloadTransactionByIdState;
 
   // api
   useEffect(() => {
@@ -355,13 +359,12 @@ function ReconcilationUserDetails() {
           closeModal={() => setTransactionDetailsModalVisible(false)}
           onClickExportBtn={() =>
             dispatch(
-              exportTransactionByIdToMailRequest({
+              downloadTransactionByIdRequest({
                 transId: selectedPrevTransactionItem?.transId,
-                email: userEmail,
               }),
             )
           }
-          exportBtnDisabled={exportTransactionByIdToMailStatus === 'loading' ? true : false}
+          exportBtnDisabled={downloadTransactionByIdStatus === 'loading' ? true : false}
           data={transactionByIdData?.data}
           isLoading={getTransactionByIdState.status === 'loading' ? true : false}
         />

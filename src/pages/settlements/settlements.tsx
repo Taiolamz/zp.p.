@@ -59,6 +59,7 @@ import {
   exportTransactionByIdToMailRequest,
   exportTransactionByIdToMailReset,
   settlementAnalyticsRequest,
+  downloadTransactionByIdRequest,
 } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 type Dictionary = {
@@ -194,6 +195,9 @@ function Settlements() {
 
   const settlementAnalyticsState = useAppSelector(state => state.settlementAnalytics);
   const { status: settlementAnalyticsStatus } = settlementAnalyticsState;
+
+  const downloadTransactionByIdState = useAppSelector(state => state.downloadTransactionById);
+  const { status: downloadTransactionByIdStatus } = downloadTransactionByIdState;
 
   const escalateCchema = yup.object().shape({
     title: yup.string().required('Title is required'),
@@ -690,13 +694,13 @@ function Settlements() {
           closeModal={() => setTransactionDetailsModalVisible(false)}
           onClickExportBtn={() =>
             dispatch(
-              exportTransactionByIdToMailRequest({
+              downloadTransactionByIdRequest({
                 transId: selectedFailedTransaction.transId,
-                email: selectedFailedTransaction.email,
               }),
             )
           }
-          exportBtnDisabled={exportTransactionByIdToMailStatus === 'loading' ? true : false}
+          actionBtnText="Download"
+          exportBtnDisabled={downloadTransactionByIdStatus === 'loading' ? true : false}
           data={transactionByIdData?.data}
           isLoading={getTransactionByIdState.status === 'loading' ? true : false}
         />
