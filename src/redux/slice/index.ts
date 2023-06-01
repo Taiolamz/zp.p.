@@ -29,3 +29,4 @@ export * from './getDocumentHistorySlice';
 export * from './getUserSubAgentsSlice';
 export * from './getAllTransactionsSlice';
 export * from './downloadTransactionByIdSlice';
+export * from './downloadTransactionsSlice';

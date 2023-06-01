@@ -31,6 +31,7 @@ import {
   getUserSubAgentsSliceReducer,
   getAllTransactionsSliceReducer,
   downloadTransactionByIdSliceReducer,
+  downloadTransactionsSliceReducer,
 } from './slice';
 
 const rootReducer = combineReducers({
@@ -65,6 +66,7 @@ const rootReducer = combineReducers({
   getUserSubAgents: getUserSubAgentsSliceReducer,
   getAllTransactions: getAllTransactionsSliceReducer,
   downloadTransactionById: downloadTransactionByIdSliceReducer,
+  downloadTransactions: downloadTransactionsSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

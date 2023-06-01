@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import api from '../../api/api';
-import { saveAs } from 'file-saver';
+
 type Dictionary = {
   [key: string]: any;
 };
@@ -17,16 +17,16 @@ const initialState = {
   error: null,
 } as InitState;
 
-export const downloadTransactionByIdRequest = createAsyncThunk(
-  'downloadTransactionById',
+export const downloadTransactionsRequest = createAsyncThunk(
+  'downloadTransactions',
   async (payload: Dictionary, { dispatch }) => {
-    const { transId } = payload;
-    const url = `admin/transactions/${transId}/download`;
+    const { model_type, status, start_date, end_date } = payload;
+    const url = `admin/transactions/export`;
     const headers = {
-      //   'Content-Type': 'application/pdf',
+      'Content-Type': 'application/pdf',
       //   Accept: 'application/json',
       //   encoding: 'UTF-8',
-      //   'Content-Disposition': 'attachment; filename="transaction.pdf"',
+      'Content-Disposition': 'attachment; filename="transaction.pdf"',
     };
     try {
       const response = await api.get(url, {
@@ -34,6 +34,12 @@ export const downloadTransactionByIdRequest = createAsyncThunk(
         // responseType: 'arraybuffer',
         responseType: 'blob',
         // headers: headers,
+        params: {
+          model_type,
+          status,
+          start_date,
+          end_date,
+        },
       });
 
       const uri = window.URL.createObjectURL(new Blob([response.data]));
@@ -50,8 +56,8 @@ export const downloadTransactionByIdRequest = createAsyncThunk(
   },
 );
 
-const downloadTransactionByIdSlice = createSlice({
-  name: 'downloadTransactionById',
+const downloadTransactionsSlice = createSlice({
+  name: 'downloadTransactions',
   initialState,
   reducers: {
     reset: state => {
@@ -59,20 +65,20 @@ const downloadTransactionByIdSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addCase(downloadTransactionByIdRequest.pending, state => {
+    builder.addCase(downloadTransactionsRequest.pending, state => {
       state.status = 'loading';
     });
-    builder.addCase(downloadTransactionByIdRequest.fulfilled, (state, action) => {
+    builder.addCase(downloadTransactionsRequest.fulfilled, (state, action) => {
       state.status = 'succeeded';
       state.data = action.payload;
       state.error = null;
     });
-    builder.addCase(downloadTransactionByIdRequest.rejected, (state, action) => {
+    builder.addCase(downloadTransactionsRequest.rejected, (state, action) => {
       state.status = 'failed';
       state.error = action.payload;
     });
   },
 });
 
-export const downloadTransactionByIdReset = downloadTransactionByIdSlice.actions.reset;
-export const downloadTransactionByIdSliceReducer = downloadTransactionByIdSlice.reducer;
+export const downloadTransactionsSliceReset = downloadTransactionsSlice.actions.reset;
+export const downloadTransactionsSliceReducer = downloadTransactionsSlice.reducer;

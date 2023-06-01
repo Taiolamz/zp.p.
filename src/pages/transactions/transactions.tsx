@@ -39,6 +39,7 @@ import {
   getTransactionByIdRequest,
   getTransactionByIdReset,
   downloadTransactionByIdRequest,
+  downloadTransactionsRequest,
 } from '../../redux/slice';
 
 function Transactions() {
@@ -55,6 +56,9 @@ function Transactions() {
 
   const downloadTransactionByIdState = useAppSelector(state => state.downloadTransactionById);
   const { status: downloadTransactionByIdStatus } = downloadTransactionByIdState;
+
+  const downloadTransactionsState = useAppSelector(state => state.downloadTransactions);
+  const { status: downloadTransactionsStatus } = downloadTransactionsState;
 
   //   downloadTransactionByIdSliceReducer
   const initialDate = '2022-01-01';
@@ -108,7 +112,7 @@ function Transactions() {
         updatedList.push({
           id: index + 1,
           name: item?.user.name,
-          tid: item?.model_type,
+          tid: item?.transfer_purpose,
           amount: parseFloat(item?.amount),
           type: item?.transaction_reference,
           status: item.status,
@@ -207,6 +211,12 @@ function Transactions() {
     }
   }, [downloadTransactionByIdState]);
 
+  useEffect(() => {
+    if (downloadTransactionsStatus === 'succeeded') {
+      //   console.log(downloadTransactionByIdState, 'downloadTransactionByIdState');
+    }
+  }, [downloadTransactionsState]);
+
   const handleOnClick = (item: Dictionary) => {
     setTransactionDetailsModalVisible(true);
     setSingleTransId(item?.transId);
@@ -216,6 +226,19 @@ function Transactions() {
   const handleOnClickDownloadSingleTransaction = () => {
     dispatch(downloadTransactionByIdRequest({ transId: singleTransId }));
   };
+
+  const handleOnClickDownloadIcon = () => {
+    dispatch(
+      downloadTransactionsRequest({
+        model_type: tTypes[0] !== 'Transaction Type' ? replaceStringWithBackslach(tTypes[0]) : '',
+        status: tStatus[0] !== 'Transaction Status' ? tStatus[0] : '',
+        start_date: startDisplayRecordDate,
+        end_date: endDisplayRecordDate,
+      }),
+    );
+  };
+
+  console.log(downloadTransactionsState, 'state');
 
   return (
     <AppContainer navTitle="TRANSACTIONS">
@@ -276,7 +299,12 @@ function Transactions() {
           setSelectedItem={setSelectedTransaction}
           onClick={(item: any) => handleOnClick(item)}
         />
-        <DownloadIcon style={{ position: 'fixed', right: 30, top: '60vh', cursor: 'pointer' }} onClick={() => {}} />
+        {tTypes[0] !== 'Transaction Type' && (
+          <DownloadIcon
+            style={{ position: 'fixed', right: 30, top: '60vh', cursor: 'pointer' }}
+            onClick={handleOnClickDownloadIcon}
+          />
+        )}
 
         <Pagination
           currentPage={currentPage}
