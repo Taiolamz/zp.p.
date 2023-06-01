@@ -31,7 +31,13 @@ import { Dictionary } from '../../types';
 
 import { CustomSelectOptionsIProps } from '../../components/customSelect';
 import { DatePickerContainer, HeaderContainer, HeaderContent } from './style';
-import { getAllTransactionsRequest, getAllTransactionsReset } from '../../redux/slice';
+import {
+  getAllTransactionsRequest,
+  getAllTransactionsReset,
+  getTransactionByIdRequest,
+  getTransactionByIdReset,
+  downloadTransactionByIdRequest,
+} from '../../redux/slice';
 
 // const initialDate = '2022-01-01';
 // const currentDate = new Date().toDateString();
@@ -46,6 +52,13 @@ function Transactions() {
   const allTransactionsState = useAppSelector(state => state.getAllTransactions);
   const { status: allTransactionsStatus } = allTransactionsState;
 
+  const transactionByIdState = useAppSelector(state => state.getTransactionById);
+  const { status: transactionByIdStatus } = transactionByIdState;
+
+  const downloadTransactionByIdState = useAppSelector(state => state.downloadTransactionById);
+  const { status: downloadTransactionByIdStatus } = downloadTransactionByIdState;
+
+  //   downloadTransactionByIdSliceReducer
   const initialDate = '2022-01-01';
   const currentDate = new Date().toDateString();
   const tTypesOption: CustomSelectOptionsIProps[] = [
@@ -68,11 +81,14 @@ function Transactions() {
   const [endDisplayRecordDate, setEndDisplayRecordDate] = useState(currentDate);
   const [transactionDetailsModalVisible, setTransactionDetailsModalVisible] = useState(false);
   const [transactionData, setTransactionData] = useState<any[]>([]);
+  const [transactionByIdData, setTransactionByIdData] = useState<Dictionary>({});
   const [toggleFilter, setToggleFilter] = useState(false);
+  const [singleTransId, setSingleTransId] = useState('');
   const pageSize = 10;
   const [totalPages, setTotalPages] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
-  console.log(tTypes[0], 'tTypesOption');
+
+  //   console.log(transactionByIdStatus, 'id');
   useEffect(() => {
     dispatch(
       getAllTransactionsRequest({
@@ -116,9 +132,93 @@ function Transactions() {
     }
   }, [allTransactionsState]);
 
+  useEffect(() => {
+    if (transactionByIdStatus === 'succeeded') {
+      const {
+        amount,
+        status,
+        currency,
+        transfer_purpose,
+        beneficiary_account_id,
+        charge,
+        channel,
+        created_at,
+        external_account_name,
+        source,
+        user: { name, email, telephone },
+      } = transactionByIdState.data.transaction;
+      const result = {
+        amount,
+        status,
+        currency,
+        data: [
+          {
+            id: 1,
+            text: capitalizeFirstLetter(transfer_purpose),
+            helper: 'Transaction Type',
+          },
+          {
+            id: 2,
+            text: name,
+            helper: 'Wallet Name',
+          },
+          {
+            id: 3,
+            text: email,
+            helper: 'Email',
+          },
+          {
+            id: 4,
+            text: telephone,
+            helper: 'Phone Number',
+          },
+          {
+            id: 5,
+            text: `N${charge}`,
+            helper: 'Charges',
+          },
+          {
+            id: 6,
+            text: source !== null ? source?.name : external_account_name,
+            helper: 'Sender Name',
+          },
+          {
+            id: 7,
+            text: channel,
+            helper: 'Channel',
+          },
+          {
+            id: 8,
+            text: timeFormat(created_at, true),
+            helper: 'Time',
+          },
+          {
+            id: 9,
+            text: dateFormat(created_at),
+            helper: 'Date',
+          },
+        ],
+      };
+      setTransactionByIdData(result);
+    }
+  }, [transactionByIdState]);
+
+  useEffect(() => {
+    if (downloadTransactionByIdStatus === 'succeeded') {
+      console.log(downloadTransactionByIdState, 'downloadTransactionByIdState');
+    }
+  }, [downloadTransactionByIdState]);
+
   const handleOnClick = (item: Dictionary) => {
-    console.log(item, 'item');
+    setTransactionDetailsModalVisible(true);
+    setSingleTransId(item?.transId);
+    dispatch(getTransactionByIdRequest({ transId: item?.transId }));
   };
+
+  const handleOnClickDownloadSingleTransaction = () => {
+    dispatch(downloadTransactionByIdRequest({ transId: singleTransId }));
+  };
+
   return (
     <AppContainer navTitle="TRANSACTIONS">
       <div style={{ marginTop: spacing.small, paddingBottom: spacing.medium }}>
@@ -178,10 +278,7 @@ function Transactions() {
           setSelectedItem={setSelectedTransaction}
           onClick={(item: any) => handleOnClick(item)}
         />
-        <DownloadIcon
-          style={{ position: 'fixed', right: 30, top: '60vh', cursor: 'pointer' }}
-          onClick={() => setTransactionDetailsModalVisible(true)}
-        />
+        <DownloadIcon style={{ position: 'fixed', right: 30, top: '60vh', cursor: 'pointer' }} onClick={() => {}} />
 
         <Pagination
           currentPage={currentPage}
@@ -193,15 +290,16 @@ function Transactions() {
         />
 
         <TransactionDetailsModal
-          status={'success'}
-          amount={'2000'}
-          currency={'N'}
+          status={transactionByIdData?.status}
+          amount={transactionByIdData?.amount}
+          currency={transactionByIdData?.currency}
           isModalVisible={transactionDetailsModalVisible}
           closeModal={() => setTransactionDetailsModalVisible(false)}
-          onClickExportBtn={() => console.log('hello')}
-          exportBtnDisabled={false}
-          data={[{ id: 1, text: 'hello', helper: 'me me' }]}
-          isLoading={false}
+          onClickExportBtn={handleOnClickDownloadSingleTransaction}
+          exportBtnDisabled={downloadTransactionByIdStatus === 'loading'}
+          data={transactionByIdData?.data}
+          isLoading={transactionByIdStatus === 'loading'}
+          actionBtnText="Download"
         />
         <LoaderModal
           isModalVisible={allTransactionsStatus === 'loading'}
