@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { DatePicker, DoughnutChart } from '../../components';
+import { ChartLegend, DatePicker, DoughnutChart } from '../../components';
 import { H1, H2, H3, H4, H5, H6 } from '../../styles';
 import {
   Container,
@@ -37,18 +37,7 @@ const TransactionVolume = ({ transactionVolumeChartData }: TransactionVolumeIPro
             </H5>
           </TransactionMainText>
 
-          <TransactionMainLegend>
-            {transactionVolumeChartData.map(item => {
-              return (
-                <div key={item.id}>
-                  <FaCircle color={item.backgroundColor} />
-                  <H6 left color={colors.primary}>
-                    {item.name}
-                  </H6>
-                </div>
-              );
-            })}
-          </TransactionMainLegend>
+          <ChartLegend data={transactionVolumeChartData} type="withoutcount" />
         </TransactionMainLeft>
         <DoughnutChart data={transactionVolumeChartData} />
       </TransactionMain>

@@ -113,3 +113,37 @@ export const ChartsContainer = styled.div`
     column-gap: ${spacing.small_2};
   }
 `;
+
+export const TransactionVolumeChart = styled.div`
+  a {
+    text-decoration: none;
+  }
+`;
+
+//TRANSACTION INFORMATION STYLES
+export const BorderedTexts = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  column-gap: ${spacing.small_2};
+  margin-bottom: ${spacing.xsmall};
+`;
+
+export const StatsCount = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: ${spacing.small_2};
+  margin-bottom: ${spacing.small};
+
+  @media (max-width: 980px) {
+    grid-template-columns: 100%;
+    row-gap: ${spacing.small_2};
+    column-gap: ${spacing.small_2};
+  }
+`;
+
+export const ChartContainer = styled.div`
+  margin-bottom: ${spacing.small};
+`;
+export const ChartWrapper = styled.div`
+  max-width: 98%;
+`;

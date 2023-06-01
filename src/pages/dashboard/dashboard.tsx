@@ -7,6 +7,7 @@ import {
   Container,
   FourBoxContainer,
   StatCount,
+  TransactionVolumeChart,
   TwoBoxActive,
   TwoBoxContainerBottom,
   TwoBoxContainerTop,
@@ -15,6 +16,7 @@ import {
   TwoBoxItemTop,
 } from './style';
 import { kycLevelData, transactionVolumeChartData } from './data';
+import { Link } from 'react-router-dom';
 
 function Dashboard() {
   return (
@@ -100,7 +102,11 @@ function Dashboard() {
           </FourBoxContainer>
         </CardsContainer>
         <ChartsContainer>
-          <TransactionVolume transactionVolumeChartData={transactionVolumeChartData} />
+          <TransactionVolumeChart>
+            <Link to={'/transactioninformation'}>
+              <TransactionVolume transactionVolumeChartData={transactionVolumeChartData} />
+            </Link>
+          </TransactionVolumeChart>
           <CustomerGrowth />
         </ChartsContainer>
       </Container>
