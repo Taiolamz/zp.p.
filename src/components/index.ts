@@ -41,3 +41,6 @@ export { default as CountInfoCardBorderText } from './cards/countInfoCardBorderT
 export { default as LevelCard } from './cards/levelCard';
 export { default as DoughnutChart } from './doughnutChart';
 export { default as CustomSelect } from './customSelect';
+export { default as HorizontalInfoCount } from './horizontalInfoCount';
+export { default as TransactionInfoBarChart } from './transactionInfoBarChart';
+export { default as ChartLegend } from './chartLegend';

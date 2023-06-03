@@ -6,6 +6,7 @@ const routesPath = {
   SIGNUP: '/signup',
   PASSWORDRESET: '/password/reset',
   DASHBOARD: '/dashboard',
+  TRANSACTIONINFORMATION: '/transactioninformation',
   KYC: '/kyc',
   SUPPORT: '/support',
   SETTLEMENTS: '/settlements',

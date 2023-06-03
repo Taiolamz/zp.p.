@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import { Dashboard } from '../pages/dashboard';
+import { Dashboard, TransactionInformation } from '../pages/dashboard';
 import { Login } from '../pages/login';
 import { Kyc, KycCustomer } from '../pages/kyc';
 import { Support } from '../pages/support';
@@ -26,6 +26,7 @@ function AppRoute() {
     KYCDOC,
     USERDETAILS,
     TRANSACTIONS,
+    TRANSACTIONINFORMATION,
   } = routesPath;
   // const authState = useAppSelector((state) => state.auth);
 
@@ -38,6 +39,14 @@ function AppRoute() {
           element={
             <PrivateRoute>
               <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={TRANSACTIONINFORMATION}
+          element={
+            <PrivateRoute>
+              <TransactionInformation />
             </PrivateRoute>
           }
         />

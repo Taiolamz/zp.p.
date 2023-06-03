@@ -1,3 +1,4 @@
+import { ChartLegendIPropsIProps } from '../../components/chartLegend';
 import { colors } from '../../utils';
 
 export const kycLevelData = [
@@ -27,11 +28,11 @@ export const kycLevelData = [
   },
 ];
 
-export const transactionVolumeChartData = [
+export const transactionVolumeChartData: ChartLegendIPropsIProps[] = [
   {
     id: 1,
     name: 'Cash Requests',
-    percentage: 49,
+    count: 49,
     backgroundColor: colors.green,
   },
   {
@@ -43,15 +44,71 @@ export const transactionVolumeChartData = [
   {
     id: 3,
     name: 'Airtime & Data Bills',
-    count: 2300,
+    count: 15,
     backgroundColor: colors.blue,
   },
   {
     id: 4,
     name: 'Other Bills',
-    count: 150,
+    count: 15,
     backgroundColor: colors.purple,
   },
 ];
 
 export const dashboardBarData = [1000, 600, 1200, 687, 800, 1200, 1000, 800, 594, 797, 392, 500];
+// export const transactionInfoBarData = [1000, 600, 1200, 687];
+
+export const transactionInfoBarData = [
+  {
+    id: 3,
+    name: 'Airtime & Data Bills',
+    count: 2985000,
+    backgroundColor: colors.purple,
+  },
+  {
+    id: 1,
+    name: 'Cash Requests',
+    count: 9751270,
+    backgroundColor: colors.green,
+  },
+  {
+    id: 2,
+    name: 'TV Subscription',
+    count: 3781100,
+    backgroundColor: colors.orange,
+  },
+
+  {
+    id: 4,
+    name: 'Other Bills',
+    count: 3282100,
+    backgroundColor: colors.blue,
+  },
+];
+
+export const transactionInformationStats = [
+  {
+    id: 1,
+    title: 'Amount Transacted',
+    count: '19900560',
+    backgroundColor: colors.white,
+    countColor: colors.primary,
+    type: 'money',
+  },
+  {
+    id: 2,
+    title: 'Total Revenue',
+    count: '9000000',
+    backgroundColor: colors.white,
+    countColor: colors.primary,
+    type: 'money',
+  },
+  {
+    id: 3,
+    title: 'Total Transactions',
+    count: '1500',
+    backgroundColor: colors.white,
+    countColor: colors.primary,
+    type: 'figure',
+  },
+];

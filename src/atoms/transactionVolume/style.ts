@@ -6,6 +6,7 @@ export const Container = styled.div`
   padding: ${spacing.small} ${spacing.small};
   border-radius: ${borderRadius.medium};
   width: 100%;
+  height: 100%;
 `;
 
 export const TransactionHeader = styled.div`
