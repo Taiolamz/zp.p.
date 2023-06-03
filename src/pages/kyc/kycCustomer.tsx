@@ -378,7 +378,7 @@ function KycCustomer() {
   };
 
   const handleRejectVerification = () => {
-    setSuccessFulltext('reject');
+    setSuccessFulltext('rejected');
     dispatch(
       kycVerificationRequest({
         verificationId: userVerificationId,

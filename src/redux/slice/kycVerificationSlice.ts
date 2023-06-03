@@ -1,63 +1,60 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import api from "../../api/api";
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import api from '../../api/api';
 type Dictionary = {
   [key: string]: any;
 };
 
 interface InitState {
   data: Dictionary;
-  status: "idle" | "loading" | "succeeded" | "failed";
+  status: 'idle' | 'loading' | 'succeeded' | 'failed';
   error: any;
 }
 
 const initialState = {
   data: {},
-  status: "idle",
+  status: 'idle',
   error: null,
 } as InitState;
 
-export const kycVerificationRequest = createAsyncThunk(
-  "kycVerification",
-  async (payload: Dictionary, { dispatch }) => {
-    const { verificationId, status, comment } = payload;
-    const url = `admin/verifications/${verificationId}`;
-    let verificationStatus;
+export const kycVerificationRequest = createAsyncThunk('kycVerification', async (payload: Dictionary, { dispatch }) => {
+  const { verificationId, status, comment } = payload;
+  const url = `admin/verifications/${verificationId}`;
+  let verificationStatus;
 
-    if (status === "approved") {
-      verificationStatus = { status };
-    }
-    if (status === "rejected") {
-      verificationStatus = { status, comment };
-    }
-
-    try {
-      const response = await api.patch(url, verificationStatus);
-      return response?.data;
-    } catch (err) {
-      throw err;
-    }
+  if (status === 'approved') {
+    verificationStatus = { status };
   }
-);
+  if (status === 'rejected') {
+    verificationStatus = { status, comment };
+  }
+
+  try {
+    const response = await api.patch(url, verificationStatus);
+    return response?.data;
+  } catch (err) {
+    throw err;
+  }
+});
 
 const kycVerificationSlice = createSlice({
-  name: "kycVerification",
+  name: 'kycVerification',
   initialState,
   reducers: {
-    reset: (state) => {
+    reset: state => {
       Object.assign(state, initialState);
     },
   },
-  extraReducers: (builder) => {
-    builder.addCase(kycVerificationRequest.pending, (state) => {
-      state.status = "loading";
+  extraReducers: builder => {
+    builder.addCase(kycVerificationRequest.pending, state => {
+      state.status = 'loading';
     });
     builder.addCase(kycVerificationRequest.fulfilled, (state, action) => {
-      state.status = "succeeded";
+      state.status = 'succeeded';
       state.data = action.payload;
       state.error = null;
     });
     builder.addCase(kycVerificationRequest.rejected, (state, action) => {
-      state.status = "failed";
+      state.status = 'failed';
       state.error = action.payload;
     });
   },

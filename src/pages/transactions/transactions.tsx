@@ -113,10 +113,10 @@ function Transactions() {
       });
 
       const {
-        meta: { links },
+        meta: { links, last_page },
       } = allTransactionsState?.data?.transactions;
 
-      setTotalPages(links.length - 2);
+      setTotalPages(last_page);
       setTransactionData(updatedList);
     }
   }, [allTransactionsState]);

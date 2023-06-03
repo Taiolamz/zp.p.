@@ -263,10 +263,10 @@ function Reconciliation() {
       });
 
       const {
-        meta: { links },
+        meta: { links, last_page },
       } = transactionState?.data?.transactions;
 
-      setTotalPages(links.length - 2);
+      setTotalPages(last_page);
 
       setTransactionDataList(updatedList);
     }

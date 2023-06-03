@@ -141,10 +141,10 @@ function ReconcilationUserDetails() {
       });
 
       const {
-        meta: { links },
+        meta: { links, last_page },
       } = userTransactionsState?.data?.transactions;
 
-      setTotalPages(links.length - 2);
+      setTotalPages(last_page);
       setPreviousTransactionData(updatedList);
     }
   }, [userTransactionsState]);

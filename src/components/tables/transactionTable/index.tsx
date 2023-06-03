@@ -51,8 +51,15 @@ function TransactionTable({ data, setSelectedItem, headerData, type, onClick }: 
                     <TD>{item.tid}</TD>
                     <TD>{currencyFormat(item.amount, false, item.currency)}</TD>
                     <TD>{capitalizeFirstLetter(item.type)}</TD>
-                    <TD color={item.status === 'success' ? colors.greenVariantTwo : colors.red}>
-                      {item.status === 'success' ? 'Successful' : 'Unseccessful'}
+                    <TD
+                      color={
+                        item.status === 'success'
+                          ? colors.greenVariantTwo
+                          : item.status === 'failed'
+                          ? colors.red
+                          : colors.greyDark
+                      }>
+                      {item.status === 'success' ? 'Successful' : item.status === 'failed' ? 'Failed' : 'Pending'}
                     </TD>
                     <TD>{dateFormat(item.time)}</TD>
                     <TD>
@@ -72,8 +79,15 @@ function TransactionTable({ data, setSelectedItem, headerData, type, onClick }: 
                     <TD>{item.tid}</TD>
                     <TD>{currencyFormat(item.amount, false, item.currency)}</TD>
                     <TD>{capitalizeFirstLetter(item.type)}</TD>
-                    <TD color={item.status === 'success' ? colors.greenVariantTwo : colors.red}>
-                      {item.status === 'success' ? 'Successful' : 'Unseccessful'}
+                    <TD
+                      color={
+                        item.status === 'success'
+                          ? colors.greenVariantTwo
+                          : item.status === 'failed'
+                          ? colors.red
+                          : colors.greyDark
+                      }>
+                      {item.status === 'success' ? 'Successful' : item.status === 'failed' ? 'Failed' : 'Pending'}
                     </TD>
                     <TD>{`${dateFormat(item.time)} - ${timeFormat(item.time)}`}</TD>
                     <TD>{/* <MoreIcon onClick={onClick} /> */}</TD>

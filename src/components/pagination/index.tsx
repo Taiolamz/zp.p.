@@ -1,9 +1,7 @@
-import { memo } from "react";
-import Pagination, {
-  bootstrap5PaginationPreset,
-} from "react-responsive-pagination";
-import { spacing } from "../../utils";
-import "./style.css";
+import { memo } from 'react';
+import Pagination, { bootstrap5PaginationPreset } from 'react-responsive-pagination';
+import { spacing } from '../../utils';
+import './style.css';
 interface IProps {
   totalPages: number;
   currentPage: number;
@@ -12,13 +10,7 @@ interface IProps {
   isLoading: boolean;
 }
 
-function RPagination({
-  totalPages,
-  currentPage,
-  onPageChange,
-  maxWidth,
-  isLoading = false,
-}: IProps) {
+function RPagination({ totalPages, currentPage, onPageChange, maxWidth, isLoading = false }: IProps) {
   return (
     <>
       {!isLoading && (
@@ -26,21 +18,21 @@ function RPagination({
           style={{
             marginTop: spacing.small,
             marginBottom: spacing.medium,
-            width: "100%",
-            maxWidth: "100%",
+            width: '100%',
+            maxWidth: '100%',
           }}>
           <Pagination
             {...bootstrap5PaginationPreset}
             total={totalPages}
             current={currentPage}
             onPageChange={onPageChange}
-            extraClassName='justify-content-center'
-            pageItemClassName='page-item'
-            pageLinkClassName='page-link'
-            activeItemClassName='active'
-            disabledItemClassName='disabled'
-            srOnlyClassName='sr-only'
-            narrowStrategy='dropEllipsis'
+            extraClassName="justify-content-center"
+            pageItemClassName="page-item"
+            pageLinkClassName="page-link"
+            activeItemClassName="active"
+            disabledItemClassName="disabled"
+            srOnlyClassName="sr-only"
+            narrowStrategy="dropEllipsis"
             maxWidth={maxWidth || 350}
           />
         </div>

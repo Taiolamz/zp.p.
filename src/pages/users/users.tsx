@@ -158,10 +158,10 @@ function Users() {
       setUsersData(updateUsersData);
       setFirstMount(false);
       const {
-        meta: { links },
+        meta: { links, last_page },
       } = usersState?.data?.users;
 
-      setTotalPages(links.length - 2);
+      setTotalPages(last_page);
     }
   }, [usersState]);
 

@@ -464,10 +464,10 @@ function UserDetails() {
       setTransactionHistoryData(result);
 
       const {
-        meta: { links },
+        meta: { links, last_page },
       } = userProfileTransactionState?.data?.transactions;
 
-      setTotalPages(links.length - 2);
+      setTotalPages(last_page);
     }
   }, [userProfileTransactionState]);
 

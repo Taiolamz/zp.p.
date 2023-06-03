@@ -151,10 +151,10 @@ function Kyc() {
       setKycData(updateData);
 
       const {
-        meta: { links },
+        meta: { links, last_page },
       } = kycsState?.data?.users;
 
-      setTotalPages(links.length - 2);
+      setTotalPages(last_page);
     }
   }, [kycsState, tabViewSelectedIndex]);
 
