@@ -45,12 +45,6 @@ function Users() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const tabViewUsersData = [
-    { id: 1, isSelected: true, text: 'Customers' },
-    { id: 2, isSelected: false, text: 'Internal Users' },
-    { id: 3, isSelected: false, text: 'Roles and permission' },
-  ];
-
   const [tabViewUsersSelectedIndex, setTabViewUsersSelectedIndex] = useState<any[number]>(1);
   const [selectedUsersCard, setSelectedUsersCard] = useState<Dictionary>({
     id: 1,
@@ -58,6 +52,11 @@ function Users() {
     title: 'Active Users',
   });
 
+  const [tabViewUsersData, setTabViewUsersData] = useState([
+    { id: 1, isSelected: true, text: 'Customers' },
+    { id: 2, isSelected: false, text: 'Internal Users' },
+    { id: 3, isSelected: false, text: 'Roles and permission' },
+  ]);
   const [isSearchingUsers, setIsSearchingUsers] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [userCountData, setUserCountData] = useState<any[]>([]);
@@ -220,7 +219,7 @@ function Users() {
         <TabView
           data={tabViewUsersData}
           setSelectedIndex={setTabViewUsersSelectedIndex}
-          tabViewSelectedIndex={tabViewUsersSelectedIndex}
+          // tabViewSelectedIndex={tabViewUsersSelectedIndex}
         />
         {tabViewUsersSelectedIndex === 1 && (
           <UsersContainer>
