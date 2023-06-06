@@ -192,7 +192,7 @@ function Users() {
   // handle different modules
   const handleMoreIconOptions = async (item: string) => {
     if (item === namedEdit) {
-      console.log('Edit');
+      console.log('Edit jj');
     }
     if (item === namedDeactivate) {
       console.log('Deactivate');
