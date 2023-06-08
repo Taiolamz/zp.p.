@@ -2,7 +2,14 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContainer, CountInfo, TabView, LoaderModal, MoreIconView } from '../../atoms';
 import { colors, dateFormat, routesPath, spacing } from '../../utils';
-import { SearchInput, UsersTable, Pagination, BorderedText, InternaUsersTable } from '../../components';
+import {
+  SearchInput,
+  UsersTable,
+  Pagination,
+  BorderedText,
+  InternaUsersTable,
+  RolesAndPermissionTable,
+} from '../../components';
 import {
   InternalUserTop,
   InternalUsersContainer,
@@ -12,7 +19,7 @@ import {
   UsersContainer,
 } from './style';
 
-import { InternalUsersData, internalUsersDataHeader, userDataHeader } from './data';
+import { InternalUsersData, internalUsersDataHeader, userDataHeader, rolesAndPermissionDataHeader } from './data';
 import { Dictionary } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { getUsersRequest, getUsersReset, getSuperAgentsRequest, getSuperAgentsReset } from '../../redux/slice';
@@ -27,6 +34,9 @@ const namedDeactivate = 'Deactivate';
 const namedReactivate = 'Reactivate';
 const namedResetPassword = 'Reset Password';
 const namedViewLoginHistory = 'View Login History';
+
+const roleDetails = 'Role Details';
+const roleDeleteRole = 'Delete Role';
 
 const userTypeToFetchByActivity = (data: Dictionary) => {
   let result: string = '';
@@ -63,20 +73,24 @@ function Users() {
   const [usersData, setUsersData] = useState<any[]>([]);
   const [usersDataSuperAgent, setUsersDataSuperAgent] = useState<any[]>([]);
   const [selectedInternalUserItem, setSelectedInternalUserItem] = useState<Dictionary>({});
+  const [selectedRoleItem, setSelectedRoleItem] = useState<Dictionary>({});
   const [moreIconIsVisible, setMoreIconIsVisible] = useState(false);
+  const [roleMoreIconIsVisible, setRoleMoreIconIsVisible] = useState(false);
   const pageSize = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(5);
   const [selectedTransactionActionText, setSelectedTransactionActionText] = useState('');
+  const [selectedRoleActionText, setSelectedRoleActionText] = useState('');
   const [searchInternalUserValue, setSearchInternalUserValue] = useState('');
-
   const [firstMount, setFirstMount] = useState(true);
-  // redux state
-  const usersState = useAppSelector(state => state.getUsers);
-  const { status: usersStatus } = usersState;
 
   //More Icon for Internal Users
   const moreIconOption = [namedEdit, namedDeactivate, namedReactivate, namedResetPassword, namedViewLoginHistory];
+  const roleMoreIconOption = [roleDetails, roleDeleteRole];
+
+  // redux state
+  const usersState = useAppSelector(state => state.getUsers);
+  const { status: usersStatus } = usersState;
 
   const superAgentsState = useAppSelector(state => state.getSuperAgents);
   const { status: superAgentsStatus } = superAgentsState;
@@ -213,6 +227,11 @@ function Users() {
     setMoreIconIsVisible(true);
   };
 
+  const handleRoleModalOpen = (item: Dictionary) => {
+    setSelectedRoleItem(item);
+    setRoleMoreIconIsVisible(true);
+  };
+
   return (
     <AppContainer navTitle="USER">
       <UserContainer>
@@ -317,13 +336,47 @@ function Users() {
             />
           </InternalUsersContainer>
         )}
-        {tabViewUsersSelectedIndex === 3 && ''}
+        {tabViewUsersSelectedIndex === 3 && (
+          <InternalUsersContainer>
+            <InternalUserTop>
+              <BorderedText
+                text="New Role"
+                icon={<AiOutlinePlus color={colors.white} size={15} />}
+                backgroundColor={colors.primary}
+                color={colors.white}
+              />
+              <SearchInput
+                backgroundColor={'transparent'}
+                name="searchProfileValue"
+                value={searchInternalUserValue}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchInternalUserValue(e.target.value)}
+                placeholder="Search record"
+              />
+            </InternalUserTop>
+            <RolesAndPermissionTable
+              data={[
+                { title: 'Excecutive Access', permissionCount: '89', userCount: '1', createdBy: 'Allen Kardic' },
+                { title: 'KYC Inputter', permissionCount: '89', userCount: '1', createdBy: 'Allen Kardic' },
+              ]}
+              headerData={rolesAndPermissionDataHeader}
+              onClick={(item: Dictionary) => handleRoleModalOpen(item)}
+              setSelectedItem={setSelectedRoleItem}
+            />
+          </InternalUsersContainer>
+        )}
 
         <MoreIconView
           setSelectedText={setSelectedTransactionActionText}
           isModalVisible={moreIconIsVisible}
           closeModal={() => setMoreIconIsVisible(false)}
           options={moreIconOption}
+          onClick={item => handleMoreIconOptions(item)}
+        />
+        <MoreIconView
+          setSelectedText={setSelectedRoleActionText}
+          isModalVisible={roleMoreIconIsVisible}
+          closeModal={() => setRoleMoreIconIsVisible(false)}
+          options={roleMoreIconOption}
           onClick={item => handleMoreIconOptions(item)}
         />
         <LoaderModal

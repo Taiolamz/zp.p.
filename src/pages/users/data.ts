@@ -42,6 +42,13 @@ export const internalUsersDataHeader = {
   dateEnrolled: 'Date Enrolled',
 };
 
+export const rolesAndPermissionDataHeader = {
+  title: 'Role Title',
+  permissionCount: 'Permission Count',
+  userCount: 'User Count',
+  createdBy: 'Created By',
+};
+
 export const customerDetails: CustomerProfileIProps[] = [
   {
     id: 1,
