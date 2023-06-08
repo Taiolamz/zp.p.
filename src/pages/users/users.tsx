@@ -24,7 +24,7 @@ import { Dictionary } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { getUsersRequest, getUsersReset, getSuperAgentsRequest, getSuperAgentsReset } from '../../redux/slice';
 import { AiOutlinePlus } from 'react-icons/ai';
-const { USERDETAILS } = routesPath;
+const { USERDETAILS, USERROLES } = routesPath;
 
 const activeUser = 'active';
 const inActiveUser = 'inactive';
@@ -232,6 +232,12 @@ function Users() {
     setRoleMoreIconIsVisible(true);
   };
 
+  const handleRoleMoreIconOptions = (item: string) => {
+    if (item === roleDetails) {
+      navigate(USERROLES);
+    }
+  };
+
   return (
     <AppContainer navTitle="USER">
       <UserContainer>
@@ -377,7 +383,7 @@ function Users() {
           isModalVisible={roleMoreIconIsVisible}
           closeModal={() => setRoleMoreIconIsVisible(false)}
           options={roleMoreIconOption}
-          onClick={item => handleMoreIconOptions(item)}
+          onClick={item => handleRoleMoreIconOptions(item)}
         />
         <LoaderModal
           text="Please wait loading ..."
