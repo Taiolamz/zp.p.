@@ -30,6 +30,7 @@ import {
   getAllTransactionsSliceReducer,
   downloadTransactionByIdSliceReducer,
   downloadTransactionsSliceReducer,
+  getInternalUsersSliceReducer,
 } from './slice';
 const state = {
   login: loginSliceReducer,
@@ -63,6 +64,7 @@ const state = {
   getAllTransactions: getAllTransactionsSliceReducer,
   downloadTransactionById: downloadTransactionByIdSliceReducer,
   downloadTransactions: downloadTransactionsSliceReducer,
+  getInternalUsers: getInternalUsersSliceReducer,
 };
 
 export const testAppSelector = (f: any) => f(state);

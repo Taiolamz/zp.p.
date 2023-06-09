@@ -30,3 +30,4 @@ export * from './getUserSubAgentsSlice';
 export * from './getAllTransactionsSlice';
 export * from './downloadTransactionByIdSlice';
 export * from './downloadTransactionsSlice';
+export * from './getInternalUsersSlice';

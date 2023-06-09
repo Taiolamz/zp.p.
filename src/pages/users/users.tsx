@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppContainer, CountInfo, TabView, LoaderModal, MoreIconView } from '../../atoms';
-import { colors, dateFormat, routesPath, spacing } from '../../utils';
+import { capitalizeFirstLetter, colors, dateFormat, routesPath, spacing, arrayToString } from '../../utils';
 import {
   SearchInput,
   UsersTable,
@@ -22,7 +22,13 @@ import {
 import { InternalUsersData, internalUsersDataHeader, userDataHeader, rolesAndPermissionDataHeader } from './data';
 import { Dictionary } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-import { getUsersRequest, getUsersReset, getSuperAgentsRequest, getSuperAgentsReset } from '../../redux/slice';
+import {
+  getUsersRequest,
+  getUsersReset,
+  getSuperAgentsRequest,
+  getSuperAgentsReset,
+  getInternalUsersRequest,
+} from '../../redux/slice';
 import { AiOutlinePlus } from 'react-icons/ai';
 const { USERDETAILS, USERROLES } = routesPath;
 
@@ -83,7 +89,7 @@ function Users() {
   const [selectedRoleActionText, setSelectedRoleActionText] = useState('');
   const [searchInternalUserValue, setSearchInternalUserValue] = useState('');
   const [firstMount, setFirstMount] = useState(true);
-
+  const [internalUsersData, setInternalUsersData] = useState<any[]>([]);
   //More Icon for Internal Users
   const moreIconOption = [namedEdit, namedDeactivate, namedReactivate, namedResetPassword, namedViewLoginHistory];
   const roleMoreIconOption = [roleDetails, roleDeleteRole];
@@ -95,6 +101,9 @@ function Users() {
   const superAgentsState = useAppSelector(state => state.getSuperAgents);
   const { status: superAgentsStatus } = superAgentsState;
 
+  const internalUsersState = useAppSelector(state => state.getInternalUsers);
+  const { status: internalUsersStatus } = internalUsersState;
+
   useEffect(() => {
     console.log(selectedInternalUserItem);
   }, [selectedInternalUserItem]);
@@ -105,17 +114,19 @@ function Users() {
   const userTypeToFetch = userTypeToFetchByActivity(selectedUsersCard);
 
   useEffect(() => {
-    dispatch(
-      getUsersRequest({
-        path:
-          searchValue?.length >= 1
-            ? `?term=${searchValue}&include=account`
-            : `/sort-by-status?status=${userTypeToFetch}`,
-        per_page: pageSize,
-        page: currentPage,
-      }),
-    );
-  }, [selectedUsersCard, currentPage, isSearchingUsers]);
+    if (tabViewUsersSelectedIndex === 1) {
+      dispatch(
+        getUsersRequest({
+          path:
+            searchValue?.length >= 1
+              ? `?term=${searchValue}&include=account`
+              : `/sort-by-status?status=${userTypeToFetch}`,
+          per_page: pageSize,
+          page: currentPage,
+        }),
+      );
+    }
+  }, [selectedUsersCard, currentPage, isSearchingUsers, tabViewUsersSelectedIndex]);
 
   useEffect(() => {
     if (usersStatus === 'succeeded' && tabViewUsersSelectedIndex === 1) {
@@ -185,7 +196,6 @@ function Users() {
   useEffect(() => {
     if (superAgentsStatus === 'succeeded') {
       let updateUsersData: any[] = [];
-      console.log(superAgentsState?.data[0], 'items');
       superAgentsState?.data?.forEach((item: Dictionary, index: number) => {
         updateUsersData.push({
           id: index + 1,
@@ -201,6 +211,31 @@ function Users() {
       setUsersDataSuperAgent(updateUsersData);
     }
   }, [superAgentsState]);
+
+  useEffect(() => {
+    if (tabViewUsersSelectedIndex === 2) {
+      dispatch(getInternalUsersRequest({}));
+    }
+  }, [tabViewUsersSelectedIndex]);
+
+  useEffect(() => {
+    if (internalUsersStatus === 'succeeded') {
+      let updateUsersData: any[] = [];
+      internalUsersState?.data?.users?.data?.forEach((item: Dictionary, index: number) => {
+        updateUsersData.push({
+          id: index + 1,
+          name: item?.name,
+          email: item?.email,
+          role: arrayToString(item?.roles),
+          status: item?.status,
+          lastSeen: item?.last_login,
+          dateEnrolled: item?.created_at,
+        });
+      });
+
+      setInternalUsersData(updateUsersData);
+    }
+  }, [internalUsersState]);
 
   // handle different modules
   const handleMoreIconOptions = async (item: string) => {
@@ -241,11 +276,7 @@ function Users() {
   return (
     <AppContainer navTitle="USER">
       <UserContainer>
-        <TabView
-          data={tabViewUsersData}
-          setSelectedIndex={setTabViewUsersSelectedIndex}
-          // tabViewSelectedIndex={tabViewUsersSelectedIndex}
-        />
+        <TabView data={tabViewUsersData} setSelectedIndex={setTabViewUsersSelectedIndex} />
         {tabViewUsersSelectedIndex === 1 && (
           <UsersContainer>
             <CountInfo data={userCountData} setSelectedData={setSelectedUsersCard} />
@@ -335,7 +366,7 @@ function Users() {
               />
             </InternalUserTop>
             <InternaUsersTable
-              data={InternalUsersData}
+              data={internalUsersData}
               headerData={internalUsersDataHeader}
               onClick={(item: Dictionary) => handleItemModalOpen(item)}
               setSelectedItem={setSelectedInternalUserItem}
@@ -387,7 +418,9 @@ function Users() {
         />
         <LoaderModal
           text="Please wait loading ..."
-          isModalVisible={superAgentsStatus === 'loading' || usersStatus === 'loading'}
+          isModalVisible={
+            superAgentsStatus === 'loading' || usersStatus === 'loading' || internalUsersStatus === 'loading'
+          }
           closeModal={() => {}}
         />
       </UserContainer>
