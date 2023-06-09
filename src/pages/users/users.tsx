@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppContainer, CountInfo, TabView, LoaderModal, MoreIconView } from '../../atoms';
+import { AppContainer, CountInfo, TabView, LoaderModal, MoreIconView, CreateInternalUserModal } from '../../atoms';
 import { capitalizeFirstLetter, colors, dateFormat, routesPath, spacing, arrayToString } from '../../utils';
 import {
   SearchInput,
@@ -90,6 +90,8 @@ function Users() {
   const [searchInternalUserValue, setSearchInternalUserValue] = useState('');
   const [firstMount, setFirstMount] = useState(true);
   const [internalUsersData, setInternalUsersData] = useState<any[]>([]);
+  const [createInternalUserIsModalVisible, setCreateInternalUserIsModalVisible] = useState(false);
+  const [createInternalUserData, setCreateInternalUserData] = useState({});
   //More Icon for Internal Users
   const moreIconOption = [namedEdit, namedDeactivate, namedReactivate, namedResetPassword, namedViewLoginHistory];
   const roleMoreIconOption = [roleDetails, roleDeleteRole];
@@ -273,6 +275,10 @@ function Users() {
     }
   };
 
+  const handleCreateInternalUser = (item: Dictionary) => {
+    console.log(item, 'items');
+  };
+  console.log(createInternalUserData, 'setCreateInternalUserData');
   return (
     <AppContainer navTitle="USER">
       <UserContainer>
@@ -356,6 +362,8 @@ function Users() {
                 icon={<AiOutlinePlus color={colors.white} size={15} />}
                 backgroundColor={colors.primary}
                 color={colors.white}
+                onClick={() => setCreateInternalUserIsModalVisible(true)}
+                // onClick={() => console.log('hello')}
               />
               <SearchInput
                 backgroundColor={'transparent'}
@@ -415,6 +423,15 @@ function Users() {
           closeModal={() => setRoleMoreIconIsVisible(false)}
           options={roleMoreIconOption}
           onClick={item => handleRoleMoreIconOptions(item)}
+        />
+
+        <CreateInternalUserModal
+          isModalVisible={createInternalUserIsModalVisible}
+          closeModal={() => setCreateInternalUserIsModalVisible(false)}
+          title="Add New User"
+          isLoading={false}
+          isSubmittingInternalUser={true}
+          onSubmit={(item: Dictionary) => handleCreateInternalUser(item)}
         />
         <LoaderModal
           text="Please wait loading ..."
