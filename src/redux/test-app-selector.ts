@@ -31,6 +31,7 @@ import {
   downloadTransactionByIdSliceReducer,
   downloadTransactionsSliceReducer,
   getInternalUsersSliceReducer,
+  getRolesDropDownSliceReducer,
 } from './slice';
 const state = {
   login: loginSliceReducer,
@@ -65,6 +66,7 @@ const state = {
   downloadTransactionById: downloadTransactionByIdSliceReducer,
   downloadTransactions: downloadTransactionsSliceReducer,
   getInternalUsers: getInternalUsersSliceReducer,
+  getRolesDropDown: getRolesDropDownSliceReducer,
 };
 
 export const testAppSelector = (f: any) => f(state);

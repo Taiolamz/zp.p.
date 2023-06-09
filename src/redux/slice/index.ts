@@ -31,3 +31,4 @@ export * from './getAllTransactionsSlice';
 export * from './downloadTransactionByIdSlice';
 export * from './downloadTransactionsSlice';
 export * from './getInternalUsersSlice';
+export * from './getRolesDropDownSlice';

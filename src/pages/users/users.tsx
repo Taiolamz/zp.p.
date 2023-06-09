@@ -28,6 +28,7 @@ import {
   getSuperAgentsRequest,
   getSuperAgentsReset,
   getInternalUsersRequest,
+  getRolesDropDownRequest,
 } from '../../redux/slice';
 import { AiOutlinePlus } from 'react-icons/ai';
 const { USERDETAILS, USERROLES } = routesPath;
@@ -91,7 +92,7 @@ function Users() {
   const [firstMount, setFirstMount] = useState(true);
   const [internalUsersData, setInternalUsersData] = useState<any[]>([]);
   const [createInternalUserIsModalVisible, setCreateInternalUserIsModalVisible] = useState(false);
-  const [createInternalUserData, setCreateInternalUserData] = useState({});
+  const [rolesData, setRolesData] = useState([]);
   //More Icon for Internal Users
   const moreIconOption = [namedEdit, namedDeactivate, namedReactivate, namedResetPassword, namedViewLoginHistory];
   const roleMoreIconOption = [roleDetails, roleDeleteRole];
@@ -105,6 +106,9 @@ function Users() {
 
   const internalUsersState = useAppSelector(state => state.getInternalUsers);
   const { status: internalUsersStatus } = internalUsersState;
+
+  const rolesDropDownState = useAppSelector(state => state.getRolesDropDown);
+  const { status: rolesDropDownStatus } = rolesDropDownState;
 
   useEffect(() => {
     console.log(selectedInternalUserItem);
@@ -239,6 +243,12 @@ function Users() {
     }
   }, [internalUsersState]);
 
+  useEffect(() => {
+    if (rolesDropDownStatus === 'succeeded') {
+      console.log(rolesDropDownState, 'rolesDropDownState');
+    }
+  }, [rolesDropDownState]);
+
   // handle different modules
   const handleMoreIconOptions = async (item: string) => {
     if (item === namedEdit) {
@@ -275,10 +285,13 @@ function Users() {
     }
   };
 
+  // const handleInternalUser
+
   const handleCreateInternalUser = (item: Dictionary) => {
     console.log(item, 'items');
+    // dispatch(getRolesDropDownRequest({}));
   };
-  console.log(createInternalUserData, 'setCreateInternalUserData');
+
   return (
     <AppContainer navTitle="USER">
       <UserContainer>
@@ -430,7 +443,7 @@ function Users() {
           closeModal={() => setCreateInternalUserIsModalVisible(false)}
           title="Add New User"
           isLoading={false}
-          isSubmittingInternalUser={true}
+          isSubmittingInternalUser={false}
           onSubmit={(item: Dictionary) => handleCreateInternalUser(item)}
         />
         <LoaderModal
