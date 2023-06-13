@@ -220,8 +220,8 @@ function Transactions() {
       downloadTransactionsRequest({
         model_type: tTypes[0] !== 'Transaction Type' ? replaceStringWithBackslach(tTypes[0]) : '',
         status: tStatus[0] !== 'Transaction Status' ? tStatus[0] : '',
-        start_date: startDisplayRecordDate,
-        end_date: endDisplayRecordDate,
+        start_date: yearDateFormat(startDisplayRecordDate),
+        end_date: yearDateFormat(endDisplayRecordDate),
       }),
     );
   };
