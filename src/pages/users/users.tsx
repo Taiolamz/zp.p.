@@ -92,7 +92,13 @@ function Users() {
   const [firstMount, setFirstMount] = useState(true);
   const [internalUsersData, setInternalUsersData] = useState<any[]>([]);
   const [createInternalUserIsModalVisible, setCreateInternalUserIsModalVisible] = useState(false);
-  const [rolesData, setRolesData] = useState([]);
+  const [rolesData, setRolesData] = useState([
+    {
+      value: 'admin',
+      label: 'Admin',
+    },
+  ]);
+
   //More Icon for Internal Users
   const moreIconOption = [namedEdit, namedDeactivate, namedReactivate, namedResetPassword, namedViewLoginHistory];
   const roleMoreIconOption = [roleDetails, roleDeleteRole];
@@ -245,7 +251,14 @@ function Users() {
 
   useEffect(() => {
     if (rolesDropDownStatus === 'succeeded') {
-      console.log(rolesDropDownState, 'rolesDropDownState');
+      let updateRoleDta: any[] = [];
+      rolesDropDownState?.data?.roles?.data?.forEach((item: Dictionary) => {
+        updateRoleDta.push({
+          value: item.name,
+          label: capitalizeFirstLetter(item.name),
+        });
+      });
+      setRolesData(updateRoleDta);
     }
   }, [rolesDropDownState]);
 
@@ -268,6 +281,8 @@ function Users() {
     }
   };
 
+  // getRolesDropDownRequest
+
   // Function opens more item when the more icon in internal users table is clicked
   const handleItemModalOpen = (item: Dictionary) => {
     setSelectedInternalUserItem(item);
@@ -285,9 +300,14 @@ function Users() {
     }
   };
 
+  const addInternalUserBtn = () => {
+    dispatch(getRolesDropDownRequest({}));
+    setCreateInternalUserIsModalVisible(true);
+  };
+
   // const handleInternalUser
 
-  const handleCreateInternalUser = (item: Dictionary) => {
+  const handleCreateInternalUserModalBtn = (item: Dictionary) => {
     console.log(item, 'items');
     // dispatch(getRolesDropDownRequest({}));
   };
@@ -375,7 +395,7 @@ function Users() {
                 icon={<AiOutlinePlus color={colors.white} size={15} />}
                 backgroundColor={colors.primary}
                 color={colors.white}
-                onClick={() => setCreateInternalUserIsModalVisible(true)}
+                onClick={addInternalUserBtn}
                 // onClick={() => console.log('hello')}
               />
               <SearchInput
@@ -442,9 +462,10 @@ function Users() {
           isModalVisible={createInternalUserIsModalVisible}
           closeModal={() => setCreateInternalUserIsModalVisible(false)}
           title="Add New User"
-          isLoading={false}
+          isLoading={rolesDropDownStatus === 'loading'}
           isSubmittingInternalUser={false}
-          onSubmit={(item: Dictionary) => handleCreateInternalUser(item)}
+          onSubmit={(item: Dictionary) => handleCreateInternalUserModalBtn(item)}
+          roleOption={rolesData}
         />
         <LoaderModal
           text="Please wait loading ..."

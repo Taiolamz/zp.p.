@@ -22,7 +22,7 @@ export const getRolesDropDownRequest = createAsyncThunk(
     const url = `admin/role-dropdown`;
 
     try {
-      const response = await api.post(url, payload);
+      const response = await api.get(url);
       return response?.data;
     } catch (err) {
       throw err;

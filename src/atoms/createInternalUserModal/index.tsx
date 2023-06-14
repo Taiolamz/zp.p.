@@ -7,6 +7,11 @@ import { H2, H3, H5 } from '../../styles';
 import { borderRadius, colors, spacing } from '../../utils';
 import { Dictionary } from '../../types';
 
+interface RoleOptionsIProps {
+  value: string;
+  label: string;
+}
+
 export interface IProps {
   isModalVisible: boolean;
   closeModal: () => void;
@@ -14,6 +19,7 @@ export interface IProps {
   isLoading: boolean;
   onSubmit: (item: Dictionary) => any;
   isSubmittingInternalUser: boolean;
+  roleOption: RoleOptionsIProps[];
 }
 
 function CreateInternalUserModal({
@@ -23,6 +29,7 @@ function CreateInternalUserModal({
   isLoading,
   onSubmit,
   isSubmittingInternalUser,
+  roleOption,
 }: IProps) {
   const [selectedRole, setSelectedRole] = useState('');
   const schema = yup.object().shape({
@@ -97,24 +104,7 @@ function CreateInternalUserModal({
                         label="Role"
                         selectedValue={setSelectedRole}
                         placeholder="Select Agent"
-                        options={[
-                          {
-                            value: 'admin',
-                            label: 'Admin',
-                          },
-                          {
-                            value: 'executive',
-                            label: 'Executive',
-                          },
-                          {
-                            value: 'inputter',
-                            label: 'Inputter',
-                          },
-                          {
-                            value: 'settlement inputter',
-                            label: 'Settlement Inputter',
-                          },
-                        ]}
+                        options={roleOption}
                         width={'100%'}
                       />
                       <BtnContainer>
