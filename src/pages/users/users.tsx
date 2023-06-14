@@ -1,7 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { AppContainer, CountInfo, TabView, LoaderModal, MoreIconView, CreateInternalUserModal } from '../../atoms';
-import { capitalizeFirstLetter, colors, dateFormat, routesPath, spacing, arrayToString } from '../../utils';
+import {
+  AppContainer,
+  CountInfo,
+  TabView,
+  LoaderModal,
+  MoreIconView,
+  CreateInternalUserModal,
+  SuccessActionModal,
+  ActivityActionModal,
+} from '../../atoms';
+import { capitalizeFirstLetter, colors, dateFormat, routesPath, spacing, arrayToString, images } from '../../utils';
 import {
   SearchInput,
   UsersTable,
@@ -30,6 +39,7 @@ import {
   getInternalUsersRequest,
   getRolesDropDownRequest,
   createInternalUserRequest,
+  createInternalUserReset,
 } from '../../redux/slice';
 import { AiOutlinePlus } from 'react-icons/ai';
 const { USERDETAILS, USERROLES } = routesPath;
@@ -99,7 +109,8 @@ function Users() {
       label: 'Admin',
     },
   ]);
-
+  const [createUserSuccessModalVisible, setCreateUserSuccessModalVisible] = useState(false);
+  const [toggleGetInternalUser, setToggleGetInternalUser] = useState(false);
   //More Icon for Internal Users
   const moreIconOption = [namedEdit, namedDeactivate, namedReactivate, namedResetPassword, namedViewLoginHistory];
   const roleMoreIconOption = [roleDetails, roleDeleteRole];
@@ -232,7 +243,7 @@ function Users() {
     if (tabViewUsersSelectedIndex === 2) {
       dispatch(getInternalUsersRequest({}));
     }
-  }, [tabViewUsersSelectedIndex]);
+  }, [tabViewUsersSelectedIndex, toggleGetInternalUser]);
 
   useEffect(() => {
     if (internalUsersStatus === 'succeeded') {
@@ -265,6 +276,13 @@ function Users() {
       setRolesData(updateRoleDta);
     }
   }, [rolesDropDownState]);
+
+  useEffect(() => {
+    if (createInternalUserStatus === 'succeeded') {
+      setCreateInternalUserIsModalVisible(false);
+      setCreateUserSuccessModalVisible(true);
+    }
+  }, [createInternalUserState]);
 
   // handle different modules
   const handleMoreIconOptions = async (item: string) => {
@@ -322,6 +340,11 @@ function Users() {
     dispatch(createInternalUserRequest(payload));
   };
 
+  const handleCloseCreateInternalUserModal = () => {
+    setCreateUserSuccessModalVisible(false);
+    dispatch(createInternalUserReset());
+    setToggleGetInternalUser(!toggleGetInternalUser);
+  };
   return (
     <AppContainer navTitle="USER">
       <UserContainer>
@@ -480,6 +503,16 @@ function Users() {
           defaultValues={{ defaultEmail: '', defaultFirstName: '', defaultLastName: '', defaultRole: '' }}
         />
 
+        <ActivityActionModal
+          isModalVisible={createUserSuccessModalVisible}
+          closeModal={handleCloseCreateInternalUserModal}
+          title="User Successfully Created"
+          text="An Onboarding mail has been sent to the user"
+          actionText="Close"
+          image={images.sent}
+          actionClick={handleCloseCreateInternalUserModal}
+          isLoading={false}
+        />
         <LoaderModal
           text="Please wait loading ..."
           isModalVisible={
