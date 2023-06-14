@@ -10,7 +10,16 @@ import {
   SuccessActionModal,
   ActivityActionModal,
 } from '../../atoms';
-import { capitalizeFirstLetter, colors, dateFormat, routesPath, spacing, arrayToString, images } from '../../utils';
+import {
+  capitalizeFirstLetter,
+  colors,
+  dateFormat,
+  routesPath,
+  spacing,
+  arrayToString,
+  images,
+  getWordFromString,
+} from '../../utils';
 import {
   SearchInput,
   UsersTable,
@@ -103,6 +112,7 @@ function Users() {
   const [firstMount, setFirstMount] = useState(true);
   const [internalUsersData, setInternalUsersData] = useState<any[]>([]);
   const [createInternalUserIsModalVisible, setCreateInternalUserIsModalVisible] = useState(false);
+  const [editInternalUserIsModalVisible, setEditInternalUserIsModalVisible] = useState(false);
   const [rolesData, setRolesData] = useState([
     {
       value: 'admin',
@@ -287,7 +297,8 @@ function Users() {
   // handle different modules
   const handleMoreIconOptions = async (item: string) => {
     if (item === namedEdit) {
-      console.log('Edit jj');
+      dispatch(getRolesDropDownRequest({}));
+      setEditInternalUserIsModalVisible(true);
     }
     if (item === namedDeactivate) {
       console.log('Deactivate');
@@ -345,6 +356,18 @@ function Users() {
     dispatch(createInternalUserReset());
     setToggleGetInternalUser(!toggleGetInternalUser);
   };
+
+  const handleEditInternalUserModalBtn = (item: Dictionary) => {
+    const { email, first_name, last_name, role } = item;
+    const payload = {
+      first_name,
+      last_name,
+      role,
+      email,
+    };
+    dispatch(createInternalUserRequest(payload));
+  };
+
   return (
     <AppContainer navTitle="USER">
       <UserContainer>
@@ -501,6 +524,28 @@ function Users() {
           roleOption={rolesData}
           actionBtnText={'Create User'}
           defaultValues={{ defaultEmail: '', defaultFirstName: '', defaultLastName: '', defaultRole: '' }}
+        />
+
+        {/* edit internal user modal */}
+        <CreateInternalUserModal
+          isModalVisible={editInternalUserIsModalVisible}
+          closeModal={() => setEditInternalUserIsModalVisible(false)}
+          title="Edit User Details"
+          isLoading={rolesDropDownStatus === 'loading'}
+          isSubmittingInternalUser={createInternalUserStatus === 'loading'}
+          onSubmit={(item: Dictionary) => handleEditInternalUserModalBtn(item)}
+          roleOption={rolesData}
+          actionBtnText={'Update'}
+          defaultValues={{
+            defaultEmail: selectedInternalUserItem.hasOwnProperty('email') ? selectedInternalUserItem.email : '',
+            defaultFirstName: selectedInternalUserItem.hasOwnProperty('name')
+              ? getWordFromString(selectedInternalUserItem.name, 1)
+              : '',
+            defaultLastName: selectedInternalUserItem.hasOwnProperty('name')
+              ? getWordFromString(selectedInternalUserItem.name, 2)
+              : '',
+            defaultRole: selectedInternalUserItem.hasOwnProperty('role') ? selectedInternalUserItem.role : '',
+          }}
         />
 
         <ActivityActionModal
