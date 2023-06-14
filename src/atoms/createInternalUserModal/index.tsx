@@ -12,6 +12,13 @@ interface RoleOptionsIProps {
   label: string;
 }
 
+interface DefaultValuesIProps {
+  defaultEmail: string;
+  defaultFirstName: string;
+  defaultLastName: string;
+  defaultRole: string;
+}
+
 export interface IProps {
   isModalVisible: boolean;
   closeModal: () => void;
@@ -20,6 +27,8 @@ export interface IProps {
   onSubmit: (item: Dictionary) => any;
   isSubmittingInternalUser: boolean;
   roleOption: RoleOptionsIProps[];
+  actionBtnText: string;
+  defaultValues: DefaultValuesIProps;
 }
 
 function CreateInternalUserModal({
@@ -30,14 +39,18 @@ function CreateInternalUserModal({
   onSubmit,
   isSubmittingInternalUser,
   roleOption,
+  actionBtnText,
+  defaultValues,
 }: IProps) {
-  const [selectedRole, setSelectedRole] = useState('');
+  const { defaultEmail, defaultFirstName, defaultLastName, defaultRole } = defaultValues;
+  const [selectedRole, setSelectedRole] = useState(defaultRole);
   const schema = yup.object().shape({
     email: yup.string().email().required('Email is required'),
     firstName: yup.string().required('First name is required'),
     lastName: yup.string().required('Last name is required'),
     role: selectedRole.length < 2 ? yup.string().required('Role is required') : yup.string(),
   });
+
   return (
     <Modal title={title} isModalVisible={isModalVisible} closeModal={closeModal}>
       {isLoading ? (
@@ -48,11 +61,16 @@ function CreateInternalUserModal({
         <Container>
           <Content>
             <Formik
-              initialValues={{ email: '', firstName: '', lastName: '', role: '' }}
+              initialValues={{
+                email: defaultEmail,
+                firstName: defaultFirstName,
+                lastName: defaultLastName,
+                role: defaultRole,
+              }}
               enableReinitialize={true}
               validationSchema={schema}
               onSubmit={async (values, { setSubmitting }) => {
-                const { email, firstName, lastName, role } = values;
+                const { email, firstName, lastName, role } = values ?? '';
                 const payload = {
                   email: email,
                   first_name: firstName,
@@ -103,12 +121,12 @@ function CreateInternalUserModal({
                         error={errors.role}
                         label="Role"
                         selectedValue={setSelectedRole}
-                        placeholder="Select Agent"
+                        placeholder={defaultRole.length > 2 ? defaultRole : 'Select Agent'}
                         options={roleOption}
                         width={'100%'}
                       />
                       <BtnContainer>
-                        <Button type="submit" text="Create User" disabled={isSubmittingInternalUser} />
+                        <Button type="submit" text={actionBtnText} disabled={isSubmittingInternalUser} />
                         <Button
                           secondary
                           color={colors.primary}

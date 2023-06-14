@@ -29,6 +29,7 @@ import {
   getSuperAgentsReset,
   getInternalUsersRequest,
   getRolesDropDownRequest,
+  createInternalUserRequest,
 } from '../../redux/slice';
 import { AiOutlinePlus } from 'react-icons/ai';
 const { USERDETAILS, USERROLES } = routesPath;
@@ -115,6 +116,9 @@ function Users() {
 
   const rolesDropDownState = useAppSelector(state => state.getRolesDropDown);
   const { status: rolesDropDownStatus } = rolesDropDownState;
+
+  const createInternalUserState = useAppSelector(state => state.createInternalUser);
+  const { status: createInternalUserStatus } = createInternalUserState;
 
   useEffect(() => {
     console.log(selectedInternalUserItem);
@@ -308,8 +312,14 @@ function Users() {
   // const handleInternalUser
 
   const handleCreateInternalUserModalBtn = (item: Dictionary) => {
-    console.log(item, 'items');
-    // dispatch(getRolesDropDownRequest({}));
+    const { email, first_name, last_name, role } = item;
+    const payload = {
+      first_name,
+      last_name,
+      role,
+      email,
+    };
+    dispatch(createInternalUserRequest(payload));
   };
 
   return (
@@ -463,10 +473,13 @@ function Users() {
           closeModal={() => setCreateInternalUserIsModalVisible(false)}
           title="Add New User"
           isLoading={rolesDropDownStatus === 'loading'}
-          isSubmittingInternalUser={false}
+          isSubmittingInternalUser={createInternalUserStatus === 'loading'}
           onSubmit={(item: Dictionary) => handleCreateInternalUserModalBtn(item)}
           roleOption={rolesData}
+          actionBtnText={'Create User'}
+          defaultValues={{ defaultEmail: '', defaultFirstName: '', defaultLastName: '', defaultRole: '' }}
         />
+
         <LoaderModal
           text="Please wait loading ..."
           isModalVisible={

@@ -42,5 +42,5 @@ export const BtnContainer = styled.div`
   width: 80%;
   margin-right: auto;
   margin-left: auto;
-  margin-top: ${spacing.large};
+  margin-top: ${spacing.xlarge};
 `;
