@@ -572,7 +572,7 @@ function Users() {
           }
           text={updateInternalUserStatus === 'succeeded' ? '' : 'An Onboarding mail has been sent to the user'}
           actionText="Close"
-          image={images.sent}
+          image={updateInternalUserStatus === 'succeeded' ? images.check : images.sent}
           actionClick={handleCloseCreateInternalUserModal}
           isLoading={false}
         />
