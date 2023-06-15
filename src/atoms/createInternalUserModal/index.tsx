@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { Formik } from 'formik';
 import { Container, Content, BtnContainer } from './style';
 import { Modal, Button, Input, Picker } from '../../components';
-import { H2, H3, H5 } from '../../styles';
-import { borderRadius, colors, spacing } from '../../utils';
+import { H5 } from '../../styles';
+import { colors } from '../../utils';
 import { Dictionary } from '../../types';
 
 interface RoleOptionsIProps {
@@ -71,11 +71,12 @@ function CreateInternalUserModal({
               validationSchema={schema}
               onSubmit={async (values, { setSubmitting }) => {
                 const { email, firstName, lastName, role } = values ?? '';
+
                 const payload = {
                   email: email,
                   first_name: firstName,
                   last_name: lastName,
-                  role: selectedRole,
+                  role: selectedRole.length > 2 ? selectedRole : role,
                 };
                 onSubmit(payload);
                 setSubmitting(false);

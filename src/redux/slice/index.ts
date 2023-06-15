@@ -33,3 +33,4 @@ export * from './downloadTransactionsSlice';
 export * from './getInternalUsersSlice';
 export * from './getRolesDropDownSlice';
 export * from './createInternalUserSlice';
+export * from './updateInternalUserSlice';

@@ -19,6 +19,7 @@ import {
   arrayToString,
   images,
   getWordFromString,
+  lowerCaseFirstLetter,
 } from '../../utils';
 import {
   SearchInput,
@@ -49,6 +50,8 @@ import {
   getRolesDropDownRequest,
   createInternalUserRequest,
   createInternalUserReset,
+  updateInternalUserRequest,
+  updateInternalUserReset,
 } from '../../redux/slice';
 import { AiOutlinePlus } from 'react-icons/ai';
 const { USERDETAILS, USERROLES } = routesPath;
@@ -140,6 +143,9 @@ function Users() {
 
   const createInternalUserState = useAppSelector(state => state.createInternalUser);
   const { status: createInternalUserStatus } = createInternalUserState;
+
+  const updateInternalUserState = useAppSelector(state => state.updateInternalUser);
+  const { status: updateInternalUserStatus } = updateInternalUserState;
 
   useEffect(() => {
     console.log(selectedInternalUserItem);
@@ -267,6 +273,7 @@ function Users() {
           status: item?.status,
           lastSeen: item?.last_login,
           dateEnrolled: item?.created_at,
+          userId: item?.id,
         });
       });
 
@@ -292,7 +299,11 @@ function Users() {
       setCreateInternalUserIsModalVisible(false);
       setCreateUserSuccessModalVisible(true);
     }
-  }, [createInternalUserState]);
+    if (updateInternalUserStatus === 'succeeded') {
+      setEditInternalUserIsModalVisible(false);
+      setCreateUserSuccessModalVisible(true);
+    }
+  }, [createInternalUserState, updateInternalUserState]);
 
   // handle different modules
   const handleMoreIconOptions = async (item: string) => {
@@ -355,18 +366,22 @@ function Users() {
   const handleCloseCreateInternalUserModal = () => {
     setCreateUserSuccessModalVisible(false);
     dispatch(createInternalUserReset());
+    dispatch(updateInternalUserReset());
     setToggleGetInternalUser(!toggleGetInternalUser);
   };
 
   const handleEditInternalUserModalBtn = (item: Dictionary) => {
     const { email, first_name, last_name, role } = item;
+
     const payload = {
       first_name,
       last_name,
-      role,
+      role: lowerCaseFirstLetter(role),
       email,
+      userId: selectedInternalUserItem?.userId,
     };
-    dispatch(createInternalUserRequest(payload));
+
+    dispatch(updateInternalUserRequest(payload));
   };
 
   return (
@@ -533,7 +548,7 @@ function Users() {
           closeModal={() => setEditInternalUserIsModalVisible(false)}
           title="Edit User Details"
           isLoading={rolesDropDownStatus === 'loading'}
-          isSubmittingInternalUser={createInternalUserStatus === 'loading'}
+          isSubmittingInternalUser={updateInternalUserStatus === 'loading'}
           onSubmit={(item: Dictionary) => handleEditInternalUserModalBtn(item)}
           roleOption={rolesData}
           actionBtnText={'Update'}
@@ -552,8 +567,10 @@ function Users() {
         <ActivityActionModal
           isModalVisible={createUserSuccessModalVisible}
           closeModal={handleCloseCreateInternalUserModal}
-          title="User Successfully Created"
-          text="An Onboarding mail has been sent to the user"
+          title={
+            updateInternalUserStatus === 'succeeded' ? 'User Details Successfully Updated' : 'User Successfully Created'
+          }
+          text={updateInternalUserStatus === 'succeeded' ? '' : 'An Onboarding mail has been sent to the user'}
           actionText="Close"
           image={images.sent}
           actionClick={handleCloseCreateInternalUserModal}
