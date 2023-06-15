@@ -52,6 +52,8 @@ import {
   createInternalUserReset,
   updateInternalUserRequest,
   updateInternalUserReset,
+  resetInternalUserPasswordRequest,
+  resetInternalUserPasswordReset,
 } from '../../redux/slice';
 import { AiOutlinePlus } from 'react-icons/ai';
 const { USERDETAILS, USERROLES } = routesPath;
@@ -124,6 +126,7 @@ function Users() {
   ]);
   const [createUserSuccessModalVisible, setCreateUserSuccessModalVisible] = useState(false);
   const [toggleGetInternalUser, setToggleGetInternalUser] = useState(false);
+  const [resetPasswordSuccessModalVisible, setResetPasswordSuccessModalVisible] = useState(false);
   //More Icon for Internal Users
   const moreIconOption = [namedEdit, namedDeactivate, namedReactivate, namedResetPassword, namedViewLoginHistory];
   const roleMoreIconOption = [roleDetails, roleDeleteRole];
@@ -146,6 +149,9 @@ function Users() {
 
   const updateInternalUserState = useAppSelector(state => state.updateInternalUser);
   const { status: updateInternalUserStatus } = updateInternalUserState;
+
+  const resetInternalUserPasswordState = useAppSelector(state => state.resetInternalUserPassword);
+  const { status: resetInternalUserPasswordStatus } = resetInternalUserPasswordState;
 
   useEffect(() => {
     console.log(selectedInternalUserItem);
@@ -305,6 +311,12 @@ function Users() {
     }
   }, [createInternalUserState, updateInternalUserState]);
 
+  useEffect(() => {
+    if (resetInternalUserPasswordStatus === 'succeeded') {
+      setResetPasswordSuccessModalVisible(true);
+    }
+  }, [resetInternalUserPasswordState]);
+
   // handle different modules
   const handleMoreIconOptions = async (item: string) => {
     setMoreIconIsVisible(false);
@@ -319,7 +331,7 @@ function Users() {
       console.log('Reactivate');
     }
     if (item === namedResetPassword) {
-      console.log('Reset Password');
+      dispatch(resetInternalUserPasswordRequest({ userId: selectedInternalUserItem?.userId }));
     }
     if (item === namedResetPassword) {
       console.log('View Login History');
@@ -382,6 +394,11 @@ function Users() {
     };
 
     dispatch(updateInternalUserRequest(payload));
+  };
+
+  const handleCloseResetPasswordModal = () => {
+    setResetPasswordSuccessModalVisible(false);
+    dispatch(resetInternalUserPasswordReset());
   };
 
   return (
@@ -576,10 +593,26 @@ function Users() {
           actionClick={handleCloseCreateInternalUserModal}
           isLoading={false}
         />
+
+        {/* reset password success modal */}
+        <ActivityActionModal
+          isModalVisible={resetPasswordSuccessModalVisible}
+          closeModal={handleCloseResetPasswordModal}
+          title={''}
+          text={'Password Reset link has been sent to the User'}
+          actionText="Close"
+          image={images.sent}
+          actionClick={handleCloseResetPasswordModal}
+          isLoading={false}
+        />
+
         <LoaderModal
           text="Please wait loading ..."
           isModalVisible={
-            superAgentsStatus === 'loading' || usersStatus === 'loading' || internalUsersStatus === 'loading'
+            superAgentsStatus === 'loading' ||
+            usersStatus === 'loading' ||
+            internalUsersStatus === 'loading' ||
+            resetInternalUserPasswordStatus === 'loading'
           }
           closeModal={() => {}}
         />
