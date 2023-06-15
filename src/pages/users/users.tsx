@@ -296,6 +296,7 @@ function Users() {
 
   // handle different modules
   const handleMoreIconOptions = async (item: string) => {
+    setMoreIconIsVisible(false);
     if (item === namedEdit) {
       dispatch(getRolesDropDownRequest({}));
       setEditInternalUserIsModalVisible(true);
