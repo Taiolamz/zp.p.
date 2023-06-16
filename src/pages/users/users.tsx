@@ -9,6 +9,7 @@ import {
   CreateInternalUserModal,
   SuccessActionModal,
   ActivityActionModal,
+  ProfileActivationToggleModal,
 } from '../../atoms';
 import {
   capitalizeFirstLetter,
@@ -54,6 +55,8 @@ import {
   updateInternalUserReset,
   resetInternalUserPasswordRequest,
   resetInternalUserPasswordReset,
+  updateUserStatusRequest,
+  updateUserStatusReset,
 } from '../../redux/slice';
 import { AiOutlinePlus } from 'react-icons/ai';
 const { USERDETAILS, USERROLES } = routesPath;
@@ -127,8 +130,14 @@ function Users() {
   const [createUserSuccessModalVisible, setCreateUserSuccessModalVisible] = useState(false);
   const [toggleGetInternalUser, setToggleGetInternalUser] = useState(false);
   const [resetPasswordSuccessModalVisible, setResetPasswordSuccessModalVisible] = useState(false);
+  const [profileActivationSuccessIsModalVisible, setProfileActivationSuccessIsModalVisible] = useState(false);
+  const [profileActivationIsModalVisible, setProfileActivationIsModalVisible] = useState(false);
+  const [userAccountStatus, setUserAccountStatus] = useState('');
+  const [deactiveMessage, setDeactiveMessage] = useState('');
+
+  const decideUserCurrentStatus: string = userAccountStatus === 'active' ? namedDeactivate : namedReactivate;
   //More Icon for Internal Users
-  const moreIconOption = [namedEdit, namedDeactivate, namedReactivate, namedResetPassword, namedViewLoginHistory];
+  const moreIconOption = [namedEdit, decideUserCurrentStatus, namedResetPassword, namedViewLoginHistory];
   const roleMoreIconOption = [roleDetails, roleDeleteRole];
 
   // redux state
@@ -152,6 +161,9 @@ function Users() {
 
   const resetInternalUserPasswordState = useAppSelector(state => state.resetInternalUserPassword);
   const { status: resetInternalUserPasswordStatus } = resetInternalUserPasswordState;
+
+  const updateUserStatusState = useAppSelector(state => state.updateUserStatus);
+  const { status: updateUserStatusStatus } = updateUserStatusState;
 
   useEffect(() => {
     console.log(selectedInternalUserItem);
@@ -265,7 +277,7 @@ function Users() {
     if (tabViewUsersSelectedIndex === 2) {
       dispatch(getInternalUsersRequest({}));
     }
-  }, [tabViewUsersSelectedIndex, toggleGetInternalUser]);
+  }, [tabViewUsersSelectedIndex, toggleGetInternalUser, updateUserStatusState]);
 
   useEffect(() => {
     if (internalUsersStatus === 'succeeded') {
@@ -300,6 +312,13 @@ function Users() {
     }
   }, [rolesDropDownState]);
 
+  // successful deactivate or reactivate user
+  useEffect(() => {
+    if (updateUserStatusStatus === 'succeeded') {
+      setProfileActivationSuccessIsModalVisible(true);
+    }
+  }, [updateUserStatusState]);
+
   useEffect(() => {
     if (createInternalUserStatus === 'succeeded') {
       setCreateInternalUserIsModalVisible(false);
@@ -324,11 +343,8 @@ function Users() {
       dispatch(getRolesDropDownRequest({}));
       setEditInternalUserIsModalVisible(true);
     }
-    if (item === namedDeactivate) {
-      console.log('Deactivate');
-    }
-    if (item === namedReactivate) {
-      console.log('Reactivate');
+    if (item === namedDeactivate || item === namedReactivate) {
+      setProfileActivationIsModalVisible(true);
     }
     if (item === namedResetPassword) {
       dispatch(resetInternalUserPasswordRequest({ userId: selectedInternalUserItem?.userId }));
@@ -342,6 +358,7 @@ function Users() {
 
   // Function opens more item when the more icon in internal users table is clicked
   const handleItemModalOpen = (item: Dictionary) => {
+    setUserAccountStatus(item?.status);
     setSelectedInternalUserItem(item);
     setMoreIconIsVisible(true);
   };
@@ -399,6 +416,34 @@ function Users() {
   const handleCloseResetPasswordModal = () => {
     setResetPasswordSuccessModalVisible(false);
     dispatch(resetInternalUserPasswordReset());
+  };
+
+  // reactivate or deactivate user action
+  const handleUserProfileActivity = () => {
+    let payload: Dictionary;
+    if (userAccountStatus === 'active') {
+      payload = {
+        userId: selectedInternalUserItem?.userId,
+        data: {
+          status: 'inactive',
+          comment: deactiveMessage,
+        },
+      };
+    } else {
+      payload = {
+        userId: selectedInternalUserItem?.userId,
+        data: {
+          status: 'active',
+        },
+      };
+    }
+
+    dispatch(updateUserStatusRequest(payload));
+  };
+
+  const handleProfileActivationSuccessClose = () => {
+    setProfileActivationSuccessIsModalVisible(false);
+    dispatch(updateUserStatusReset());
   };
 
   return (
@@ -485,7 +530,6 @@ function Users() {
                 backgroundColor={colors.primary}
                 color={colors.white}
                 onClick={addInternalUserBtn}
-                // onClick={() => console.log('hello')}
               />
               <SearchInput
                 backgroundColor={'transparent'}
@@ -606,13 +650,39 @@ function Users() {
           isLoading={false}
         />
 
+        {/* activate or deactive user */}
+        <ProfileActivationToggleModal
+          isModalVisible={profileActivationIsModalVisible}
+          activityStatus={userAccountStatus}
+          actionClicked={handleUserProfileActivity}
+          closeModal={() => setProfileActivationIsModalVisible(false)}
+          setDeactiveMessage={setDeactiveMessage}
+        />
+
+        {/* this modal shows when admin successfully activate or deactivate a user */}
+        <ActivityActionModal
+          isModalVisible={profileActivationSuccessIsModalVisible}
+          closeModal={handleProfileActivationSuccessClose}
+          actionClick={handleProfileActivationSuccessClose}
+          image={images.check}
+          isLoading={false}
+          actionText="Close"
+          title=""
+          text={
+            userAccountStatus === 'active'
+              ? 'Profile has been successfuly deactivated'
+              : 'Profile has been successfuly reactivated'
+          }
+        />
+
         <LoaderModal
           text="Please wait loading ..."
           isModalVisible={
             superAgentsStatus === 'loading' ||
             usersStatus === 'loading' ||
             internalUsersStatus === 'loading' ||
-            resetInternalUserPasswordStatus === 'loading'
+            resetInternalUserPasswordStatus === 'loading' ||
+            updateUserStatusStatus === 'loading'
           }
           closeModal={() => {}}
         />

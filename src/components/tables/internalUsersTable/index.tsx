@@ -58,8 +58,8 @@ function InternaUsersTable({ data, setSelectedItem, headerData, onClick }: any) 
                   <TD>{item.name}</TD>
                   <TD>{item.email}</TD>
                   <TD>{item.role}</TD>
-                  <TD color={item.status ? colors.greenVariantTwo : colors.red}>
-                    {capitalizeFirstLetter(item.status) ? 'Active' : 'Inactive'}
+                  <TD color={item.status === 'active' ? colors.greenVariantTwo : colors.red}>
+                    {capitalizeFirstLetter(item.status)}
                   </TD>
                   <TD>{dateFormat(item.lastSeen)}</TD>
                   <TD>{dateFormat(item.dateEnrolled)}</TD>
