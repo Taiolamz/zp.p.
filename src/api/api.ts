@@ -1,7 +1,7 @@
-import Cookies from "js-cookie";
-import axios from "axios";
+import Cookies from 'js-cookie';
+import axios from 'axios';
 // import { AxiosRequestConfig } from "axios";
-import { routesPath, showMessage } from "../utils";
+import { routesPath, showMessage } from '../utils';
 
 /**
  * Creates an initial 'axios' instance with custom settings.
@@ -15,13 +15,13 @@ const instance = axios.create({
   baseURL: BASE_URL,
   timeout: 20000,
   headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json; charset=utf-8",
+    Accept: 'application/json',
+    'Content-Type': 'application/json; charset=utf-8',
   },
 });
 
-instance.interceptors.request.use(async (config) => {
-  let AuthToken: string = (await Cookies.get(TOKEN)) || "token";
+instance.interceptors.request.use(async config => {
+  let AuthToken: string = (await Cookies.get(TOKEN)) || 'token';
 
   // if (config?.addTrailingSlash && config?.url[config?.url?.length - 1] !== "\") {
   //   config.url += "\"
@@ -32,7 +32,7 @@ instance.interceptors.request.use(async (config) => {
   }
 
   if (config.url !== LOGIN && config.url !== PASSWORDRESET) {
-    config.headers.Authorization = "Bearer " + AuthToken;
+    config.headers.Authorization = 'Bearer ' + AuthToken;
   }
 
   return config;
@@ -41,7 +41,7 @@ instance.interceptors.request.use(async (config) => {
 instance.interceptors.response.use(
   (res: any) => res.data,
 
-  (err) => {
+  err => {
     if (err.response.status === 403) {
       Cookies.remove(TOKEN);
       window.location.href = LOGIN;
@@ -50,7 +50,7 @@ instance.interceptors.response.use(
 
     if (err.response.status === 401) {
       showMessage({
-        type: "error",
+        type: 'error',
         message: Array.isArray(err.response.data.error.message)
           ? err.response.data.error.message[0]
           : err.response.data.error.message,
@@ -59,14 +59,14 @@ instance.interceptors.response.use(
 
     if (err.response.status === 404) {
       showMessage({
-        type: "error",
+        type: 'error',
         message: err.response.data.error.message,
       });
     }
 
     if (err.response.status === 422) {
       showMessage({
-        type: "error",
+        type: 'error',
         message: Array.isArray(err.response.data.error.message)
           ? err.response.data.error.message[0]
           : err.response.data.error.message,
@@ -75,21 +75,28 @@ instance.interceptors.response.use(
 
     if (err.response.status === 503) {
       showMessage({
-        type: "error",
+        type: 'error',
+        message: err.response.data.error.message,
+      });
+    }
+
+    if (err.response.status_code === 503) {
+      showMessage({
+        type: 'error',
         message: err.response.data.error.message,
       });
     }
 
     if (err.response.status === 500) {
       showMessage({
-        type: "error",
+        type: 'error',
         message: err.response.data.error.message,
       });
     }
 
     if (err.response.status === 400) {
       showMessage({
-        type: "error",
+        type: 'error',
         message: err.response.data.error.message,
       });
     }
@@ -99,7 +106,7 @@ instance.interceptors.response.use(
     }
 
     return Promise.reject(err.message);
-  }
+  },
 );
 
 /**
