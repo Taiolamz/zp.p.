@@ -123,6 +123,7 @@ function Users() {
   const [searchInternalUserValue, setSearchInternalUserValue] = useState('');
   const [firstMount, setFirstMount] = useState(true);
   const [internalUsersData, setInternalUsersData] = useState<any[]>([]);
+  const [internalUsersDataList, setInternalUsersDataList] = useState<any[]>([]);
   const [createInternalUserIsModalVisible, setCreateInternalUserIsModalVisible] = useState(false);
   const [editInternalUserIsModalVisible, setEditInternalUserIsModalVisible] = useState(false);
   const [rolesData, setRolesData] = useState([
@@ -299,6 +300,7 @@ function Users() {
       });
 
       setInternalUsersData(updateUsersData);
+      setInternalUsersDataList(updateUsersData);
     }
   }, [internalUsersState]);
 
@@ -465,6 +467,12 @@ function Users() {
     dispatch(updateUserStatusReset());
   };
 
+  const handleOnchangeInternalUser = (value: any) => {
+    setSearchInternalUserValue(value);
+    const updatedData = internalUsersData.filter(user => user.name.toLowerCase().includes(value));
+    setInternalUsersDataList(updatedData);
+  };
+
   return (
     <AppContainer navTitle="USER">
       <UserContainer>
@@ -554,12 +562,13 @@ function Users() {
                 backgroundColor={'transparent'}
                 name="searchProfileValue"
                 value={searchInternalUserValue}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchInternalUserValue(e.target.value)}
-                placeholder="Search by Phone Number or Account Number"
+                // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchInternalUserValue(e.target.value)}
+                onChange={(e: any) => handleOnchangeInternalUser(e.target.value)}
+                placeholder="Search by name"
               />
             </InternalUserTop>
             <InternaUsersTable
-              data={internalUsersData}
+              data={internalUsersDataList}
               headerData={internalUsersDataHeader}
               onClick={(item: Dictionary) => handleItemModalOpen(item)}
               setSelectedItem={setSelectedInternalUserItem}
