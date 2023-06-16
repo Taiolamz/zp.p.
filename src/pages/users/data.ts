@@ -238,6 +238,11 @@ export const loginHistoryDataHeader1 = {
   ipAddress: 'IP Address',
 };
 
+export const loginHistoryDataHeader = {
+  time: 'Time',
+  device: 'Machine Name',
+};
+
 export const loginHistoryDataHeader2 = {
   time: 'Time',
   staffName: 'Staff Name',

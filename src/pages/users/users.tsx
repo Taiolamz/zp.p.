@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { AiOutlinePlus } from 'react-icons/ai';
 import {
   AppContainer,
   CountInfo,
@@ -10,6 +11,7 @@ import {
   SuccessActionModal,
   ActivityActionModal,
   ProfileActivationToggleModal,
+  LoginHistoryOnlyModal,
 } from '../../atoms';
 import {
   capitalizeFirstLetter,
@@ -21,6 +23,7 @@ import {
   images,
   getWordFromString,
   lowerCaseFirstLetter,
+  timeFormat,
 } from '../../utils';
 import {
   SearchInput,
@@ -39,7 +42,7 @@ import {
   UsersContainer,
 } from './style';
 
-import { InternalUsersData, internalUsersDataHeader, userDataHeader, rolesAndPermissionDataHeader } from './data';
+import { loginHistoryDataHeader, internalUsersDataHeader, userDataHeader, rolesAndPermissionDataHeader } from './data';
 import { Dictionary } from '../../types';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import {
@@ -57,8 +60,9 @@ import {
   resetInternalUserPasswordReset,
   updateUserStatusRequest,
   updateUserStatusReset,
+  getLoginHistoryRequest,
 } from '../../redux/slice';
-import { AiOutlinePlus } from 'react-icons/ai';
+
 const { USERDETAILS, USERROLES } = routesPath;
 
 const activeUser = 'active';
@@ -134,6 +138,8 @@ function Users() {
   const [profileActivationIsModalVisible, setProfileActivationIsModalVisible] = useState(false);
   const [userAccountStatus, setUserAccountStatus] = useState('');
   const [deactiveMessage, setDeactiveMessage] = useState('');
+  const [loginHistoryIsModalVisible, setLoginHistoryIsModalVisible] = useState(false);
+  const [loginHistoryData, setLoginHistoryData] = useState<any[]>([]);
 
   const decideUserCurrentStatus: string = userAccountStatus === 'active' ? namedDeactivate : namedReactivate;
   //More Icon for Internal Users
@@ -165,11 +171,8 @@ function Users() {
   const updateUserStatusState = useAppSelector(state => state.updateUserStatus);
   const { status: updateUserStatusStatus } = updateUserStatusState;
 
-  useEffect(() => {
-    console.log(selectedInternalUserItem);
-  }, [selectedInternalUserItem]);
-
-  // api
+  const loginHistoryState = useAppSelector(state => state.getLoginHistory);
+  const { status: loginHistoryStatus } = loginHistoryState;
 
   // get users by status
   const userTypeToFetch = userTypeToFetchByActivity(selectedUsersCard);
@@ -312,6 +315,21 @@ function Users() {
     }
   }, [rolesDropDownState]);
 
+  useEffect(() => {
+    let resultLoginHistory: any[] = [];
+    if (loginHistoryStatus === 'succeeded') {
+      loginHistoryState?.data?.users?.data?.forEach((el: Dictionary, index: number) => {
+        resultLoginHistory.push({
+          id: index + 1,
+          time: `${dateFormat(el?.login_at)} - ${timeFormat(el?.login_at)}`,
+          device: el?.data?.userAgent === null ? 'N/A' : el?.data?.userAgent,
+        });
+      });
+
+      setLoginHistoryData(resultLoginHistory);
+    }
+  }, [loginHistoryState]);
+
   // successful deactivate or reactivate user
   useEffect(() => {
     if (updateUserStatusStatus === 'succeeded') {
@@ -349,8 +367,9 @@ function Users() {
     if (item === namedResetPassword) {
       dispatch(resetInternalUserPasswordRequest({ userId: selectedInternalUserItem?.userId }));
     }
-    if (item === namedResetPassword) {
-      console.log('View Login History');
+    if (item === namedViewLoginHistory) {
+      setLoginHistoryIsModalVisible(true);
+      dispatch(getLoginHistoryRequest({ userId: selectedInternalUserItem?.userId }));
     }
   };
 
@@ -673,6 +692,17 @@ function Users() {
               ? 'Profile has been successfuly deactivated'
               : 'Profile has been successfuly reactivated'
           }
+        />
+
+        {/* this modal shows login history */}
+        <LoginHistoryOnlyModal
+          actionClick={() => {}}
+          closeModal={() => setLoginHistoryIsModalVisible(false)}
+          isModalVisible={loginHistoryIsModalVisible}
+          title="Login History"
+          data={loginHistoryData}
+          headerData1={loginHistoryDataHeader}
+          isLoading={loginHistoryStatus === 'loading'}
         />
 
         <LoaderModal

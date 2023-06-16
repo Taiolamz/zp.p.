@@ -32,3 +32,4 @@ export { default as CustomerGrowth } from './customerGrowth';
 export { default as DashboardBarChart } from './dashboardBarChart';
 export { default as DocumentHistoryModal } from './documentHistoryModal';
 export { default as CreateInternalUserModal } from './createInternalUserModal';
+export { default as LoginHistoryOnlyModal } from './loginHistoryOnlyModal';
