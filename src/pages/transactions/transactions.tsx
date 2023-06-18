@@ -11,6 +11,7 @@ import {
   timeFormat,
   showMessage,
   replaceStringWithBackslach,
+  yearDateFormat,
 } from '../../utils';
 
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
@@ -83,8 +84,8 @@ function Transactions() {
       getAllTransactionsRequest({
         model_type: tTypes[0] !== 'Transaction Type' ? replaceStringWithBackslach(tTypes[0]) : '',
         status: tStatus[0] !== 'Transaction Status' ? tStatus[0] : '',
-        start_date: startDisplayRecordDate,
-        end_date: endDisplayRecordDate,
+        start_date: yearDateFormat(startDisplayRecordDate),
+        end_date: yearDateFormat(endDisplayRecordDate),
         per_page: pageSize,
         page: currentPage,
       }),
@@ -219,8 +220,8 @@ function Transactions() {
       downloadTransactionsRequest({
         model_type: tTypes[0] !== 'Transaction Type' ? replaceStringWithBackslach(tTypes[0]) : '',
         status: tStatus[0] !== 'Transaction Status' ? tStatus[0] : '',
-        start_date: startDisplayRecordDate,
-        end_date: endDisplayRecordDate,
+        start_date: yearDateFormat(startDisplayRecordDate),
+        end_date: yearDateFormat(endDisplayRecordDate),
       }),
     );
   };
@@ -284,7 +285,7 @@ function Transactions() {
           setSelectedItem={setSelectedTransaction}
           onClick={(item: any) => handleOnClick(item)}
         />
-        {tTypes[0] !== 'Transaction Type' && startDisplayRecordDate !== initialDate && (
+        {startDisplayRecordDate !== initialDate && (
           <DownloadIcon
             style={{ position: 'fixed', right: 30, top: '60vh', cursor: 'pointer' }}
             onClick={handleOnClickDownloadIcon}
