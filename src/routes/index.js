@@ -5,7 +5,7 @@ import { Kyc, KycCustomer } from '../pages/kyc';
 import { Support } from '../pages/support';
 import { Users } from '../pages/users';
 import { Settlements, Reconciliation, ReconcilationUserDetails } from '../pages/settlements';
-import { Settings } from '../pages/settings';
+import { EmailNotification, NewAppNotification, NewArticles, Settings } from '../pages/settings';
 import { NotFound } from '../pages/notFound';
 import { PrivateRoute } from './privateRoute';
 import { routesPath } from '../utils';
@@ -27,6 +27,9 @@ function AppRoute() {
     USERDETAILS,
     TRANSACTIONS,
     TRANSACTIONINFORMATION,
+    NEWAPPNOTIFICATION,
+    EMAILNOTIFICATION,
+    NEWARTICLE,
   } = routesPath;
   // const authState = useAppSelector((state) => state.auth);
 
@@ -120,6 +123,30 @@ function AppRoute() {
           element={
             <PrivateRoute>
               <Settings />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={NEWAPPNOTIFICATION}
+          element={
+            <PrivateRoute>
+              <NewAppNotification />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={EMAILNOTIFICATION}
+          element={
+            <PrivateRoute>
+              <EmailNotification />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={NEWARTICLE}
+          element={
+            <PrivateRoute>
+              <NewArticles />
             </PrivateRoute>
           }
         />

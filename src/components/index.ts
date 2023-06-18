@@ -44,3 +44,8 @@ export { default as CustomSelect } from './customSelect';
 export { default as HorizontalInfoCount } from './horizontalInfoCount';
 export { default as TransactionInfoBarChart } from './transactionInfoBarChart';
 export { default as ChartLegend } from './chartLegend';
+export { default as NotificationTable } from './tables/notificationTable';
+export { default as StepperInput } from './stepperInput';
+export { default as CustomUpload } from './customUpload';
+export { default as RadioInput } from './radioInput';
+export { default as FaqTable } from './tables/faqTable';

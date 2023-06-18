@@ -17,6 +17,9 @@ const routesPath = {
   KYCDOC: '/kyc/',
   USERDETAILS: '/user/profile/',
   TRANSACTIONS: '/transactions',
+  NEWAPPNOTIFICATION: '/settings/newappnotification',
+  EMAILNOTIFICATION: '/settings/emailnotification',
+  NEWARTICLE: '/settings/newarticle',
 };
 
 export default routesPath;
