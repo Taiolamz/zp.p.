@@ -43,7 +43,7 @@ function Settings() {
     console.log(item);
   };
 
-  console.log(selectedSettingsCard);
+  // console.log(selectedSettingsCard);
   return (
     <AppContainer navTitle="App Contents" navHelper={selectedSettingsCard?.title}>
       <div>

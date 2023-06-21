@@ -23,8 +23,6 @@ const NewNotification = ({ radioData, setFormvalues }: any) => {
 
   const [deliverDate, setDeliverDate] = useState('');
 
-  console.log(deliverTime);
-
   return (
     <div>
       <Formik

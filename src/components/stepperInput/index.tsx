@@ -29,7 +29,7 @@ const StepperInput = ({ maxValue, setValue }: any) => {
       <StepperButton type="button" onClick={() => handleChange('plus')} disabled={disabled(maxValue)}>
         <MdKeyboardArrowUp color={time === maxValue ? colors.greyVariantTwo : colors.greyVariantFour} size={25} />
       </StepperButton>
-      <StepperNumber type="number" max={59} min={0} value={time} />
+      <StepperNumber type="number" max={59} min={0} value={time < 10 ? `${0}${time}` : time} />
       <StepperButton type="button" onClick={() => handleChange('minus')} disabled={disabled(0)}>
         <MdKeyboardArrowDown color={time === 0 ? colors.greyVariantTwo : colors.greyVariantFour} size={25} />
       </StepperButton>
