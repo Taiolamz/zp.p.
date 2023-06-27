@@ -35,3 +35,4 @@ export * from './getRolesDropDownSlice';
 export * from './createInternalUserSlice';
 export * from './updateInternalUserSlice';
 export * from './resetInternalUserPasswordSlice';
+export * from './getRolesSlice';

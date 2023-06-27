@@ -116,7 +116,7 @@ function AppRoute() {
           }
         />
         <Route
-          path={USERROLES}
+          path={`${USERROLES}:id`}
           element={
             <PrivateRoute>
               <RoleDetails />

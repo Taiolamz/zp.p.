@@ -1,14 +1,14 @@
 import { TableTag, TD, TH, TR, TableContainer } from './style';
 import { MoreIcon } from '../..';
-import { colors, currencyFormat, dateFormat, capitalizeFirstLetter } from '../../../utils';
+import { capitalizeFirstLetter } from '../../../utils';
 import { ReactComponent as EmptySearchIcon } from '../../../assets/svg/emptySearch.svg';
 import { Dictionary } from '../../../types';
 
 export interface RolesAndPermissionTableIPropsIProps {
   id?: number;
   title: string;
-  permissionCount: string;
-  userCount: string;
+  permissionCount: string | number;
+  userCount: string | number;
   createdBy: string;
   roleId?: string;
 }
@@ -51,8 +51,8 @@ function RolesAndPermissionTable({ data, setSelectedItem, headerData, onClick }:
             <tbody>
               {data?.map((item: Dictionary, index: number) => (
                 <TR key={index}>
-                  <TD>{item.id}</TD>
-                  <TD>{item.title}</TD>
+                  <TD>{}</TD>
+                  <TD>{capitalizeFirstLetter(item.title)}</TD>
                   <TD>{item.permissionCount}</TD>
                   <TD>{item.userCount}</TD>
                   <TD>{item.createdBy}</TD>

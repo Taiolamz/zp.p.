@@ -61,6 +61,7 @@ import {
   updateUserStatusRequest,
   updateUserStatusReset,
   getLoginHistoryRequest,
+  getRolesRequest,
 } from '../../redux/slice';
 
 const { USERDETAILS, USERROLES } = routesPath;
@@ -141,6 +142,7 @@ function Users() {
   const [deactiveMessage, setDeactiveMessage] = useState('');
   const [loginHistoryIsModalVisible, setLoginHistoryIsModalVisible] = useState(false);
   const [loginHistoryData, setLoginHistoryData] = useState<any[]>([]);
+  const [userRolesData, setUserRolesData] = useState<any[]>([]);
 
   const decideUserCurrentStatus: string = userAccountStatus === 'active' ? namedDeactivate : namedReactivate;
   //More Icon for Internal Users
@@ -174,6 +176,9 @@ function Users() {
 
   const loginHistoryState = useAppSelector(state => state.getLoginHistory);
   const { status: loginHistoryStatus } = loginHistoryState;
+
+  const rolesState = useAppSelector(state => state.getRoles);
+  const { status: rolesStatus } = rolesState;
 
   // get users by status
   const userTypeToFetch = userTypeToFetchByActivity(selectedUsersCard);
@@ -284,6 +289,12 @@ function Users() {
   }, [tabViewUsersSelectedIndex, toggleGetInternalUser, updateUserStatusState]);
 
   useEffect(() => {
+    if (tabViewUsersSelectedIndex === 3) {
+      dispatch(getRolesRequest({}));
+    }
+  }, [tabViewUsersSelectedIndex]);
+
+  useEffect(() => {
     if (internalUsersStatus === 'succeeded') {
       let updateUsersData: any[] = [];
       internalUsersState?.data?.users?.data?.forEach((item: Dictionary, index: number) => {
@@ -356,6 +367,25 @@ function Users() {
     }
   }, [resetInternalUserPasswordState]);
 
+  useEffect(() => {
+    let resultRoles: any[] = [];
+    if (rolesStatus === 'succeeded') {
+      console.log(rolesState, 'rolesState');
+      rolesState?.data?.roles?.data?.forEach((el: Dictionary, index: number) => {
+        resultRoles.push({
+          title: el.name,
+          permissionCount: el?.permission_count,
+          userCount: el?.user_count,
+          createdBy: el?.publisher === null ? 'N/A' : el?.publisher,
+          roleId: el?.id,
+          id: el?.id,
+        });
+      });
+
+      setUserRolesData(resultRoles);
+    }
+  }, [rolesState]);
+
   // handle different modules
   const handleMoreIconOptions = async (item: string) => {
     setMoreIconIsVisible(false);
@@ -391,7 +421,7 @@ function Users() {
 
   const handleRoleMoreIconOptions = (item: string) => {
     if (item === roleDetails) {
-      navigate(USERROLES);
+      navigate(`${USERROLES}${selectedRoleItem?.id.toString()}`);
     }
   };
 
@@ -593,10 +623,7 @@ function Users() {
               />
             </InternalUserTop>
             <RolesAndPermissionTable
-              data={[
-                { title: 'Excecutive Access', permissionCount: '89', userCount: '1', createdBy: 'Allen Kardic' },
-                { title: 'KYC Inputter', permissionCount: '89', userCount: '1', createdBy: 'Allen Kardic' },
-              ]}
+              data={userRolesData}
               headerData={rolesAndPermissionDataHeader}
               onClick={(item: Dictionary) => handleRoleModalOpen(item)}
               setSelectedItem={setSelectedRoleItem}
@@ -721,7 +748,8 @@ function Users() {
             usersStatus === 'loading' ||
             internalUsersStatus === 'loading' ||
             resetInternalUserPasswordStatus === 'loading' ||
-            updateUserStatusStatus === 'loading'
+            updateUserStatusStatus === 'loading' ||
+            rolesStatus === 'loading'
           }
           closeModal={() => {}}
         />

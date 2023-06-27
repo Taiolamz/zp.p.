@@ -17,7 +17,7 @@ const routesPath = {
   KYCDOC: '/kyc/',
   USERDETAILS: '/user/profile/',
   TRANSACTIONS: '/transactions',
-  USERROLES: '/users/roles',
+  USERROLES: '/users/roles/',
 };
 
 export default routesPath;
