@@ -8,7 +8,7 @@ import { notificationRecipents } from './data';
 
 const { SETTINGS } = routesPath;
 
-function EmailNotification() {
+function EmailNotificationUpdate() {
   const navigate = useNavigate();
   const [formvalues, setFormvalues] = useState();
 
@@ -16,12 +16,12 @@ function EmailNotification() {
     <AppContainer
       goBack={() => navigate(SETTINGS)}
       navTitle={`App Contents`}
-      navHelper="EMAIL NOTIFICATION | NEW EMAIL NOTIFICATION">
+      navHelper={`EMAIL NOTIFICATION | VIEW EMAIL NOTIFICATION`}>
       <NewAppContainer>
-        <NewNotification radioData={notificationRecipents} setFormvalues={setFormvalues} />
+        <NewNotification radioData={notificationRecipents} setFormvalues={setFormvalues} type="update" />
       </NewAppContainer>
     </AppContainer>
   );
 }
 
-export default EmailNotification;
+export default EmailNotificationUpdate;

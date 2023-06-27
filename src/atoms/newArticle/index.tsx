@@ -1,40 +1,38 @@
 import React, { useState } from 'react';
 import { Button, CustomUpload, Input, TextArea } from '../../components';
 import { Formik } from 'formik';
-import { colors } from '../../utils';
+import { colors, routesPath } from '../../utils';
 import { ButtonContainer, MiniInputs } from './style';
 import { BiImageAdd } from 'react-icons/bi';
+import * as yup from 'yup';
+import { useNavigate } from 'react-router-dom';
+const { SETTINGS } = routesPath;
 
-const NewArticle = ({ radioData }: any) => {
-  const [selectedNotificationInterval, setSelectedNotificationInterval] = useState('');
+const NewArticle = ({ setFormvalues }: any) => {
+  const navigate = useNavigate();
 
-  const [selectedNotificationAction, setSelectedNotificationAction] = useState('');
+  const [imageValue, setImageValue] = useState('');
 
-  const [selectedNotificationReceipients, setSelectedNotificationReceipients] = useState('');
+  const schema = yup.object().shape({
+    title: yup.string().required('Title is required'),
+    content: yup.string().required('Content is required'),
+  });
 
   return (
     <div>
       <Formik
         initialValues={{
-          message: '',
+          content: '',
           title: '',
-          description: '',
-          deliveryTime: '',
-          escalateTo: '',
-          priorityLevel: '',
         }}
         enableReinitialize={true}
-        // validationSchema={escalateCchema}
+        validationSchema={schema}
         onSubmit={async (values, { setSubmitting }) => {
-          const { title, message, deliveryTime } = values;
+          const { title, content } = values;
 
           console.log({
             title,
-            message,
-            selectedNotificationAction,
-            selectedNotificationInterval,
-            deliveryTime,
-            selectedNotificationReceipients,
+            content,
           });
           setSubmitting(false);
         }}>
@@ -52,6 +50,7 @@ const NewArticle = ({ radioData }: any) => {
                   value={values?.title}
                   name={'title'}
                   onChange={handleChange}
+                  error={errors.title}
                 />
 
                 <TextArea
@@ -59,29 +58,33 @@ const NewArticle = ({ radioData }: any) => {
                   backgroundColor={colors.white}
                   borderColor={colors.grey}
                   placeholder="Enter message body"
-                  value={values.message}
+                  value={values.content}
                   name={'content'}
                   onChange={handleChange}
-                  error={errors.message}
+                  error={errors.content}
                 />
+
                 <MiniInputs>
                   <CustomUpload
                     inputMessage={'Attach Item Image'}
                     label={'Attach Image (Optional)'}
                     backgroundColor={colors.white}
                     icon={<BiImageAdd size={30} color={colors.primary} />}
+                    setFileValue={setImageValue}
                   />
                 </MiniInputs>
 
                 <ButtonContainer>
                   <Button type="submit" text="Create Item" />
                   <Button
+                    onClick={() => navigate(SETTINGS)}
                     text="Cancel"
                     disabled={false}
                     secondary
                     backgroundColor="red"
                     borderColor="transparent"
                     color={colors.primary}
+                    boxShadow="none"
                   />
                 </ButtonContainer>
               </div>

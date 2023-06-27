@@ -21,7 +21,16 @@ const emptyListCenterStyle = {
   alignItems: 'center',
 };
 
-const { NEWAPPNOTIFICATION, EMAILNOTIFICATION, NEWARTICLE } = routesPath;
+const {
+  NEWAPPNOTIFICATION,
+  EMAILNOTIFICATION,
+  NEWARTICLE,
+  NEWFAQ,
+  APPNOTIFICATIONUPDATE,
+  EMAILNOTIFICATIONUPDATE,
+  ARTICLEUPDATE,
+  FAQUPDATE,
+} = routesPath;
 
 function Settings() {
   const [selectedSettingsCard, setSelectedSettingsCard] = useState<Dictionary>({});
@@ -39,15 +48,32 @@ function Settings() {
   const objectLength = Object.keys(selectedSettingsCard).length;
 
   // handle different more icon text
-  const handleMoreIconOptions = async (item: string) => {
-    console.log(item);
+  const handleMoreIconOptionsApp = async (item: string) => {
+    if (item === viewDetails) {
+      navigate(`${APPNOTIFICATIONUPDATE}`);
+    }
+  };
+  const handleMoreIconOptionsEmail = async (item: string) => {
+    if (item === viewDetails) {
+      navigate(`${EMAILNOTIFICATIONUPDATE}`);
+    }
+  };
+  const handleMoreIconOptionsArticle = async (item: string) => {
+    if (item === viewDetails) {
+      navigate(`${ARTICLEUPDATE}`);
+    }
+  };
+  const handleMoreIconOptionsFaq = async (item: string) => {
+    if (item === viewDetails) {
+      navigate(`${FAQUPDATE}`);
+    }
   };
 
   // console.log(selectedSettingsCard);
   return (
     <AppContainer navTitle="App Contents" navHelper={selectedSettingsCard?.title}>
       <div>
-        <CountInfo data={settingsCountData} setSelectedData={setSelectedSettingsCard} />
+        <CountInfo data={settingsCountData} setSelectedData={setSelectedSettingsCard} type="settings" />
         {objectLength < 1 && (
           <div style={emptyListCenterStyle}>
             <img src={images.emptyList} alt="Empty container" />
@@ -83,13 +109,24 @@ function Settings() {
                 data={notificationData}
                 onClick={(item: Dictionary) => setMoreIsVisible(true)}
               />
-
+              {/* <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={selectedPage => {
+                  setCurrentPage(selectedPage);
+                }}
+                isLoading={
+                  getTransactionsStatus === 'loading' ||
+                  settlementAnalyticsStatus === 'loading' ||
+                  transactionDataList?.length < 1
+                }
+              /> */}
               <MoreIconView
                 setSelectedText={setSelectedNotificationText}
                 isModalVisible={moreIsVisible}
                 closeModal={() => setMoreIsVisible(false)}
                 options={moreIconOption}
-                onClick={item => handleMoreIconOptions(item)}
+                onClick={item => handleMoreIconOptionsApp(item)}
               />
             </>
           )}
@@ -120,7 +157,15 @@ function Settings() {
                 headerData={notificationDataHeader}
                 header={true}
                 data={notificationData}
+                onClick={(item: Dictionary) => setMoreIsVisible(true)}
                 // onClick={item => navigate(`${USERDETAILS}${item.userId}`)}
+              />
+              <MoreIconView
+                setSelectedText={setSelectedNotificationText}
+                isModalVisible={moreIsVisible}
+                closeModal={() => setMoreIsVisible(false)}
+                options={moreIconOption}
+                onClick={item => handleMoreIconOptionsEmail(item)}
               />
             </>
           )}
@@ -147,7 +192,19 @@ function Settings() {
                   placeholder="Search Records"
                 />
               </NotificationTop>
-              <NotificationTable headerData={articleDataHeader} header={true} data={notificationData} />
+              <NotificationTable
+                headerData={articleDataHeader}
+                header={true}
+                data={notificationData}
+                onClick={(item: Dictionary) => setMoreIsVisible(true)}
+              />
+              <MoreIconView
+                setSelectedText={setSelectedNotificationText}
+                isModalVisible={moreIsVisible}
+                closeModal={() => setMoreIsVisible(false)}
+                options={moreIconOption}
+                onClick={item => handleMoreIconOptionsArticle(item)}
+              />
             </>
           )}
           {selectedSettingsCard.id === 4 && (
@@ -158,7 +215,7 @@ function Settings() {
                   backgroundColor={colors.primary}
                   color={colors.white}
                   icon={<AiOutlinePlus color={colors.white} />}
-                  onClick={() => navigate(`${NEWARTICLE}`)}
+                  onClick={() => navigate(`${NEWFAQ}`)}
                 />
                 <SearchInput
                   backgroundColor={colors.white}
@@ -173,7 +230,19 @@ function Settings() {
                   placeholder="Search Records"
                 />
               </NotificationTop>
-              <FaqTable headerData={faqDataHeader} header={true} data={faqData} />
+              <FaqTable
+                headerData={faqDataHeader}
+                header={true}
+                data={faqData}
+                onClick={(item: Dictionary) => setMoreIsVisible(true)}
+              />
+              <MoreIconView
+                setSelectedText={setSelectedNotificationText}
+                isModalVisible={moreIsVisible}
+                closeModal={() => setMoreIsVisible(false)}
+                options={moreIconOption}
+                onClick={item => handleMoreIconOptionsFaq(item)}
+              />
             </>
           )}
 

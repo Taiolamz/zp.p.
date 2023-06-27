@@ -6,9 +6,10 @@ import { CountInfoCardIProps } from '../../components/cards/countInfoCard';
 export interface CountInfoIProps {
   data: CountInfoCardIProps[];
   setSelectedData?: any;
+  type?: string;
 }
 
-function CountInfo({ data, setSelectedData }: CountInfoIProps) {
+function CountInfo({ data, setSelectedData, type }: CountInfoIProps) {
   const [dataList, setDataList] = useState(data as CountInfoCardIProps[]);
 
   useLayoutEffect(() => {
@@ -16,7 +17,7 @@ function CountInfo({ data, setSelectedData }: CountInfoIProps) {
     data.forEach((item: CountInfoCardIProps) =>
       result.push({
         id: item.id,
-        isSelected: item.id === 1 ? true : false,
+        isSelected: type === 'settings' ? false : item.id === 1 ? true : false,
         count: item.count,
         title: item.title,
       }),

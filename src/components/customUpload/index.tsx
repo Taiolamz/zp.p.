@@ -1,6 +1,7 @@
 import { H4, H6 } from '../../styles';
 import { ChangeEvent, useState } from 'react';
 import { CustomUploadContainer, FileInputs, InputButton, InputStyle } from './style';
+import { colors } from '../../utils';
 
 export interface CustomUploadIProps {
   label?: string;
@@ -8,9 +9,10 @@ export interface CustomUploadIProps {
   backgroundColor: string;
   icon?: any;
   setFileValue?: any;
+  error?: string;
 }
 
-const CustomUpload = ({ label, inputMessage, backgroundColor, icon, setFileValue }: CustomUploadIProps) => {
+const CustomUpload = ({ label, inputMessage, backgroundColor, icon, setFileValue, error }: CustomUploadIProps) => {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setFileValue(e.target.files[0]);
@@ -31,6 +33,11 @@ const CustomUpload = ({ label, inputMessage, backgroundColor, icon, setFileValue
           <H6>{inputMessage}</H6>
         </InputButton>
       </FileInputs>{' '}
+      {error && (
+        <H4 left color={colors.red}>
+          {error}
+        </H4>
+      )}
     </CustomUploadContainer>
   );
 };

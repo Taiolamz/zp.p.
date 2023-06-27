@@ -12,7 +12,7 @@ function NewAppNotification() {
   const navigate = useNavigate();
 
   const [formvalues, setFormvalues] = useState();
-  console.log(formvalues);
+  // console.log(formvalues);
   return (
     <AppContainer
       goBack={() => navigate(SETTINGS)}

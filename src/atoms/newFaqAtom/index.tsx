@@ -1,42 +1,41 @@
 import React, { useState } from 'react';
 import { Button, CustomUpload, Input, Picker, RadioInput, StepperInput, TextArea } from '../../components';
 import { Formik } from 'formik';
-import { colors } from '../../utils';
+import { colors, routesPath } from '../../utils';
 import { ButtonContainer, MiniInputs, RadioStyle } from './style';
 import { H2, H3 } from '../../styles';
 import { AiFillFile } from 'react-icons/ai';
 import { BiImageAdd } from 'react-icons/bi';
+import * as yup from 'yup';
+import { useNavigate } from 'react-router-dom';
+const { SETTINGS } = routesPath;
 
-const NewArticle = ({ radioData }: any) => {
-  const [selectedNotificationInterval, setSelectedNotificationInterval] = useState('');
+const NewFaqAtom = ({ setFormvalues }: any) => {
+  const navigate = useNavigate();
 
-  const [selectedNotificationAction, setSelectedNotificationAction] = useState('');
+  const [activePlatform, setActivePlatform] = useState('');
 
-  const [selectedNotificationReceipients, setSelectedNotificationReceipients] = useState('');
+  const schema = yup.object().shape({
+    question: yup.string().required('Question is required'),
+    solution: yup.string().required('Content is required'),
+  });
 
   return (
     <div>
       <Formik
         initialValues={{
-          message: '',
-          title: '',
-          description: '',
-          deliveryTime: '',
-          escalateTo: '',
-          priorityLevel: '',
+          question: '',
+          solution: '',
+          platform: '',
         }}
         enableReinitialize={true}
-        // validationSchema={escalateCchema}
+        validationSchema={schema}
         onSubmit={async (values, { setSubmitting }) => {
-          const { title, message, deliveryTime } = values;
-
-          console.log({
-            title,
-            message,
-            selectedNotificationAction,
-            selectedNotificationInterval,
-            deliveryTime,
-            selectedNotificationReceipients,
+          const { question, solution } = values;
+          setFormvalues({
+            question,
+            solution,
+            activePlatform,
           });
           setSubmitting(false);
         }}>
@@ -51,9 +50,10 @@ const NewArticle = ({ radioData }: any) => {
                   borderColor={colors.grey}
                   placeholder="Enter  Question"
                   type="text"
-                  value={values?.title}
+                  value={values?.question}
                   name={'question'}
                   onChange={handleChange}
+                  error={errors.question}
                 />
 
                 <TextArea
@@ -61,29 +61,36 @@ const NewArticle = ({ radioData }: any) => {
                   backgroundColor={colors.white}
                   borderColor={colors.grey}
                   placeholder="Enter answer to the FAQ"
-                  value={values.message}
+                  value={values.solution}
                   name={'solution'}
                   onChange={handleChange}
-                  error={errors.message}
+                  error={errors.solution}
                 />
                 <MiniInputs>
-                  <CustomUpload
-                    inputMessage={'Click here to attach image'}
-                    label={'Attach Image (Optional)'}
-                    backgroundColor={colors.white}
-                    icon={<BiImageAdd size={30} color={colors.primary} />}
+                  <Picker
+                    error={errors.platform}
+                    label="Select a Platform"
+                    selectedValue={setActivePlatform}
+                    marginBottom="0"
+                    options={[
+                      { label: 'Low', value: 'low' },
+                      { label: 'Medium', value: 'medium' },
+                      { label: 'High', value: 'high' },
+                    ]}
                   />
                 </MiniInputs>
 
                 <ButtonContainer>
                   <Button type="submit" text="Create Item" />
                   <Button
+                    onClick={() => navigate(SETTINGS)}
                     text="Cancel"
                     disabled={false}
                     secondary
                     backgroundColor="red"
                     borderColor="transparent"
                     color={colors.primary}
+                    boxShadow="none"
                   />
                 </ButtonContainer>
               </div>
@@ -95,4 +102,4 @@ const NewArticle = ({ radioData }: any) => {
   );
 };
 
-export default NewArticle;
+export default NewFaqAtom;

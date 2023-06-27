@@ -19,7 +19,7 @@ export interface TableIPropsIProps {
   backgroundColor?: string;
   header?: boolean;
   headerData?: any;
-  // onClick: (item: any) => void;
+  onClick?: any;
 }
 
 const emptyListCenterStyle = {
@@ -28,7 +28,7 @@ const emptyListCenterStyle = {
   alignItems: 'center',
 };
 
-function FaqTable({ data, headerData }: TableIPropsIProps) {
+function FaqTable({ data, headerData, onClick }: TableIPropsIProps) {
   return (
     <div>
       {data?.length >= 1 ? (
@@ -54,7 +54,7 @@ function FaqTable({ data, headerData }: TableIPropsIProps) {
                   <TD>{item.createdBy}</TD>
                   <TD>{item.dateCreated}</TD>
                   <TD>
-                    <MoreIcon />
+                    <MoreIcon onClick={onClick} />
                   </TD>
                 </TR>
               ))}

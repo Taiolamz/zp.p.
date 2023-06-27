@@ -7,8 +7,13 @@ import { H2, H3, H4, H5 } from '../../styles';
 import { AiFillFile } from 'react-icons/ai';
 import { BiImageAdd } from 'react-icons/bi';
 import CustomTimeInput from '../customTimeInput';
+import * as yup from 'yup';
+import { routesPath } from '../../utils';
+import { useNavigate } from 'react-router-dom';
 
-const NewNotification = ({ radioData, setFormvalues }: any) => {
+const { SETTINGS } = routesPath;
+
+const NewNotification = ({ radioData, setFormvalues, type }: any) => {
   const [deliverTime, setDeliverTime] = useState({});
 
   const [selectedNotificationInterval, setSelectedNotificationInterval] = useState('');
@@ -23,18 +28,26 @@ const NewNotification = ({ radioData, setFormvalues }: any) => {
 
   const [deliverDate, setDeliverDate] = useState('');
 
+  const schema = yup.object().shape({
+    title: yup.string().required('Title is required'),
+    message: yup.string().required('Message is required'),
+  });
+
+  const navigate = useNavigate();
+
   return (
     <div>
       <Formik
         initialValues={{
           message: '',
-          title: '',
+          title: type === 'update' ? 'title' : '',
           description: '',
           deliveryTime: '',
-          escalateTo: '',
-          priorityLevel: '',
+          notificationinterval: '',
           deliverDate: '',
+          notificationaction: '',
         }}
+        validationSchema={schema}
         enableReinitialize={true}
         onSubmit={async (values, { setSubmitting }) => {
           const { title, message } = values;
@@ -66,6 +79,7 @@ const NewNotification = ({ radioData, setFormvalues }: any) => {
                   value={values?.title}
                   name={'title'}
                   onChange={handleChange}
+                  error={errors.title}
                 />
 
                 <TextArea
@@ -81,6 +95,7 @@ const NewNotification = ({ radioData, setFormvalues }: any) => {
                 <MiniInput1>
                   <CustomUpload
                     inputMessage={'Click here to attach image'}
+                    error={errors.notificationinterval}
                     label={'Attach Image (Optional)'}
                     backgroundColor={colors.white}
                     setFileValue={setImageValue}
@@ -88,7 +103,7 @@ const NewNotification = ({ radioData, setFormvalues }: any) => {
                   />
 
                   <Picker
-                    error={errors.priorityLevel}
+                    error={errors.notificationinterval}
                     label="Notification Interval (Optional)"
                     selectedValue={setSelectedNotificationInterval}
                     marginBottom="0"
@@ -102,7 +117,7 @@ const NewNotification = ({ radioData, setFormvalues }: any) => {
                 </MiniInput1>
                 <MiniInput2>
                   <Picker
-                    error={errors.priorityLevel}
+                    error={errors.notificationaction}
                     label="Notification Action (Optional)"
                     selectedValue={setSelectedNotificationAction}
                     placeholder="Select an Action"
@@ -123,7 +138,7 @@ const NewNotification = ({ radioData, setFormvalues }: any) => {
                     <H5 left color={colors.grey} semiBold>
                       Enter Delivery Time
                     </H5>
-                    <CustomTimeInput setTimeValue={setDeliverTime} />
+                    <CustomTimeInput setTimeValue={setDeliverTime} error={errors.deliveryTime} />
                   </SingleMiniInput>
                 </MiniInput2>
                 <RadioStyle>
@@ -143,13 +158,14 @@ const NewNotification = ({ radioData, setFormvalues }: any) => {
                     //   disabled={createEscalationTicketStatus === 'loading' ? true : false}
                   />
                   <Button
-                    // onClick={handleCloseEscalateModal}
+                    onClick={() => navigate(SETTINGS)}
                     text="Cancel"
                     disabled={false}
                     secondary
                     backgroundColor="red"
                     borderColor="transparent"
                     color={colors.primary}
+                    boxShadow="none"
                   />
                 </ButtonContainer>
               </div>

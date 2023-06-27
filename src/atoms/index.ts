@@ -34,3 +34,4 @@ export { default as DocumentHistoryModal } from './documentHistoryModal';
 export { default as NewNotification } from './newNotification';
 export { default as NewArticle } from './newArticle';
 export { default as CustomTimeInput } from './customTimeInput';
+export { default as NewFaqAtom } from './newFaqAtom';

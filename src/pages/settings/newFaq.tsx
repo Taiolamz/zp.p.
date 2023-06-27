@@ -1,27 +1,25 @@
 import { useState } from 'react';
-import { AppContainer, NewNotification } from '../../atoms';
+import { AppContainer, NewArticle, NewFaqAtom, NewNotification } from '../../atoms';
 import { routesPath } from '../../utils';
 import { useNavigate } from 'react-router';
-import { H1 } from '../../styles';
 import { NewAppContainer } from './style';
 import { notificationRecipents } from './data';
+import { H5 } from '../../styles';
 
 const { SETTINGS } = routesPath;
 
-function EmailNotification() {
+function NewFaq() {
   const navigate = useNavigate();
   const [formvalues, setFormvalues] = useState();
+  console.log(formvalues);
 
   return (
-    <AppContainer
-      goBack={() => navigate(SETTINGS)}
-      navTitle={`App Contents`}
-      navHelper="EMAIL NOTIFICATION | NEW EMAIL NOTIFICATION">
+    <AppContainer goBack={() => navigate(SETTINGS)} navTitle={`App Contents`} navHelper="FAQ'S | NEW FAQ">
       <NewAppContainer>
-        <NewNotification radioData={notificationRecipents} setFormvalues={setFormvalues} />
+        <NewFaqAtom setFormvalues={setFormvalues} />
       </NewAppContainer>
     </AppContainer>
   );
 }
 
-export default EmailNotification;
+export default NewFaq;

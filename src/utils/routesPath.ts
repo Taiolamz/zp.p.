@@ -18,8 +18,13 @@ const routesPath = {
   USERDETAILS: '/user/profile/',
   TRANSACTIONS: '/transactions',
   NEWAPPNOTIFICATION: '/settings/newappnotification',
+  APPNOTIFICATIONUPDATE: '/settings/appnotificationupdate',
   EMAILNOTIFICATION: '/settings/emailnotification',
+  EMAILNOTIFICATIONUPDATE: '/settings/emailnotificationupdate',
   NEWARTICLE: '/settings/newarticle',
+  ARTICLEUPDATE: '/settings/articleupdate',
+  NEWFAQ: '/settings/newfaq',
+  FAQUPDATE: '/settings/faqupdate',
 };
 
 export default routesPath;

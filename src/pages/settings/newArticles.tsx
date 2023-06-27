@@ -9,11 +9,13 @@ const { SETTINGS } = routesPath;
 
 function NewArticles() {
   const navigate = useNavigate();
+  const [formvalues, setFormvalues] = useState();
+  // console.log(formvalues);
 
   return (
-    <AppContainer goBack={() => navigate(SETTINGS)} navTitle={`App Contents`} navHelper="New Article">
+    <AppContainer goBack={() => navigate(SETTINGS)} navTitle={`App Contents`} navHelper="ARTICLES | NEW ARTICLES ">
       <NewAppContainer>
-        <NewArticle radioData={notificationRecipents} />
+        <NewArticle setFormvalues={setFormvalues} />
       </NewAppContainer>
     </AppContainer>
   );
