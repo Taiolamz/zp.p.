@@ -18,6 +18,7 @@ const routesPath = {
   USERDETAILS: '/user/profile/',
   TRANSACTIONS: '/transactions',
   USERROLES: '/users/roles/',
+  CREATEUSERROLES: '/users/roles/new',
 };
 
 export default routesPath;

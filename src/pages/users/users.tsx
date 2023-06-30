@@ -64,7 +64,7 @@ import {
   getRolesRequest,
 } from '../../redux/slice';
 
-const { USERDETAILS, USERROLES } = routesPath;
+const { USERDETAILS, USERROLES, CREATEUSERROLES } = routesPath;
 
 const activeUser = 'active';
 const inActiveUser = 'inactive';
@@ -613,6 +613,7 @@ function Users() {
                 icon={<AiOutlinePlus color={colors.white} size={15} />}
                 backgroundColor={colors.primary}
                 color={colors.white}
+                onClick={() => navigate(CREATEUSERROLES)}
               />
               <SearchInput
                 backgroundColor={'transparent'}
