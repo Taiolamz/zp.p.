@@ -310,9 +310,14 @@ function CreateRole() {
               backgroundColor={'white'}
               borderColor={colors.greyVariantSix}
               custom
-              onChange={() => {
+              onChange={checked => {
                 setToggleKyc(!toggleKyc);
                 setCurrentAccess(canViewKyc);
+                if (!checked) {
+                  setToggleAllKycAccessRight(false);
+                  setToggleCanAcceptKyc(false);
+                  setToggleCanRejectKyc(false);
+                }
               }}
               checked={toggleKyc}
               label="KYC"
@@ -336,9 +341,14 @@ function CreateRole() {
               backgroundColor={'white'}
               borderColor={colors.greyVariantSix}
               custom
-              onChange={() => {
+              onChange={checked => {
                 setToggleSettlement(!toggleSettlement);
                 setCurrentAccess(canViewSettlement);
+                if (!checked) {
+                  setToggleAllSettlementAccessRight(false);
+                  setToggleReconciliation(false);
+                  setToggleCanReconcileAccount(false);
+                }
               }}
               checked={toggleSettlement}
               label="Settlements"
@@ -471,7 +481,16 @@ function CreateRole() {
                   backgroundColor={'transparent'}
                   borderColor={'transparent'}
                   custom
-                  onChange={() => setToggleAllKycAccessRight(!toggleAllKycAccessRight)}
+                  onChange={checked => {
+                    setToggleAllKycAccessRight(!toggleAllKycAccessRight);
+                    if (checked) {
+                      setToggleCanAcceptKyc(true);
+                      setToggleCanRejectKyc(true);
+                    } else {
+                      setToggleCanAcceptKyc(false);
+                      setToggleCanRejectKyc(false);
+                    }
+                  }}
                   checked={toggleAllKycAccessRight}
                   label="Toggle All"
                   marginBottom={spacing.xxsmall}
@@ -599,12 +618,14 @@ function CreateRole() {
                   backgroundColor={'transparent'}
                   borderColor={'transparent'}
                   custom
-                  onChange={() => {
+                  onChange={checked => {
                     setToggleAllSettlementAccessRight(!toggleAllSettlementAccessRight);
-                    if (toggleAllSettlementAccessRight) {
-                      setToggleSettlement(true);
+                    if (checked) {
                       setToggleReconciliation(true);
                       setToggleCanReconcileAccount(true);
+                    } else {
+                      setToggleReconciliation(false);
+                      setToggleCanReconcileAccount(false);
                     }
                   }}
                   checked={toggleAllSettlementAccessRight}
@@ -627,18 +648,6 @@ function CreateRole() {
                   checked={toggleAllPermissions}
                   label="Access Right"
                   labelTwo={'Status'}
-                />
-                <Switch
-                  borderRadius={false}
-                  paddingVertical={spacing.xsmall}
-                  backgroundColor={'white'}
-                  borderColor={colors.greyVariantTwo}
-                  paddingLeft={spacing.small}
-                  paddingRight={spacing.medium}
-                  custom
-                  onChange={() => setToggleSettlement(!toggleSettlement)}
-                  checked={toggleSettlement}
-                  label="Access settlement"
                 />
                 <Switch
                   borderRadius={false}

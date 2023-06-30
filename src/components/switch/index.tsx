@@ -7,7 +7,7 @@ import { spacing, colors, fontWeight } from '../../utils';
 interface IProps {
   label?: string;
   checked: boolean;
-  onChange: () => void;
+  onChange: (checked: boolean) => void;
   custom?: boolean;
   borderRadius?: boolean;
   paddingVertical?: number | string;
@@ -63,7 +63,7 @@ function RSwitch({
               {labelTwo}
             </H3>
           ) : (
-            <Switch onChange={onChange} checked={checked} uncheckedIcon={false} checkedIcon={false} />
+            <Switch onChange={() => onChange(!checked)} checked={checked} uncheckedIcon={false} checkedIcon={false} />
           )}
         </CustomContainer>
       </div>
