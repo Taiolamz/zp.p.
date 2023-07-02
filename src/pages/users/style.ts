@@ -113,6 +113,7 @@ export const RoleDetailsNameContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  align-content: center;
 `;
 
 export const RoleDetailsHorizontalLine = styled.div`

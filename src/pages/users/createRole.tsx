@@ -2,18 +2,9 @@ import * as yup from 'yup';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { AppContainer, LoaderModal } from '../../atoms';
+import { AppContainer, ActivityActionModal } from '../../atoms';
 
-import {
-  colors,
-  routesPath,
-  dateFormat,
-  capitalizeFirstLetter,
-  timeFormat,
-  images,
-  determineVericationDocState,
-  spacing,
-} from '../../utils';
+import { colors, routesPath, images, spacing } from '../../utils';
 import {
   RoleDetailsPermissionContainer,
   RoleDetailsPermissionContentOne,
@@ -26,11 +17,11 @@ import {
 } from './style';
 import { H2, H3 } from '../../styles';
 
-import { getUserProfileRequest, getUserProfileReset, createRoleRequest, createRoleReset } from '../../redux/slice';
+import { createRoleRequest, createRoleReset } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 import { Dictionary } from '../../types';
-import { Switch, BorderedText, Picker, Input, Button } from '../../components';
+import { Switch, Picker, Input, Button } from '../../components';
 
 const { USERS } = routesPath;
 
@@ -98,7 +89,6 @@ function CreateRole() {
   const createRoleState = useAppSelector(state => state.createRole);
   const { status: createRoleStatus } = createRoleState;
 
-  console.log(createRoleStatus, 'createRoleStatus');
   // can vie all access rights
 
   function addStingToArray(arr: string[], string: string) {
@@ -358,6 +348,7 @@ function CreateRole() {
             error={roleNameError}
             backgroundColor={colors.white}
             borderColor={colors.greyVariantTwo}
+            marginBottom={'0px'}
           />
         </RoleDetailsNameContainer>
         <RoleDetailsHorizontalLine />
@@ -999,6 +990,22 @@ function CreateRole() {
             </RoleDetailsPermissionContentTwo>
           )}
         </RoleDetailsPermissionContainer>
+
+        <ActivityActionModal
+          actionClick={() => {
+            dispatch(createRoleReset());
+            navigate(USERS);
+          }}
+          closeModal={() => {
+            dispatch(createRoleReset());
+            navigate(USERS);
+          }}
+          actionText="Close"
+          isLoading={false}
+          isModalVisible={createRoleStatus === 'succeeded'}
+          text={'You have successfully created a new role'}
+          image={images.check}
+        />
       </div>
     </AppContainer>
   );
