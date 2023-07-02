@@ -26,7 +26,7 @@ import {
 } from './style';
 import { H2, H3 } from '../../styles';
 
-import { getUserProfileRequest, getUserProfileReset } from '../../redux/slice';
+import { getUserProfileRequest, getUserProfileReset, createRoleRequest, createRoleReset } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 import { Dictionary } from '../../types';
@@ -94,6 +94,11 @@ function CreateRole() {
   const [roleNameValue, setRoleNameValue] = useState('');
   const [roleNameError, setRoleNameError] = useState('');
 
+  // redux state
+  const createRoleState = useAppSelector(state => state.createRole);
+  const { status: createRoleStatus } = createRoleState;
+
+  console.log(createRoleStatus, 'createRoleStatus');
   // can vie all access rights
 
   function addStingToArray(arr: string[], string: string) {
@@ -147,7 +152,6 @@ function CreateRole() {
         canViewTransaction,
         canViewSettings,
       ];
-      console.log(resultArr, 'arr result');
     }
     if (!toggleAllPermissions) {
       resultArr = [];
@@ -322,7 +326,13 @@ function CreateRole() {
       setRoleNameError('Enter role name');
     } else {
       setRoleNameError('');
-      console.log(selectedUserRoles, 'create role');
+      const payload = {
+        role: roleNameValue,
+        permissions: selectedUserRoles,
+      };
+
+      console.log(payload, 'payload');
+      dispatch(createRoleRequest(payload));
     }
   };
 
@@ -522,7 +532,12 @@ function CreateRole() {
             />
 
             <RoleDetailsUpdateContainer>
-              <Button onClick={handleCreateRole} type="submit" text="Create Role" disabled={false} />
+              <Button
+                onClick={handleCreateRole}
+                type="submit"
+                text="Create Role"
+                disabled={createRoleStatus === 'loading'}
+              />
               <Button
                 onClick={() => {}}
                 type="submit"

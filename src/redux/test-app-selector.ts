@@ -36,6 +36,7 @@ import {
   updateInternalUserSliceReducer,
   resetInternalUserPasswordSliceReducer,
   getRolesSliceReducer,
+  createRoleSliceReducer,
 } from './slice';
 const state = {
   login: loginSliceReducer,
@@ -75,6 +76,7 @@ const state = {
   updateInternalUser: updateInternalUserSliceReducer,
   resetInternalUserPassword: resetInternalUserPasswordSliceReducer,
   getRoles: getRolesSliceReducer,
+  createRole: createRoleSliceReducer,
 };
 
 export const testAppSelector = (f: any) => f(state);
