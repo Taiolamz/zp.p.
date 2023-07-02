@@ -1,10 +1,23 @@
-import * as yup from 'yup';
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 import { AppContainer, ActivityActionModal } from '../../atoms';
 
-import { colors, routesPath, images, spacing } from '../../utils';
+import {
+  colors,
+  routesPath,
+  images,
+  spacing,
+  getAdminUserSelectedRoles,
+  // files
+  canViewDashboard,
+  canViewSupport,
+  canViewKyc,
+  canViewSettlement,
+  canViewUsers,
+  canViewTransaction,
+  canViewSettings,
+} from '../../utils';
+
 import {
   RoleDetailsPermissionContainer,
   RoleDetailsPermissionContentOne,
@@ -16,37 +29,11 @@ import {
   RoleDetailsHorizontalLine,
 } from './style';
 import { H2, H3 } from '../../styles';
-
 import { createRoleRequest, createRoleReset } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
-
-import { Dictionary } from '../../types';
 import { Switch, Picker, Input, Button } from '../../components';
 
 const { USERS } = routesPath;
-
-// access types
-const canViewDashboard = 'can view dashboard';
-//   support
-const canViewSupport = 'can view support';
-const canEditSupport = 'can edit support';
-//   kyc
-const canViewKyc = 'can view kyc';
-const canAcceptKyc = 'can accept kyc';
-const canRejectKyc = 'can reject kyc';
-// settlement
-const canViewSettlement = 'can view settlement';
-// reconciliation
-const canViewReconciliation = 'can view reconciliation';
-const canReconcileAccount = 'can reconcile account';
-// users
-const canViewUsers = 'can view users';
-const canEditUsers = 'can edit users';
-// transactions
-const canViewTransaction = 'can view transaction';
-// settings
-const canViewSettings = 'can view settings';
-const canEditSettings = 'can edit settings';
 
 function CreateRole() {
   const navigate = useNavigate();
@@ -88,187 +75,6 @@ function CreateRole() {
   // redux state
   const createRoleState = useAppSelector(state => state.createRole);
   const { status: createRoleStatus } = createRoleState;
-
-  // can vie all access rights
-
-  function addStingToArray(arr: string[], string: string) {
-    var index = arr.indexOf(string);
-
-    if (index === -1) {
-      arr.push(string); // String does not exist in the array, so add it
-    } else {
-      //   arr.splice(index, 1);
-      arr = arr.filter(e => e !== string);
-    }
-
-    return arr;
-  }
-
-  function removeStingToArray(arr: string[], string: string) {
-    arr = arr.filter(e => e !== string);
-    // arr.splice(index, 1); // String exists in the array, so remove it
-
-    return arr;
-  }
-
-  function getAdminUserSelectedRoles(
-    toggleAllPermissions: boolean,
-    toggleDashboard: boolean,
-    toggleSupport: boolean,
-    toggleCanEditSupport: boolean,
-    toggleKyc: boolean,
-    toggleAllKycAccessRight: boolean,
-    toggleCanAcceptKyc: boolean,
-    toggleCanRejectKyc: boolean,
-    toggleSettlement: boolean,
-    toggleAllSettlementAccessRight: boolean,
-    toggleReconciliation: boolean,
-    toggleCanReconcileAccount: boolean,
-    toggleUsers: boolean,
-    toggleCanEditUsers: boolean,
-    toggleTransactions: boolean,
-    toggleSettings: boolean,
-    toggleCanEditSettings: boolean,
-  ) {
-    let resultArr: string[] = [];
-    if (toggleAllPermissions) {
-      resultArr = [
-        canViewDashboard,
-        canViewSupport,
-        canViewKyc,
-        canViewSettlement,
-        canViewReconciliation,
-        canViewUsers,
-        canViewTransaction,
-        canViewSettings,
-      ];
-    }
-    if (!toggleAllPermissions) {
-      resultArr = [];
-    }
-
-    if (toggleDashboard) {
-      addStingToArray(resultArr, canViewDashboard);
-    }
-    if (!toggleDashboard) {
-      removeStingToArray(resultArr, canViewDashboard);
-    }
-    if (toggleSupport) {
-      addStingToArray(resultArr, canViewSupport);
-      addStingToArray(resultArr, canEditSupport);
-    }
-    if (!toggleSupport) {
-      removeStingToArray(resultArr, canViewSupport);
-      removeStingToArray(resultArr, canEditSupport);
-    }
-    if (toggleCanEditSupport) {
-      addStingToArray(resultArr, canEditSupport);
-    }
-    if (!toggleCanEditSupport) {
-      removeStingToArray(resultArr, canEditSupport);
-    }
-    if (toggleKyc) {
-      addStingToArray(resultArr, canViewKyc);
-    }
-    if (!toggleKyc) {
-      removeStingToArray(resultArr, canViewKyc);
-      removeStingToArray(resultArr, canAcceptKyc);
-      removeStingToArray(resultArr, canRejectKyc);
-    }
-    if (toggleAllKycAccessRight) {
-      addStingToArray(resultArr, canAcceptKyc);
-      addStingToArray(resultArr, canRejectKyc);
-    }
-    if (!toggleAllKycAccessRight) {
-      removeStingToArray(resultArr, canAcceptKyc);
-      removeStingToArray(resultArr, canRejectKyc);
-    }
-    if (toggleCanAcceptKyc) {
-      addStingToArray(resultArr, canAcceptKyc);
-    }
-    if (!toggleCanAcceptKyc) {
-      removeStingToArray(resultArr, canAcceptKyc);
-    }
-    if (toggleCanRejectKyc) {
-      addStingToArray(resultArr, canRejectKyc);
-    }
-    if (!toggleCanRejectKyc) {
-      removeStingToArray(resultArr, canRejectKyc);
-    }
-    if (toggleSupport) {
-      addStingToArray(resultArr, canViewSupport);
-    }
-    if (!toggleSupport) {
-      removeStingToArray(resultArr, canViewSupport);
-      removeStingToArray(resultArr, canEditSupport);
-    }
-    if (toggleCanEditSupport) {
-      addStingToArray(resultArr, canEditSupport);
-    }
-    if (!toggleCanEditSupport) {
-      removeStingToArray(resultArr, canEditSupport);
-    }
-    if (toggleSettlement) {
-      addStingToArray(resultArr, canViewSettlement);
-    }
-    if (!toggleSettlement) {
-      removeStingToArray(resultArr, canViewSettlement);
-    }
-    if (toggleAllSettlementAccessRight) {
-      addStingToArray(resultArr, canViewReconciliation);
-      addStingToArray(resultArr, canReconcileAccount);
-    }
-    if (!toggleAllSettlementAccessRight) {
-      removeStingToArray(resultArr, canViewReconciliation);
-      removeStingToArray(resultArr, canReconcileAccount);
-    }
-    if (toggleReconciliation) {
-      addStingToArray(resultArr, canViewReconciliation);
-    }
-    if (!toggleReconciliation) {
-      removeStingToArray(resultArr, canViewReconciliation);
-    }
-    if (toggleCanReconcileAccount) {
-      addStingToArray(resultArr, canReconcileAccount);
-    }
-    if (!toggleCanReconcileAccount) {
-      removeStingToArray(resultArr, canReconcileAccount);
-    }
-    if (toggleUsers) {
-      addStingToArray(resultArr, canViewUsers);
-    }
-    if (!toggleUsers) {
-      removeStingToArray(resultArr, canViewUsers);
-      removeStingToArray(resultArr, canEditUsers);
-    }
-    if (toggleCanEditUsers) {
-      addStingToArray(resultArr, canEditUsers);
-    }
-    if (!toggleCanEditUsers) {
-      removeStingToArray(resultArr, canEditUsers);
-    }
-    if (toggleTransactions) {
-      addStingToArray(resultArr, canViewTransaction);
-    }
-    if (!toggleTransactions) {
-      removeStingToArray(resultArr, canViewTransaction);
-    }
-    if (toggleSettings) {
-      addStingToArray(resultArr, canViewSettings);
-    }
-    if (!toggleSettings) {
-      removeStingToArray(resultArr, canViewSettings);
-      removeStingToArray(resultArr, canEditSettings);
-    }
-    if (toggleCanEditSettings) {
-      addStingToArray(resultArr, canEditSettings);
-    }
-    if (!toggleCanEditSettings) {
-      removeStingToArray(resultArr, canEditSettings);
-    }
-
-    return resultArr;
-  }
 
   useEffect(() => {
     const allArrResult = getAdminUserSelectedRoles(
