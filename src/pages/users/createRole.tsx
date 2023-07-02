@@ -1,5 +1,7 @@
+import * as yup from 'yup';
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+
 import { AppContainer, LoaderModal } from '../../atoms';
 
 import {
@@ -28,9 +30,32 @@ import { getUserProfileRequest, getUserProfileReset } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 import { Dictionary } from '../../types';
-import { Switch, BorderedText, Picker } from '../../components';
-import { boolean } from 'yup';
+import { Switch, BorderedText, Picker, Input, Button } from '../../components';
+
 const { USERS } = routesPath;
+
+// access types
+const canViewDashboard = 'can view dashboard';
+//   support
+const canViewSupport = 'can view support';
+const canEditSupport = 'can edit support';
+//   kyc
+const canViewKyc = 'can view kyc';
+const canAcceptKyc = 'can accept kyc';
+const canRejectKyc = 'can reject kyc';
+// settlement
+const canViewSettlement = 'can view settlement';
+// reconciliation
+const canViewReconciliation = 'can view reconciliation';
+const canReconcileAccount = 'can reconcile account';
+// users
+const canViewUsers = 'can view users';
+const canEditUsers = 'can edit users';
+// transactions
+const canViewTransaction = 'can view transaction';
+// settings
+const canViewSettings = 'can view settings';
+const canEditSettings = 'can edit settings';
 
 function CreateRole() {
   const navigate = useNavigate();
@@ -63,30 +88,11 @@ function CreateRole() {
   const [toggleSettings, setToggleSettings] = useState<boolean>(false);
   const [toggleCanEditSettings, setToggleCanEditSettings] = useState<boolean>(false);
 
-  const [currentAccess, setCurrentAccess] = useState<string>('');
+  const [currentAccess, setCurrentAccess] = useState<string>(canViewDashboard);
+  const [selectedUserRoles, setSelectedUserRoles] = useState<string[]>([]);
   const [selectedUserType, setSelectedUserType] = useState('');
-
-  const canViewDashboard = 'can view dashboard';
-  //   support
-  const canViewSupport = 'can view support';
-  const canEditSupport = 'can edit support';
-  //   kyc
-  const canViewKyc = 'can view kyc';
-  const canAcceptKyc = 'can accept kyc';
-  const canRejectKyc = 'can reject kyc';
-  // settlement
-  const canViewSettlement = 'can view settlement';
-  // reconciliation
-  const canViewReconciliation = 'can view reconciliation';
-  const canReconcileAccount = 'can reconcile account';
-  // users
-  const canViewUsers = 'can view users';
-  const canEditUsers = 'can edit users';
-  // transactions
-  const canViewTransaction = 'can view transaction';
-  // settings
-  const canViewSettings = 'can view settings';
-  const canEditSettings = 'can edit settings';
+  const [roleNameValue, setRoleNameValue] = useState('');
+  const [roleNameError, setRoleNameError] = useState('');
 
   // can vie all access rights
 
@@ -266,7 +272,7 @@ function CreateRole() {
     if (!toggleCanEditSettings) {
       removeStingToArray(resultArr, canEditSettings);
     }
-    console.log(resultArr, 'final result');
+
     return resultArr;
   }
 
@@ -290,8 +296,7 @@ function CreateRole() {
       toggleSettings,
       toggleCanEditSettings,
     );
-
-    console.log(allArrResult, 'allArrResult');
+    setSelectedUserRoles(allArrResult);
   }, [
     toggleAllPermissions,
     toggleDashboard,
@@ -312,6 +317,15 @@ function CreateRole() {
     toggleCanEditSettings,
   ]);
 
+  const handleCreateRole = () => {
+    if (roleNameValue.length < 2) {
+      setRoleNameError('Enter role name');
+    } else {
+      setRoleNameError('');
+      console.log(selectedUserRoles, 'create role');
+    }
+  };
+
   return (
     <AppContainer goBack={() => navigate(USERS)} navTitle={`USER CONTROL USERS`} navHelper="ROLE DETAILS">
       <div>
@@ -320,11 +334,20 @@ function CreateRole() {
         </H2>
         <RoleDetailsNameContainer>
           <H3 style={{ marginRight: spacing.small }}>Role Name</H3>
-          <BorderedText
-            color={colors.primary}
-            text="Executive Access"
-            backgroundColor="transparent"
-            borderColor={colors.primary}
+
+          <Input
+            label=""
+            type="text"
+            name="roleNameValue"
+            placeholder="Enter Role Name"
+            value={roleNameValue}
+            onChange={(e: any) => {
+              setRoleNameValue(e.target.value);
+              setRoleNameError('');
+            }}
+            error={roleNameError}
+            backgroundColor={colors.white}
+            borderColor={colors.greyVariantTwo}
           />
         </RoleDetailsNameContainer>
         <RoleDetailsHorizontalLine />
@@ -499,8 +522,16 @@ function CreateRole() {
             />
 
             <RoleDetailsUpdateContainer>
-              <BorderedText color={colors.white} text="Update Role" backgroundColor={colors.primary} />
-              <BorderedText color={colors.greyDark} text="Cancel" backgroundColor="transparent" />
+              <Button onClick={handleCreateRole} type="submit" text="Create Role" disabled={false} />
+              <Button
+                onClick={() => {}}
+                type="submit"
+                text="Cancel"
+                disabled={false}
+                backgroundColor={'transparent'}
+                color={colors.primary}
+                borderColor={'transparent'}
+              />
             </RoleDetailsUpdateContainer>
           </RoleDetailsPermissionContentOne>
 
