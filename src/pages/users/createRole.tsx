@@ -35,8 +35,6 @@ const { USERS } = routesPath;
 function CreateRole() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  let { id } = useParams();
-  const userId = id?.trim();
 
   const [toggleAllPermissions, setToggleAllPermissions] = useState<boolean>(false);
   //   dashboard
@@ -98,16 +96,16 @@ function CreateRole() {
     if (index === -1) {
       arr.push(string); // String does not exist in the array, so add it
     } else {
-      arr.splice(index, 1);
+      //   arr.splice(index, 1);
+      arr = arr.filter(e => e !== string);
     }
 
     return arr;
   }
 
   function removeStingToArray(arr: string[], string: string) {
-    var index = arr.indexOf(string);
-
-    arr.splice(index, 1); // String exists in the array, so remove it
+    arr = arr.filter(e => e !== string);
+    // arr.splice(index, 1); // String exists in the array, so remove it
 
     return arr;
   }
@@ -143,6 +141,7 @@ function CreateRole() {
         canViewTransaction,
         canViewSettings,
       ];
+      console.log(resultArr, 'arr result');
     }
     if (!toggleAllPermissions) {
       resultArr = [];
@@ -195,6 +194,19 @@ function CreateRole() {
     }
     if (!toggleCanRejectKyc) {
       removeStingToArray(resultArr, canRejectKyc);
+    }
+    if (toggleSupport) {
+      addStingToArray(resultArr, canViewSupport);
+    }
+    if (!toggleSupport) {
+      removeStingToArray(resultArr, canViewSupport);
+      removeStingToArray(resultArr, canEditSupport);
+    }
+    if (toggleCanEditSupport) {
+      addStingToArray(resultArr, canEditSupport);
+    }
+    if (!toggleCanEditSupport) {
+      removeStingToArray(resultArr, canEditSupport);
     }
     if (toggleSettlement) {
       addStingToArray(resultArr, canViewSettlement);
@@ -254,7 +266,51 @@ function CreateRole() {
     if (!toggleCanEditSettings) {
       removeStingToArray(resultArr, canEditSettings);
     }
+    console.log(resultArr, 'final result');
+    return resultArr;
   }
+
+  useEffect(() => {
+    const allArrResult = getAdminUserSelectedRoles(
+      toggleAllPermissions,
+      toggleDashboard,
+      toggleSupport,
+      toggleCanEditSupport,
+      toggleKyc,
+      toggleAllKycAccessRight,
+      toggleCanAcceptKyc,
+      toggleCanRejectKyc,
+      toggleSettlement,
+      toggleAllSettlementAccessRight,
+      toggleReconciliation,
+      toggleCanReconcileAccount,
+      toggleUsers,
+      toggleCanEditUsers,
+      toggleTransactions,
+      toggleSettings,
+      toggleCanEditSettings,
+    );
+
+    console.log(allArrResult, 'allArrResult');
+  }, [
+    toggleAllPermissions,
+    toggleDashboard,
+    toggleSupport,
+    toggleCanEditSupport,
+    toggleKyc,
+    toggleAllKycAccessRight,
+    toggleCanAcceptKyc,
+    toggleCanRejectKyc,
+    toggleSettlement,
+    toggleAllSettlementAccessRight,
+    toggleReconciliation,
+    toggleCanReconcileAccount,
+    toggleUsers,
+    toggleCanEditUsers,
+    toggleTransactions,
+    toggleSettings,
+    toggleCanEditSettings,
+  ]);
 
   return (
     <AppContainer goBack={() => navigate(USERS)} navTitle={`USER CONTROL USERS`} navHelper="ROLE DETAILS">
@@ -284,9 +340,46 @@ function CreateRole() {
               backgroundColor={'transparent'}
               borderColor={'transparent'}
               custom
-              onChange={() => {
+              onChange={checked => {
                 setToggleAllPermissions(!toggleAllPermissions);
                 setCurrentAccess(canViewDashboard);
+                if (checked) {
+                  setToggleAllPermissions(true);
+                  setToggleDashboard(true);
+                  setToggleSupport(true);
+                  setToggleCanEditSupport(true);
+                  setToggleKyc(true);
+                  setToggleAllKycAccessRight(true);
+                  setToggleCanAcceptKyc(true);
+                  setToggleCanRejectKyc(true);
+                  setToggleSettlement(true);
+                  setToggleAllSettlementAccessRight(true);
+                  setToggleReconciliation(true);
+                  setToggleCanReconcileAccount(true);
+                  setToggleUsers(true);
+                  setToggleCanEditUsers(true);
+                  setToggleTransactions(true);
+                  setToggleSettings(true);
+                  setToggleCanEditSettings(true);
+                } else {
+                  setToggleAllPermissions(false);
+                  setToggleDashboard(false);
+                  setToggleSupport(false);
+                  setToggleCanEditSupport(false);
+                  setToggleKyc(false);
+                  setToggleAllKycAccessRight(false);
+                  setToggleCanAcceptKyc(false);
+                  setToggleCanRejectKyc(false);
+                  setToggleSettlement(false);
+                  setToggleAllSettlementAccessRight(false);
+                  setToggleReconciliation(false);
+                  setToggleCanReconcileAccount(false);
+                  setToggleUsers(false);
+                  setToggleCanEditUsers(false);
+                  setToggleTransactions(false);
+                  setToggleSettings(false);
+                  setToggleCanEditSettings(false);
+                }
               }}
               checked={toggleAllPermissions}
               label="Toggle All"
@@ -328,9 +421,12 @@ function CreateRole() {
               backgroundColor={'white'}
               borderColor={colors.greyVariantSix}
               custom
-              onChange={() => {
+              onChange={checked => {
                 setToggleSupport(!toggleSupport);
                 setCurrentAccess(canViewSupport);
+                if (!checked) {
+                  setToggleCanEditSupport(false);
+                }
               }}
               checked={toggleSupport}
               label="Support"
@@ -359,9 +455,12 @@ function CreateRole() {
               backgroundColor={'white'}
               borderColor={colors.greyVariantSix}
               custom
-              onChange={() => {
+              onChange={checked => {
                 setToggleUsers(!toggleUsers);
                 setCurrentAccess(canViewUsers);
+                if (!checked) {
+                  setToggleCanEditUsers(false);
+                }
               }}
               checked={toggleUsers}
               label="User Control"
@@ -386,9 +485,12 @@ function CreateRole() {
               backgroundColor={colors.purpleVariantThree}
               borderColor={colors.greyVariantSix}
               custom
-              onChange={() => {
+              onChange={checked => {
                 setToggleSettings(!toggleSettings);
                 setCurrentAccess(canViewSettings);
+                if (!checked) {
+                  setToggleCanEditSettings(false);
+                }
               }}
               checked={toggleSettings}
               label="App Contents"
@@ -403,7 +505,7 @@ function CreateRole() {
           </RoleDetailsPermissionContentOne>
 
           {/* second part */}
-          {/* dashborf */}
+          {/* dashbord */}
           {currentAccess === canViewDashboard && (
             <RoleDetailsPermissionContentTwo>
               <RoleDetailsAllUsersContainer>
@@ -453,9 +555,9 @@ function CreateRole() {
                   paddingLeft={spacing.small}
                   paddingRight={spacing.medium}
                   custom
-                  onChange={() => setToggleAllPermissions(!toggleAllPermissions)}
-                  checked={toggleAllPermissions}
-                  label="Can View this tab"
+                  onChange={() => setToggleDashboard(!toggleDashboard)}
+                  checked={toggleDashboard}
+                  label="Can View dashboard"
                 />
               </RoleDetailsAccess>
             </RoleDetailsPermissionContentTwo>
@@ -592,7 +694,7 @@ function CreateRole() {
                   custom
                   onChange={() => setToggleCanEditSupport(!toggleCanEditSupport)}
                   checked={toggleCanEditSupport}
-                  label="Access Spport"
+                  label="Access Support"
                 />
               </RoleDetailsAccess>
             </RoleDetailsPermissionContentTwo>
@@ -729,7 +831,7 @@ function CreateRole() {
                   custom
                   onChange={() => setToggleCanEditUsers(!toggleCanEditUsers)}
                   checked={toggleCanEditUsers}
-                  label="Access Users"
+                  label="Can edit Users controls"
                 />
               </RoleDetailsAccess>
             </RoleDetailsPermissionContentTwo>
@@ -845,7 +947,7 @@ function CreateRole() {
                   custom
                   onChange={() => setToggleCanEditSettings(!toggleCanEditSettings)}
                   checked={toggleCanEditSettings}
-                  label="Access Settings"
+                  label="Can edit settings"
                 />
               </RoleDetailsAccess>
             </RoleDetailsPermissionContentTwo>
