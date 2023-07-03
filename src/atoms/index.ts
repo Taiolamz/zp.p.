@@ -31,3 +31,7 @@ export { default as TransactionVolume } from './transactionVolume';
 export { default as CustomerGrowth } from './customerGrowth';
 export { default as DashboardBarChart } from './dashboardBarChart';
 export { default as DocumentHistoryModal } from './documentHistoryModal';
+export { default as NewNotification } from './newNotification';
+export { default as NewArticle } from './newArticle';
+export { default as CustomTimeInput } from './customTimeInput';
+export { default as NewFaqAtom } from './newFaqAtom';
