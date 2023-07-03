@@ -13,3 +13,6 @@ export { default as routesPath } from './routesPath';
 export { default as showMessage } from './showMessage';
 export { default as capitalizeFirstLetter } from './capitalizeFirstLetter';
 export { default as determineVericationDocState } from './determineVericationDocState';
+export { default as arrayToString } from './arrayToString';
+export { default as getWordFromString } from './getWordFromString';
+export { default as lowerCaseFirstLetter } from './lowerCaseFirstLetter';

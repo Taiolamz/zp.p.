@@ -4,22 +4,21 @@ import { colors, currencyFormat, dateFormat, capitalizeFirstLetter } from '../..
 import { ReactComponent as EmptySearchIcon } from '../../../assets/svg/emptySearch.svg';
 import { Dictionary } from '../../../types';
 
-export interface InternalUsersTableIPropsIProps {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-  status: boolean;
-  lastSeen: string;
-  dateEnrolled: string;
+export interface RolesAndPermissionTableIPropsIProps {
+  id?: number;
+  title: string;
+  permissionCount: string;
+  userCount: string;
+  createdBy: string;
+  roleId?: string;
 }
 
-export interface InternalUsersTableIProps {
-  data: InternalUsersTableIPropsIProps[];
+export interface RolesAndPermissionTableIProps {
+  data: RolesAndPermissionTableIPropsIProps[];
   setSelectedItem?: any;
   backgroundColor?: string;
   header?: boolean;
-  headerData?: any;
+  headerData: Dictionary;
   onClick: (item: Dictionary) => any;
 }
 
@@ -29,7 +28,7 @@ const emptyListCenterStyle = {
   alignItems: 'center',
 };
 
-function InternaUsersTable({ data, setSelectedItem, headerData, onClick }: any) {
+function RolesAndPermissionTable({ data, setSelectedItem, headerData, onClick }: RolesAndPermissionTableIProps) {
   const handleOnSelect = (item: any) => {
     setSelectedItem(item);
   };
@@ -42,27 +41,21 @@ function InternaUsersTable({ data, setSelectedItem, headerData, onClick }: any) 
             <thead>
               <tr>
                 <TH></TH>
-                <TH>{headerData.name}</TH>
-                <TH>{headerData.email}</TH>
-                <TH>{headerData.role}</TH>
-                <TH>{headerData.status}</TH>
-                <TH>{headerData.lastSeen}</TH>
-                <TH>{headerData.dateEnrolled}</TH>
+                <TH>{headerData.title}</TH>
+                <TH>{headerData.permissionCount}</TH>
+                <TH>{headerData.userCount}</TH>
+                <TH>{headerData.createdBy}</TH>
               </tr>
             </thead>
 
             <tbody>
-              {data?.map((item: any, index: number) => (
+              {data?.map((item: Dictionary, index: number) => (
                 <TR key={index}>
                   <TD>{item.id}</TD>
-                  <TD>{item.name}</TD>
-                  <TD>{item.email}</TD>
-                  <TD>{item.role}</TD>
-                  <TD color={item.status === 'active' ? colors.greenVariantTwo : colors.red}>
-                    {capitalizeFirstLetter(item.status)}
-                  </TD>
-                  <TD>{dateFormat(item.lastSeen)}</TD>
-                  <TD>{dateFormat(item.dateEnrolled)}</TD>
+                  <TD>{item.title}</TD>
+                  <TD>{item.permissionCount}</TD>
+                  <TD>{item.userCount}</TD>
+                  <TD>{item.createdBy}</TD>
                   <TD>
                     <MoreIcon onClick={() => onClick(item)} />
                   </TD>
@@ -80,4 +73,4 @@ function InternaUsersTable({ data, setSelectedItem, headerData, onClick }: any) 
   );
 }
 
-export default InternaUsersTable;
+export default RolesAndPermissionTable;
