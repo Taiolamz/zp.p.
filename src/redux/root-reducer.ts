@@ -32,6 +32,16 @@ import {
   getAllTransactionsSliceReducer,
   downloadTransactionByIdSliceReducer,
   downloadTransactionsSliceReducer,
+  getInternalUsersSliceReducer,
+  getRolesDropDownSliceReducer,
+  createInternalUserSliceReducer,
+  updateInternalUserSliceReducer,
+  resetInternalUserPasswordSliceReducer,
+  getRolesSliceReducer,
+  createRoleSliceReducer,
+  updateRoleSliceReducer,
+  getSingleRoleSliceReducer,
+  deleteRoleSliceReducer,
 } from './slice';
 
 const rootReducer = combineReducers({
@@ -67,6 +77,16 @@ const rootReducer = combineReducers({
   getAllTransactions: getAllTransactionsSliceReducer,
   downloadTransactionById: downloadTransactionByIdSliceReducer,
   downloadTransactions: downloadTransactionsSliceReducer,
+  getInternalUsers: getInternalUsersSliceReducer,
+  getRolesDropDown: getRolesDropDownSliceReducer,
+  createInternalUser: createInternalUserSliceReducer,
+  updateInternalUser: updateInternalUserSliceReducer,
+  resetInternalUserPassword: resetInternalUserPasswordSliceReducer,
+  getRoles: getRolesSliceReducer,
+  createRole: createRoleSliceReducer,
+  updateRole: updateRoleSliceReducer,
+  getSingleRole: getSingleRoleSliceReducer,
+  deleteRole: deleteRoleSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

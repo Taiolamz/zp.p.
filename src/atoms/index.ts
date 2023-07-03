@@ -35,3 +35,5 @@ export { default as NewNotification } from './newNotification';
 export { default as NewArticle } from './newArticle';
 export { default as CustomTimeInput } from './customTimeInput';
 export { default as NewFaqAtom } from './newFaqAtom';
+export { default as CreateInternalUserModal } from './createInternalUserModal';
+export { default as LoginHistoryOnlyModal } from './loginHistoryOnlyModal';

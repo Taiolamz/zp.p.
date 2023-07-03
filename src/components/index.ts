@@ -35,6 +35,7 @@ export { default as SavedBanksTable } from './tables/savedBanksTable';
 export { default as PreviousTransactionsTable } from './tables/previousTransactionsTable';
 export { default as SubAgentCard } from './subAgentCard';
 export { default as InternaUsersTable } from './tables/internalUsersTable';
+export { default as RolesAndPermissionTable } from './tables/rolesAndPermissionTable';
 export { default as Ratecard } from './cards/rateCard';
 export { default as Activecard } from './cards/activeCard';
 export { default as CountInfoCardBorderText } from './cards/countInfoCardBorderText';

@@ -25,6 +25,8 @@ const routesPath = {
   ARTICLEUPDATE: '/settings/articleupdate',
   NEWFAQ: '/settings/newfaq',
   FAQUPDATE: '/settings/faqupdate',
+  USERROLES: '/users/roles/',
+  CREATEUSERROLES: '/users/roles/new',
 };
 
 export default routesPath;

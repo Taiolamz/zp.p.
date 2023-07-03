@@ -1,7 +1,7 @@
-import { memo, ReactElement } from "react";
-import { Container } from "./style";
-import { H5 } from "../../styles";
-import { colors, spacing } from "../../utils";
+import { memo, ReactElement } from 'react';
+import { Container } from './style';
+import { H5 } from '../../styles';
+import { colors, spacing } from '../../utils';
 
 interface IProps {
   text: string;
@@ -12,6 +12,7 @@ interface IProps {
   borderRadius?: string | number;
   onClick?: () => void;
   cursor?: string;
+  borderColor?: string;
 }
 
 function BorderedText({
@@ -21,14 +22,16 @@ function BorderedText({
   color,
   height,
   onClick,
-  cursor = "pointer",
+  cursor = 'pointer',
+  borderColor,
 }: IProps) {
   return (
     <Container
       onClick={onClick}
       height={height}
       backgroundColor={backgroundColor}
-      cursor={cursor}>
+      cursor={cursor}
+      borderColor={borderColor}>
       {icon && <div style={{ marginRight: spacing.xxsmall }}>{icon}</div>}
       <H5 semiBold color={color ? color : colors.grey}>
         {text}

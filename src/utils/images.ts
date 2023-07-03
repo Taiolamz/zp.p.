@@ -12,6 +12,7 @@ const images = {
   successIconGif: require('../assets/gif/successIcon.gif'),
   reactivateUser: require('../assets/images/reactivateUser.png'),
   deactivateUser: require('../assets/images/deactivateUser.png'),
+  sent: require('../assets/images/sent.png'),
 };
 
 export default images;
