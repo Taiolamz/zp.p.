@@ -1,33 +1,23 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { AppContainer, LoaderModal, ActivityActionModal } from '../../atoms';
+import { useNavigate } from 'react-router-dom';
+import { AppContainer, ActivityActionModal } from '../../atoms';
 
 import {
   colors,
   routesPath,
-  dateFormat,
-  capitalizeFirstLetter,
-  timeFormat,
   images,
-  determineVericationDocState,
   spacing,
   getAdminUserSelectedRoles,
   // files
   canViewDashboard,
   canViewSupport,
-  canEditSupport,
   canViewKyc,
-  canAcceptKyc,
-  canRejectKyc,
   canViewSettlement,
-  canViewReconciliation,
-  canReconcileAccount,
   canViewUsers,
-  canEditUsers,
   canViewTransaction,
   canViewSettings,
-  canEditSettings,
 } from '../../utils';
+
 import {
   RoleDetailsPermissionContainer,
   RoleDetailsPermissionContentOne,
@@ -39,19 +29,15 @@ import {
   RoleDetailsHorizontalLine,
 } from './style';
 import { H2, H3 } from '../../styles';
-
-import { updateRoleRequest, updateRoleReset, getSingleRoleRequest, getSingleRoleReset } from '../../redux/slice';
+import { createRoleRequest, createRoleReset } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import { Switch, Picker, Input, Button } from '../../components';
 
-import { Dictionary } from '../../types';
-import { Switch, BorderedText, Picker, Button } from '../../components';
 const { USERS } = routesPath;
 
-function RoleDetails() {
+function CreateRole() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  let { id } = useParams();
-  const roleId = id?.trim();
 
   const [toggleAllPermissions, setToggleAllPermissions] = useState<boolean>(false);
   //   dashboard
@@ -83,71 +69,12 @@ function RoleDetails() {
   const [currentAccess, setCurrentAccess] = useState<string>(canViewDashboard);
   const [selectedUserRoles, setSelectedUserRoles] = useState<string[]>([]);
   const [selectedUserType, setSelectedUserType] = useState('');
-  const [roleName, setRoleName] = useState('');
+  const [roleNameValue, setRoleNameValue] = useState('');
+  const [roleNameError, setRoleNameError] = useState('');
 
   // redux state
-  const singleRoleState = useAppSelector(state => state.getSingleRole);
-  const { status: singleRoleStatus } = singleRoleState;
-
-  const updateRoleState = useAppSelector(state => state.updateRole);
-  const { status: updateRoleStatus } = updateRoleState;
-
-  useEffect(() => {
-    dispatch(getSingleRoleRequest({ id: roleId }));
-  }, []);
-
-  useEffect(() => {
-    if (singleRoleStatus === 'succeeded') {
-      let formatedRole: string[] = [];
-      setRoleName(singleRoleState.data.role.name);
-      singleRoleState.data.role.permissions.forEach((el: Dictionary) => {
-        formatedRole.push(el.name);
-      });
-
-      if (formatedRole.includes(canViewDashboard)) {
-        setToggleDashboard(true);
-      }
-      if (formatedRole.includes(canViewSupport)) {
-        setToggleSupport(true);
-      }
-      if (formatedRole.includes(canEditSupport)) {
-        setToggleCanEditSupport(true);
-      }
-      if (formatedRole.includes(canViewKyc)) {
-        setToggleKyc(true);
-      }
-      if (formatedRole.includes(canAcceptKyc)) {
-        setToggleCanAcceptKyc(true);
-      }
-      if (formatedRole.includes(canRejectKyc)) {
-        setToggleCanRejectKyc(true);
-      }
-      if (formatedRole.includes(canViewSettlement)) {
-        setToggleSettlement(true);
-      }
-      if (formatedRole.includes(canViewReconciliation)) {
-        setToggleReconciliation(true);
-      }
-      if (formatedRole.includes(canReconcileAccount)) {
-        setToggleCanReconcileAccount(true);
-      }
-      if (formatedRole.includes(canViewUsers)) {
-        setToggleUsers(true);
-      }
-      if (formatedRole.includes(canEditUsers)) {
-        setToggleCanEditUsers(true);
-      }
-      if (formatedRole.includes(canViewTransaction)) {
-        setToggleTransactions(true);
-      }
-      if (formatedRole.includes(canViewSettings)) {
-        setToggleSettings(true);
-      }
-      if (formatedRole.includes(canEditSettings)) {
-        setToggleCanEditSettings(true);
-      }
-    }
-  }, [singleRoleState]);
+  const createRoleState = useAppSelector(state => state.createRole);
+  const { status: createRoleStatus } = createRoleState;
 
   useEffect(() => {
     const allArrResult = getAdminUserSelectedRoles(
@@ -190,14 +117,19 @@ function RoleDetails() {
     toggleCanEditSettings,
   ]);
 
-  const handleUpdateRole = () => {
-    const payload = {
-      role: roleName,
-      permissions: selectedUserRoles,
-      id: roleId,
-    };
+  const handleCreateRole = () => {
+    if (roleNameValue.length < 2) {
+      setRoleNameError('Enter role name');
+    } else {
+      setRoleNameError('');
+      const payload = {
+        role: roleNameValue,
+        permissions: selectedUserRoles,
+      };
 
-    dispatch(updateRoleRequest(payload));
+      console.log(payload, 'payload');
+      dispatch(createRoleRequest(payload));
+    }
   };
 
   return (
@@ -208,11 +140,21 @@ function RoleDetails() {
         </H2>
         <RoleDetailsNameContainer>
           <H3 style={{ marginRight: spacing.small }}>Role Name</H3>
-          <BorderedText
-            color={colors.primary}
-            text={capitalizeFirstLetter(roleName)}
-            backgroundColor="transparent"
-            borderColor={colors.primary}
+
+          <Input
+            label=""
+            type="text"
+            name="roleNameValue"
+            placeholder="Enter Role Name"
+            value={roleNameValue}
+            onChange={(e: any) => {
+              setRoleNameValue(e.target.value);
+              setRoleNameError('');
+            }}
+            error={roleNameError}
+            backgroundColor={colors.white}
+            borderColor={colors.greyVariantTwo}
+            marginBottom={'0px'}
           />
         </RoleDetailsNameContainer>
         <RoleDetailsHorizontalLine />
@@ -388,10 +330,10 @@ function RoleDetails() {
 
             <RoleDetailsUpdateContainer>
               <Button
-                onClick={handleUpdateRole}
+                onClick={handleCreateRole}
                 type="submit"
-                text="Update Role"
-                disabled={updateRoleStatus === 'loading'}
+                text="Create Role"
+                disabled={createRoleStatus === 'loading'}
               />
               <Button
                 onClick={() => {}}
@@ -857,24 +799,22 @@ function RoleDetails() {
 
         <ActivityActionModal
           actionClick={() => {
-            dispatch(updateRoleReset());
+            dispatch(createRoleReset());
             navigate(USERS);
           }}
           closeModal={() => {
-            dispatch(updateRoleReset());
+            dispatch(createRoleReset());
             navigate(USERS);
           }}
           actionText="Close"
           isLoading={false}
-          isModalVisible={updateRoleStatus === 'succeeded'}
-          text={'You have successfully updated the role details'}
+          isModalVisible={createRoleStatus === 'succeeded'}
+          text={'You have successfully created a new role'}
           image={images.check}
         />
-
-        <LoaderModal isModalVisible={singleRoleStatus === 'loading'} text="Please wait loading" closeModal={() => {}} />
       </div>
     </AppContainer>
   );
 }
 
-export default RoleDetails;
+export default CreateRole;

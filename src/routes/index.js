@@ -3,7 +3,7 @@ import { Dashboard, TransactionInformation } from '../pages/dashboard';
 import { Login } from '../pages/login';
 import { Kyc, KycCustomer } from '../pages/kyc';
 import { Support } from '../pages/support';
-import { Users, RoleDetails, UserDetails } from '../pages/users';
+import { Users, RoleDetails, UserDetails, CreateRole } from '../pages/users';
 import { Settlements, Reconciliation, ReconcilationUserDetails } from '../pages/settlements';
 import { Settings } from '../pages/settings';
 import { NotFound } from '../pages/notFound';
@@ -27,6 +27,7 @@ function AppRoute() {
     TRANSACTIONS,
     TRANSACTIONINFORMATION,
     USERROLES,
+    CREATEUSERROLES,
   } = routesPath;
   // const authState = useAppSelector((state) => state.auth);
 
@@ -116,10 +117,18 @@ function AppRoute() {
           }
         />
         <Route
-          path={USERROLES}
+          path={`${USERROLES}:id`}
           element={
             <PrivateRoute>
               <RoleDetails />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={CREATEUSERROLES}
+          element={
+            <PrivateRoute>
+              <CreateRole />
             </PrivateRoute>
           }
         />

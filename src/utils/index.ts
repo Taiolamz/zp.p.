@@ -16,3 +16,6 @@ export { default as determineVericationDocState } from './determineVericationDoc
 export { default as arrayToString } from './arrayToString';
 export { default as getWordFromString } from './getWordFromString';
 export { default as lowerCaseFirstLetter } from './lowerCaseFirstLetter';
+export { addStingToArray } from './addStingToArray';
+export { removeStingToArray } from './removeStingToArray';
+export * from './getAdminUserSelectedRoles';

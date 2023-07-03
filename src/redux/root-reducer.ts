@@ -37,6 +37,11 @@ import {
   createInternalUserSliceReducer,
   updateInternalUserSliceReducer,
   resetInternalUserPasswordSliceReducer,
+  getRolesSliceReducer,
+  createRoleSliceReducer,
+  updateRoleSliceReducer,
+  getSingleRoleSliceReducer,
+  deleteRoleSliceReducer,
 } from './slice';
 
 const rootReducer = combineReducers({
@@ -77,6 +82,11 @@ const rootReducer = combineReducers({
   createInternalUser: createInternalUserSliceReducer,
   updateInternalUser: updateInternalUserSliceReducer,
   resetInternalUserPassword: resetInternalUserPasswordSliceReducer,
+  getRoles: getRolesSliceReducer,
+  createRole: createRoleSliceReducer,
+  updateRole: updateRoleSliceReducer,
+  getSingleRole: getSingleRoleSliceReducer,
+  deleteRole: deleteRoleSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

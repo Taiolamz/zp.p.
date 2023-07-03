@@ -61,9 +61,12 @@ import {
   updateUserStatusRequest,
   updateUserStatusReset,
   getLoginHistoryRequest,
+  getRolesRequest,
+  deleteRoleRequest,
+  deleteRoleReset,
 } from '../../redux/slice';
 
-const { USERDETAILS, USERROLES } = routesPath;
+const { USERDETAILS, USERROLES, CREATEUSERROLES } = routesPath;
 
 const activeUser = 'active';
 const inActiveUser = 'inactive';
@@ -121,6 +124,7 @@ function Users() {
   const [selectedTransactionActionText, setSelectedTransactionActionText] = useState('');
   const [selectedRoleActionText, setSelectedRoleActionText] = useState('');
   const [searchInternalUserValue, setSearchInternalUserValue] = useState('');
+  const [searchUserRoleValue, setSearchUserRoleValue] = useState('');
   const [firstMount, setFirstMount] = useState(true);
   const [internalUsersData, setInternalUsersData] = useState<any[]>([]);
   const [internalUsersDataList, setInternalUsersDataList] = useState<any[]>([]);
@@ -141,7 +145,10 @@ function Users() {
   const [deactiveMessage, setDeactiveMessage] = useState('');
   const [loginHistoryIsModalVisible, setLoginHistoryIsModalVisible] = useState(false);
   const [loginHistoryData, setLoginHistoryData] = useState<any[]>([]);
-
+  const [userRolesData, setUserRolesData] = useState<any[]>([]);
+  const [userRolesDataList, setUserRolesDataList] = useState<any[]>([]);
+  const [deleteRoleIsModalVisible, setDeleteRoleIsModalVisible] = useState(false);
+  const [deleteRoleSuccessIsModalVisible, setDeleteRoleSuccessIsModalVisible] = useState(false);
   const decideUserCurrentStatus: string = userAccountStatus === 'active' ? namedDeactivate : namedReactivate;
   //More Icon for Internal Users
   const moreIconOption = [namedEdit, decideUserCurrentStatus, namedResetPassword, namedViewLoginHistory];
@@ -174,6 +181,12 @@ function Users() {
 
   const loginHistoryState = useAppSelector(state => state.getLoginHistory);
   const { status: loginHistoryStatus } = loginHistoryState;
+
+  const rolesState = useAppSelector(state => state.getRoles);
+  const { status: rolesStatus } = rolesState;
+
+  const deleteRoleState = useAppSelector(state => state.deleteRole);
+  const { status: deleteRoleStatus } = deleteRoleState;
 
   // get users by status
   const userTypeToFetch = userTypeToFetchByActivity(selectedUsersCard);
@@ -284,6 +297,12 @@ function Users() {
   }, [tabViewUsersSelectedIndex, toggleGetInternalUser, updateUserStatusState]);
 
   useEffect(() => {
+    if (tabViewUsersSelectedIndex === 3) {
+      dispatch(getRolesRequest({}));
+    }
+  }, [tabViewUsersSelectedIndex, deleteRoleState]);
+
+  useEffect(() => {
     if (internalUsersStatus === 'succeeded') {
       let updateUsersData: any[] = [];
       internalUsersState?.data?.users?.data?.forEach((item: Dictionary, index: number) => {
@@ -356,6 +375,31 @@ function Users() {
     }
   }, [resetInternalUserPasswordState]);
 
+  useEffect(() => {
+    let resultRoles: any[] = [];
+    if (rolesStatus === 'succeeded') {
+      rolesState?.data?.roles?.data?.forEach((el: Dictionary, index: number) => {
+        resultRoles.push({
+          title: el.name,
+          permissionCount: el?.permission_count,
+          userCount: el?.user_count,
+          createdBy: el?.publisher === null ? 'N/A' : el?.publisher,
+          roleId: el?.id,
+          id: el?.id,
+        });
+      });
+
+      setUserRolesData(resultRoles);
+      setUserRolesDataList(resultRoles);
+    }
+  }, [rolesState]);
+
+  useEffect(() => {
+    if (deleteRoleStatus === 'succeeded') {
+      setDeleteRoleSuccessIsModalVisible(true);
+    }
+  }, [deleteRoleState]);
+
   // handle different modules
   const handleMoreIconOptions = async (item: string) => {
     setMoreIconIsVisible(false);
@@ -391,7 +435,11 @@ function Users() {
 
   const handleRoleMoreIconOptions = (item: string) => {
     if (item === roleDetails) {
-      navigate(USERROLES);
+      navigate(`${USERROLES}${selectedRoleItem?.id.toString()}`);
+    }
+
+    if (item === roleDeleteRole) {
+      setDeleteRoleIsModalVisible(true);
     }
   };
 
@@ -471,6 +519,23 @@ function Users() {
     setSearchInternalUserValue(value);
     const updatedData = internalUsersData.filter(user => user.name.toLowerCase().includes(value));
     setInternalUsersDataList(updatedData);
+  };
+
+  const handleOnchangeRole = (value: any) => {
+    setSearchUserRoleValue(value);
+    const updatedData = userRolesData.filter(role => role.title.toLowerCase().includes(value));
+    setUserRolesDataList(updatedData);
+  };
+
+  const handleDeleteRole = () => {
+    setRoleMoreIconIsVisible(false);
+    dispatch(deleteRoleRequest({ id: selectedRoleItem?.roleId }));
+  };
+
+  const handleSuccessDeleteRole = () => {
+    setDeleteRoleSuccessIsModalVisible(false);
+    setDeleteRoleIsModalVisible(false);
+    dispatch(deleteRoleReset());
   };
 
   return (
@@ -562,7 +627,6 @@ function Users() {
                 backgroundColor={'transparent'}
                 name="searchProfileValue"
                 value={searchInternalUserValue}
-                // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchInternalUserValue(e.target.value)}
                 onChange={(e: any) => handleOnchangeInternalUser(e.target.value)}
                 placeholder="Search by name"
               />
@@ -583,20 +647,18 @@ function Users() {
                 icon={<AiOutlinePlus color={colors.white} size={15} />}
                 backgroundColor={colors.primary}
                 color={colors.white}
+                onClick={() => navigate(CREATEUSERROLES)}
               />
               <SearchInput
                 backgroundColor={'transparent'}
-                name="searchProfileValue"
-                value={searchInternalUserValue}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchInternalUserValue(e.target.value)}
+                name="searchRoleValue"
+                value={searchUserRoleValue}
+                onChange={(e: any) => handleOnchangeRole(e.target.value)}
                 placeholder="Search record"
               />
             </InternalUserTop>
             <RolesAndPermissionTable
-              data={[
-                { title: 'Excecutive Access', permissionCount: '89', userCount: '1', createdBy: 'Allen Kardic' },
-                { title: 'KYC Inputter', permissionCount: '89', userCount: '1', createdBy: 'Allen Kardic' },
-              ]}
+              data={userRolesDataList}
               headerData={rolesAndPermissionDataHeader}
               onClick={(item: Dictionary) => handleRoleModalOpen(item)}
               setSelectedItem={setSelectedRoleItem}
@@ -714,6 +776,33 @@ function Users() {
           isLoading={loginHistoryStatus === 'loading'}
         />
 
+        {/* this modal is to delete user */}
+
+        <ActivityActionModal
+          actionClick={handleDeleteRole}
+          closeModal={() => {
+            setDeleteRoleIsModalVisible(false);
+            dispatch(deleteRoleReset());
+          }}
+          actionText="Delete"
+          secondaryActionText="Cancel"
+          isModalVisible={deleteRoleIsModalVisible}
+          text={'Are you sure you want to delete this role?'}
+          image={images.reactivateUser}
+          isLoading={deleteRoleStatus === 'loading'}
+          actionBtnBackgroundColor={colors.red}
+        />
+
+        <ActivityActionModal
+          actionClick={handleSuccessDeleteRole}
+          closeModal={handleSuccessDeleteRole}
+          actionText="Close"
+          isModalVisible={deleteRoleSuccessIsModalVisible}
+          text={'You have successfully deleted the Role'}
+          image={images.check}
+          isLoading={false}
+        />
+
         <LoaderModal
           text="Please wait loading ..."
           isModalVisible={
@@ -721,7 +810,8 @@ function Users() {
             usersStatus === 'loading' ||
             internalUsersStatus === 'loading' ||
             resetInternalUserPasswordStatus === 'loading' ||
-            updateUserStatusStatus === 'loading'
+            updateUserStatusStatus === 'loading' ||
+            rolesStatus === 'loading'
           }
           closeModal={() => {}}
         />

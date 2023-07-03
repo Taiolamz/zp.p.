@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { spacing } from '../../utils';
+import { spacing, colors } from '../../utils';
 
 export const Container = styled.div`
   display: grid;
@@ -71,4 +71,54 @@ export const InternalUserTop = styled.div`
   justify-content: space-between;
   align-items: center;
   margin-bottom: ${spacing.large};
+`;
+
+// ROLE DETAILS STYLES
+export const RoleDetailsPermissionContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: ${spacing.xlarge};
+`;
+
+export const RoleDetailsPermissionContentOne = styled.div`
+  flex-grow: 2;
+`;
+
+export const RoleDetailsUpdateContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: ${spacing.xlarge};
+`;
+
+export const RoleDetailsPermissionContentTwo = styled.div`
+  flex-grow: 6;
+`;
+
+export const RoleDetailsAccess = styled.div`
+  background-color: ${colors.white};
+`;
+
+export const RoleDetailsAllUsersContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const RoleDetailsNameContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  align-content: center;
+`;
+
+export const RoleDetailsHorizontalLine = styled.div`
+  height: 2px;
+  background-color: ${colors.greyVariantTwo};
+  margin-top: ${spacing.medium};
+  margin-bottom: ${spacing.medium};
 `;
