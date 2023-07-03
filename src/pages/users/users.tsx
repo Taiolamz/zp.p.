@@ -124,6 +124,7 @@ function Users() {
   const [selectedTransactionActionText, setSelectedTransactionActionText] = useState('');
   const [selectedRoleActionText, setSelectedRoleActionText] = useState('');
   const [searchInternalUserValue, setSearchInternalUserValue] = useState('');
+  const [searchUserRoleValue, setSearchUserRoleValue] = useState('');
   const [firstMount, setFirstMount] = useState(true);
   const [internalUsersData, setInternalUsersData] = useState<any[]>([]);
   const [internalUsersDataList, setInternalUsersDataList] = useState<any[]>([]);
@@ -145,6 +146,7 @@ function Users() {
   const [loginHistoryIsModalVisible, setLoginHistoryIsModalVisible] = useState(false);
   const [loginHistoryData, setLoginHistoryData] = useState<any[]>([]);
   const [userRolesData, setUserRolesData] = useState<any[]>([]);
+  const [userRolesDataList, setUserRolesDataList] = useState<any[]>([]);
   const [deleteRoleIsModalVisible, setDeleteRoleIsModalVisible] = useState(false);
   const [deleteRoleSuccessIsModalVisible, setDeleteRoleSuccessIsModalVisible] = useState(false);
   const decideUserCurrentStatus: string = userAccountStatus === 'active' ? namedDeactivate : namedReactivate;
@@ -388,6 +390,7 @@ function Users() {
       });
 
       setUserRolesData(resultRoles);
+      setUserRolesDataList(resultRoles);
     }
   }, [rolesState]);
 
@@ -437,7 +440,6 @@ function Users() {
 
     if (item === roleDeleteRole) {
       setDeleteRoleIsModalVisible(true);
-      console.log(item, 'item');
     }
   };
 
@@ -519,7 +521,14 @@ function Users() {
     setInternalUsersDataList(updatedData);
   };
 
+  const handleOnchangeRole = (value: any) => {
+    setSearchUserRoleValue(value);
+    const updatedData = userRolesData.filter(role => role.title.toLowerCase().includes(value));
+    setUserRolesDataList(updatedData);
+  };
+
   const handleDeleteRole = () => {
+    setRoleMoreIconIsVisible(false);
     dispatch(deleteRoleRequest({ id: selectedRoleItem?.roleId }));
   };
 
@@ -618,7 +627,6 @@ function Users() {
                 backgroundColor={'transparent'}
                 name="searchProfileValue"
                 value={searchInternalUserValue}
-                // onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchInternalUserValue(e.target.value)}
                 onChange={(e: any) => handleOnchangeInternalUser(e.target.value)}
                 placeholder="Search by name"
               />
@@ -643,14 +651,14 @@ function Users() {
               />
               <SearchInput
                 backgroundColor={'transparent'}
-                name="searchProfileValue"
-                value={searchInternalUserValue}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchInternalUserValue(e.target.value)}
+                name="searchRoleValue"
+                value={searchUserRoleValue}
+                onChange={(e: any) => handleOnchangeRole(e.target.value)}
                 placeholder="Search record"
               />
             </InternalUserTop>
             <RolesAndPermissionTable
-              data={userRolesData}
+              data={userRolesDataList}
               headerData={rolesAndPermissionDataHeader}
               onClick={(item: Dictionary) => handleRoleModalOpen(item)}
               setSelectedItem={setSelectedRoleItem}
