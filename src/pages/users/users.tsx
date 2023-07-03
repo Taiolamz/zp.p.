@@ -62,6 +62,8 @@ import {
   updateUserStatusReset,
   getLoginHistoryRequest,
   getRolesRequest,
+  deleteRoleRequest,
+  deleteRoleReset,
 } from '../../redux/slice';
 
 const { USERDETAILS, USERROLES, CREATEUSERROLES } = routesPath;
@@ -143,7 +145,8 @@ function Users() {
   const [loginHistoryIsModalVisible, setLoginHistoryIsModalVisible] = useState(false);
   const [loginHistoryData, setLoginHistoryData] = useState<any[]>([]);
   const [userRolesData, setUserRolesData] = useState<any[]>([]);
-
+  const [deleteRoleIsModalVisible, setDeleteRoleIsModalVisible] = useState(false);
+  const [deleteRoleSuccessIsModalVisible, setDeleteRoleSuccessIsModalVisible] = useState(false);
   const decideUserCurrentStatus: string = userAccountStatus === 'active' ? namedDeactivate : namedReactivate;
   //More Icon for Internal Users
   const moreIconOption = [namedEdit, decideUserCurrentStatus, namedResetPassword, namedViewLoginHistory];
@@ -179,6 +182,9 @@ function Users() {
 
   const rolesState = useAppSelector(state => state.getRoles);
   const { status: rolesStatus } = rolesState;
+
+  const deleteRoleState = useAppSelector(state => state.deleteRole);
+  const { status: deleteRoleStatus } = deleteRoleState;
 
   // get users by status
   const userTypeToFetch = userTypeToFetchByActivity(selectedUsersCard);
@@ -292,7 +298,7 @@ function Users() {
     if (tabViewUsersSelectedIndex === 3) {
       dispatch(getRolesRequest({}));
     }
-  }, [tabViewUsersSelectedIndex]);
+  }, [tabViewUsersSelectedIndex, deleteRoleState]);
 
   useEffect(() => {
     if (internalUsersStatus === 'succeeded') {
@@ -370,7 +376,6 @@ function Users() {
   useEffect(() => {
     let resultRoles: any[] = [];
     if (rolesStatus === 'succeeded') {
-      console.log(rolesState, 'rolesState');
       rolesState?.data?.roles?.data?.forEach((el: Dictionary, index: number) => {
         resultRoles.push({
           title: el.name,
@@ -385,6 +390,12 @@ function Users() {
       setUserRolesData(resultRoles);
     }
   }, [rolesState]);
+
+  useEffect(() => {
+    if (deleteRoleStatus === 'succeeded') {
+      setDeleteRoleSuccessIsModalVisible(true);
+    }
+  }, [deleteRoleState]);
 
   // handle different modules
   const handleMoreIconOptions = async (item: string) => {
@@ -422,6 +433,11 @@ function Users() {
   const handleRoleMoreIconOptions = (item: string) => {
     if (item === roleDetails) {
       navigate(`${USERROLES}${selectedRoleItem?.id.toString()}`);
+    }
+
+    if (item === roleDeleteRole) {
+      setDeleteRoleIsModalVisible(true);
+      console.log(item, 'item');
     }
   };
 
@@ -501,6 +517,16 @@ function Users() {
     setSearchInternalUserValue(value);
     const updatedData = internalUsersData.filter(user => user.name.toLowerCase().includes(value));
     setInternalUsersDataList(updatedData);
+  };
+
+  const handleDeleteRole = () => {
+    dispatch(deleteRoleRequest({ id: selectedRoleItem?.roleId }));
+  };
+
+  const handleSuccessDeleteRole = () => {
+    setDeleteRoleSuccessIsModalVisible(false);
+    setDeleteRoleIsModalVisible(false);
+    dispatch(deleteRoleReset());
   };
 
   return (
@@ -740,6 +766,33 @@ function Users() {
           data={loginHistoryData}
           headerData1={loginHistoryDataHeader}
           isLoading={loginHistoryStatus === 'loading'}
+        />
+
+        {/* this modal is to delete user */}
+
+        <ActivityActionModal
+          actionClick={handleDeleteRole}
+          closeModal={() => {
+            setDeleteRoleIsModalVisible(false);
+            dispatch(deleteRoleReset());
+          }}
+          actionText="Delete"
+          secondaryActionText="Cancel"
+          isModalVisible={deleteRoleIsModalVisible}
+          text={'Are you sure you want to delete this role?'}
+          image={images.reactivateUser}
+          isLoading={deleteRoleStatus === 'loading'}
+          actionBtnBackgroundColor={colors.red}
+        />
+
+        <ActivityActionModal
+          actionClick={handleSuccessDeleteRole}
+          closeModal={handleSuccessDeleteRole}
+          actionText="Close"
+          isModalVisible={deleteRoleSuccessIsModalVisible}
+          text={'You have successfully deleted the Role'}
+          image={images.check}
+          isLoading={false}
         />
 
         <LoaderModal
