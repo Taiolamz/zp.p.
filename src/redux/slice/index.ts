@@ -37,3 +37,5 @@ export * from './updateInternalUserSlice';
 export * from './resetInternalUserPasswordSlice';
 export * from './getRolesSlice';
 export * from './createRoleSlice';
+export * from './updateRoleSlice';
+export * from './getSingleRoleSlice';
