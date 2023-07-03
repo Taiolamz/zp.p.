@@ -5,7 +5,14 @@ import { Kyc, KycCustomer } from '../pages/kyc';
 import { Support } from '../pages/support';
 import { Users, RoleDetails, UserDetails, CreateRole } from '../pages/users';
 import { Settlements, Reconciliation, ReconcilationUserDetails } from '../pages/settlements';
-import { Settings } from '../pages/settings';
+import {
+  EmailNotification,
+  EmailNotificationUpdate,
+  NewAppNotification,
+  NewArticles,
+  NewFaq,
+  Settings,
+} from '../pages/settings';
 import { NotFound } from '../pages/notFound';
 import { PrivateRoute } from './privateRoute';
 import { routesPath } from '../utils';
@@ -26,6 +33,14 @@ function AppRoute() {
     USERDETAILS,
     TRANSACTIONS,
     TRANSACTIONINFORMATION,
+    NEWAPPNOTIFICATION,
+    APPNOTIFICATIONUPDATE,
+    EMAILNOTIFICATION,
+    EMAILNOTIFICATIONUPDATE,
+    NEWARTICLE,
+    ARTICLEUPDATE,
+    NEWFAQ,
+    FAQUPDATE,
     USERROLES,
     CREATEUSERROLES,
   } = routesPath;
@@ -137,6 +152,70 @@ function AppRoute() {
           element={
             <PrivateRoute>
               <Settings />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={NEWAPPNOTIFICATION}
+          element={
+            <PrivateRoute>
+              <NewAppNotification />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={APPNOTIFICATIONUPDATE}
+          element={
+            <PrivateRoute>
+              <NewAppNotification />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={EMAILNOTIFICATION}
+          element={
+            <PrivateRoute>
+              <EmailNotification />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={EMAILNOTIFICATIONUPDATE}
+          element={
+            <PrivateRoute>
+              <EmailNotificationUpdate />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={NEWARTICLE}
+          element={
+            <PrivateRoute>
+              <NewArticles />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={ARTICLEUPDATE}
+          element={
+            <PrivateRoute>
+              <NewArticles />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={NEWFAQ}
+          element={
+            <PrivateRoute>
+              <NewFaq />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path={FAQUPDATE}
+          element={
+            <PrivateRoute>
+              <NewFaq />
             </PrivateRoute>
           }
         />

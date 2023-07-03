@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { colors, boxShadow, spacing } from "../../utils";
+import styled from 'styled-components';
+import { colors, boxShadow, spacing } from '../../utils';
 
 interface StyleProps {
   helper?: string;
@@ -17,8 +17,8 @@ export const Container = styled.div`
   background-color: ${colors.white};
   box-shadow: ${boxShadow.light};
   width: 100%;
-  padding: ${spacing.xxsmall} ${spacing.small} ${spacing.xxsmall}
-    ${spacing.small};
+  z-index: 0;
+  padding: ${spacing.xxsmall} ${spacing.small} ${spacing.xxsmall} ${spacing.small};
 `;
 
 export const Content = styled.div`
