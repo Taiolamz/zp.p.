@@ -25,9 +25,11 @@ export const TH = styled.th`
   background-color: ${colors.smokeWhite};
   padding: 8px;
   color: ${colors.primary};
+  font-family: Rubik;
 `;
 
 export const TD = styled.td`
+  font-family: Rubik;
   padding: 8px;
   background-color: ${(p: StyleProps) => (p.backgroundColor ? p.backgroundColor : colors.white)};
   color: ${(p: StyleProps) => (p.color ? p.color : colors.primary)};
