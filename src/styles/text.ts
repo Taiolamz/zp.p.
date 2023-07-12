@@ -12,6 +12,26 @@ interface StyleProps {
   lightBold?: boolean;
 }
 
+export const HB = styled.div`
+  font-weight: ${(p: StyleProps) =>
+    p.bold
+      ? fontWeight.bold
+      : p.semiBold
+      ? fontWeight.semiBold
+      : p.semiLight
+      ? fontWeight.semiLight
+      : p.lightBold
+      ? fontWeight.lightBold
+      : fontWeight.light};
+  color: ${({ color }: any) => (color ? color : colors.black)};
+  font-size: 1.2em;
+  font-family: Poppins;
+  text-align: ${(p: StyleProps) => (p.right ? 'right' : p.left ? 'left' : 'center')};
+  @media (min-width: 48rem) {
+    font-size: 2em;
+  }
+`;
+
 export const H1 = styled.div`
   font-weight: ${(p: StyleProps) =>
     p.bold

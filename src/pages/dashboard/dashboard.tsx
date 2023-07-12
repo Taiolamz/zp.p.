@@ -83,7 +83,7 @@ function Dashboard() {
                   title="Complaints"
                   backgroundColor={colors.white}
                   color={colors.primary}
-                  count={'345'}
+                  count={345}
                 />
               </TwoBoxItemBottom>
               <TwoBoxItemActive>

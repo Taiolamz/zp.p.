@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { colors, spacing } from '../../utils';
+import { colors, spacing, boxShadow } from '../../utils';
 
 export const Container = styled.div`
   background-color: ${colors.white};
@@ -7,6 +7,7 @@ export const Container = styled.div`
   display: grid;
   height: 100%;
   border-radius: 10px;
+  box-shadow: ${boxShadow.light};
   row-gap: ${spacing.small};
   @media (max-width: 768px) {
   }

@@ -83,6 +83,7 @@ function SideBar() {
         icon: <FiMail />,
         path: SUPPORT,
       },
+
       {
         id: 4,
         isSelected: toggleBtn,
