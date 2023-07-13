@@ -7,6 +7,7 @@ export const Container = styled.div`
   display: grid;
   row-gap: ${spacing.small};
   border-radius: 10px;
+  cursor: pointer;
   @media (max-width: 768px) {
   }
 `;

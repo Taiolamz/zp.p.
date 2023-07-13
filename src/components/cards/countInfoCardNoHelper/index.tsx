@@ -16,6 +16,7 @@ export interface CountInfoCardNoHelperIProps {
   titleColor?: string;
   titleWeight?: string;
   titleSmall?: boolean;
+  onClick?: () => void;
 }
 
 function CountInfoCardNoHelper({
@@ -27,17 +28,18 @@ function CountInfoCardNoHelper({
   backgroundColor,
   type,
   titleWeight,
-  titleSmall
+  titleSmall,
+  onClick,
 }: CountInfoCardNoHelperIProps) {
-  console.log(titleWeight)
+  console.log(titleWeight);
   return (
-    <Container  backgroundColor={backgroundColor} isSelected={isSelected}>
+    <Container onClick={onClick} backgroundColor={backgroundColor} isSelected={isSelected}>
       {type === 'small' || titleSmall ? (
-        <H4 font-weight={titleWeight ? titleWeight : ""} left color={titleColor ? titleColor : colors.primary}>
+        <H4 font-weight={titleWeight ? titleWeight : ''} left color={titleColor ? titleColor : colors.primary}>
           {title}
         </H4>
       ) : (
-        <H2 font-weight={titleWeight ? titleWeight : ""} left color={titleColor ? titleColor : colors.primary}>
+        <H2 font-weight={titleWeight ? titleWeight : ''} left color={titleColor ? titleColor : colors.primary}>
           {title}
         </H2>
       )}

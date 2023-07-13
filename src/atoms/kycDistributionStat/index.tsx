@@ -11,21 +11,26 @@ import { H1 } from '../../styles';
 import { colors, currencyFormat } from '../../utils';
 import { Bottom, Container, Top, TopItemOne } from './style';
 
-
 export interface kycDataIprops {
-  title: string
-  count: number|string
+  title: string;
+  count: number | string;
 }
 export interface KycDistributionStatIProps {
   kycLevelData: LevelCardIPropsIProps[];
   pendingVerification: kycDataIprops;
   totalCustomers: kycDataIprops;
+  onClick?: () => void;
 }
 
-const KycDistributionStat = ({ kycLevelData, pendingVerification, totalCustomers }: KycDistributionStatIProps) => {
+const KycDistributionStat = ({
+  kycLevelData,
+  pendingVerification,
+  totalCustomers,
+  onClick,
+}: KycDistributionStatIProps) => {
   return (
     <div>
-      <Container>
+      <Container onClick={onClick}>
         <H1 left semiBold color={colors.greyVariantFour}>
           KYC Distribution
         </H1>

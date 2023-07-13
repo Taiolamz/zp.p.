@@ -14,6 +14,7 @@ export const TransactionHeader = styled.div`
   align-items: center;
   width: 100%;
   justify-content: space-between;
+  margin-bottom: ${spacing.small};
 `;
 
 export const TransactionMain = styled.div`
@@ -33,6 +34,7 @@ export const TransactionMainText = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: ${spacing.small};
+  margin-bottom: ${spacing.medium};
 `;
 
 export const TransactionMainLegend = styled.div`

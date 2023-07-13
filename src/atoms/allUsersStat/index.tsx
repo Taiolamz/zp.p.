@@ -14,14 +14,15 @@ export interface activeDataIpropsIprops {
 }
 
 export interface allUsersDataIprops {
-  allUsersData: allUsersDataIpropsIprops
-  activeData: activeDataIpropsIprops[]
+  allUsersData: allUsersDataIpropsIprops;
+  activeData: activeDataIpropsIprops[];
+  onClick?: () => void;
 }
 
-const AllUsersStat = ({allUsersData, activeData}: allUsersDataIprops) => {
+const AllUsersStat = ({ allUsersData, activeData, onClick }: allUsersDataIprops) => {
   return (
     <div>
-      <Container>
+      <Container onClick={onClick}>
         <Top>
           <CountInfoCardNoHelper
             title="All Users"
@@ -30,6 +31,7 @@ const AllUsersStat = ({allUsersData, activeData}: allUsersDataIprops) => {
             titleColor={colors.greyVariantOne}
             count={allUsersData.usersCount}
             titleWeight={fontWeight.lightBold}
+            onClick={onClick}
           />
           <Ratecard
             count={allUsersData.conversionRate}
@@ -40,9 +42,9 @@ const AllUsersStat = ({allUsersData, activeData}: allUsersDataIprops) => {
           />
         </Top>
         <Bottom>
-        {activeData.map((item) => {
-          return <Activecard key={item.id} count={item.count} title={item.title} />
-        })}
+          {activeData.map(item => {
+            return <Activecard key={item.id} count={item.count} title={item.title} />;
+          })}
         </Bottom>
       </Container>
     </div>

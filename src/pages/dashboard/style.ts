@@ -13,6 +13,10 @@ export const StatCount = styled.div`
   display: grid;
   grid-template-columns: repeat(4, auto);
 
+  a {
+    text-decoration: none;
+  }
+
   @media (max-width: 1150px) {
     grid-template-columns: repeat(2, auto);
   }
@@ -57,6 +61,7 @@ export const TwoBoxItemTop = styled.div`
   background-color: ${colors.white};
   border-radius: 10px;
   padding: ${spacing.xsmall};
+  cursor: pointer;
 
   @media (max-width: 768px) {
   }
@@ -70,7 +75,7 @@ export const TwoBoxItemBottom = styled.div`
   border-radius: 10px;
   padding: ${spacing.xsmall};
   justify-content: space-between;
-
+  cursor: pointer;
   @media (max-width: 768px) {
   }
 `;
@@ -78,6 +83,7 @@ export const TwoBoxItemBottom = styled.div`
 export const TwoBoxItemActive = styled.div`
   display: flex;
   /* height: max-content; */
+  cursor: pointer;
   background-color: ${colors.white};
   width: 100%;
   border-radius: 10px;

@@ -10,6 +10,7 @@ export const Container = styled.div`
   border-radius: 10px;
   box-shadow: ${boxShadow.light};
   row-gap: ${spacing.small};
+  cursor: pointer;
   @media (max-width: 768px) {
   }
 `;

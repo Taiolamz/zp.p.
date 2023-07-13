@@ -21,7 +21,7 @@ const TransactionVolume = ({ transactionVolumeChartData }: TransactionVolumeIPro
   return (
     <Container>
       <TransactionHeader>
-        <H2 left semiBold>
+        <H2 left semiBold color={colors.greyVariantOne}>
           Transaction Volume Insight
         </H2>
         <DatePicker selectedDate={setStartDisplayRecordDate} />
