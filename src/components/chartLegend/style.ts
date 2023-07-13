@@ -13,6 +13,6 @@ export const TransactionMainLegend = styled.div`
     display: flex;
     column-gap: ${spacing.xsmall};
     align-items: center;
-    width: 100%;
+    justify-content: space-between;
   }
 `;
