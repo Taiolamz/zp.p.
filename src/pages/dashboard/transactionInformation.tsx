@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AppContainer } from '../../atoms';
-import { BorderedTexts, ChartContainer, ChartWrapper, Container, StatsCount } from './style';
+import { BorderedTexts, ChartContainer, ChartWrapper, Container, LegendContainer, StatsCount } from './style';
 import { BorderedText, ChartLegend, HorizontalInfoCount, TransactionInfoBarChart } from '../../components';
 import { colors, routesPath } from '../../utils';
 import { transactionInfoBarData, transactionInformationStats, transactionVolumeChartData } from './data';
@@ -33,7 +33,9 @@ const TransactionInformation = () => {
           </StatsCount>
 
           <ChartContainer>
-            <ChartLegend data={transactionVolumeChartData} type="withcount" />
+            <LegendContainer>
+              <ChartLegend data={transactionVolumeChartData} type="withcount" />
+            </LegendContainer>
             <ChartWrapper>
               <TransactionInfoBarChart data={transactionInfoBarData} />
             </ChartWrapper>

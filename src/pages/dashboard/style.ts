@@ -134,7 +134,21 @@ export const StatsCount = styled.div`
 
 export const ChartContainer = styled.div`
   margin-bottom: ${spacing.small};
+  position: relative;
 `;
+
 export const ChartWrapper = styled.div`
   max-width: 98%;
+`;
+
+export const LegendContainer = styled.div`
+  margin-right: 170px;
+
+  @media (max-width: 1200px) {
+    margin-right: 100px;
+  }
+
+  @media (max-width: 900px) {
+    margin-right: 60px;
+  }
 `;

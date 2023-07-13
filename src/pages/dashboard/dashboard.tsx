@@ -80,7 +80,7 @@ function Dashboard() {
               </TwoBoxItemBottom>
             </TwoBoxContainerItem>
             <TwoBoxContainerItem>
-            <TwoBoxItemTop>
+              <TwoBoxItemTop>
                 <CountInfoCardNoHelper
                   title={activeCash.title}
                   color={activeCash.color}

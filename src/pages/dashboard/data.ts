@@ -1,5 +1,6 @@
 import { ChartLegendIPropsIProps } from '../../components/chartLegend';
 import { colors } from '../../utils';
+import numberFormat from '../../utils/numberFormat';
 import { dashboardMainCountDataIProps } from './dashboard';
 
 export const kycLevelData = [
@@ -124,7 +125,7 @@ export const activeData = [
   { id: 2, title: 'INACTIVE', count: 1400 },
 ];
 
-export const totalCustomers = { title: 'Total Customers', count: 11234 };
+export const totalCustomers = { title: 'Total Customers', count: numberFormat(11234) };
 
 export const pendingVerification = { title: 'Pending Verification', count: 705 };
 
@@ -166,7 +167,7 @@ export const dashboardMainCountData: dashboardMainCountDataIProps[] = [
 export const refferals = {
   title: 'Refferals',
   color: colors.primary,
-  count: 4324,
+  count: numberFormat(4324),
   type: 'small',
   titleColor: colors.greyVariantOne,
 };
@@ -174,7 +175,7 @@ export const refferals = {
 export const activeCash = {
   title: 'Active Cash Requests',
   color: colors.primary,
-  count: 4324,
+  count: numberFormat(4324),
   type: 'small',
   titleColor: colors.greyVariantOne,
 };
@@ -190,7 +191,7 @@ export const complaints = {
 export const agents = {
   title: 'Agents',
   color: colors.primary,
-  count: 4324,
+  count: 345,
   type: 'small',
   titleColor: colors.greyVariantSeven,
 };

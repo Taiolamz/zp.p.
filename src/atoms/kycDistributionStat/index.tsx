@@ -14,7 +14,7 @@ import { Bottom, Container, Top, TopItemOne } from './style';
 
 export interface kycDataIprops {
   title: string
-  count: number
+  count: number|string
 }
 export interface KycDistributionStatIProps {
   kycLevelData: LevelCardIPropsIProps[];
