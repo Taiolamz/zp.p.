@@ -195,3 +195,16 @@ export const agents = {
   type: 'small',
   titleColor: colors.greyVariantSeven,
 };
+
+export const customersCount = [
+  {
+    id: 1,
+    title: 'Total Customer',
+    count: numberFormat(5234),
+  },
+  {
+    id: 2,
+    title: 'New Customer',
+    count: numberFormat(2161),
+  },
+];

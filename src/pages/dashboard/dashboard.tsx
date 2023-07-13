@@ -20,6 +20,7 @@ import {
   agents,
   allUsersData,
   complaints,
+  customersCount,
   dashboardMainCountData,
   kycLevelData,
   pendingVerification,
@@ -128,7 +129,7 @@ function Dashboard() {
               <TransactionVolume transactionVolumeChartData={transactionVolumeChartData} />
             </Link>
           </TransactionVolumeChart>
-          <CustomerGrowth />
+          <CustomerGrowth customersCount={customersCount} />
         </ChartsContainer>
       </Container>
     </AppContainer>
