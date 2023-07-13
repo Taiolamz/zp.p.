@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-import { H1, H2, H4 } from '../../../styles';
+import { H1, H2, H4, HB } from '../../../styles';
 import { colors } from '../../../utils';
 import { Container } from './style';
 
@@ -13,6 +13,9 @@ export interface CountInfoCardNoHelperIProps {
   color?: string;
   backgroundColor?: string;
   type?: string;
+  titleColor?: string;
+  titleWeight?: string;
+  titleSmall?: boolean;
 }
 
 function CountInfoCardNoHelper({
@@ -20,17 +23,21 @@ function CountInfoCardNoHelper({
   count,
   title,
   color,
+  titleColor,
   backgroundColor,
   type,
+  titleWeight,
+  titleSmall
 }: CountInfoCardNoHelperIProps) {
+  console.log(titleWeight)
   return (
-    <Container backgroundColor={backgroundColor} isSelected={isSelected}>
-      {type === 'small' ? (
-        <H4 left color={colors.primary}>
+    <Container  backgroundColor={backgroundColor} isSelected={isSelected}>
+      {type === 'small' || titleSmall ? (
+        <H4 font-weight={titleWeight ? titleWeight : ""} left color={titleColor ? titleColor : colors.primary}>
           {title}
         </H4>
       ) : (
-        <H2 left color={colors.primary}>
+        <H2 font-weight={titleWeight ? titleWeight : ""} left color={titleColor ? titleColor : colors.primary}>
           {title}
         </H2>
       )}
@@ -39,9 +46,9 @@ function CountInfoCardNoHelper({
           {count}
         </H2>
       ) : (
-        <H1 left bold color={color ? color : colors.primary}>
+        <HB left bold color={color ? color : colors.primary}>
           {count}
-        </H1>
+        </HB>
       )}
     </Container>
   );

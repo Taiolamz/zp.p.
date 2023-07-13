@@ -12,18 +12,21 @@ export const Container = styled.div`
 export const StatCount = styled.div`
   display: grid;
   grid-template-columns: repeat(4, auto);
-  @media (max-width: 940px) {
+
+  @media (max-width: 1150px) {
     grid-template-columns: repeat(2, auto);
   }
 `;
 
 export const CardsContainer = styled.div`
   display: grid;
-  grid-template-columns: 20.7% 36.6% 36%;
+  grid-template-columns: auto auto 15% 15%;
+  /* grid-template-columns: repeat(4, auto); */
   justify-content: space-between;
   height: 100%;
+  column-gap: ${spacing.small};
 
-  @media (max-width: 1050px) {
+  @media (max-width: 1150px) {
     grid-template-columns: repeat(2, 50%);
     row-gap: ${spacing.small_2};
     column-gap: ${spacing.small_2};
@@ -40,33 +43,20 @@ export const FourBoxContainer = styled.div`
   width: 100%;
 `;
 
-export const TwoBoxContainerTop = styled.div`
+export const TwoBoxContainerItem = styled.div`
   display: grid;
-  grid-template-columns: 47% 47%;
   column-gap: 1rem;
   align-items: stretch;
   width: 100%;
-  /* justify-content: space-between; */
+  row-gap: ${spacing.small};
   @media (max-width: 768px) {
   }
 `;
-export const TwoBoxContainerBottom = styled.div`
-  display: grid;
-  grid-template-columns: 47% 47%;
-  column-gap: 1rem;
-  align-items: stretch;
-  height: 100%;
-  @media (max-width: 768px) {
-  }
-`;
+
 export const TwoBoxItemTop = styled.div`
-  display: grid;
-  /* height: 10px; */
   background-color: ${colors.white};
-  width: 100%;
   border-radius: 10px;
   padding: ${spacing.xsmall};
-  justify-content: space-between;
 
   @media (max-width: 768px) {
   }
@@ -106,8 +96,9 @@ export const ChartsContainer = styled.div`
   justify-content: space-between;
   row-gap: ${spacing.small_2};
   column-gap: ${spacing.small_2};
+  margin-top: ${spacing.small};
 
-  @media (max-width: 980px) {
+  @media (max-width: 1085px) {
     grid-template-columns: 100%;
     row-gap: ${spacing.small_2};
     column-gap: ${spacing.small_2};

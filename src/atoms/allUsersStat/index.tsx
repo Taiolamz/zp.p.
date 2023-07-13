@@ -1,8 +1,24 @@
 import { Activecard, CountInfoCard, CountInfoCardNoHelper, Ratecard } from '../../components';
-import { colors, currencyFormat } from '../../utils';
+import { colors, currencyFormat, fontWeight } from '../../utils';
 import { Bottom, Container, Top } from './style';
 
-const AllUsersStat = () => {
+export interface allUsersDataIpropsIprops {
+  usersCount: number;
+  conversionRate: string;
+}
+
+export interface activeDataIpropsIprops {
+  id: number;
+  title: string;
+  count: number;
+}
+
+export interface allUsersDataIprops {
+  allUsersData: allUsersDataIpropsIprops
+  activeData: activeDataIpropsIprops[]
+}
+
+const AllUsersStat = ({allUsersData, activeData}: allUsersDataIprops) => {
   return (
     <div>
       <Container>
@@ -11,10 +27,12 @@ const AllUsersStat = () => {
             title="All Users"
             backgroundColor="transparent"
             color={colors.primary}
-            count={'93000'}
+            titleColor={colors.greyVariantOne}
+            count={allUsersData.usersCount}
+            titleWeight={fontWeight.lightBold}
           />
           <Ratecard
-            count="77%"
+            count={allUsersData.conversionRate}
             title="CONVERSION RATE"
             backgroundColor={colors.greyVariantFive}
             titleColor={colors.green}
@@ -22,8 +40,9 @@ const AllUsersStat = () => {
           />
         </Top>
         <Bottom>
-          <Activecard count="7900" title="ACTIVE" />
-          <Activecard count="1400" title="INACTIVE" />
+        {activeData.map((item) => {
+          return <Activecard key={item.id} count={item.count} title={item.title} />
+        })}
         </Bottom>
       </Container>
     </div>

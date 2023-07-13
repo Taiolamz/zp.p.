@@ -9,97 +9,100 @@ import {
   StatCount,
   TransactionVolumeChart,
   TwoBoxActive,
-  TwoBoxContainerBottom,
-  TwoBoxContainerTop,
+  TwoBoxContainerItem,
   TwoBoxItemActive,
   TwoBoxItemBottom,
   TwoBoxItemTop,
 } from './style';
-import { kycLevelData, transactionVolumeChartData } from './data';
+import { activeCash, activeData, agents, allUsersData, complaints, dashboardMainCountData, kycLevelData, pendingVerification, refferals, totalCustomers, transactionVolumeChartData } from './data';
 import { Link } from 'react-router-dom';
 
+export interface dashboardMainCountDataIProps {
+  id: number; 
+  title: string; 
+  count: number; 
+  helperText: string
+  backgroundColor: string
+  color: string
+}
+
+export interface fourBoxesIProps {
+  title: string,
+  color: string,
+  count: number,
+  type: string,
+  titleColor: string,
+}
+
 function Dashboard() {
+  
   return (
     <AppContainer navTitle="DASHBOARD">
       <Container>
         <StatCount>
+    {dashboardMainCountData.map((item) => {
+
+      return (
+        <>
           <CountInfoCard
-            title="Inflow"
-            helper="Total Income"
-            background="transparent"
-            color={colors.blueVariantOne}
-            count={currencyFormat(19990560)}
+            key={item.id}
+            title={item.title}
+            helper={item.helperText}
+            background={item.backgroundColor}
+            color={item.color}
+            count={currencyFormat(item.count)}
             // shadow="none"
           />
-          <CountInfoCard
-            title="Outflow"
-            helper="Total Withdrawals"
-            background="transparent"
-            color={colors.orange}
-            count={currencyFormat(10590000)}
-          />
-          <CountInfoCard
-            title="Revenue"
-            helper="Tansaction Profit"
-            background="transparent"
-            color={colors.green}
-            count={currencyFormat(1450000)}
-          />
-          <CountInfoCard
-            title="Current In-App Balance"
-            helper="Transaction Aggregate"
-            background="transparent"
-            color={colors.greenVariantOne}
-            count={currencyFormat(9400000)}
-          />
-        </StatCount>
+      </>
+    )}) 
+  }
+  </StatCount>
         <CardsContainer>
-          <AllUsersStat />
-          <KycDistributionStat kycLevelData={kycLevelData} />
-          <FourBoxContainer>
-            <TwoBoxContainerTop>
+          <AllUsersStat  allUsersData={allUsersData} activeData={activeData}/>
+          <KycDistributionStat kycLevelData={kycLevelData} totalCustomers={totalCustomers} pendingVerification={pendingVerification}/>
+            <TwoBoxContainerItem>
               <TwoBoxItemTop>
                 <CountInfoCardNoHelper
-                  title="Refferals"
-                  // backgroundColor={colors.white}
-                  color={colors.primary}
-                  count={'4,324'}
-                  type={'small'}
+                  title={refferals.title}
+                  color={refferals.color}
+                  count={refferals.count}
+                  type={refferals.type}
+                  titleColor={refferals.titleColor}
                 />
               </TwoBoxItemTop>
-              <TwoBoxItemTop>
-                <CountInfoCardNoHelper
-                  title="Active Cash Requests"
-                  // backgroundColor={colors.white}
-                  color={colors.primary}
-                  count={'4,324'}
-                  type={'small'}
-                />
-              </TwoBoxItemTop>
-            </TwoBoxContainerTop>
-            <TwoBoxContainerBottom>
               <TwoBoxItemBottom>
                 <CountInfoCardNoHelper
-                  title="Complaints"
-                  backgroundColor={colors.white}
-                  color={colors.primary}
-                  count={345}
-                />
+                 title={complaints.title}
+                 color={complaints.color}
+                 count={complaints.count}
+                 titleColor={complaints.titleColor}
+                  />
               </TwoBoxItemBottom>
+            </TwoBoxContainerItem>
+            <TwoBoxContainerItem>
+            <TwoBoxItemTop>
+                <CountInfoCardNoHelper
+                  title={activeCash.title}
+                  color={activeCash.color}
+                  count={activeCash.count}
+                  type={activeCash.type}
+                  titleColor={activeCash.titleColor}
+                  />
+              </TwoBoxItemTop>
               <TwoBoxItemActive>
                 <CountInfoCardNoHelper
-                  title="Agents"
-                  backgroundColor={colors.white}
-                  color={colors.primary}
-                  count={'345'}
+                  title={agents.title}
+                  color={agents.color}
+                  count={agents.count}
+                  titleColor={agents.titleColor}
                 />
-                <TwoBoxActive>
-                  <Activecard count="7900" title="ACTIVE" />
-                  <Activecard count="1400" title="INACTIVE" />
+                <TwoBoxActive>      
+                  {activeData.map((item) => {
+                    return <Activecard key={item.id} count={item.count} title={item.title} />
+                  })}
                 </TwoBoxActive>
               </TwoBoxItemActive>
-            </TwoBoxContainerBottom>
-          </FourBoxContainer>
+            </TwoBoxContainerItem>
         </CardsContainer>
         <ChartsContainer>
           <TransactionVolumeChart>
