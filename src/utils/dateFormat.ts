@@ -32,8 +32,8 @@ export function timeFormat(date: string, pmAm: boolean = false) {
   hours = hours || 12;
   minutes = minutes < 10 ? `0${minutes}` : minutes;
 
-  const strTime = `${hours}:${minutes} ${ampm}`;
-  const noAmPmstrTime = `${hours}:${minutes}`;
+  const strTime = `${hours - 1}:${minutes} ${ampm}`;
+  const noAmPmstrTime = `${hours - 1}:${minutes}`;
 
   return pmAm ? strTime : noAmPmstrTime;
 }
