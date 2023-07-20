@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { colors, spacing } from "../../utils";
+import styled from 'styled-components';
+import { colors, spacing } from '../../utils';
 
 interface StyleProps {
   isSelected?: boolean;
@@ -17,7 +17,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   @media (max-width: 768px) {
-    display: none;
+    height: 100%;
   }
 `;
 
@@ -28,6 +28,7 @@ export const Content = styled.div`
   justify-content: space-between;
   height: 100%;
   padding-bottom: ${spacing.small};
+  position: relative;
 `;
 
 export const BottomTabContainer = styled.div`
@@ -68,6 +69,17 @@ export const ImgContainer = styled.div`
   margin-bottom: ${spacing.small};
   margin-left: auto;
   margin-right: auto;
+`;
+
+export const HamburgerContainer = styled.div`
+  position: absolute;
+  justify-content: flex-end;
+  right: ${spacing.small_2};
+  top: -${spacing.small_2};
+  display: none;
+  @media (max-width: 768px) {
+    display: flex;
+  }
 `;
 
 export const Img = styled.img`

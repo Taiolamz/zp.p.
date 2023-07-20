@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { colors, spacing } from '../../utils';
+import { boxShadow, colors, spacing } from '../../utils';
 export const Container = styled.div`
   display: grid;
   padding: ${spacing.small} 0;
@@ -62,14 +62,14 @@ export const TwoBoxItemTop = styled.div`
   border-radius: 10px;
   padding: ${spacing.xsmall};
   cursor: pointer;
-
+  box-shadow: ${boxShadow.light};
   @media (max-width: 768px) {
   }
 `;
 
 export const TwoBoxItemBottom = styled.div`
   display: grid;
-  /* height: max-content; */
+  box-shadow: ${boxShadow.light};
   background-color: ${colors.white};
   width: 100%;
   border-radius: 10px;
@@ -82,7 +82,7 @@ export const TwoBoxItemBottom = styled.div`
 
 export const TwoBoxItemActive = styled.div`
   display: flex;
-  /* height: max-content; */
+  box-shadow: ${boxShadow.light};
   cursor: pointer;
   background-color: ${colors.white};
   width: 100%;

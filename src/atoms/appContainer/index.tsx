@@ -1,7 +1,7 @@
-import { ReactElement } from "react";
-import { Container, Content } from "./style";
-import { SideBar } from "..";
-import { Navbar } from "../../components";
+import { ReactElement, useState } from 'react';
+import { Container, Content, SidebarLayout } from './style';
+import { SideBar } from '..';
+import { Navbar } from '../../components';
 
 export interface IProps {
   children: ReactElement;
@@ -11,12 +11,15 @@ export interface IProps {
 }
 
 function AppContainer({ children, navTitle, navHelper, goBack }: IProps) {
+  const [hidden, setHidden] = useState(true);
   return (
     <>
       <Container>
-        <Navbar goBack={goBack} title={navTitle} helper={navHelper} />
+        <Navbar onClick={() => setHidden(false)} goBack={goBack} title={navTitle} helper={navHelper} />
         <Content>
-          <SideBar />
+          <SidebarLayout hide={hidden}>
+            <SideBar onClick={() => setHidden(true)} />
+          </SidebarLayout>
           {children}
         </Content>
       </Container>

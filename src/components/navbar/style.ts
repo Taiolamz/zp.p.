@@ -26,6 +26,7 @@ export const Content = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+  column-gap: 5px;
   -webkit-align-items: center;
 `;
 
@@ -49,4 +50,11 @@ export const BackBtnContainer = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: center;
+`;
+
+export const HamburgerContainer = styled.div`
+  display: none;
+  @media (max-width: 768px) {
+    display: flex;
+  }
 `;

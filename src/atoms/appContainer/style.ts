@@ -1,5 +1,9 @@
-import styled from "styled-components";
-import { colors, spacing } from "../../utils";
+import styled from 'styled-components';
+import { colors, spacing } from '../../utils';
+
+interface StyleProps {
+  hide?: boolean;
+}
 
 export const Container = styled.div`
   display: flex;
@@ -20,5 +24,11 @@ export const Content = styled.div`
   padding-right: ${spacing.small};
   @media (max-width: 768px) {
     padding: 0px ${spacing.xsmall};
+  }
+`;
+
+export const SidebarLayout = styled.div`
+  @media (max-width: 768px) {
+    display: ${(p: StyleProps) => (p.hide ? 'none' : 'block')};
   }
 `;
