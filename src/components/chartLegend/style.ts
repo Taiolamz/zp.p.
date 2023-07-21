@@ -8,6 +8,11 @@ export const TransactionMainLegend = styled.div`
   column-gap: ${spacing.small};
   row-gap: ${spacing.small};
   justify-content: flex-end;
+
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+  }
+
   width: 100%;
   > div {
     display: flex;

@@ -21,6 +21,10 @@ export const TransactionMain = styled.div`
   display: grid;
   grid-template-columns: 50% 50%;
   /* justify-content: space-between; */
+
+  @media (max-width: 400px) {
+    grid-template-columns: auto;
+  }
 `;
 
 export const TransactionMainLeft = styled.div`
