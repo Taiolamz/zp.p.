@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-import { H1, H2, H4 } from '../../../styles';
+import { H1, H2, H3, H4, HB } from '../../../styles';
 import { colors } from '../../../utils';
 import { Bottom, BottomBorder, Container } from './style';
 import { BorderedText } from '../../index';
@@ -12,6 +12,7 @@ export interface CountInfoCardBorderTextIProps {
   backgroundColor?: string;
   borderText: string;
   borderTextColor?: string;
+  titleColor?: string
 }
 
 function CountInfoCardBorderText({
@@ -21,16 +22,17 @@ function CountInfoCardBorderText({
   backgroundColor,
   borderText,
   borderTextColor,
+  titleColor
 }: CountInfoCardBorderTextIProps) {
   return (
     <Container backgroundColor={backgroundColor} borderTextColor={borderTextColor}>
-      <H2 left color={colors.primary}>
+      <H4 left color={titleColor ? titleColor : colors.primary}>
         {title}
-      </H2>
+      </H4>
       <Bottom>
-        <H1 left bold color={color ? color : colors.primary}>
+        <HB left bold color={color ? color : colors.primary}>
           {count}
-        </H1>
+        </HB>
         <BottomBorder borderTextColor={borderTextColor}>
           <BorderedText text={borderText} backgroundColor="transparent" color={borderTextColor} />
         </BottomBorder>

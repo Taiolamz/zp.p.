@@ -12,8 +12,7 @@ export const TableContainer = styled.div`
 `;
 export const TransactionContainer = styled.div`
   width: 100%;
-  background-color: ${(p: StyleProps) =>
-    p.backgroundColor ? p.backgroundColor : colors.white};
+  background-color: ${(p: StyleProps) => (p.backgroundColor ? p.backgroundColor : colors.white)};
 `;
 
 export const TableTag = styled.table`
@@ -28,6 +27,7 @@ export const TH = styled.th`
   color: ${colors.primary};
   font-weight: ${fontWeight.semiLight};
   font-size: 0.875rem;
+  font-family: Rubik;
 `;
 
 export const TD = styled.td`
@@ -35,6 +35,7 @@ export const TD = styled.td`
   background-color: ${colors.secondary};
   color: ${colors.primary};
   font-size: 0.875rem;
+  font-family: Rubik;
 
   :first-child {
     border-radius: 10px 0 0 10px;

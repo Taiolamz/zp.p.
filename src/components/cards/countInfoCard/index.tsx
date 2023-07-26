@@ -1,6 +1,6 @@
 import { memo } from 'react';
 
-import { H1, H4 } from '../../../styles';
+import { HB, H1, H4 } from '../../../styles';
 import { colors } from '../../../utils';
 import { Container } from './style';
 
@@ -33,9 +33,9 @@ function CountInfoCard({
       <H4 left color={colors.grey}>
         {title}
       </H4>
-      <H1 left bold color={color ? color : colors.primary}>
+      <HB style={{ fontFamily: 'Poppins', fontWeight: '700' }} left bold color={color ? color : colors.primary}>
         {count}
-      </H1>
+      </HB>
       <H4 left color={colors.grey}>
         {helper ? helper : 'Total Records'}
       </H4>

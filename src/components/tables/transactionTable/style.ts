@@ -22,12 +22,14 @@ export const TableTag = styled.table`
 `;
 
 export const TH = styled.th`
+  font-family: Rubik;
   background-color: ${colors.smokeWhite};
   padding: 8px;
   color: ${colors.greyVariantOne};
 `;
 
 export const TD = styled.td`
+  font-family: Rubik;
   // font-size: 12px;
   padding: 8px;
   background-color: ${(p: StyleProps) => (p.backgroundColor ? p.backgroundColor : colors.white)};

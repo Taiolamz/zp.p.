@@ -11,6 +11,7 @@ export const Container = styled.div`
   background-color: ${(p: StyleProps) => p.backgroundColor};
   padding: ${spacing.xsmall} ${spacing.xsmall};
   height: max-content;
+  width: min-content;
   @media (max-width: 768px) {
     padding: ${spacing.xsmall};
   }

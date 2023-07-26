@@ -39,7 +39,7 @@ function DoughnutChart({ data }: SettlementBarChartOptionsIProps) {
 
   return (
     <Container style={{ marginTop: spacing.small }}>
-      <Doughnut options={options} data={chartData} height={'100%'} width={'100%'} />
+      <Doughnut options={options} data={chartData} height={'90%'} width={'90%'} />
     </Container>
   );
 }

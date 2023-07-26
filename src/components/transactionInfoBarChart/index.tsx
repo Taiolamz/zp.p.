@@ -41,7 +41,7 @@ function BarChart({ data }: BarChartIProps) {
       },
     },
     scales: {
-      x: {
+      x: {        
         border: {
           display: false,
         },
@@ -86,6 +86,9 @@ function BarChart({ data }: BarChartIProps) {
         grouped: true,
         barThickness: 100,
         borderRadius: 6,
+        categoryPercentage: 0.99,
+            barPercentage: 1.0
+
       },
     ],
   };

@@ -1,13 +1,16 @@
 import styled from 'styled-components';
-import { colors, spacing } from '../../utils';
+import { colors, spacing, boxShadow } from '../../utils';
 
 export const Container = styled.div`
   background-color: ${colors.white};
   padding: ${spacing.small_2};
-  display: grid;
+  display: flex;
+  flex-direction: column;
   height: 100%;
   border-radius: 10px;
+  box-shadow: ${boxShadow.light};
   row-gap: ${spacing.small};
+  cursor: pointer;
   @media (max-width: 768px) {
   }
 `;
