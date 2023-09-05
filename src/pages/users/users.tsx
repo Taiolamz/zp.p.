@@ -235,6 +235,7 @@ function Users() {
           updateUsersData.push({
             id: index + 1,
             name: item?.name !== null ? `${item?.name}` : 'N/A',
+
             userId: item?.id,
             walletNo: item?.account?.number ? item?.account?.number : 'N/A',
             phone: item?.telephone,
@@ -434,6 +435,7 @@ function Users() {
   };
 
   const handleRoleMoreIconOptions = (item: string) => {
+    setRoleMoreIconIsVisible(false);
     if (item === roleDetails) {
       navigate(`${USERROLES}${selectedRoleItem?.id.toString()}`);
     }
