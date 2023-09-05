@@ -9,8 +9,9 @@ interface StyleProps {
 export const Container = styled.div`
   background-color: ${(p: StyleProps) => p.backgroundColor};
   height: 100%;
-  /* padding: ${spacing.small} ${spacing.small}; */
-  /* width: 100%; */
+  /* display: flex;
+  flex-direction: column;
+  justify-content: space-between; */
   @media (max-width: 768px) {
     /* padding: ${spacing.xsmall}; */
   }

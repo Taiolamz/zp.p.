@@ -14,12 +14,17 @@ export const TransactionHeader = styled.div`
   align-items: center;
   width: 100%;
   justify-content: space-between;
+  margin-bottom: ${spacing.small};
 `;
 
 export const TransactionMain = styled.div`
   display: grid;
   grid-template-columns: 50% 50%;
   /* justify-content: space-between; */
+
+  @media (max-width: 400px) {
+    grid-template-columns: auto;
+  }
 `;
 
 export const TransactionMainLeft = styled.div`
@@ -33,6 +38,7 @@ export const TransactionMainText = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: ${spacing.small};
+  margin-bottom: ${spacing.medium};
 `;
 
 export const TransactionMainLegend = styled.div`

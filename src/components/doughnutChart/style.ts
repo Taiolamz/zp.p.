@@ -5,4 +5,6 @@ interface StyleProps {
   isSelected?: boolean;
 }
 
-export const Container = styled.div``;
+export const Container = styled.div`
+  width: 97%;
+`;

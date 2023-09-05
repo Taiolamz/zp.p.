@@ -17,7 +17,9 @@ import {
   BottomTabContent,
   ImgContainer,
   Img,
+  HamburgerContainer,
 } from './style';
+import { RxHamburgerMenu } from 'react-icons/rx';
 
 interface IProps {
   text: string;
@@ -46,7 +48,11 @@ function TabNav({ text, icon, isSelected, onClick }: IProps) {
   );
 }
 
-function SideBar() {
+interface SideBarIProps {
+  onClick?: () => void;
+}
+
+function SideBar({ onClick }: SideBarIProps) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -83,6 +89,7 @@ function SideBar() {
         icon: <FiMail />,
         path: SUPPORT,
       },
+
       {
         id: 4,
         isSelected: toggleBtn,
@@ -187,6 +194,9 @@ function SideBar() {
       <Container>
         <Content>
           <div>
+            <HamburgerContainer onClick={onClick}>
+              <RxHamburgerMenu />
+            </HamburgerContainer>
             <ImgContainer>
               <Img src={images.logoMain} alt="logo" />
             </ImgContainer>
@@ -213,7 +223,7 @@ function SideBar() {
           />
         </Content>
       </Container>
-      <BottomTabContainer>
+      {/* <BottomTabContainer>
         <BottomTabContent>
           {dataBottomTab.map((item, index) => (
             <TabNav
@@ -225,7 +235,7 @@ function SideBar() {
             />
           ))}
         </BottomTabContent>
-      </BottomTabContainer>
+      </BottomTabContainer> */}
     </>
   );
 }

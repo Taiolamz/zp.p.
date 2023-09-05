@@ -15,6 +15,7 @@ const colors = {
   greyVariantFour: '#818187',
   greyVariantFive: '#f6f6f6',
   greyVariantSix: '#D9D9D9',
+  greyVariantSeven: '#7E7E96',
   yellow: '#fbad39',
   green: '#089E17',
   greenVariantOne: '#2DBD9B',

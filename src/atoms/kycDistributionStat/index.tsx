@@ -11,32 +11,47 @@ import { H1 } from '../../styles';
 import { colors, currencyFormat } from '../../utils';
 import { Bottom, Container, Top, TopItemOne } from './style';
 
+export interface kycDataIprops {
+  title: string;
+  count: number | string;
+}
 export interface KycDistributionStatIProps {
   kycLevelData: LevelCardIPropsIProps[];
+  pendingVerification: kycDataIprops;
+  totalCustomers: kycDataIprops;
+  onClick?: () => void;
 }
 
-const KycDistributionStat = ({ kycLevelData }: KycDistributionStatIProps) => {
+const KycDistributionStat = ({
+  kycLevelData,
+  pendingVerification,
+  totalCustomers,
+  onClick,
+}: KycDistributionStatIProps) => {
   return (
     <div>
-      <Container>
+      <Container onClick={onClick}>
         <H1 left semiBold color={colors.greyVariantFour}>
           KYC Distribution
         </H1>
         <Top>
           <TopItemOne>
             <CountInfoCardNoHelper
-              title="Total Customers"
+              title={totalCustomers.title}
               backgroundColor="transparent"
               color={colors.primary}
-              count={'11,234'}
+              count={totalCustomers.count}
+              titleColor={colors.greyVariantSeven}
+              titleSmall={true}
             />
           </TopItemOne>
           <CountInfoCardBorderText
-            title="Pending Verification"
+            title={pendingVerification.title}
             backgroundColor="transparent"
             color={colors.primary}
-            count={'705'}
+            count={pendingVerification.count}
             borderText="Resolve"
+            titleColor={colors.greyVariantSeven}
             borderTextColor={colors.yellow}
           />
         </Top>

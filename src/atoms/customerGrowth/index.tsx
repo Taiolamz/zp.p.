@@ -8,7 +8,17 @@ import { dashboardBarData } from '../../pages/dashboard/data';
 import DashboardBarChart from '../dashboardBarChart';
 import { CustomSelectOptionsIProps } from '../../components/customSelect';
 
-const CustomerGrowth = () => {
+export interface CustomersCountIProps {
+  id: number;
+  title: string;
+  count: number | string;
+}
+
+export interface CustomerGrowthIProps {
+  customersCount: CustomersCountIProps[];
+}
+
+const CustomerGrowth = ({ customersCount }: CustomerGrowthIProps) => {
   // const [startDisplayRecordDate, setStartDisplayRecordDate] = useState('');
   const [dateOption, setDateOption] = useState(['year', 'Year']);
 
@@ -32,12 +42,15 @@ const CustomerGrowth = () => {
       </CustomerGrowthHeader>
       <CustomerGrowthMain>
         <CustomerGrowthStat>
-          <CountInfoCardNoHelper title="Total Customer" count={'5,234'} type={'small'} />
-          <CountInfoCardNoHelper title="New Customers" count={'2164'} type={'small'} />
+          {customersCount.map(item => {
+            return <CountInfoCardNoHelper key={item.id} title={item.title} count={item.count} />;
+          })}
         </CustomerGrowthStat>
 
         <CustomerGrowthChart>
-          <H4 left>3% growth in the past year</H4>
+          <H4 left color={colors.primary}>
+            3% growth in the past year
+          </H4>
           <DashboardBarChart
             setBarChartSelectedText={setBarChartSelectedText}
             dailyData={barChartSelectedText === 'Daily' ? dashboardBarData : emptyData}
