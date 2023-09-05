@@ -437,6 +437,8 @@ function Users() {
   const handleRoleMoreIconOptions = (item: string) => {
     setRoleMoreIconIsVisible(false);
     if (item === roleDetails) {
+      // console.log(selectedRoleItem?.id, 'role details');
+      // navigate(`${USERROLES}${selectedRoleItem?.id}`);
       navigate(`${USERROLES}${selectedRoleItem?.id.toString()}`);
     }
 
