@@ -31,7 +31,8 @@ const kycLevelZero = '?level=level zero&include=bvn';
 const kycLevelOne = '?level=level one&include=bvn';
 const kycLevelTwo = '?level=level two&include=bvn';
 const kycLevelAgency = '/fetchAgentVerification?level=level two&filterBy=cac document verification&include=bvn';
-const kycLevelBusinessAdress = '/fetchAgentVerification?level=level two&filterBy=address verification&include=bvn';
+const kycLevelBusinessAdress =
+  '/fetchAgentVerification?level=level two&filterBy=business address verification&include=bvn';
 
 const verifiedKycLevelOne = '/verified?level=level one';
 const verifiedKycLevelTwo = '/verified?level=level two';
