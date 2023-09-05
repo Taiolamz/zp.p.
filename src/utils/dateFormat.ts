@@ -38,4 +38,13 @@ export function timeFormat(date: string, pmAm: boolean = false) {
   return pmAm ? strTime : noAmPmstrTime;
 }
 
+export const formatRMDatePicker = (date: any) => {
+  // Format the date as 'DD-MM-YYYY'
+  const day = date?.day?.toString()?.padStart(2, '0');
+  const month = (date?.month?.number)?.toString()?.padStart(2, '0');
+  const year = date?.year;
+
+  return `${day}-${month}-${year}`;
+};
+
 // export default dateFormat;
