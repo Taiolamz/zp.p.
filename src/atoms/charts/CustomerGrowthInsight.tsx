@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { MdOutlineEditCalendar } from 'react-icons/md'
-import { ZojaSelect } from '../../../../components/tailwind'
-import yearRange from '../../../../utils/yearRange'
+import { ZojaSelect } from '../../components/tailwind'
+import yearRange from '../../utils/yearRange'
 import ReactApexChart from 'react-apexcharts'
-import { Dictionary } from '../../../../types'
+import { Dictionary } from '../../types'
 
 
 const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November',]

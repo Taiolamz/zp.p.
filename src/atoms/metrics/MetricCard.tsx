@@ -1,5 +1,5 @@
 import React from 'react'
-import numberFormat from '../../../utils/numberFormat'
+import numberFormat from '../../utils/numberFormat'
 
 interface IProps {
     title: string,

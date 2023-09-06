@@ -1,4 +1,4 @@
-import StatLabel from './StatLabel'
+import StatLabel from '../labels/StatLabel';
 
 interface IProps {
     total_user: number,

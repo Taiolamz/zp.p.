@@ -47,8 +47,8 @@ module.exports = {
         zojaShadowFour: "0px 2px 6px 2px #0000001A",
         zojaShadowFive: "0px 1px 2px 0px #00000026",
         zojaShadowSix:" 0px 4px 10px 0px #0000001A",
-        zojaShadowSeven: "0px 4px 10px 0px #0000001A"
-
+        zojaShadowSeven: "0px 4px 10px 0px #0000001A",
+        zojaShadowEight: "0px 8px 24px -4px #02114614"
       },
     },
   },

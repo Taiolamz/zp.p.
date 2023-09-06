@@ -1,11 +1,10 @@
-import { MdArrowRightAlt, MdOutlineEditCalendar } from 'react-icons/md'
-import StatLabel from '../StatLabel'
-import { Dictionary } from '../../../../types'
-import { Link } from 'react-router-dom'
-import ReactApexChart from 'react-apexcharts'
 import { useRef, useState } from 'react'
-import { ZojaDatePicker } from '../../../../components/tailwind'
+import ReactApexChart from 'react-apexcharts'
+import { MdArrowRightAlt, MdOutlineEditCalendar } from 'react-icons/md'
 import DatePicker from 'react-multi-date-picker'
+import { Link } from 'react-router-dom'
+import { Dictionary } from '../../types'
+import { routesPath } from '../../utils'
 
 const appFeatures: Dictionary = [
     {
@@ -104,6 +103,7 @@ const TransactionVolumeInsight = () => {
             },
         },
     })
+    const { TRANSACTIONINFORMATION } = routesPath
     return (
         <section className='tw-bg-white tw-p-4 tw-rounded-lg tw-shadow-zojaShadowOne tw-w-full'>
             <div className="tw-flex tw-items-center tw-justify-between md:tw-items-baseline">
@@ -136,7 +136,7 @@ const TransactionVolumeInsight = () => {
                             ))
                         }
                     </div>
-                    <Link to="/" className='tw-font-thin tw-flex tw-items-center tw-text-xs tw-no-underline tw-text-[#162082] tw-mt-6 tw-ml-3'> <span className='tw-font-normal'>See More</span> <span className='tw-text-lg'><MdArrowRightAlt /></span>  </Link>
+                    <Link to={TRANSACTIONINFORMATION} className='tw-font-thin tw-flex tw-items-center tw-text-xs tw-no-underline tw-text-[#162082] tw-mt-6 tw-ml-3'> <span className='tw-font-normal'>See More</span> <span className='tw-text-lg'><MdArrowRightAlt /></span>  </Link>
                 </div>
                 <div className='tw-mx-auto md:tw-w-[50%]'>
                     <div id="chart">

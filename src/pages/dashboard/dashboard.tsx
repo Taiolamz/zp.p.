@@ -1,46 +1,13 @@
-import { Activecard, CountInfoCard, CountInfoCardNoHelper } from '../../components';
-import { colors, currencyFormat, images, routesPath } from '../../utils';
-import { AppContainer, AllUsersStat, KycDistributionStat, TransactionVolume, CustomerGrowth } from '../../atoms';
-import {
-  CardsContainer,
-  ChartsContainer,
-  Container,
-  FourBoxContainer,
-  StatCount,
-  TransactionVolumeChart,
-  TwoBoxActive,
-  TwoBoxContainerItem,
-  TwoBoxItemActive,
-  TwoBoxItemBottom,
-  TwoBoxItemTop,
-} from './style';
-import {
-  activeCash,
-  activeData,
-  agents,
-  allUsersData,
-  complaints,
-  customersCount,
-  dashboardMainCountData,
-  kycLevelData,
-  pendingVerification,
-  refferals,
-  totalCustomers,
-  transactionVolumeChartData,
-} from './data';
-import { Link, useNavigate } from 'react-router-dom';
-import { AdvanceFilter, AllUserStat, CustomerGrowthInsight, KYCDistributionStat, MetricCard, RightSideMetric, StatLabel, TransactionVolumeInsight } from './atoms';
-import { FaCalendarAlt, FaChevronRight } from 'react-icons/fa';
-import { MdOutlineEditCalendar } from 'react-icons/md';
-import { VscBellDot, VscBell } from 'react-icons/vsc';
-import { BsFilter } from 'react-icons/bs';
-import { BiChevronDown } from 'react-icons/bi';
-import { ZojaButton, ZojaModal, ZojaSelect } from '../../components/tailwind';
-import DatePicker from 'react-multi-date-picker';
 import { useEffect, useRef, useState } from 'react';
-import useClickOutside from '../../utils/hooks/useClickOutside';
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+import { BiChevronDown } from 'react-icons/bi';
+import { BsFilter } from 'react-icons/bs';
+import { VscBellDot } from 'react-icons/vsc';
+import Skeleton from 'react-loading-skeleton';
+import { useNavigate } from 'react-router-dom';
+import { AdvanceFilter, AllUserStat, AppContainer, CustomerGrowthInsight, KycDistributionStat, MetricCard, RightSideMetric, TransactionVolumeInsight } from '../../atoms';
+import { NotificationIcon, NotificationModal, SingleNotification } from '../../components';
+import { ZojaModal } from '../../components/tailwind';
+import { images, routesPath } from '../../utils';
 const { SETTLEMENTS, USERS, KYC, SUPPORT } = routesPath;
 
 export interface dashboardMainCountDataIProps {
@@ -63,11 +30,14 @@ export interface fourBoxesIProps {
 const Dashboard = () => {
   const navigate = useNavigate();
   const [showAdvanceFilter, setShowAdvanceFilter] = useState(false)
+  const [showNotificationModal, setShowNotificationModal] = useState(false)
   const [loading, setLoading] = useState(true)
   const advanceFilterRef = useRef<any>(null)
+  const notificationModalRef = useRef<any>(null)
   let timeRef = useRef<any>(null)
 
   const handleCloseAdvanceFilterModal = () => setShowAdvanceFilter(false)
+  const handleCloseNotificationModal = () => setShowNotificationModal(false)
 
   useEffect(() => {
     timeRef.current = setTimeout(() => {
@@ -85,17 +55,50 @@ const Dashboard = () => {
           <span className='tw-hidden tw-text-[#6E7C87] tw-text-sm tw-font-normal md:tw-block'>Advanced Filter</span>
           <span><BiChevronDown /></span>
         </div>
-        <span className='tw-block tw-text-2xl tw-mr-1 md:tw-mr-5'><VscBellDot /> </span>
+        <NotificationIcon onClick={() => setShowNotificationModal(true)}/>
       </div>
     } navTitle={<span className='tw-ml-3 tw-text-[#5E6366] tw-font-medium md:tw-text-[1.2rem]'
     >Welcome, Bola</span>}>
       <>
         <ZojaModal
           show={showAdvanceFilter}
+          height='auto'
+          position='right'
+          borderRadius='8px'
           handleClose={handleCloseAdvanceFilterModal}
           closeOnClickOutside={true}
+          extraClass='md:tw-w-[33.5rem] md:tw-right-72 md:tw-mt-12'
           contentRef={advanceFilterRef}
           children={<AdvanceFilter contentRef={advanceFilterRef} handleClose={handleCloseAdvanceFilterModal} />}
+        />
+
+        <ZojaModal
+          show={showNotificationModal}
+          height='full'
+          position='right'
+          handleClose={handleCloseNotificationModal}
+          extraClass='tw-w-[18rem] md:tw-w-[25rem]'
+          closeOnClickOutside={true}
+          contentRef={notificationModalRef}
+          children={
+            <NotificationModal
+              title='Notification'
+              contentRef={notificationModalRef}
+              handleClose={handleCloseNotificationModal}
+              children={<div>
+                <SingleNotification
+                  title="Ticket Response Received"
+                  content="Your Ticket with Item Number #12345 has gotten a response from the assigned staff, click this message to go and view this ticket action"
+                  createdAt="06-06-2022"
+                />
+                <SingleNotification
+                  title="New Live Message"
+                  content="New Live message received from Adebayo Tijani"
+                  createdAt="06-06-2022"
+                  isRead={true}
+                />
+              </div>}
+            />}
         />
         <section className='tw-p-2 tw-mb-4 md:tw-p-0 md:tw-pt-8 md:tw-px-4 md:tw-mb-8'>
           <section className='tw-flex tw-justify-between tw-gap-8 tw-flex-col md:tw-flex-row'>
@@ -110,7 +113,7 @@ const Dashboard = () => {
                   <div className='tw-flex tw-gap-4 tw-flex-wrap tw-gap-x-10'>
                     {Array.from({ length: 3 }, (_, idx) => (
                       <div key={idx} className='tw-w-[9rem] md:tw-w-[14rem]'>
-                        <Skeleton count={4} height={9} />
+                        <Skeleton count={4} height={9} borderRadius='0' />
                       </div>
                     ))}
                   </div>
@@ -119,13 +122,13 @@ const Dashboard = () => {
               <div className='tw-mt-6 tw-flex tw-flex-col tw-gap-4 md:tw-flex-row md:tw-gap-x-6 md:tw-mt-16'>
                 {!loading && <>
                   <AllUserStat total_user={9300} active_user={7900} inactive_user={1400} ios_download={4000} android_download={5300} conversion_rate={77} />
-                  <KYCDistributionStat />
+                  <KycDistributionStat />
                 </>}
                 {loading &&
                   <div className='tw-flex tw-flex-col tw-gap-4 md:tw-gap-x-10 md:tw-flex-row md:-tw-mt-5 md:tw-ml-2'>
                     {Array.from({ length: 2 }, (_, idx) => (
                       <div key={idx} className='tw-w-[100%] md:tw-w-[22.5rem]'>
-                        <Skeleton count={8} height={9} />
+                        <Skeleton count={8} height={9} borderRadius='0' />
                       </div>
                     ))}
                   </div>
@@ -146,7 +149,7 @@ const Dashboard = () => {
               {loading && <div className='tw-bg-gray-200/20 tw-flex tw-flex-col tw-gap-y-4 tw-rounded-lg'>
                 {Array.from({ length: 3 }, (_, idx) => (
                   <div key={idx} className='tw-w-[100%] md:tw-w-[16.5rem]'>
-                    <Skeleton count={4} height={7} />
+                    <Skeleton count={4} height={7} borderRadius='0' />
                   </div>
                 ))}
               </div>}
@@ -161,93 +164,14 @@ const Dashboard = () => {
             {loading && <div className="tw-flex tw-flex-col tw-gap-y-3 tw-mt-8 md:tw-flex-row md:tw-gap-x-12">
               {Array.from({ length: 2 }, (_, idx) => (
                 <div key={idx} className='tw-w-[100%] md:tw-w-[calc(100vw_-_55.5rem)]'>
-                  <Skeleton count={8} height={9} />
+                  <Skeleton count={8} height={9} borderRadius='0' />
                 </div>
               ))}
             </div>}
           </section>
         </section>
       </>
-      {/* <Container>
-        <StatCount>
-          {dashboardMainCountData.map(item => {
-            return (
-              <>
-                <CountInfoCard
-                  key={item.id}
-                  title={item.title}
-                  helper={item.helperText}
-                  background={item.backgroundColor}
-                  color={item.color}
-                  count={currencyFormat(item.count)}
-                  // shadow="none"
-                  onClick={() => navigate(SETTLEMENTS)}
-                />
-              </>
-            );
-          })}
-        </StatCount>
-        <CardsContainer>
-          <AllUsersStat allUsersData={allUsersData} activeData={activeData} onClick={() => navigate(USERS)} />
-          <KycDistributionStat
-            kycLevelData={kycLevelData}
-            totalCustomers={totalCustomers}
-            pendingVerification={pendingVerification}
-            onClick={() => navigate(KYC)}
-          />
-          <TwoBoxContainerItem>
-            <TwoBoxItemTop>
-              <CountInfoCardNoHelper
-                title={refferals.title}
-                color={refferals.color}
-                count={refferals.count}
-                type={refferals.type}
-                titleColor={refferals.titleColor}
-              />
-            </TwoBoxItemTop>
-            <TwoBoxItemBottom onClick={() => navigate(SUPPORT)}>
-              <CountInfoCardNoHelper
-                title={complaints.title}
-                color={complaints.color}
-                count={complaints.count}
-                titleColor={complaints.titleColor}
-              />
-            </TwoBoxItemBottom>
-          </TwoBoxContainerItem>
-          <TwoBoxContainerItem>
-            <TwoBoxItemTop>
-              <CountInfoCardNoHelper
-                title={activeCash.title}
-                color={activeCash.color}
-                count={activeCash.count}
-                type={activeCash.type}
-                titleColor={activeCash.titleColor}
-              />
-            </TwoBoxItemTop>
-            <TwoBoxItemActive onClick={() => navigate(SUPPORT)}>
-              <CountInfoCardNoHelper
-                title={agents.title}
-                color={agents.color}
-                count={agents.count}
-                titleColor={agents.titleColor}
-              />
-              <TwoBoxActive>
-                {activeData.map(item => {
-                  return <Activecard key={item.id} count={item.count} title={item.title} />;
-                })}
-              </TwoBoxActive>
-            </TwoBoxItemActive>
-          </TwoBoxContainerItem>
-        </CardsContainer>
-        <ChartsContainer>
-          <TransactionVolumeChart>
-            <Link to={'/transactioninformation'}>
-              <TransactionVolume transactionVolumeChartData={transactionVolumeChartData} />
-            </Link>
-          </TransactionVolumeChart>
-          <CustomerGrowth customersCount={customersCount} />
-        </ChartsContainer>
-      </Container> */}
+
     </AppContainer>
   );
 }

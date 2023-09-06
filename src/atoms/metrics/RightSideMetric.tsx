@@ -1,8 +1,6 @@
-import React from 'react'
-import { images } from '../../../utils'
-import StatLabel from './StatLabel'
 import { FaChevronRight } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
+import { StatLabel } from '../../atoms'
 
 interface IProps {
     icon: any,
