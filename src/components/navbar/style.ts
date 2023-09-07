@@ -17,7 +17,7 @@ export const Container = styled.div`
   background-color: ${colors.white};
   box-shadow: ${boxShadow.light};
   width: 100%;
-  z-index: 0;
+  z-index: 999;
   padding: ${spacing.xxsmall} ${spacing.small} ${spacing.xxsmall} ${spacing.small};
 `;
 

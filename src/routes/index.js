@@ -17,6 +17,8 @@ import { NotFound } from '../pages/notFound';
 import { PrivateRoute } from './privateRoute';
 import { routesPath } from '../utils';
 import { Transactions } from '../pages/transactions';
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 function AppRoute() {
   const {
@@ -228,6 +230,15 @@ function AppRoute() {
           }
         />
         <Route path="*" element={<NotFound />} />
+        <Route path='/test' element={<>
+          <div className='tw-w-1/2 tw-mx-auto'>
+            {
+              Array.from({ length: 3 }, (_, idx) => (
+                <Skeleton key={idx} count={2} className="tw-w-full tw-bg-red-400" />
+              ))
+            }
+          </div>
+        </>} />
       </Routes>
     </>
   );

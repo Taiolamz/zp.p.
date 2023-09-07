@@ -26,7 +26,7 @@ export { default as TransactionHistoryModal } from './transactionHistoryModal';
 export { default as SavedBanksModal } from './savedBanksModal';
 export { default as ProfileActivationToggleModal } from './profileActivationToggleModal';
 export { default as AllUsersStat } from './allUsersStat';
-export { default as KycDistributionStat } from './kycDistributionStat';
+// export { default as KycDistributionStat } from './kycDistributionStat';
 export { default as TransactionVolume } from './transactionVolume';
 export { default as CustomerGrowth } from './customerGrowth';
 export { default as DashboardBarChart } from './dashboardBarChart';
@@ -37,3 +37,12 @@ export { default as CustomTimeInput } from './customTimeInput';
 export { default as NewFaqAtom } from './newFaqAtom';
 export { default as CreateInternalUserModal } from './createInternalUserModal';
 export { default as LoginHistoryOnlyModal } from './loginHistoryOnlyModal';
+export { default as LevelLabel } from "./labels/LevelLabel"
+export { default as StatLabel } from "./labels/StatLabel"
+export { default as MetricCard } from "./metrics/MetricCard"
+export { default as AllUserStat } from "./statistics/AllUserStat"
+export { default as AdvanceFilter } from "./modals/AdvanceFilter"
+export { default as CustomerGrowthInsight } from "./charts/CustomerGrowthInsight"
+export { default as TransactionVolumeInsight } from "./charts/TransactionVolumeInsight"
+export { default as KycDistributionStat } from "./metrics/KYCDistributionStat"
+export { default as RightSideMetric } from "./metrics/RightSideMetric"

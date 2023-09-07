@@ -9,9 +9,10 @@ interface IProps {
   helper?: string;
   goBack?: () => void;
   onClick?: () => void;
+  navBarContentRight?: any
 }
 
-function Navbar({ title, helper, goBack, onClick }: IProps) {
+function Navbar({ title, helper, goBack, onClick, navBarContentRight }: IProps) {
   return (
     <Container>
       <Content>
@@ -30,7 +31,10 @@ function Navbar({ title, helper, goBack, onClick }: IProps) {
         {helper ? <H1 semiBold>{helper}</H1> : <H4>{helper}</H4>}
       </Content>
 
-      <ImgContent src={images.logoBordered} alt="logo" />
+      <div className='tw-flex tw-items-center tw-gap-x-2'>
+        {navBarContentRight}
+        <ImgContent src={images.logoBordered} alt="logo" />
+      </div>
     </Container>
   );
 }
