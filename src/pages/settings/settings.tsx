@@ -69,11 +69,17 @@ function Settings() {
     }
   };
 
-  // console.log(selectedSettingsCard);
+  const settingsBoxShadow = '0px 30px 55px 0px rgba(120, 120, 143, 0.10)';
+
   return (
     <AppContainer navTitle="App Contents" navHelper={selectedSettingsCard?.title}>
       <div>
-        <CountInfo data={settingsCountData} setSelectedData={setSelectedSettingsCard} type="settings" />
+        <CountInfo
+          data={settingsCountData}
+          shadow={settingsBoxShadow}
+          setSelectedData={setSelectedSettingsCard}
+          type="settings"
+        />
         {objectLength < 1 && (
           <div style={emptyListCenterStyle}>
             <img src={images.emptyList} alt="Empty container" />

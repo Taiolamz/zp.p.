@@ -7,9 +7,10 @@ export interface CountInfoIProps {
   data: CountInfoCardIProps[];
   setSelectedData?: any;
   type?: string;
+  shadow?: string;
 }
 
-function CountInfo({ data, setSelectedData, type }: CountInfoIProps) {
+function CountInfo({ data, setSelectedData, type, shadow }: CountInfoIProps) {
   const [dataList, setDataList] = useState(data as CountInfoCardIProps[]);
 
   useLayoutEffect(() => {
@@ -51,6 +52,7 @@ function CountInfo({ data, setSelectedData, type }: CountInfoIProps) {
               onClick={() => handleOnSelectCard(item)}
               count={item.count}
               title={item.title}
+              shadow={shadow}
             />
           </Content>
         ))}
