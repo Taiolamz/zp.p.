@@ -5,6 +5,8 @@ import DatePicker from 'react-multi-date-picker'
 import { formatRMDatePicker } from '../../utils'
 import { useFormik } from 'formik'
 import { Dictionary } from '../../types'
+import { useAppDispatch } from '../../redux/redux-hooks'
+import { getDashboardAnalyticInsight } from '../../redux/slice'
 
 interface IProps {
     handleClose: () => void,
@@ -18,31 +20,31 @@ const transactionTypeOptions = [
     },
     {
         label: "Cash requests/provision",
-        value: "Cash requests/provision"
+        value: "cash_request"
     },
     {
         label: "Transfer-Zojapay",
-        value: "Transfer-Zojapay"
+        value: "zojapay"
     },
     {
         label: "Airtime & Data Bills",
-        value: "Airtime & Data Bills"
+        value: "airtime_&_data"
     },
     {
         label: "Electricity",
-        value: "Electricity"
+        value: "electricity"
     },
     {
         label: "Transfer-other banks",
-        value: "Transfer-other banks"
+        value: "other_banks"
     },
     {
         label: "Other bills(cable,betting,etc)",
-        value: "Other bills(cable,betting,etc)"
+        value: "other_bills"
     },
     {
         label: "Contactless payment(NFC,QR)",
-        value: "Contactless payment(NFC,QR)"
+        value: "contactless"
     },
 ]
 
@@ -53,11 +55,11 @@ const userTypeOptions = [
     },
     {
         label: "Active Users",
-        value: "Active Users"
+        value: "active"
     },
     {
         label: "Inactive Users",
-        value: "Inactive Users"
+        value: "inactive"
     },
 ]
 
@@ -67,7 +69,7 @@ const AdvanceFilter = ({ handleClose, contentRef }: IProps) => {
     const startDateRef = useRef<any>(null)
     const endDateRef = useRef<any>(null)
 
-    // console.log(startDate)
+    const dispatch = useAppDispatch()
 
     const initialValues: Dictionary = {
         transaction_type: '',
@@ -76,10 +78,13 @@ const AdvanceFilter = ({ handleClose, contentRef }: IProps) => {
         end_date: '',
     }
 
+    const handleFilter = () => dispatch(getDashboardAnalyticInsight(values))
+
     const { values, errors, touched, handleSubmit, handleChange } = useFormik({
         initialValues: initialValues,
         onSubmit: (values) => {
-            console.log(values);
+            handleFilter()
+            handleClose()
         }
     })
 
@@ -111,7 +116,8 @@ const AdvanceFilter = ({ handleClose, contentRef }: IProps) => {
                         <div className='tw-border tw-text-[11.3px] tw-text-gray-400 tw-p-[9px] tw-px-7 tw-rounded-[4px] tw-flex tw-gap-5 tw-relative md:tw-px-8'>
                             <span className={`${startDate && 'tw-text-gray-600 tw-font-normal'}`}>{startDate !== null ? formatRMDatePicker(startDate) : 'Start Date'}</span> <span className='tw-text-lg tw-text-isPrimary tw-cursor-pointer' onClick={() => startDateRef.current.openCalendar()}><MdOutlineEditCalendar /> </span>
                             <DatePicker
-                                value={startDate}
+                                value={values.start_date}
+                                onClose={()=>{values.start_date = formatRMDatePicker(startDate)}}
                                 ref={startDateRef}
                                 containerClassName="tw-absolute tw-bottom-2 tw-w-[1rem] tw-text-md tw-hidden -tw-mt-7"
                                 inputClass="tw-bg-inherit tw-outline-none tw-hidden"
@@ -124,6 +130,7 @@ const AdvanceFilter = ({ handleClose, contentRef }: IProps) => {
                         <div className='tw-border tw-text-[11.3px] tw-text-gray-400 tw-p-[9px] tw-px-7 tw-rounded-[4px] tw-flex tw-gap-5 tw-relative md:tw-px-8'>
                             <span className={`${endDate && 'tw-text-gray-600 tw-font-normal'}`}>{endDate !== null ? formatRMDatePicker(endDate) : 'Start Date'}</span> <span className='tw-text-lg tw-text-isPrimary tw-cursor-pointer' onClick={() => endDateRef.current.openCalendar()}><MdOutlineEditCalendar /> </span>
                             <DatePicker
+                                onClose={()=>{values.end_date = formatRMDatePicker(endDate)}}
                                 value={endDate}
                                 ref={endDateRef}
                                 containerClassName="tw-absolute tw-bottom-2 tw-w-[1rem] tw-text-md tw-hidden -tw-mt-7"
