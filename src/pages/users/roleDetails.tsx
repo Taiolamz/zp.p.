@@ -5,11 +5,7 @@ import { AppContainer, LoaderModal, ActivityActionModal } from '../../atoms';
 import {
   colors,
   routesPath,
-  dateFormat,
-  capitalizeFirstLetter,
-  timeFormat,
   images,
-  determineVericationDocState,
   spacing,
   getAdminUserSelectedRoles,
   // files
@@ -83,7 +79,7 @@ function RoleDetails() {
   const [currentAccess, setCurrentAccess] = useState<string>(canViewDashboard);
   const [selectedUserRoles, setSelectedUserRoles] = useState<string[]>([]);
   const [selectedUserType, setSelectedUserType] = useState('');
-  const [roleName, setRoleName] = useState('');
+  const [roleName, setRoleName] = useState('roleName');
 
   // redux state
   const singleRoleState = useAppSelector(state => state.getSingleRole);
@@ -99,12 +95,12 @@ function RoleDetails() {
   useEffect(() => {
     if (singleRoleStatus === 'succeeded') {
       let formatedRole: string[] = [];
-      setRoleName(singleRoleState.data.role.name);
-      singleRoleState.data.role.permissions.forEach((el: Dictionary) => {
-        formatedRole.push(el.name);
+      setRoleName(singleRoleState?.data?.role?.name);
+      singleRoleState?.data?.role?.permissions?.forEach((el: Dictionary) => {
+        formatedRole.push(el?.name);
       });
 
-      if (formatedRole.includes(canViewDashboard)) {
+      if (formatedRole?.includes(canViewDashboard)) {
         setToggleDashboard(true);
       }
       if (formatedRole.includes(canViewSupport)) {
@@ -210,7 +206,7 @@ function RoleDetails() {
           <H3 style={{ marginRight: spacing.small }}>Role Name</H3>
           <BorderedText
             color={colors.primary}
-            text={capitalizeFirstLetter(roleName)}
+            text={roleName}
             backgroundColor="transparent"
             borderColor={colors.primary}
           />
