@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AppContainer, NewArticle, NewNotification } from '../../atoms';
 import { routesPath } from '../../utils';
 import { useNavigate } from 'react-router';
@@ -33,8 +33,35 @@ function NewArticles() {
     dispatch(createArticleRequest(payload));
   };
 
+  // useEffect(() => {
+  //   if (getArticlesStatus === 'succeeded') {
+  //     let updatedList: any[] = [];
+
+  //     articlesState?.data?.articles?.data.forEach((item: any, index: number) => {
+  //       updatedList.push({
+  //         id: index + 1,
+  //         title: item?.title,
+  //         status: item?.status,
+  //         dateCreated: yearDateFormat(item?.created_at),
+  //         timeUpdated: item?.updated_at,
+  //         articleId: item?.id,
+  //         imageUrl: item?.image_url,
+  //         createdBy: item?.author?.name,
+  //       });
+  //     });
+
+  //     const {
+  //       meta: { links, last_page },
+  //     } = articlesState?.data?.articles;
+
+  //     setTotalPages(last_page);
+
+  //     setArticlesDataList(updatedList);
+  //   }
+  // }, [articlesState]);
+
   return (
-    <AppContainer goBack={() => navigate(SETTINGS)} navTitle={`App Contents`} navHelper="ARTICLES | NEW ARTICLES ">
+    <AppContainer goBack={() => navigate(SETTINGS)} navTitle={`App Contents`} navHelper="ARTICLES | VIEW ARTICLE ">
       <NewAppContainer>
         <NewArticle
           // setFormvalues={setFormvalues}

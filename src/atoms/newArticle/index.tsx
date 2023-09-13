@@ -6,9 +6,14 @@ import { ButtonContainer, MiniInputs } from './style';
 import { BiImageAdd } from 'react-icons/bi';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
+import { Dictionary } from '../../types';
 const { SETTINGS } = routesPath;
 
-const NewArticle = ({ setFormvalues }: any) => {
+export interface IProps {
+  onSubmit: (item: Dictionary) => any;
+}
+
+const NewArticle = ({ onSubmit }: IProps) => {
   const navigate = useNavigate();
 
   const [imageValue, setImageValue] = useState('');
@@ -28,12 +33,20 @@ const NewArticle = ({ setFormvalues }: any) => {
         enableReinitialize={true}
         validationSchema={schema}
         onSubmit={async (values, { setSubmitting }) => {
-          const { title, content } = values;
-
-          console.log({
-            title,
+          const {
             content,
-          });
+            title,
+            // active_platform, status, image
+          } = values ?? '';
+          const payload = {
+            title: title,
+            content: content,
+            // status: lastName,
+            image: imageValue,
+            // active_platform: lastName,
+          };
+
+          onSubmit(payload);
           setSubmitting(false);
         }}>
         {formikProps => {

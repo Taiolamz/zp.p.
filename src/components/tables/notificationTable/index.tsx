@@ -27,7 +27,11 @@ const emptyListCenterStyle = {
   alignItems: 'center',
 };
 
-function NotificationTable({ data, headerData, onClick }: TableIPropsIProps) {
+function NotificationTable({ data, headerData, onClick, setSelectedItem }: TableIPropsIProps) {
+  const handleOnSelect = (item: any) => {
+    setSelectedItem(item);
+  };
+
   return (
     <div>
       {data?.length >= 1 ? (
@@ -44,14 +48,16 @@ function NotificationTable({ data, headerData, onClick }: TableIPropsIProps) {
             </thead>
             <tbody>
               {data?.map((item: any) => (
-                <TR key={item.id}>
+                <TR key={item.articleId}>
                   <TD>{item.id}</TD>
                   <TD>{item.title}</TD>
                   <TD>{item.interval}</TD>
                   <TD>{item.createdBy}</TD>
                   <TD>{item.dateCreated}</TD>
                   <TD>
-                    <MoreIcon onClick={onClick} />
+                    <div onClick={() => handleOnSelect(item)}>
+                      <MoreIcon onClick={() => onClick(item)} />
+                    </div>
                   </TD>
                 </TR>
               ))}

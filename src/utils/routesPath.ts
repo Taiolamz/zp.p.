@@ -22,7 +22,7 @@ const routesPath = {
   EMAILNOTIFICATION: '/settings/emailnotification',
   EMAILNOTIFICATIONUPDATE: '/settings/emailnotificationupdate',
   NEWARTICLE: '/settings/newarticle',
-  ARTICLEUPDATE: '/settings/articleupdate',
+  ARTICLEUPDATE: '/settings/articleupdate/',
   NEWFAQ: '/settings/newfaq',
   FAQUPDATE: '/settings/faqupdate',
   USERROLES: '/users/roles/',

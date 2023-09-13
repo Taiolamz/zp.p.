@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { AppContainer, CountInfo, MoreIconView } from '../../atoms';
+import { useEffect, useState } from 'react';
+import { AppContainer, CountInfo, LoaderModal, MoreIconView } from '../../atoms';
 import {
   articleDataHeader,
   faqData,
@@ -8,12 +8,14 @@ import {
   notificationDataHeader,
   settingsCountData,
 } from './data';
-import { colors, images, routesPath } from '../../utils';
+import { colors, images, routesPath, yearDateFormat } from '../../utils';
 import { BorderedText, FaqTable, NotificationTable, Pagination, SearchInput } from '../../components';
 import { Dictionary } from '../../types';
 import { NotificationTop, TableContainer } from './style';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { useNavigate } from 'react-router';
+import { getArticlesRequest } from '../../redux/slice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 const emptyListCenterStyle = {
   display: 'flex',
@@ -35,14 +37,26 @@ const {
 function Settings() {
   const [selectedSettingsCard, setSelectedSettingsCard] = useState<Dictionary>({});
   const [searchValue, setSearchValue] = useState('');
+  const pageSize = 10;
   const [isSearching, setIsSearching] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(5);
+  const [transactionDataList, setTransactionDataList] = useState<any[]>([]);
+  const [articlesDataList, setArticlesDataList] = useState<any[]>([]);
   const [selectedNotificationText, setSelectedNotificationText] = useState('');
+  const [selectedArticle, setSelectedArticle] = useState<any>({});
+
   const viewDetails = 'View Details';
   const deleteEntry = 'Delete Entry';
   const moreIconOption = [viewDetails, deleteEntry];
 
   const [moreIsVisible, setMoreIsVisible] = useState(false);
 
+  // redux state
+  const articlesState = useAppSelector(state => state.getArticles);
+  const { status: getArticlesStatus } = articlesState;
+
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const objectLength = Object.keys(selectedSettingsCard).length;
@@ -60,14 +74,54 @@ function Settings() {
   };
   const handleMoreIconOptionsArticle = async (item: string) => {
     if (item === viewDetails) {
-      navigate(`${ARTICLEUPDATE}`);
+      navigate(`${ARTICLEUPDATE}${selectedArticle.articleId}`);
     }
+
+    console.log(item, 'view');
   };
   const handleMoreIconOptionsFaq = async (item: string) => {
     if (item === viewDetails) {
       navigate(`${FAQUPDATE}`);
     }
   };
+
+  useEffect(() => {
+    if (selectedSettingsCard.id === 3) {
+      dispatch(
+        getArticlesRequest({
+          per_page: pageSize,
+          page: currentPage,
+        }),
+      );
+    }
+  }, [selectedSettingsCard, currentPage, pageSize]);
+
+  useEffect(() => {
+    if (getArticlesStatus === 'succeeded') {
+      let updatedList: any[] = [];
+
+      articlesState?.data?.articles?.data.forEach((item: any, index: number) => {
+        updatedList.push({
+          id: index + 1,
+          title: item?.title,
+          status: item?.status,
+          dateCreated: yearDateFormat(item?.created_at),
+          timeUpdated: item?.updated_at,
+          articleId: item?.id,
+          imageUrl: item?.image_url,
+          createdBy: item?.author?.name,
+        });
+      });
+
+      const {
+        meta: { links, last_page },
+      } = articlesState?.data?.articles;
+
+      setTotalPages(last_page);
+
+      setArticlesDataList(updatedList);
+    }
+  }, [articlesState]);
 
   const settingsBoxShadow = '0px 30px 55px 0px rgba(120, 120, 143, 0.10)';
 
@@ -126,6 +180,7 @@ function Settings() {
                   settlementAnalyticsStatus === 'loading' ||
                   transactionDataList?.length < 1
                 }
+
               /> */}
               <MoreIconView
                 setSelectedText={setSelectedNotificationText}
@@ -201,8 +256,9 @@ function Settings() {
               <NotificationTable
                 headerData={articleDataHeader}
                 header={true}
-                data={notificationData}
+                data={articlesDataList}
                 onClick={(item: Dictionary) => setMoreIsVisible(true)}
+                setSelectedItem={setSelectedArticle}
               />
               <MoreIconView
                 setSelectedText={setSelectedNotificationText}
@@ -263,6 +319,11 @@ function Settings() {
                 />
               )} */}
         </TableContainer>
+        <LoaderModal
+          isModalVisible={getArticlesStatus === 'loading'}
+          text="Loading please wait..."
+          closeModal={() => {}}
+        />
       </div>
     </AppContainer>
   );

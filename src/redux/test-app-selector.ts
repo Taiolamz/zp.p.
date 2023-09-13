@@ -5,6 +5,7 @@ import {
   getTransactionsSliceReducer,
   getReconciliationAccountSliceReducer,
   reconcileAccountSliceReducer,
+  getArticlesSliceReducer,
   getEscalationAgentsSliceReducer,
   createEscalationTicketSliceReducer,
   getTransactionByIdSliceReducer,
