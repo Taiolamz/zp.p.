@@ -1,19 +1,16 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AppContainer, CountInfo, MoreIconView } from '../../atoms';
-import {
-  articleDataHeader,
-  faqData,
-  faqDataHeader,
-  notificationData,
-  notificationDataHeader,
-  settingsCountData,
-} from './data';
-import { colors, images, routesPath } from '../../utils';
+import { articleDataHeader, faqDataHeader, notificationData, notificationDataHeader, settingsCountData } from './data';
+import { colors, dateFormat, images, routesPath } from '../../utils';
 import { BorderedText, FaqTable, NotificationTable, Pagination, SearchInput } from '../../components';
 import { Dictionary } from '../../types';
 import { NotificationTop, TableContainer } from './style';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { useNavigate } from 'react-router';
+
+import { getAllFaqsRequest, getAllFaqsReset } from '../../redux/slice';
+
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 const emptyListCenterStyle = {
   display: 'flex',
@@ -33,9 +30,16 @@ const {
 } = routesPath;
 
 function Settings() {
+  const dispatch = useAppDispatch();
+
   const [selectedSettingsCard, setSelectedSettingsCard] = useState<Dictionary>({});
   const [searchValue, setSearchValue] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  // faq
+  const [faqsData, setFaqsData] = useState<any[]>([]);
+  const [currentPageFaq, setCurrentPageFaq] = useState(1);
+  const [totalPagesFaq, setTotalPagesFaq] = useState(5);
+
   const [selectedNotificationText, setSelectedNotificationText] = useState('');
   const viewDetails = 'View Details';
   const deleteEntry = 'Delete Entry';
@@ -46,6 +50,40 @@ function Settings() {
   const navigate = useNavigate();
 
   const objectLength = Object.keys(selectedSettingsCard).length;
+
+  // redux state
+  const faqsState = useAppSelector(state => state.getAllFaqs);
+  const { status: faqsStatus } = faqsState;
+
+  // api faq
+  useEffect(() => {
+    dispatch(getAllFaqsRequest({}));
+  }, []);
+
+  useEffect(() => {
+    if (faqsStatus === 'succeeded') {
+      let updatedList: any[] = [];
+
+      faqsState?.data?.faqs?.data.forEach((item: any, index: number) => {
+        updatedList.push({
+          id: index + 1,
+          faqTitle: item?.question,
+          helpful: '10',
+          notHelpful: '10',
+          createdBy: item?.tag?.slug,
+          dateCreated: dateFormat(item?.created_at),
+        });
+      });
+
+      const {
+        meta: { last_page },
+      } = faqsState?.data?.faqs;
+
+      setTotalPagesFaq(last_page);
+
+      setFaqsData(updatedList);
+    }
+  }, [faqsState]);
 
   // handle different more icon text
   const handleMoreIconOptionsApp = async (item: string) => {
@@ -69,7 +107,6 @@ function Settings() {
     }
   };
 
-  // console.log(selectedSettingsCard);
   return (
     <AppContainer navTitle="App Contents" navHelper={selectedSettingsCard?.title}>
       <div>
@@ -233,7 +270,7 @@ function Settings() {
               <FaqTable
                 headerData={faqDataHeader}
                 header={true}
-                data={faqData}
+                data={faqsData}
                 onClick={(item: Dictionary) => setMoreIsVisible(true)}
               />
               <MoreIconView

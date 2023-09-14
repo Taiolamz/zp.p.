@@ -42,6 +42,7 @@ import {
   updateRoleSliceReducer,
   getSingleRoleSliceReducer,
   deleteRoleSliceReducer,
+  getAllFaqsSliceReducer,
 } from './slice';
 
 const rootReducer = combineReducers({
@@ -87,6 +88,7 @@ const rootReducer = combineReducers({
   updateRole: updateRoleSliceReducer,
   getSingleRole: getSingleRoleSliceReducer,
   deleteRole: deleteRoleSliceReducer,
+  getAllFaqs: getAllFaqsSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

@@ -40,3 +40,4 @@ export * from './createRoleSlice';
 export * from './updateRoleSlice';
 export * from './getSingleRoleSlice';
 export * from './deleteRoleSlice';
+export * from './getAllFaqsSlice';

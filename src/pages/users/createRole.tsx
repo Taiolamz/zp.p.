@@ -127,7 +127,6 @@ function CreateRole() {
         permissions: selectedUserRoles,
       };
 
-      console.log(payload, 'payload');
       dispatch(createRoleRequest(payload));
     }
   };
