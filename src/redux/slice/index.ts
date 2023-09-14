@@ -46,3 +46,6 @@ export * from './getArticleByIdSlice';
 export * from './updateArticleSlice';
 export * from './deleteArticleSlice';
 
+export * from './getDashboardAnalyticInsightSlice'
+export * from './getCustomerGrowthInsightSlice'
+export * from './getTransactionVolumeSlice'
