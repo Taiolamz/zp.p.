@@ -6,7 +6,7 @@ import { Navbar } from '../../components';
 export interface IProps {
   children: ReactElement;
   navTitle: string | any;
-  navHelper?: string;
+  navHelper?: string | any;
   goBack?: () => void;
   navBarContentRight?: any;
 }

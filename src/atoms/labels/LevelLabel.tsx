@@ -1,4 +1,5 @@
 import React from 'react'
+import numberFormat from '../../utils/numberFormat'
 
 interface IProps {
     title: string,
@@ -14,7 +15,7 @@ const LevelLabel = ({title, total, indicatorColor, hasBorderRight = true}: IProp
                 <span className={`tw-bg-gray-400 tw-w-[5px] tw-h-[5px] tw-block`} style={{backgroundColor: indicatorColor}}></span>
                 <span className='tw-text-[#5E6366] tw-font-thin tw-text-xs md:tw-text-[.9rem]'>{title}</span>
             </span>
-            <h3 className='tw-text-[#162082] tw-font-normal tw-pl-2 tw-mt-1 tw-text-[1.2rem] md:tw-text-4xl'>{total}</h3>
+            <h3 className='tw-text-[#162082] tw-font-normal tw-pl-2 tw-mt-1 tw-text-[1.2rem] md:tw-text-4xl'>{numberFormat(total)}</h3>
         </div>
     )
 }

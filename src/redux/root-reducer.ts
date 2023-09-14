@@ -42,6 +42,9 @@ import {
   updateRoleSliceReducer,
   getSingleRoleSliceReducer,
   deleteRoleSliceReducer,
+  dashboardSliceReducer,
+  customerGrowthInsightSliceReducer,
+  transactionVolumeSliceReducer
 } from './slice';
 
 const rootReducer = combineReducers({
@@ -87,6 +90,9 @@ const rootReducer = combineReducers({
   updateRole: updateRoleSliceReducer,
   getSingleRole: getSingleRoleSliceReducer,
   deleteRole: deleteRoleSliceReducer,
+  dashboard: dashboardSliceReducer,
+  customer_growth_insight: customerGrowthInsightSliceReducer,
+  transaction_volume: transactionVolumeSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
