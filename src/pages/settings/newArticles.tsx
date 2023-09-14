@@ -1,47 +1,67 @@
-import { useState } from 'react';
-import { AppContainer, NewArticle, NewNotification } from '../../atoms';
-import { routesPath } from '../../utils';
+import { useEffect, useState } from 'react';
+import { ActivityActionModal, AppContainer, NewArticle, NewNotification } from '../../atoms';
+import { images, routesPath } from '../../utils';
 import { useNavigate } from 'react-router';
 import { Dictionary } from '../../types';
 import { NewAppContainer } from './style';
 import { notificationRecipents } from './data';
 import { createArticleRequest } from '../../redux/slice';
-import { useAppDispatch } from '../../redux/redux-hooks';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 const { SETTINGS } = routesPath;
 
 function NewArticles() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [profileActivationSuccessIsModalVisible, setProfileActivationSuccessIsModalVisible] = useState(false);
 
-  const [formvalues, setFormvalues] = useState();
-  console.log(formvalues);
+  const createArticleState = useAppSelector(state => state.createArticle);
+  const { status: createArticleStatus } = createArticleState;
 
-  const handleCreateInternalUserModalBtn = (item: Dictionary) => {
+  const handleCreateArticleBtn = (item: Dictionary) => {
     const { content, title, image } = item;
-    const payload = {
-      // content,
-      // title,
-      // image,
-      title: 'Test Article 2',
-      content: 'Content of the Article 2',
-      active_platform: 'web',
-      status: 'active',
-      // image: 'MicrosoftTeams-image.png',
-    };
-    console.log(payload, 'article');
-    dispatch(createArticleRequest(payload));
+
+    const formData = new FormData();
+    formData.append('image', image);
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('active_platform', 'web');
+    formData.append('status', 'active');
+
+    dispatch(createArticleRequest(formData));
   };
 
+  const handleProfileActivationSuccessClose = () => {
+    setProfileActivationSuccessIsModalVisible(false);
+  };
+
+  useEffect(() => {
+    if (createArticleStatus === 'succeeded') {
+      setProfileActivationSuccessIsModalVisible(true);
+    }
+  }, [createArticleStatus]);
+
   return (
-    <AppContainer goBack={() => navigate(SETTINGS)} navTitle={`App Contents`} navHelper="ARTICLES | NEW ARTICLES ">
-      <NewAppContainer>
-        <NewArticle
-          // setFormvalues={setFormvalues}
-          onSubmit={(item: Dictionary) => handleCreateInternalUserModalBtn(item)}
-        />
-      </NewAppContainer>
-    </AppContainer>
+    <div>
+      <AppContainer goBack={() => navigate(SETTINGS)} navTitle={`App Contents`} navHelper="ARTICLES | NEW ARTICLES ">
+        <NewAppContainer>
+          <NewArticle
+            // setFormvalues={setFormvalues}
+            onSubmit={(item: Dictionary) => handleCreateArticleBtn(item)}
+          />
+        </NewAppContainer>
+      </AppContainer>
+      <ActivityActionModal
+        isModalVisible={profileActivationSuccessIsModalVisible}
+        closeModal={handleProfileActivationSuccessClose}
+        actionClick={handleProfileActivationSuccessClose}
+        image={images.check}
+        isLoading={false}
+        actionText="Close"
+        title=""
+        text={createArticleStatus === 'succeeded' ? 'Article has been successfuly created' : ''}
+      />
+    </div>
   );
 }
 

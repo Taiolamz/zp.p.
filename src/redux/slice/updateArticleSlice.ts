@@ -16,14 +16,14 @@ const initialState = {
   error: null,
 } as InitState;
 
-const multiPartContent = 'multipart/form-data';
+export const updateArticleRequest = createAsyncThunk(
+  'updateArticle',
+  async ({ formData, id }: any) => {
 
-export const createArticleRequest = createAsyncThunk(
-  'createArticleSlice',
-  async (payload: Dictionary, { dispatch }) => {
-    const url = `admin/articles`;
+   
+    const url = `admin/articles/${id}`;
     try {
-      const response = await api.post(url, payload);
+      const response = await api.patch(url, formData);
       return response?.data;
     } catch (err) {
       throw err;
@@ -31,8 +31,8 @@ export const createArticleRequest = createAsyncThunk(
   },
 );
 
-const createArticleSlice = createSlice({
-  name: 'createArticle',
+const updateArticleSlice = createSlice({
+  name: 'updateArticle',
   initialState,
   reducers: {
     reset: state => {
@@ -40,20 +40,20 @@ const createArticleSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addCase(createArticleRequest.pending, state => {
+    builder.addCase(updateArticleRequest.pending, state => {
       state.status = 'loading';
     });
-    builder.addCase(createArticleRequest.fulfilled, (state, action) => {
+    builder.addCase(updateArticleRequest.fulfilled, (state, action) => {
       state.status = 'succeeded';
       state.data = action.payload;
       state.error = null;
     });
-    builder.addCase(createArticleRequest.rejected, (state, action) => {
+    builder.addCase(updateArticleRequest.rejected, (state, action) => {
       state.status = 'failed';
       state.error = action.payload;
     });
   },
 });
 
-export const createArticleReset = createArticleSlice.actions.reset;
-export const createArticleReducer = createArticleSlice.reducer;
+export const updateArticleReset = updateArticleSlice.actions.reset;
+export const updateArticleSliceReducer = updateArticleSlice.reducer;

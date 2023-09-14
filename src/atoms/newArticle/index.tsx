@@ -9,11 +9,20 @@ import { useNavigate } from 'react-router-dom';
 import { Dictionary } from '../../types';
 const { SETTINGS } = routesPath;
 
-export interface IProps {
-  onSubmit: (item: Dictionary) => any;
+export interface IPropsInitialValues {
+  title: string;
+  content: string;
+  active_platform: string;
+  status: string;
+  image: string;
 }
 
-const NewArticle = ({ onSubmit }: IProps) => {
+export interface IProps {
+  onSubmit: (item: Dictionary) => any;
+  initialValues?: IPropsInitialValues;
+}
+
+const NewArticle = ({ onSubmit, initialValues }: IProps) => {
   const navigate = useNavigate();
 
   const [imageValue, setImageValue] = useState('');
@@ -27,8 +36,9 @@ const NewArticle = ({ onSubmit }: IProps) => {
     <div>
       <Formik
         initialValues={{
-          content: '',
-          title: '',
+          content: initialValues?.content || '',
+          title: initialValues?.title || '',
+          image: initialValues?.image || '',
         }}
         enableReinitialize={true}
         validationSchema={schema}
@@ -41,9 +51,7 @@ const NewArticle = ({ onSubmit }: IProps) => {
           const payload = {
             title: title,
             content: content,
-            // status: lastName,
             image: imageValue,
-            // active_platform: lastName,
           };
 
           onSubmit(payload);
@@ -84,6 +92,7 @@ const NewArticle = ({ onSubmit }: IProps) => {
                     backgroundColor={colors.white}
                     icon={<BiImageAdd size={30} color={colors.primary} />}
                     setFileValue={setImageValue}
+                    name="imageFile"
                   />
                 </MiniInputs>
 

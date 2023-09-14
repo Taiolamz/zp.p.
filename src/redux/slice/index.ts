@@ -42,4 +42,7 @@ export * from './getSingleRoleSlice';
 export * from './deleteRoleSlice';
 export * from './getArticlesSlice';
 export * from './createArticleSlice';
+export * from './getArticleByIdSlice';
+export * from './updateArticleSlice';
+export * from './deleteArticleSlice';
 

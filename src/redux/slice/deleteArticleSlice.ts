@@ -16,14 +16,12 @@ const initialState = {
   error: null,
 } as InitState;
 
-const multiPartContent = 'multipart/form-data';
-
-export const createArticleRequest = createAsyncThunk(
-  'createArticleSlice',
+export const deleteArticleRequest = createAsyncThunk(
+  'deleteArticle',
   async (payload: Dictionary, { dispatch }) => {
-    const url = `admin/articles`;
+    const url = `admin/articles/${payload?.articleId}`;
     try {
-      const response = await api.post(url, payload);
+      const response = await api.delete(url);
       return response?.data;
     } catch (err) {
       throw err;
@@ -31,8 +29,8 @@ export const createArticleRequest = createAsyncThunk(
   },
 );
 
-const createArticleSlice = createSlice({
-  name: 'createArticle',
+const deleteArticleSlice = createSlice({
+  name: 'deleteArticle',
   initialState,
   reducers: {
     reset: state => {
@@ -40,20 +38,20 @@ const createArticleSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addCase(createArticleRequest.pending, state => {
+    builder.addCase(deleteArticleRequest.pending, state => {
       state.status = 'loading';
     });
-    builder.addCase(createArticleRequest.fulfilled, (state, action) => {
+    builder.addCase(deleteArticleRequest.fulfilled, (state, action) => {
       state.status = 'succeeded';
       state.data = action.payload;
       state.error = null;
     });
-    builder.addCase(createArticleRequest.rejected, (state, action) => {
+    builder.addCase(deleteArticleRequest.rejected, (state, action) => {
       state.status = 'failed';
       state.error = action.payload;
     });
   },
 });
 
-export const createArticleReset = createArticleSlice.actions.reset;
-export const createArticleReducer = createArticleSlice.reducer;
+export const deleteArticleReset = deleteArticleSlice.actions.reset;
+export const deleteArticleSliceReducer = deleteArticleSlice.reducer;

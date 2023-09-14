@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AppContainer, CountInfo, LoaderModal, MoreIconView } from '../../atoms';
+import { ActivityActionModal, AppContainer, CountInfo, LoaderModal, MoreIconView } from '../../atoms';
 import {
   articleDataHeader,
   faqData,
@@ -14,7 +14,7 @@ import { Dictionary } from '../../types';
 import { NotificationTop, TableContainer } from './style';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { useNavigate } from 'react-router';
-import { getArticlesRequest } from '../../redux/slice';
+import { deleteArticleRequest, getArticlesRequest } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 const emptyListCenterStyle = {
@@ -34,6 +34,9 @@ const {
   FAQUPDATE,
 } = routesPath;
 
+const beforeDeleteAction = 'Delete';
+const afterDeleteAction = 'Close';
+
 function Settings() {
   const [selectedSettingsCard, setSelectedSettingsCard] = useState<Dictionary>({});
   const [searchValue, setSearchValue] = useState('');
@@ -45,6 +48,8 @@ function Settings() {
   const [articlesDataList, setArticlesDataList] = useState<any[]>([]);
   const [selectedNotificationText, setSelectedNotificationText] = useState('');
   const [selectedArticle, setSelectedArticle] = useState<any>({});
+  const [deleteIsModalVisible, setDeleteIsModalVisible] = useState(false);
+  const [actionText, setActionText] = useState(beforeDeleteAction);
 
   const viewDetails = 'View Details';
   const deleteEntry = 'Delete Entry';
@@ -55,6 +60,9 @@ function Settings() {
   // redux state
   const articlesState = useAppSelector(state => state.getArticles);
   const { status: getArticlesStatus } = articlesState;
+
+  const deleteArticleState = useAppSelector(state => state.deleteArticle);
+  const { status: deleteArticleStatus } = deleteArticleState;
 
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -77,13 +85,36 @@ function Settings() {
       navigate(`${ARTICLEUPDATE}${selectedArticle.articleId}`);
     }
 
-    console.log(item, 'view');
+    if (item === deleteEntry) {
+      setMoreIsVisible(false);
+      setDeleteIsModalVisible(true);
+    }
   };
   const handleMoreIconOptionsFaq = async (item: string) => {
     if (item === viewDetails) {
       navigate(`${FAQUPDATE}`);
     }
   };
+  console.log(actionText, deleteArticleStatus);
+  const handleActionClick = () => {
+    if (actionText === beforeDeleteAction && deleteIsModalVisible === true) {
+      dispatch(deleteArticleRequest({ articleId: selectedArticle.articleId }));
+    } else {
+      setActionText(beforeDeleteAction);
+      setDeleteIsModalVisible(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setActionText(beforeDeleteAction);
+    setDeleteIsModalVisible(false);
+  };
+
+  useEffect(() => {
+    if (deleteArticleStatus === 'succeeded') {
+      setActionText(afterDeleteAction);
+    }
+  }, [deleteArticleStatus]);
 
   useEffect(() => {
     if (selectedSettingsCard.id === 3) {
@@ -320,9 +351,24 @@ function Settings() {
               )} */}
         </TableContainer>
         <LoaderModal
-          isModalVisible={getArticlesStatus === 'loading'}
+          isModalVisible={getArticlesStatus === 'loading' || deleteArticleStatus === 'loading'}
           text="Loading please wait..."
           closeModal={() => {}}
+        />
+        <ActivityActionModal
+          actionText={actionText}
+          title=""
+          text={
+            actionText === beforeDeleteAction
+              ? 'Are you sure you want to delete this record?'
+              : 'Record has been successfully deleted'
+          }
+          isModalVisible={deleteIsModalVisible}
+          closeModal={handleCloseModal}
+          actionClick={handleActionClick}
+          image={actionText === beforeDeleteAction ? images.reject : images.check}
+          isLoading={false}
+          secondaryActionText={actionText === beforeDeleteAction ? 'Cancel' : ''}
         />
       </div>
     </AppContainer>

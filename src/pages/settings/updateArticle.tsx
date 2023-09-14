@@ -1,75 +1,99 @@
 import { useEffect, useState } from 'react';
-import { AppContainer, NewArticle, NewNotification } from '../../atoms';
-import { routesPath } from '../../utils';
-import { useNavigate } from 'react-router';
+import { ActivityActionModal, AppContainer, NewArticle, NewNotification } from '../../atoms';
+import { images, routesPath } from '../../utils';
+import { useNavigate, useParams } from 'react-router';
+// import { useParams } from 'react-router-dom';
 import { Dictionary } from '../../types';
 import { NewAppContainer } from './style';
 import { notificationRecipents } from './data';
-import { createArticleRequest } from '../../redux/slice';
-import { useAppDispatch } from '../../redux/redux-hooks';
+import { getArticleByIdRequest, updateArticleRequest } from '../../redux/slice';
+import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
+import { IPropsInitialValues } from '../../atoms/newArticle';
 
 const { SETTINGS } = routesPath;
 
-function NewArticles() {
+function UpdateArticle() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { id } = useParams();
 
-  const [formvalues, setFormvalues] = useState();
-  console.log(formvalues);
+  const [articleDataList, setArticleDataList] = useState<IPropsInitialValues>();
+  const [profileActivationSuccessIsModalVisible, setProfileActivationSuccessIsModalVisible] = useState(false);
 
-  const handleCreateInternalUserModalBtn = (item: Dictionary) => {
+  const updateArticleState = useAppSelector(state => state.updateArticle);
+  const { status: updateArticleStatus } = updateArticleState;
+  const getArticleByIdState = useAppSelector(state => state.getArticleById);
+  const { status: getArticleByIdStatus } = getArticleByIdState;
+
+  useEffect(() => {
+    dispatch(
+      getArticleByIdRequest({
+        articleId: id,
+      }),
+    );
+  }, [dispatch, id]);
+
+  const handleUpdateArticleBtn = (item: Dictionary) => {
     const { content, title, image } = item;
-    const payload = {
-      // content,
-      // title,
-      // image,
-      title: 'Test Article 2',
-      content: 'Content of the Article 2',
-      active_platform: 'web',
-      status: 'active',
-      // image: 'MicrosoftTeams-image.png',
-    };
-    console.log(payload, 'article');
-    dispatch(createArticleRequest(payload));
+
+    const formData = new FormData();
+    formData.append('image', image || getArticleByIdState?.data?.article?.image_url);
+    formData.append('title', title);
+    formData.append('content', content);
+    formData.append('active_platform', 'web');
+    formData.append('status', 'active');
+
+    dispatch(updateArticleRequest({ formData, id }));
+    console.log(...formData);
   };
 
-  // useEffect(() => {
-  //   if (getArticlesStatus === 'succeeded') {
-  //     let updatedList: any[] = [];
+  const handleProfileActivationSuccessClose = () => {
+    setProfileActivationSuccessIsModalVisible(false);
+  };
 
-  //     articlesState?.data?.articles?.data.forEach((item: any, index: number) => {
-  //       updatedList.push({
-  //         id: index + 1,
-  //         title: item?.title,
-  //         status: item?.status,
-  //         dateCreated: yearDateFormat(item?.created_at),
-  //         timeUpdated: item?.updated_at,
-  //         articleId: item?.id,
-  //         imageUrl: item?.image_url,
-  //         createdBy: item?.author?.name,
-  //       });
-  //     });
+  useEffect(() => {
+    if (updateArticleStatus === 'succeeded') {
+      setProfileActivationSuccessIsModalVisible(true);
+    }
+  }, [updateArticleStatus]);
 
-  //     const {
-  //       meta: { links, last_page },
-  //     } = articlesState?.data?.articles;
+  useEffect(() => {
+    if (getArticleByIdStatus === 'succeeded') {
+      const updatedList: any = {
+        title: getArticleByIdState?.data?.article?.title,
+        content: getArticleByIdState?.data?.article?.content,
+        active_platform: getArticleByIdState?.data?.article?.active_platform,
+        status: getArticleByIdState?.data?.article?.status,
+        image: getArticleByIdState?.data?.article?.image_url,
+      };
 
-  //     setTotalPages(last_page);
-
-  //     setArticlesDataList(updatedList);
-  //   }
-  // }, [articlesState]);
+      setArticleDataList(updatedList);
+    }
+  }, [getArticleByIdStatus, getArticleByIdState]);
 
   return (
-    <AppContainer goBack={() => navigate(SETTINGS)} navTitle={`App Contents`} navHelper="ARTICLES | VIEW ARTICLE ">
-      <NewAppContainer>
-        <NewArticle
-          // setFormvalues={setFormvalues}
-          onSubmit={(item: Dictionary) => handleCreateInternalUserModalBtn(item)}
-        />
-      </NewAppContainer>
-    </AppContainer>
+    <div>
+      <AppContainer goBack={() => navigate(SETTINGS)} navTitle={`App Contents`} navHelper="ARTICLES | VIEW ARTICLE ">
+        <NewAppContainer>
+          <NewArticle
+            initialValues={articleDataList}
+            // setFormvalues={setFormvalues}
+            onSubmit={(item: Dictionary) => handleUpdateArticleBtn(item)}
+          />
+        </NewAppContainer>
+      </AppContainer>
+      <ActivityActionModal
+        isModalVisible={profileActivationSuccessIsModalVisible}
+        closeModal={handleProfileActivationSuccessClose}
+        actionClick={handleProfileActivationSuccessClose}
+        image={images.check}
+        isLoading={false}
+        actionText="Close"
+        title=""
+        text={updateArticleStatus === 'succeeded' ? 'Article has been successfuly updated' : ''}
+      />
+    </div>
   );
 }
 
-export default NewArticles;
+export default UpdateArticle;

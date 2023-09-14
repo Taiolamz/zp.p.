@@ -11,6 +11,7 @@ import {
   getEscalationAgentsSliceReducer,
   createEscalationTicketSliceReducer,
   getTransactionByIdSliceReducer,
+  getArticleByIdSliceReducer,
   exportTransactionByIdToMailSliceReducer,
   settlementAnalyticsSliceReducer,
   getKycsSliceReducer,
@@ -44,6 +45,8 @@ import {
   updateRoleSliceReducer,
   getSingleRoleSliceReducer,
   deleteRoleSliceReducer,
+  updateArticleSliceReducer,
+  deleteArticleSliceReducer,
 } from './slice';
 
 const rootReducer = combineReducers({
@@ -91,6 +94,9 @@ const rootReducer = combineReducers({
   getSingleRole: getSingleRoleSliceReducer,
   deleteRole: deleteRoleSliceReducer,
   getArticles: getArticlesSliceReducer,
+  getArticleById: getArticleByIdSliceReducer,
+  updateArticle: updateArticleSliceReducer,
+  deleteArticle: deleteArticleSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;
