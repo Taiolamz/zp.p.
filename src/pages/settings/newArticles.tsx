@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import { Dictionary } from '../../types';
 import { NewAppContainer } from './style';
 import { notificationRecipents } from './data';
-import { createArticleRequest } from '../../redux/slice';
+import { createArticleRequest, createArticleReset } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 const { SETTINGS } = routesPath;
@@ -13,10 +13,11 @@ const { SETTINGS } = routesPath;
 function NewArticles() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [profileActivationSuccessIsModalVisible, setProfileActivationSuccessIsModalVisible] = useState(false);
-
   const createArticleState = useAppSelector(state => state.createArticle);
+
   const { status: createArticleStatus } = createArticleState;
+
+  const [profileActivationSuccessIsModalVisible, setProfileActivationSuccessIsModalVisible] = useState(false);
 
   const handleCreateArticleBtn = (item: Dictionary) => {
     const { content, title, image } = item;
@@ -30,7 +31,6 @@ function NewArticles() {
 
     dispatch(createArticleRequest(formData));
   };
-
   const handleProfileActivationSuccessClose = () => {
     setProfileActivationSuccessIsModalVisible(false);
   };
@@ -38,15 +38,16 @@ function NewArticles() {
   useEffect(() => {
     if (createArticleStatus === 'succeeded') {
       setProfileActivationSuccessIsModalVisible(true);
+      dispatch(createArticleReset());
     }
-  }, [createArticleStatus]);
+  }, [createArticleStatus, dispatch]);
 
   return (
     <div>
       <AppContainer goBack={() => navigate(SETTINGS)} navTitle={`App Contents`} navHelper="ARTICLES | NEW ARTICLES ">
         <NewAppContainer>
           <NewArticle
-            // setFormvalues={setFormvalues}
+            requestStatus={createArticleStatus}
             onSubmit={(item: Dictionary) => handleCreateArticleBtn(item)}
           />
         </NewAppContainer>
@@ -59,7 +60,7 @@ function NewArticles() {
         isLoading={false}
         actionText="Close"
         title=""
-        text={createArticleStatus === 'succeeded' ? 'Article has been successfuly created' : ''}
+        text={'Article has been successfuly created'}
       />
     </div>
   );

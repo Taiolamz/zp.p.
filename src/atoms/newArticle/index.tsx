@@ -20,11 +20,11 @@ export interface IPropsInitialValues {
 export interface IProps {
   onSubmit: (item: Dictionary) => any;
   initialValues?: IPropsInitialValues;
+  requestStatus?: string;
 }
 
-const NewArticle = ({ onSubmit, initialValues }: IProps) => {
+const NewArticle = ({ onSubmit, initialValues, requestStatus }: IProps) => {
   const navigate = useNavigate();
-
   const [imageValue, setImageValue] = useState('');
 
   const schema = yup.object().shape({
@@ -97,11 +97,10 @@ const NewArticle = ({ onSubmit, initialValues }: IProps) => {
                 </MiniInputs>
 
                 <ButtonContainer>
-                  <Button type="submit" text="Create Item" />
+                  <Button type="submit" text="Create Item" disabled={requestStatus === 'loading' ? true : false} />
                   <Button
                     onClick={() => navigate(SETTINGS)}
                     text="Cancel"
-                    disabled={false}
                     secondary
                     backgroundColor="red"
                     borderColor="transparent"

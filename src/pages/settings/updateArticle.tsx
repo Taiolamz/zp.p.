@@ -1,99 +1,99 @@
 import { useEffect, useState } from 'react';
-import { ActivityActionModal, AppContainer, NewArticle, NewNotification } from '../../atoms';
+import { ActivityActionModal, AppContainer, LoaderModal, NewArticle } from '../../atoms';
 import { images, routesPath } from '../../utils';
 import { useNavigate, useParams } from 'react-router';
 // import { useParams } from 'react-router-dom';
+
 import { Dictionary } from '../../types';
 import { NewAppContainer } from './style';
-import { notificationRecipents } from './data';
-import { getArticleByIdRequest, updateArticleRequest } from '../../redux/slice';
+import { getArticleByIdRequest, updateArticleRequest, updateArticleReset } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 import { IPropsInitialValues } from '../../atoms/newArticle';
+import { object, string } from 'yup';
 
 const { SETTINGS } = routesPath;
 
 function UpdateArticle() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { id } = useParams();
 
+  const { id } = useParams();
   const [articleDataList, setArticleDataList] = useState<IPropsInitialValues>();
-  const [profileActivationSuccessIsModalVisible, setProfileActivationSuccessIsModalVisible] = useState(false);
+  const [isProfileActivationSuccessModalVisible, setIsProfileActivationSuccessModalVisible] = useState(false);
 
   const updateArticleState = useAppSelector(state => state.updateArticle);
   const { status: updateArticleStatus } = updateArticleState;
+
   const getArticleByIdState = useAppSelector(state => state.getArticleById);
-  const { status: getArticleByIdStatus } = getArticleByIdState;
+  const { status: getArticleByIdStatus, data: getArticleData } = getArticleByIdState;
 
   useEffect(() => {
-    dispatch(
-      getArticleByIdRequest({
-        articleId: id,
-      }),
-    );
+    dispatch(getArticleByIdRequest({ articleId: id }));
   }, [dispatch, id]);
 
   const handleUpdateArticleBtn = (item: Dictionary) => {
     const { content, title, image } = item;
+    const typeOfImage = typeof image;
 
     const formData = new FormData();
-    formData.append('image', image || getArticleByIdState?.data?.article?.image_url);
+    typeOfImage === 'object' && formData.append('image', image || getArticleData?.article?.image_url);
     formData.append('title', title);
     formData.append('content', content);
     formData.append('active_platform', 'web');
     formData.append('status', 'active');
+    formData.append('_method', 'PUT');
 
     dispatch(updateArticleRequest({ formData, id }));
-    console.log(...formData);
   };
 
   const handleProfileActivationSuccessClose = () => {
-    setProfileActivationSuccessIsModalVisible(false);
+    setIsProfileActivationSuccessModalVisible(false);
   };
 
   useEffect(() => {
     if (updateArticleStatus === 'succeeded') {
-      setProfileActivationSuccessIsModalVisible(true);
+      setIsProfileActivationSuccessModalVisible(true);
+      dispatch(updateArticleReset());
     }
-  }, [updateArticleStatus]);
+  }, [dispatch, updateArticleStatus]);
 
   useEffect(() => {
-    if (getArticleByIdStatus === 'succeeded') {
-      const updatedList: any = {
-        title: getArticleByIdState?.data?.article?.title,
-        content: getArticleByIdState?.data?.article?.content,
-        active_platform: getArticleByIdState?.data?.article?.active_platform,
-        status: getArticleByIdState?.data?.article?.status,
-        image: getArticleByIdState?.data?.article?.image_url,
-      };
-
+    if (getArticleByIdStatus === 'succeeded' && getArticleData?.article) {
+      const { title, content, active_platform, status, image_url } = getArticleData.article;
+      const updatedList: IPropsInitialValues = { title, content, active_platform, status, image: image_url };
       setArticleDataList(updatedList);
     }
-  }, [getArticleByIdStatus, getArticleByIdState]);
+  }, [getArticleByIdStatus, getArticleData]);
 
   return (
     <div>
       <AppContainer goBack={() => navigate(SETTINGS)} navTitle={`App Contents`} navHelper="ARTICLES | VIEW ARTICLE ">
         <NewAppContainer>
-          <NewArticle
-            initialValues={articleDataList}
-            // setFormvalues={setFormvalues}
-            onSubmit={(item: Dictionary) => handleUpdateArticleBtn(item)}
-          />
+          {articleDataList && (
+            <NewArticle
+              initialValues={articleDataList}
+              onSubmit={item => handleUpdateArticleBtn(item)}
+              requestStatus={updateArticleStatus}
+            />
+          )}
         </NewAppContainer>
       </AppContainer>
+      <LoaderModal
+        isModalVisible={getArticleByIdStatus === 'loading'}
+        text="Loading please wait..."
+        closeModal={() => {}}
+      />
       <ActivityActionModal
-        isModalVisible={profileActivationSuccessIsModalVisible}
+        isModalVisible={isProfileActivationSuccessModalVisible}
         closeModal={handleProfileActivationSuccessClose}
         actionClick={handleProfileActivationSuccessClose}
         image={images.check}
         isLoading={false}
         actionText="Close"
         title=""
-        text={updateArticleStatus === 'succeeded' ? 'Article has been successfuly updated' : ''}
-      />
+        text={'Article has been successfuly updated'}
+      />{' '}
     </div>
   );
 }
-
 export default UpdateArticle;

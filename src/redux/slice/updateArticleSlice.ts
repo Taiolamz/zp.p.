@@ -23,7 +23,7 @@ export const updateArticleRequest = createAsyncThunk(
    
     const url = `admin/articles/${id}`;
     try {
-      const response = await api.patch(url, formData);
+      const response = await api.post(url, formData);
       return response?.data;
     } catch (err) {
       throw err;

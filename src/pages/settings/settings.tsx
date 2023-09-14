@@ -95,7 +95,6 @@ function Settings() {
       navigate(`${FAQUPDATE}`);
     }
   };
-  console.log(actionText, deleteArticleStatus);
   const handleActionClick = () => {
     if (actionText === beforeDeleteAction && deleteIsModalVisible === true) {
       dispatch(deleteArticleRequest({ articleId: selectedArticle.articleId }));
@@ -207,8 +206,7 @@ function Settings() {
                   setCurrentPage(selectedPage);
                 }}
                 isLoading={
-                  getTransactionsStatus === 'loading' ||
-                  settlementAnalyticsStatus === 'loading' ||
+                  getArticlesStatus === 'loading' ||
                   transactionDataList?.length < 1
                 }
 
@@ -291,6 +289,14 @@ function Settings() {
                 onClick={(item: Dictionary) => setMoreIsVisible(true)}
                 setSelectedItem={setSelectedArticle}
               />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={selectedPage => {
+                  setCurrentPage(selectedPage);
+                }}
+                isLoading={getArticlesStatus === 'loading' || articlesDataList?.length < 1}
+              />
               <MoreIconView
                 setSelectedText={setSelectedNotificationText}
                 isModalVisible={moreIsVisible}
@@ -351,7 +357,7 @@ function Settings() {
               )} */}
         </TableContainer>
         <LoaderModal
-          isModalVisible={getArticlesStatus === 'loading' || deleteArticleStatus === 'loading'}
+          isModalVisible={getArticlesStatus === 'loading'}
           text="Loading please wait..."
           closeModal={() => {}}
         />
@@ -368,6 +374,7 @@ function Settings() {
           actionClick={handleActionClick}
           image={actionText === beforeDeleteAction ? images.reject : images.check}
           isLoading={false}
+          requestStatus={deleteArticleStatus}
           secondaryActionText={actionText === beforeDeleteAction ? 'Cancel' : ''}
         />
       </div>
