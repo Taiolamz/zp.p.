@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { AppContainer, CountInfo, MoreIconView } from '../../atoms';
+import { AppContainer, CountInfo, MoreIconView, ActivityActionModal } from '../../atoms';
 import { articleDataHeader, faqDataHeader, notificationData, notificationDataHeader, settingsCountData } from './data';
 import { colors, dateFormat, images, routesPath } from '../../utils';
 import { BorderedText, FaqTable, NotificationTable, Pagination, SearchInput } from '../../components';
@@ -41,6 +41,7 @@ function Settings() {
   const [totalPagesFaq, setTotalPagesFaq] = useState(5);
 
   const [selectedNotificationText, setSelectedNotificationText] = useState('');
+  const [isDeleteFaqModalVisible, setIsDeleteFaqModalVisible] = useState(false);
   const viewDetails = 'View Details';
   const deleteEntry = 'Delete Entry';
   const moreIconOption = [viewDetails, deleteEntry];
@@ -105,6 +106,15 @@ function Settings() {
     if (item === viewDetails) {
       navigate(`${FAQUPDATE}`);
     }
+    if (item === deleteEntry) {
+      setIsDeleteFaqModalVisible(true);
+    }
+  };
+
+  const handleDeleteFaq = () => {};
+
+  const handleCloseFaq = () => {
+    setIsDeleteFaqModalVisible(false);
   };
 
   return (
@@ -279,6 +289,15 @@ function Settings() {
                 closeModal={() => setMoreIsVisible(false)}
                 options={moreIconOption}
                 onClick={item => handleMoreIconOptionsFaq(item)}
+              />
+              <ActivityActionModal
+                actionClick={handleDeleteFaq}
+                closeModal={handleCloseFaq}
+                isModalVisible={isDeleteFaqModalVisible}
+                text={`You have sure you want to delete this notification?`}
+                actionText="Delete"
+                actionBtnBackgroundColor={colors.red}
+                image={images.check}
               />
             </>
           )}
