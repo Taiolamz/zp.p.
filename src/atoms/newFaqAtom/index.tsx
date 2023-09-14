@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { Button, CustomUpload, Input, Picker, RadioInput, StepperInput, TextArea } from '../../components';
 import { Formik } from 'formik';
-import { colors, routesPath } from '../../utils';
-import { ButtonContainer, MiniInputs, RadioStyle } from './style';
-import { H2, H3 } from '../../styles';
-import { AiFillFile } from 'react-icons/ai';
-import { BiImageAdd } from 'react-icons/bi';
+import { colors, routesPath, spacing } from '../../utils';
+import { ButtonContainer, MiniInputs } from './style';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
+import { H2 } from '../../styles';
 const { SETTINGS } = routesPath;
 
-const NewFaqAtom = ({ setFormvalues }: any) => {
+const NewFaqAtom = ({ setFormvalues, onClick }: any) => {
   const navigate = useNavigate();
 
   const [activePlatform, setActivePlatform] = useState('');
@@ -18,6 +16,8 @@ const NewFaqAtom = ({ setFormvalues }: any) => {
   const schema = yup.object().shape({
     question: yup.string().required('Question is required'),
     solution: yup.string().required('Content is required'),
+
+    platform: activePlatform.length < 2 ? yup.string().required('Select a platform') : yup.string(),
   });
 
   return (
@@ -44,6 +44,9 @@ const NewFaqAtom = ({ setFormvalues }: any) => {
           return (
             <form onSubmit={handleSubmit}>
               <div>
+                <H2 left bold style={{ marginBottom: spacing.small }}>
+                  New FAQ
+                </H2>
                 <Input
                   label="Frequently Asked Question"
                   backgroundColor={colors.white}
@@ -81,7 +84,7 @@ const NewFaqAtom = ({ setFormvalues }: any) => {
                 </MiniInputs>
 
                 <ButtonContainer>
-                  <Button type="submit" text="Create Item" />
+                  <Button type="submit" text="Create Item" onClick={onClick} />
                   <Button
                     onClick={() => navigate(SETTINGS)}
                     text="Cancel"
