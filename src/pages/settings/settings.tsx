@@ -109,7 +109,7 @@ function Settings() {
   };
   const handleMoreIconOptionsFaq = async (item: string) => {
     if (item === viewDetails) {
-      navigate(`${FAQUPDATE}`);
+      navigate(`${FAQUPDATE}${selectedFaqData?.itemId?.toString()}`);
     }
     if (item === deleteEntry) {
       setMoreIsVisible(false);
