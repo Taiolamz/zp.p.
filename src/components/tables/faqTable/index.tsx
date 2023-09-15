@@ -54,7 +54,7 @@ function FaqTable({ data, headerData, onClick }: TableIPropsIProps) {
                   <TD>{item.createdBy}</TD>
                   <TD>{item.dateCreated}</TD>
                   <TD>
-                    <MoreIcon onClick={onClick} />
+                    <MoreIcon onClick={() => onClick(item)} />
                   </TD>
                 </TR>
               ))}

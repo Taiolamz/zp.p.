@@ -8,7 +8,7 @@ import { NotificationTop, TableContainer } from './style';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { useNavigate } from 'react-router';
 
-import { getAllFaqsRequest, getAllFaqsReset } from '../../redux/slice';
+import { getAllFaqsRequest, getAllFaqsReset, deleteFaqRequest, deleteFaqReset } from '../../redux/slice';
 
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
@@ -41,6 +41,7 @@ function Settings() {
   const [totalPagesFaq, setTotalPagesFaq] = useState(5);
 
   const [selectedNotificationText, setSelectedNotificationText] = useState('');
+  const [selectedFaqData, setSelectedFaqData] = useState<Dictionary>({});
   const [isDeleteFaqModalVisible, setIsDeleteFaqModalVisible] = useState(false);
   const viewDetails = 'View Details';
   const deleteEntry = 'Delete Entry';
@@ -56,6 +57,9 @@ function Settings() {
   const faqsState = useAppSelector(state => state.getAllFaqs);
   const { status: faqsStatus } = faqsState;
 
+  const deleteFaqState = useAppSelector(state => state.deleteFaq);
+  const { status: deletedFaqStatus } = deleteFaqState;
+
   // api faq
   useEffect(() => {
     dispatch(getAllFaqsRequest({}));
@@ -67,11 +71,12 @@ function Settings() {
 
       faqsState?.data?.faqs?.data.forEach((item: any, index: number) => {
         updatedList.push({
+          itemId: item.id,
           id: index + 1,
           faqTitle: item?.question,
           helpful: '10',
           notHelpful: '10',
-          createdBy: item?.tag?.slug,
+          createdBy: item?.author?.name.length < 2 ? 'N/A' : item?.author?.name,
           dateCreated: dateFormat(item?.created_at),
         });
       });
@@ -107,14 +112,31 @@ function Settings() {
       navigate(`${FAQUPDATE}`);
     }
     if (item === deleteEntry) {
+      setMoreIsVisible(false);
       setIsDeleteFaqModalVisible(true);
     }
   };
 
-  const handleDeleteFaq = () => {};
+  const handleSelectedFaq = (item: any) => {
+    setMoreIsVisible(true);
+    setSelectedFaqData(item);
+  };
+  const handleDeleteFaq = () => {
+    if (deletedFaqStatus === 'succeeded') {
+      setIsDeleteFaqModalVisible(false);
+      dispatch(deleteFaqReset());
+    } else {
+      dispatch(
+        deleteFaqRequest({
+          id: selectedFaqData?.itemId,
+        }),
+      );
+    }
+  };
 
   const handleCloseFaq = () => {
     setIsDeleteFaqModalVisible(false);
+    dispatch(deleteFaqReset());
   };
 
   return (
@@ -281,7 +303,7 @@ function Settings() {
                 headerData={faqDataHeader}
                 header={true}
                 data={faqsData}
-                onClick={(item: Dictionary) => setMoreIsVisible(true)}
+                onClick={(item: Dictionary) => handleSelectedFaq(item)}
               />
               <MoreIconView
                 setSelectedText={setSelectedNotificationText}
@@ -290,14 +312,21 @@ function Settings() {
                 options={moreIconOption}
                 onClick={item => handleMoreIconOptionsFaq(item)}
               />
+              {/* This Modal Promps to delete */}
               <ActivityActionModal
+                isLoading={deletedFaqStatus === 'loading'}
                 actionClick={handleDeleteFaq}
                 closeModal={handleCloseFaq}
                 isModalVisible={isDeleteFaqModalVisible}
-                text={`You have sure you want to delete this notification?`}
-                actionText="Delete"
-                actionBtnBackgroundColor={colors.red}
-                image={images.check}
+                text={
+                  deletedFaqStatus === 'succeeded'
+                    ? 'You have successfully deleted the Faq'
+                    : `You have sure you want to delete this notification?`
+                }
+                actionText={deletedFaqStatus === 'succeeded' ? 'Close' : 'Delete'}
+                actionBtnBackgroundColor={deletedFaqStatus === 'succeeded' ? colors.primary : colors.red}
+                image={deletedFaqStatus === 'succeeded' ? images.check : images.deactivateUser}
+                secondaryActionText={deletedFaqStatus === 'succeeded' ? '' : 'Close'}
               />
             </>
           )}
