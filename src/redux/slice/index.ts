@@ -44,3 +44,5 @@ export * from './getAllFaqsSlice';
 export * from './createFaqSlice';
 export * from './getTagsSlice';
 export * from './deleteFaqSlice';
+export * from './updateFaqSlice';
+export * from './getFaqSlice';

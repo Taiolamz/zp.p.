@@ -39,7 +39,9 @@ const NewFaqAtom = ({ setFormvalues, onClick, tagsList }: any) => {
             question,
             solution,
             activePlatform,
+            selectedTags,
           });
+
           setSubmitting(false);
         }}>
         {formikProps => {

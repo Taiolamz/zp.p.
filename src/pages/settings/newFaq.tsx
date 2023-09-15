@@ -53,6 +53,14 @@ function NewFaq() {
   // console.log(formvalues);
   const onClick = () => {
     const { solution, question, activePlatform, selectedTags } = formvalues;
+    // const dd = {
+    //   question: question,
+    //   propose_solution: solution,
+    //   active_platform: activePlatform,
+    //   status: 'active',
+    //   tag_id: selectedTags,
+    // };
+    // console.log(dd, 'dd');
     dispatch(
       createFaqRequest({
         question: question,

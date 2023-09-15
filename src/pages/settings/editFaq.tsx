@@ -2,40 +2,50 @@ import { useState, useEffect } from 'react';
 import { Formik } from 'formik';
 import { AppContainer, ActivityActionModal, LoaderModal } from '../../atoms';
 import { routesPath, colors, spacing } from '../../utils';
-import { useNavigate } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { NewAppContainer } from './style';
 import { TextArea, Input, Picker, Button } from '../../components';
 import { H2 } from '../../styles';
-import { createFaqRequest, createFaqReset, getTagsRequest } from '../../redux/slice';
+import { updateFaqRequest, updateFaqReset, getTagsRequest, getFaqRequest } from '../../redux/slice';
 import { images } from '../../utils';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 import * as yup from 'yup';
 
 import { ButtonContainer, MiniInputs } from '../../atoms/newFaqAtom/style';
+import { Dictionary } from '../../types';
 
 const { SETTINGS } = routesPath;
 
 function EditFaq() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [formvalues, setFormvalues] = useState<any>({});
-  const [tagsData, setTagsData] = useState<any[]>([]);
 
+  let { id } = useParams();
+
+  const faqId = id?.trim();
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const [tagsData, setTagsData] = useState<any[]>([]);
+  const [faqData, setFaqData] = useState<Dictionary>({});
   const [activePlatform, setActivePlatform] = useState('');
   const [selectedTags, setSelectedTags] = useState('');
+  const [selectedTagName, setSelectedTagName] = useState('');
+
   // redux state
-  const createFaqState = useAppSelector(state => state.createFaq);
-  const { status: createFaqStatus } = createFaqState;
+  const faqState = useAppSelector(state => state.getFaq);
+  const { status: faqStatus } = faqState;
 
   const tagsState = useAppSelector(state => state.getTags);
   const { status: tagsStatus } = tagsState;
 
+  const updateFaqState = useAppSelector(state => state.updateFaq);
+  const { status: updateFaqStatus } = updateFaqState;
+
   const schema = yup.object().shape({
     question: yup.string().required('Question is required'),
     solution: yup.string().required('Content is required'),
-
     platform: activePlatform.length < 2 ? yup.string().required('Select a platform') : yup.string(),
     tag: selectedTags.length < 2 ? yup.string().required('Select a Tag') : yup.string(),
   });
@@ -61,51 +71,62 @@ function EditFaq() {
 
   // api faq response
   useEffect(() => {
-    if (createFaqStatus === 'succeeded') {
-      setIsModalVisible(true);
-    }
-  }, [createFaqStatus]);
-
-  // console.log(formvalues);
-  const onClick = () => {
-    const { solution, question, activePlatform, selectedTags } = formvalues;
     dispatch(
-      createFaqRequest({
-        question: question,
-        propose_solution: solution,
-        active_platform: activePlatform,
-        status: 'active',
-        tag_id: selectedTags,
+      getFaqRequest({
+        faqId,
       }),
     );
-  };
+  }, []);
+
+  useEffect(() => {
+    if (faqStatus === 'succeeded') {
+      setSelectedTagName(faqState?.data?.faq?.tag?.name);
+      setActivePlatform(faqState?.data?.faq?.active_platform);
+
+      setFaqData({
+        question: faqState?.data?.faq?.question,
+        solution: faqState?.data?.faq?.propose_solution,
+      });
+    }
+  }, [faqStatus]);
+
+  useEffect(() => {
+    if (updateFaqStatus === 'succeeded') {
+      setIsModalVisible(true);
+    }
+  }, [updateFaqStatus]);
 
   const handleSuccssModalClose = () => {
     setIsModalVisible(false);
-    dispatch(createFaqReset());
+    dispatch(updateFaqReset());
     navigate(SETTINGS);
   };
   return (
     <AppContainer goBack={() => navigate(SETTINGS)} navTitle={`App Contents`} navHelper="FAQ'S | NEW FAQ">
       <div>
         <NewAppContainer>
-          {/* <NewFaqAtom setFormvalues={setFormvalues} onClick={onClick} tagsList={tagsData} /> */}
           <Formik
             initialValues={{
-              question: '',
-              solution: '',
-              platform: '',
-              tag: '',
+              platform: activePlatform ? activePlatform : '',
+              tag: selectedTagName ? selectedTagName : '',
+              question: faqData?.question ? faqData?.question : '',
+              solution: faqData?.solution ? faqData?.solution : '',
             }}
             enableReinitialize={true}
             validationSchema={schema}
             onSubmit={async (values, { setSubmitting }) => {
               const { question, solution } = values;
-              setFormvalues({
-                question,
-                solution,
-                activePlatform,
-              });
+
+              dispatch(
+                updateFaqRequest({
+                  question: question,
+                  propose_solution: solution,
+                  active_platform: activePlatform,
+                  status: 'active',
+                  tag_id: selectedTags,
+                  faqId,
+                }),
+              );
               setSubmitting(false);
             }}>
             {formikProps => {
@@ -125,7 +146,7 @@ function EditFaq() {
                       value={values?.question}
                       name={'question'}
                       onChange={handleChange}
-                      error={errors.question}
+                      // error={errors.question}
                     />
 
                     <TextArea
@@ -136,11 +157,12 @@ function EditFaq() {
                       value={values.solution}
                       name={'solution'}
                       onChange={handleChange}
-                      error={errors.solution}
+                      //   error={errors.solution}
                     />
                     <MiniInputs>
                       <Picker
-                        error={errors.platform}
+                        // error={errors.platform}
+                        placeholder={activePlatform}
                         label="Select a Platform"
                         selectedValue={setActivePlatform}
                         marginBottom="0"
@@ -155,7 +177,8 @@ function EditFaq() {
                       {/* this is for the listings */}
                       <Picker
                         width={100}
-                        error={errors.tag}
+                        // error={errors.tag}
+                        placeholder={selectedTagName}
                         label="Select a Tag"
                         selectedValue={setSelectedTags}
                         marginBottom="0"
@@ -164,7 +187,11 @@ function EditFaq() {
                     </div>
 
                     <ButtonContainer>
-                      <Button type="submit" text="Create Item" onClick={onClick} />
+                      <Button
+                        type="submit"
+                        text="Update Item"
+                        disabled={updateFaqStatus === 'loading' ? true : false}
+                      />
                       <Button
                         onClick={() => navigate(SETTINGS)}
                         text="Cancel"
@@ -187,13 +214,13 @@ function EditFaq() {
           actionClick={handleSuccssModalClose}
           closeModal={handleSuccssModalClose}
           isModalVisible={isModalVisible}
-          text={`You have successfully edit the FAQ`}
+          text={`You have successfully update the FAQ`}
           actionText="Close"
           image={images.check}
         />
 
         <LoaderModal
-          isModalVisible={tagsStatus === 'loading' || createFaqStatus === 'loading'}
+          isModalVisible={tagsStatus === 'loading' || faqStatus === 'loading' || updateFaqStatus === 'loading'}
           text="Loading please wait..."
           closeModal={() => {}}
         />
