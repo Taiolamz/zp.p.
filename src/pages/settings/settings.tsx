@@ -285,6 +285,7 @@ function Settings() {
               <NotificationTable
                 headerData={articleDataHeader}
                 header={true}
+                type="article"
                 data={articlesDataList}
                 onClick={(item: Dictionary) => setMoreIsVisible(true)}
                 setSelectedItem={setSelectedArticle}

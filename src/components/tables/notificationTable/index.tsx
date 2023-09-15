@@ -18,6 +18,7 @@ export interface TableIPropsIProps {
   backgroundColor?: string;
   header?: boolean;
   headerData?: any;
+  type?: string;
   onClick?: any;
 }
 
@@ -27,7 +28,7 @@ const emptyListCenterStyle = {
   alignItems: 'center',
 };
 
-function NotificationTable({ data, headerData, onClick, setSelectedItem }: TableIPropsIProps) {
+function NotificationTable({ data, headerData, onClick, setSelectedItem, type }: TableIPropsIProps) {
   const handleOnSelect = (item: any) => {
     setSelectedItem(item);
   };
@@ -41,7 +42,7 @@ function NotificationTable({ data, headerData, onClick, setSelectedItem }: Table
               <tr>
                 <TH></TH>
                 <TH>{headerData.title}</TH>
-                <TH>{headerData.interval}</TH>
+                {type !== 'article' && <TH>{headerData.interval}</TH>}
                 <TH>{headerData.createdBy}</TH>
                 <TH>{headerData.dateCreated}</TH>
               </tr>
@@ -51,7 +52,7 @@ function NotificationTable({ data, headerData, onClick, setSelectedItem }: Table
                 <TR key={item.articleId}>
                   <TD>{item.id}</TD>
                   <TD>{item.title}</TD>
-                  <TD>{item.interval}</TD>
+                  {type !== 'article' && <TD>{item.interval}</TD>}
                   <TD>{item.createdBy}</TD>
                   <TD>{item.dateCreated}</TD>
                   <TD>
