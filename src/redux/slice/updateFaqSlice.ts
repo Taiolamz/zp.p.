@@ -17,7 +17,7 @@ const initialState = {
 } as InitState;
 
 export const updateFaqRequest = createAsyncThunk('updateFaq', async (payload: Dictionary, { dispatch }) => {
-  const { faqId, question, propose_solution, active_platform, status, tag_id } = payload;
+  const { faqId, question, propose_solution, active_platform, status, tag_id, _method } = payload;
 
   const updatedPayload = {
     question,
@@ -25,6 +25,7 @@ export const updateFaqRequest = createAsyncThunk('updateFaq', async (payload: Di
     active_platform,
     status,
     tag_id,
+    _method,
   };
   const url = `admin/faq/${faqId}`;
   try {

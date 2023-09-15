@@ -78,11 +78,13 @@ function EditFaq() {
     );
   }, []);
 
+  console.log(faqState, 'faqState');
+
   useEffect(() => {
     if (faqStatus === 'succeeded') {
       setSelectedTagName(faqState?.data?.faq?.tag?.name);
       setActivePlatform(faqState?.data?.faq?.active_platform);
-
+      setSelectedTags(faqState?.data?.faq?.tag?.id);
       setFaqData({
         question: faqState?.data?.faq?.question,
         solution: faqState?.data?.faq?.propose_solution,
@@ -124,7 +126,8 @@ function EditFaq() {
                   active_platform: activePlatform,
                   status: 'active',
                   tag_id: selectedTags,
-                  faqId,
+                  faqId: faqState?.data?.faq?.id,
+                  _method: 'patch',
                 }),
               );
               setSubmitting(false);
