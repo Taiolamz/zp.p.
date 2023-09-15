@@ -41,6 +41,7 @@ import {
   getSingleRoleSliceReducer,
   deleteRoleSliceReducer,
   getAllFaqsSliceReducer,
+  getTagsSliceReducer,
 } from './slice';
 const state = {
   login: loginSliceReducer,
@@ -85,6 +86,7 @@ const state = {
   getSingleRole: getSingleRoleSliceReducer,
   deleteRole: deleteRoleSliceReducer,
   getAllFaqs: getAllFaqsSliceReducer,
+  getTags: getTagsSliceReducer,
 };
 
 export const testAppSelector = (f: any) => f(state);

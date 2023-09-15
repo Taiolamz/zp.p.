@@ -8,16 +8,18 @@ import { useNavigate } from 'react-router-dom';
 import { H2 } from '../../styles';
 const { SETTINGS } = routesPath;
 
-const NewFaqAtom = ({ setFormvalues, onClick }: any) => {
+const NewFaqAtom = ({ setFormvalues, onClick, tagsList }: any) => {
   const navigate = useNavigate();
 
   const [activePlatform, setActivePlatform] = useState('');
+  const [selectedTags, setSelectedTags] = useState('');
 
   const schema = yup.object().shape({
     question: yup.string().required('Question is required'),
     solution: yup.string().required('Content is required'),
 
     platform: activePlatform.length < 2 ? yup.string().required('Select a platform') : yup.string(),
+    tag: selectedTags.length < 2 ? yup.string().required('Select a Tag') : yup.string(),
   });
 
   return (
@@ -27,6 +29,7 @@ const NewFaqAtom = ({ setFormvalues, onClick }: any) => {
           question: '',
           solution: '',
           platform: '',
+          tag: '',
         }}
         enableReinitialize={true}
         validationSchema={schema}
@@ -76,12 +79,23 @@ const NewFaqAtom = ({ setFormvalues, onClick }: any) => {
                     selectedValue={setActivePlatform}
                     marginBottom="0"
                     options={[
-                      { label: 'Low', value: 'low' },
-                      { label: 'Medium', value: 'medium' },
-                      { label: 'High', value: 'high' },
+                      { label: 'App', value: 'app' },
+                      { label: 'Web', value: 'web' },
                     ]}
                   />
                 </MiniInputs>
+
+                <div style={{ marginBottom: spacing.large }}>
+                  {/* this is for the listings */}
+                  <Picker
+                    width={100}
+                    error={errors.tag}
+                    label="Select a Tag"
+                    selectedValue={setSelectedTags}
+                    marginBottom="0"
+                    options={tagsList}
+                  />
+                </div>
 
                 <ButtonContainer>
                   <Button type="submit" text="Create Item" onClick={onClick} />
