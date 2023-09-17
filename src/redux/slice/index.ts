@@ -40,6 +40,12 @@ export * from './createRoleSlice';
 export * from './updateRoleSlice';
 export * from './getSingleRoleSlice';
 export * from './deleteRoleSlice';
+export * from './getAllFaqsSlice';
+export * from './createFaqSlice';
+export * from './getTagsSlice';
+export * from './deleteFaqSlice';
+export * from './updateFaqSlice';
+export * from './getFaqSlice';
 export * from './getDashboardAnalyticInsightSlice'
 export * from './getCustomerGrowthInsightSlice'
 export * from './getTransactionVolumeSlice'

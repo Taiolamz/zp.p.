@@ -1,23 +1,25 @@
 import React, { useState } from 'react';
 import { Button, CustomUpload, Input, Picker, RadioInput, StepperInput, TextArea } from '../../components';
 import { Formik } from 'formik';
-import { colors, routesPath } from '../../utils';
-import { ButtonContainer, MiniInputs, RadioStyle } from './style';
-import { H2, H3 } from '../../styles';
-import { AiFillFile } from 'react-icons/ai';
-import { BiImageAdd } from 'react-icons/bi';
+import { colors, routesPath, spacing } from '../../utils';
+import { ButtonContainer, MiniInputs } from './style';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
+import { H2 } from '../../styles';
 const { SETTINGS } = routesPath;
 
-const NewFaqAtom = ({ setFormvalues }: any) => {
+const NewFaqAtom = ({ setFormvalues, onClick, tagsList }: any) => {
   const navigate = useNavigate();
 
   const [activePlatform, setActivePlatform] = useState('');
+  const [selectedTags, setSelectedTags] = useState('');
 
   const schema = yup.object().shape({
     question: yup.string().required('Question is required'),
     solution: yup.string().required('Content is required'),
+
+    platform: activePlatform.length < 2 ? yup.string().required('Select a platform') : yup.string(),
+    tag: selectedTags.length < 2 ? yup.string().required('Select a Tag') : yup.string(),
   });
 
   return (
@@ -27,6 +29,7 @@ const NewFaqAtom = ({ setFormvalues }: any) => {
           question: '',
           solution: '',
           platform: '',
+          tag: '',
         }}
         enableReinitialize={true}
         validationSchema={schema}
@@ -36,7 +39,9 @@ const NewFaqAtom = ({ setFormvalues }: any) => {
             question,
             solution,
             activePlatform,
+            selectedTags,
           });
+
           setSubmitting(false);
         }}>
         {formikProps => {
@@ -44,6 +49,9 @@ const NewFaqAtom = ({ setFormvalues }: any) => {
           return (
             <form onSubmit={handleSubmit}>
               <div>
+                <H2 left bold style={{ marginBottom: spacing.small }}>
+                  New FAQ
+                </H2>
                 <Input
                   label="Frequently Asked Question"
                   backgroundColor={colors.white}
@@ -73,15 +81,26 @@ const NewFaqAtom = ({ setFormvalues }: any) => {
                     selectedValue={setActivePlatform}
                     marginBottom="0"
                     options={[
-                      { label: 'Low', value: 'low' },
-                      { label: 'Medium', value: 'medium' },
-                      { label: 'High', value: 'high' },
+                      { label: 'App', value: 'app' },
+                      { label: 'Web', value: 'web' },
                     ]}
                   />
                 </MiniInputs>
 
+                <div style={{ marginBottom: spacing.large }}>
+                  {/* this is for the listings */}
+                  <Picker
+                    width={100}
+                    error={errors.tag}
+                    label="Select a Tag"
+                    selectedValue={setSelectedTags}
+                    marginBottom="0"
+                    options={tagsList}
+                  />
+                </div>
+
                 <ButtonContainer>
-                  <Button type="submit" text="Create Item" />
+                  <Button type="submit" text="Create Item" onClick={onClick} />
                   <Button
                     onClick={() => navigate(SETTINGS)}
                     text="Cancel"
