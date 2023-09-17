@@ -17,6 +17,7 @@ export interface IProps {
   isLoading?: boolean;
   children?: ReactElement;
   actionBtnBackgroundColor?: string;
+  requestStatus?: string;
 }
 
 function ActivityActionModal({
@@ -24,6 +25,7 @@ function ActivityActionModal({
   closeModal,
   title,
   text,
+  requestStatus,
   actionText,
   actionClick,
   image,
@@ -64,7 +66,12 @@ function ActivityActionModal({
             {secondaryActionText && <BtnContainer />}
 
             <BtnContainer>
-              <Button backgroundColor={actionBtnBackgroundColor} text={actionText} onClick={actionClick} />
+              <Button
+                backgroundColor={actionBtnBackgroundColor}
+                text={actionText}
+                onClick={actionClick}
+                disabled={requestStatus === 'loading' ? true : false}
+              />
             </BtnContainer>
             {secondaryActionText && (
               <BtnContainer>

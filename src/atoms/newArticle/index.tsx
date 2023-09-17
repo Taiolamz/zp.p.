@@ -6,11 +6,25 @@ import { ButtonContainer, MiniInputs } from './style';
 import { BiImageAdd } from 'react-icons/bi';
 import * as yup from 'yup';
 import { useNavigate } from 'react-router-dom';
+import { Dictionary } from '../../types';
 const { SETTINGS } = routesPath;
 
-const NewArticle = ({ setFormvalues }: any) => {
-  const navigate = useNavigate();
+export interface IPropsInitialValues {
+  title: string;
+  content: string;
+  active_platform: string;
+  status: string;
+  image: string;
+}
 
+export interface IProps {
+  onSubmit: (item: Dictionary) => any;
+  initialValues?: IPropsInitialValues;
+  requestStatus?: string;
+}
+
+const NewArticle = ({ onSubmit, initialValues, requestStatus }: IProps) => {
+  const navigate = useNavigate();
   const [imageValue, setImageValue] = useState('');
 
   const schema = yup.object().shape({
@@ -22,18 +36,25 @@ const NewArticle = ({ setFormvalues }: any) => {
     <div>
       <Formik
         initialValues={{
-          content: '',
-          title: '',
+          content: initialValues?.content || '',
+          title: initialValues?.title || '',
+          image: initialValues?.image || '',
         }}
         enableReinitialize={true}
         validationSchema={schema}
         onSubmit={async (values, { setSubmitting }) => {
-          const { title, content } = values;
-
-          console.log({
-            title,
+          const {
             content,
-          });
+            title,
+            // active_platform, status, image
+          } = values ?? '';
+          const payload = {
+            title: title,
+            content: content,
+            image: imageValue,
+          };
+
+          onSubmit(payload);
           setSubmitting(false);
         }}>
         {formikProps => {
@@ -71,15 +92,15 @@ const NewArticle = ({ setFormvalues }: any) => {
                     backgroundColor={colors.white}
                     icon={<BiImageAdd size={30} color={colors.primary} />}
                     setFileValue={setImageValue}
+                    name="imageFile"
                   />
                 </MiniInputs>
 
                 <ButtonContainer>
-                  <Button type="submit" text="Create Item" />
+                  <Button type="submit" text="Create Item" disabled={requestStatus === 'loading' ? true : false} />
                   <Button
                     onClick={() => navigate(SETTINGS)}
                     text="Cancel"
-                    disabled={false}
                     secondary
                     backgroundColor="red"
                     borderColor="transparent"
