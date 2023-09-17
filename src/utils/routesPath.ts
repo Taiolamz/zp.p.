@@ -24,7 +24,7 @@ const routesPath = {
   NEWARTICLE: '/settings/newarticle',
   ARTICLEUPDATE: '/settings/articleupdate/',
   NEWFAQ: '/settings/newfaq',
-  FAQUPDATE: '/settings/faqupdate',
+  FAQUPDATE: '/settings/faq/',
   USERROLES: '/users/roles/',
   CREATEUSERROLES: '/users/roles/new',
 };

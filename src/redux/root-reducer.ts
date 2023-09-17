@@ -45,8 +45,17 @@ import {
   updateRoleSliceReducer,
   getSingleRoleSliceReducer,
   deleteRoleSliceReducer,
+
   updateArticleSliceReducer,
   deleteArticleSliceReducer,
+
+  getAllFaqsSliceReducer,
+  createFaqSliceReducer,
+  getTagsSliceReducer,
+  deleteFaqSliceReducer,
+  updateFaqSliceReducer,
+  getFaqSliceReducer,
+
   dashboardSliceReducer,
   customerGrowthInsightSliceReducer,
   transactionVolumeSliceReducer
@@ -100,6 +109,12 @@ const rootReducer = combineReducers({
   getArticleById: getArticleByIdSliceReducer,
   updateArticle: updateArticleSliceReducer,
   deleteArticle: deleteArticleSliceReducer,
+  getAllFaqs: getAllFaqsSliceReducer,
+  createFaq: createFaqSliceReducer,
+  getTags: getTagsSliceReducer,
+  deleteFaq: deleteFaqSliceReducer,
+  updateFaq: updateFaqSliceReducer,
+  getFaq: getFaqSliceReducer,
   dashboard: dashboardSliceReducer,
   customer_growth_insight: customerGrowthInsightSliceReducer,
   transaction_volume: transactionVolumeSliceReducer,

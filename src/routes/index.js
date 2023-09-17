@@ -13,6 +13,7 @@ import {
   NewFaq,
   Settings,
   UpdateArticle,
+  EditFaq,
 } from '../pages/settings';
 import { NotFound } from '../pages/notFound';
 import { PrivateRoute } from './privateRoute';
@@ -198,6 +199,7 @@ function AppRoute() {
             </PrivateRoute>
           }
         />
+
         <Route
           path={`${ARTICLEUPDATE}:id`}
           element={
@@ -215,10 +217,10 @@ function AppRoute() {
           }
         />
         <Route
-          path={FAQUPDATE}
+          path={`${FAQUPDATE}:id`}
           element={
             <PrivateRoute>
-              <NewFaq />
+              <EditFaq />
             </PrivateRoute>
           }
         />
