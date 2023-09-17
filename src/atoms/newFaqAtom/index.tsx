@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, CustomUpload, Input, Picker, RadioInput, StepperInput, TextArea } from '../../components';
+import { Button, CustomUpload, Input, Picker, RadioInput, RichText, StepperInput, TextArea } from '../../components';
 import { Formik } from 'formik';
 import { colors, routesPath } from '../../utils';
 import { ButtonContainer, MiniInputs, RadioStyle } from './style';
@@ -55,7 +55,7 @@ const NewFaqAtom = ({ setFormvalues }: any) => {
                   onChange={handleChange}
                   error={errors.question}
                 />
-
+                <RichText />
                 <TextArea
                   label="Prosposed Solution"
                   backgroundColor={colors.white}
