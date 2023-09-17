@@ -451,7 +451,7 @@ function Settings() {
               )} */}
         </TableContainer>
         <LoaderModal
-          isModalVisible={getArticlesStatus === 'loading'}
+          isModalVisible={getArticlesStatus === 'loading' || faqsStatus === 'loading'}
           text="Loading please wait..."
           closeModal={() => {}}
         />
