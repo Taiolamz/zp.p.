@@ -46,3 +46,6 @@ export * from './getTagsSlice';
 export * from './deleteFaqSlice';
 export * from './updateFaqSlice';
 export * from './getFaqSlice';
+export * from './getDashboardAnalyticInsightSlice'
+export * from './getCustomerGrowthInsightSlice'
+export * from './getTransactionVolumeSlice'

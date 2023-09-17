@@ -13,6 +13,11 @@ const images = {
   reactivateUser: require('../assets/images/reactivateUser.png'),
   deactivateUser: require('../assets/images/deactivateUser.png'),
   sent: require('../assets/images/sent.png'),
+  totalCashIcon: require('../assets/images/total-cash-icon.png'),
+  totalReconciliationIcon: require('../assets/images/total-reconciliation-icon.png'),
+  supportTicketIcon: require('../assets/images/support-ticket-icon.png'),
+  agentIcon: require('../assets/images/agent-icon.png'),
+  calendarEditIcon: require('../assets/images/calendar-edit-icon.png'),
 };
 
 export default images;

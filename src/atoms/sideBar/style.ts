@@ -16,6 +16,7 @@ export const Container = styled.div`
   padding-top: ${spacing.medium};
   display: flex;
   flex-direction: column;
+  z-index: 999;
   @media (max-width: 768px) {
     height: 100%;
   }

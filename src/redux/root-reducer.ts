@@ -48,6 +48,9 @@ import {
   deleteFaqSliceReducer,
   updateFaqSliceReducer,
   getFaqSliceReducer,
+  dashboardSliceReducer,
+  customerGrowthInsightSliceReducer,
+  transactionVolumeSliceReducer
 } from './slice';
 
 const rootReducer = combineReducers({
@@ -99,6 +102,9 @@ const rootReducer = combineReducers({
   deleteFaq: deleteFaqSliceReducer,
   updateFaq: updateFaqSliceReducer,
   getFaq: getFaqSliceReducer,
+  dashboard: dashboardSliceReducer,
+  customer_growth_insight: customerGrowthInsightSliceReducer,
+  transaction_volume: transactionVolumeSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

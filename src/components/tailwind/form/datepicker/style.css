@@ -1,0 +1,4 @@
+.datepicker:focus{
+    border: none !important;
+    outline: none !important;
+}

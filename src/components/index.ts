@@ -50,3 +50,6 @@ export { default as StepperInput } from './stepperInput';
 export { default as CustomUpload } from './customUpload';
 export { default as RadioInput } from './radioInput';
 export { default as FaqTable } from './tables/faqTable';
+export { default as NotificationModal } from './tailwind/modal/notification';
+export { default as SingleNotification } from './notification/SingleNotification';
+export { default as NotificationIcon } from './moreIcon/NotificationIcon';
