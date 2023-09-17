@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ActivityActionModal, AppContainer, CountInfo, LoaderModal, MoreIconView } from '../../atoms';
+import { AppContainer, ActivityActionModal, CountInfo, LoaderModal, MoreIconView } from '../../atoms';
 import {
   articleDataHeader,
   faqData,
@@ -8,9 +8,7 @@ import {
   notificationDataHeader,
   settingsCountData,
 } from './data';
-import { useState, useEffect } from 'react';
-import { AppContainer, CountInfo, MoreIconView, ActivityActionModal } from '../../atoms';
-import { articleDataHeader, faqDataHeader, notificationData, notificationDataHeader, settingsCountData } from './data';
+
 import { colors, dateFormat, images, routesPath, yearDateFormat } from '../../utils';
 import { BorderedText, FaqTable, NotificationTable, Pagination, SearchInput } from '../../components';
 import { Dictionary } from '../../types';
@@ -21,8 +19,6 @@ import { deleteArticleRequest, getArticlesRequest } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 import { getAllFaqsRequest, getAllFaqsReset, deleteFaqRequest, deleteFaqReset } from '../../redux/slice';
-
-import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
 const emptyListCenterStyle = {
   display: 'flex',
@@ -56,7 +52,6 @@ function Settings() {
   const [totalPages, setTotalPages] = useState(5);
   const [transactionDataList, setTransactionDataList] = useState<any[]>([]);
   const [articlesDataList, setArticlesDataList] = useState<any[]>([]);
-  const [selectedNotificationText, setSelectedNotificationText] = useState('');
   const [selectedArticle, setSelectedArticle] = useState<any>({});
   const [deleteIsModalVisible, setDeleteIsModalVisible] = useState(false);
   const [actionText, setActionText] = useState(beforeDeleteAction);
@@ -82,7 +77,7 @@ function Settings() {
   const deleteArticleState = useAppSelector(state => state.deleteArticle);
   const { status: deleteArticleStatus } = deleteArticleState;
 
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const objectLength = Object.keys(selectedSettingsCard).length;
@@ -231,7 +226,6 @@ function Settings() {
   }, [articlesState]);
 
   const settingsBoxShadow = '0px 30px 55px 0px rgba(120, 120, 143, 0.10)';
-
 
   const handleCloseFaq = () => {
     setIsDeleteFaqModalVisible(false);
