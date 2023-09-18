@@ -3,7 +3,6 @@ import { ActivityActionModal, AppContainer, LoaderModal, NewNotification } from 
 import { images, routesPath } from '../../utils';
 import { useNavigate } from 'react-router';
 import { useParams, useLocation } from 'react-router-dom';
-import { H1 } from '../../styles';
 import { NewAppContainer } from './style';
 import { notificationRecipents } from './data';
 import { Dictionary } from '../../types';
@@ -102,6 +101,7 @@ function NotificationUpdate() {
 
   const handleNotificationSuccessClose = () => {
     setNotificationSuccessIsModalVisible(false);
+    navigate(SETTINGS);
   };
 
   useEffect(() => {

@@ -247,6 +247,7 @@ function Settings() {
           title: item?.title,
           status: item?.status,
           dateCreated: yearDateFormat(item?.created_at),
+
           timeUpdated: item?.updated_at,
           articleId: item?.id,
           imageUrl: item?.image_url,
@@ -272,7 +273,7 @@ function Settings() {
   }, [deleteNotificationStatus]);
 
   useEffect(() => {
-    if (selectedSettingsCard.id === 1 || 2) {
+    if (selectedSettingsCard.id === 1 || selectedSettingsCard.id === 2) {
       dispatch(
         getNotificationRequest({
           per_page: pageSize,
@@ -281,7 +282,7 @@ function Settings() {
         }),
       );
     }
-  }, [selectedSettingsCard, currentPage, pageSize, dispatch]);
+  }, [selectedSettingsCard, currentPage, pageSize, dispatch, deleteNotificationStatus]);
 
   useEffect(() => {
     if (getNotificationStatus === 'succeeded') {
@@ -399,7 +400,7 @@ function Settings() {
                 closeModal={handleCloseModal}
                 actionClick={handleNotificationDelete}
                 image={actionText === beforeDeleteAction ? images.reject : images.check}
-                isLoading={false}
+                isLoading={deleteNotificationStatus === 'loading'}
                 requestStatus={deleteArticleStatus}
                 secondaryActionText={actionText === beforeDeleteAction ? 'Cancel' : ''}
               />
@@ -498,7 +499,7 @@ function Settings() {
                 onPageChange={selectedPage => {
                   setCurrentPage(selectedPage);
                 }}
-                isLoading={getArticlesStatus === 'loading' || articlesDataList?.length < 1}
+                isLoading={getArticlesStatus === 'loading'}
               />
               <MoreIconView
                 setSelectedText={setSelectedNotificationText}

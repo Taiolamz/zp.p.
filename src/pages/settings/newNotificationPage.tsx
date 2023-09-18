@@ -55,6 +55,7 @@ function NewNotificationPage() {
 
   const handleNotificationSuccessClose = () => {
     setNotificationSuccessIsModalVisible(false);
+    navigate(SETTINGS);
   };
 
   useEffect(() => {
@@ -70,8 +71,8 @@ function NewNotificationPage() {
       : 'IN-APP NOTIFICATION | NEW APP NOTIFICATION';
 
   return (
-    <div>
-      <AppContainer goBack={() => navigate(SETTINGS)} navTitle={`App Contents`} navHelper={navHelper}>
+    <AppContainer goBack={() => navigate(SETTINGS)} navTitle={`App Contents`} navHelper={navHelper}>
+      <div>
         <NewAppContainer>
           <NewNotification
             radioData={notificationRecipents}
@@ -79,19 +80,19 @@ function NewNotificationPage() {
             onSubmit={(item: Dictionary) => handleCreateNotificationBtn(item)}
           />
         </NewAppContainer>
-      </AppContainer>
 
-      <ActivityActionModal
-        isModalVisible={notificationSuccessIsModalVisible}
-        closeModal={handleNotificationSuccessClose}
-        actionClick={handleNotificationSuccessClose}
-        image={images.check}
-        isLoading={false}
-        actionText="Close"
-        title=""
-        text={'Article has been successfuly created'}
-      />
-    </div>
+        <ActivityActionModal
+          isModalVisible={notificationSuccessIsModalVisible}
+          closeModal={handleNotificationSuccessClose}
+          actionClick={handleNotificationSuccessClose}
+          image={images.check}
+          isLoading={false}
+          actionText="Close"
+          title=""
+          text={'Article has been successfuly created'}
+        />
+      </div>
+    </AppContainer>
   );
 }
 

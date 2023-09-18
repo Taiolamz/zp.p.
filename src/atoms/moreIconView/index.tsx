@@ -28,7 +28,7 @@ function MoreIconView({ options, isModalVisible, closeModal, setSelectedText, on
       bottom: 'auto',
       boxShadow: boxShadow.light,
     },
-    overlay: { backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 9 },
+    overlay: { backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 1 },
   };
 
   const handleClick = (item: string) => {
