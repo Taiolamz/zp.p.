@@ -246,8 +246,7 @@ function Settings() {
           id: index + 1,
           title: item?.title,
           status: item?.status,
-          dateCreated: yearDateFormat(item?.created_at),
-
+          dateCreated: item?.created_at,
           timeUpdated: item?.updated_at,
           articleId: item?.id,
           imageUrl: item?.image_url,
