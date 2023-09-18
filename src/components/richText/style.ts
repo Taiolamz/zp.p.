@@ -20,11 +20,21 @@ export const TextContainer = styled.div`
   background-color: ${(p: StyleProps) =>
     p.backgroundColor ? p.backgroundColor : "transparent"};
   border-radius: ${borderRadius.small};
+  padding-bottom: ${spacing.xsmall};
+
 > div > div{
   outline: none;
   min-height: ${spacing.xlarge};
   padding-left: ${spacing.small_2};
 
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }
 `;
 
@@ -34,4 +44,8 @@ column-gap: ${spacing.small};
   align-items: center;
   width: 100%;
   padding-left: ${spacing.small_2};
+`;
+
+export const RichTextContainer = styled.div`
+margin-bottom: ${spacing.small};
 `;

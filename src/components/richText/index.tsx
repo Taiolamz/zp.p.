@@ -4,6 +4,7 @@ import Underline from '@tiptap/extension-underline';
 import TextStyle from '@tiptap/extension-text';
 import Link from '@tiptap/extension-link';
 import { EditorProvider, useCurrentEditor } from '@tiptap/react';
+import Placeholder from '@tiptap/extension-placeholder';
 import StarterKit from '@tiptap/starter-kit';
 import { EditorContent, useEditor } from '@tiptap/react';
 
@@ -17,7 +18,9 @@ import { ReactComponent as UnderLine } from '../../assets/svg/underline.svg';
 import { ReactComponent as Attachement } from '../../assets/svg/attachment.svg';
 import { ReactComponent as LinkIcon } from '../../assets/svg/link.svg';
 import { useCallback, useState } from 'react';
-import { TextContainer, ToolBar } from './style';
+import { RichTextContainer, TextContainer, ToolBar } from './style';
+import { H5 } from '../../styles';
+import { colors, spacing } from '../../utils';
 
 const Formatter = ({ editor }: any) => {
   // For Link Function
@@ -73,12 +76,12 @@ const Formatter = ({ editor }: any) => {
         className={editor.isActive('bold') ? 'is-active' : ''}>
         <Bold />
       </button>
-      <button
+      {/* <button
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}
         className={editor.isActive('bold') ? 'is-active' : ''}>
         <SmallCaps />
-      </button>
+      </button> */}
 
       <button
         onClick={() => editor.chain().focus().toggleUnderline().run()}
@@ -92,39 +95,8 @@ const Formatter = ({ editor }: any) => {
   );
 };
 
-const content = `
-<h2>
-  Hi there,
-</h2>
-<p>
-  this is a <em>basic</em> example of <strong>tiptap</strong>. Sure, there are all kind of basic text styles you’d probably expect from a text editor. But wait until you see the lists:
-</p>
-<ul>
-  <li>
-    That’s a bullet list with one …
-  </li>
-  <li>
-    … or two list items.
-  </li>
-</ul>
-<p>
-  Isn’t that great? And all of that is editable. But wait, there’s more. Let’s try a code block:
-</p>
-<pre><code class="language-css">body {
-display: none;
-}</code></pre>
-<p>
-  I know, I know, this is impressive. It’s only the tip of the iceberg though. Give it a try and click a little bit around. Don’t forget to check the other examples too.
-</p>
-<blockquote>
-  Wow, that’s amazing. Good work, boy! 👏
-  <br />
-  — Mom
-</blockquote>
-`;
-
 // eslint-disable-next-line import/no-anonymous-default-export
-const RichText = ({ setEditorContent }: any) => {
+const RichText = ({ setEditorContent, error, formIsNotValid, placeholderText, label }: any) => {
   const editor = useEditor({
     extensions: [
       TextAlign.configure({
@@ -132,6 +104,9 @@ const RichText = ({ setEditorContent }: any) => {
       }),
 
       Underline,
+      Placeholder.configure({
+        placeholder: placeholderText,
+      }),
       Link.configure({
         openOnClick: true,
       }),
@@ -155,39 +130,23 @@ const RichText = ({ setEditorContent }: any) => {
         class: 'prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none',
       },
     },
-    content: `
-      <h3 style="text-align:center">
-        Devs Just Want to Have Fun by Cyndi Lauper
-      </h3>
-      <p style="text-align:center">
-        I come home in the morning light<br>
-        My mother says, <mark>“When you gonna live your life right?”</mark><br>
-        Oh mother dear we’re not the fortunate ones<br>
-        And devs, they wanna have fun<br>
-        Oh devs just want to have fun</p>
-      <p style="text-align:center">
-        The phone rings in the middle of the night<br>
-        My father yells, "What you gonna do with your life?"<br>
-        Oh daddy dear, you know you’re still number one<br>
-        But <s>girls</s>devs, they wanna have fun<br>
-        Oh devs just want to have
-      </p>
-      <p style="text-align:center">
-        That’s all they really want<br>
-        Some fun<br>
-        When the working day is done<br>
-        Oh devs, they wanna have fun<br>
-        Oh devs just wanna have fun<br>
-        (devs, they wanna, wanna have fun, devs wanna have)
-      </p>
-    `,
   });
 
   return (
-    <TextContainer>
-      <EditorContent editor={editor} />
-      <Formatter editor={editor} />
-    </TextContainer>
+    <RichTextContainer>
+      <H5 semiBold style={{ marginLeft: 5, marginBottom: spacing.xsmall }} left color={colors.grey}>
+        <div>{label}</div>
+      </H5>
+      <TextContainer>
+        <EditorContent editor={editor} />
+        <Formatter editor={editor} />
+      </TextContainer>
+      {formIsNotValid && error && (
+        <H5 left color={error ? colors.red : colors.grey}>
+          <div>{error}</div>
+        </H5>
+      )}
+    </RichTextContainer>
   );
 };
 

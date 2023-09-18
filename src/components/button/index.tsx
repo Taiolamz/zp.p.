@@ -39,7 +39,7 @@ function Button({
       boxShadow={boxShadow}
       type={type}
       onClick={onClick}
-      disabled={disabled || formIsNotValid}>
+      disabled={disabled}>
       {icon && <ButtonIcon color={color}>{icon}</ButtonIcon>}
       {!disabled && (
         <H2 color={color ? color : icon ? colors.primary : colors.white} semiBold>

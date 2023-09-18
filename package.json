@@ -8,6 +8,7 @@
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
     "@tiptap/extension-link": "^2.1.10",
+    "@tiptap/extension-placeholder": "^2.1.10",
     "@tiptap/extension-text-align": "^2.1.10",
     "@tiptap/extension-underline": "^2.1.10",
     "@tiptap/pm": "^2.1.10",
