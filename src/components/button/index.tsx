@@ -15,6 +15,7 @@ interface IProps {
   color?: string;
   backgroundColor?: string;
   boxShadow?: string;
+  formIsNotValid?: boolean;
 }
 
 function Button({
@@ -28,6 +29,7 @@ function Button({
   color,
   backgroundColor = colors.primary,
   boxShadow,
+  formIsNotValid,
 }: IProps) {
   return (
     <Container

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, CustomUpload, Input, Picker, RadioInput, StepperInput, TextArea } from '../../components';
+import { Button, Input, Picker, RichText } from '../../components';
 import { Formik } from 'formik';
 import { colors, routesPath, spacing } from '../../utils';
 import { ButtonContainer, MiniInputs } from './style';
@@ -9,17 +9,21 @@ import { H2 } from '../../styles';
 const { SETTINGS } = routesPath;
 
 const NewFaqAtom = ({ setFormvalues, onClick, tagsList }: any) => {
+
   const navigate = useNavigate();
 
   const [activePlatform, setActivePlatform] = useState('');
   const [selectedTags, setSelectedTags] = useState('');
 
+  // This checks to see if there is any text in the textbox
+  const formatIsNotValid = !editorContent?.content?.[0].content;
+
   const schema = yup.object().shape({
     question: yup.string().required('Question is required'),
     solution: yup.string().required('Content is required'),
-
     platform: activePlatform.length < 2 ? yup.string().required('Select a platform') : yup.string(),
     tag: selectedTags.length < 2 ? yup.string().required('Select a Tag') : yup.string(),
+
   });
 
   return (
@@ -34,10 +38,10 @@ const NewFaqAtom = ({ setFormvalues, onClick, tagsList }: any) => {
         enableReinitialize={true}
         validationSchema={schema}
         onSubmit={async (values, { setSubmitting }) => {
-          const { question, solution } = values;
+          const { question } = values;
           setFormvalues({
             question,
-            solution,
+            solution: JSON.stringify(editorContent),
             activePlatform,
             selectedTags,
           });
@@ -63,8 +67,15 @@ const NewFaqAtom = ({ setFormvalues, onClick, tagsList }: any) => {
                   onChange={handleChange}
                   error={errors.question}
                 />
-
-                <TextArea
+                <RichText
+                  setEditorContent={setEditorContent}
+                  editorContent={editorContent}
+                  formIsNotValid={formatIsNotValid}
+                  error={errors.solution}
+                  placeholderText={'Enter answer to the FAQ'}
+                  label={'Prosposed Solution'}
+                />
+                {/* <TextArea
                   label="Prosposed Solution"
                   backgroundColor={colors.white}
                   borderColor={colors.grey}
@@ -73,7 +84,7 @@ const NewFaqAtom = ({ setFormvalues, onClick, tagsList }: any) => {
                   name={'solution'}
                   onChange={handleChange}
                   error={errors.solution}
-                />
+                /> */}
                 <MiniInputs>
                   <Picker
                     error={errors.platform}
@@ -100,7 +111,11 @@ const NewFaqAtom = ({ setFormvalues, onClick, tagsList }: any) => {
                 </div>
 
                 <ButtonContainer>
+
+                  <Button type="submit" text="Create Item" formIsNotValid={formatIsNotValid} />
+
                   <Button type="submit" text="Create Item" onClick={onClick} />
+
                   <Button
                     onClick={() => navigate(SETTINGS)}
                     text="Cancel"
