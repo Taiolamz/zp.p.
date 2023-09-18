@@ -22,6 +22,14 @@ export const dateTimeFormat = (text: string) => {
   return datestring;
 };
 
+export const dateTimeFormat2 = (text: string) => {
+  let d = new Date(text);
+
+  let datestring = `${d.getFullYear()}-${d.getMonth() + 1 > 9 ? d.getMonth() + 1 : `0${d.getMonth() + 1}`}-${d.getDate()} `;
+
+  return datestring;
+};
+
 export function timeFormat(date: string, pmAm: boolean = false) {
   const d = new Date(date);
   let hours = d.getHours();

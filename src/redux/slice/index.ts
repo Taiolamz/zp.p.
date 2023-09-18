@@ -54,3 +54,8 @@ export * from './getFaqSlice';
 export * from './getDashboardAnalyticInsightSlice'
 export * from './getCustomerGrowthInsightSlice'
 export * from './getTransactionVolumeSlice'
+export * from './getNotificationSlice'
+export * from './getNotificationByIdSlice'
+export * from './deleteNotificationSlice'
+export * from './createNotificationSlice'
+export * from './updateNotificationSlice'

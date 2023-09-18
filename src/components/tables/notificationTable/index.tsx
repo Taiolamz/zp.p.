@@ -1,6 +1,6 @@
 import { TableTag, TD, TH, TR, TableContainer } from './style';
 import { RxCaretRight } from 'react-icons/rx';
-import { colors } from '../../../utils';
+import { colors, dateFormat } from '../../../utils';
 import { ReactComponent as EmptySearchIcon } from '../../../assets/svg/emptySearch.svg';
 import { MoreIcon } from '../..';
 
@@ -49,12 +49,12 @@ function NotificationTable({ data, headerData, onClick, setSelectedItem, type }:
             </thead>
             <tbody>
               {data?.map((item: any) => (
-                <TR key={item.articleId}>
+                <TR key={item.notificationId}>
                   <TD>{item.id}</TD>
                   <TD>{item.title}</TD>
                   {type !== 'article' && <TD>{item.interval}</TD>}
                   <TD>{item.createdBy}</TD>
-                  <TD>{item.dateCreated}</TD>
+                  <TD>{dateFormat(item.createdAt)}</TD>
                   <TD>
                     <div onClick={() => handleOnSelect(item)}>
                       <MoreIcon onClick={() => onClick(item)} />
