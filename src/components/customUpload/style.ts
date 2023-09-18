@@ -18,6 +18,7 @@ export const InputStyle = styled.input`
   cursor: pointer;
   height: 46px;
   max-width: 200px;
+  z-index: 1;
 `;
 
 export const InputButton = styled.button`

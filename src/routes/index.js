@@ -6,8 +6,8 @@ import { Support } from '../pages/support';
 import { Users, RoleDetails, UserDetails, CreateRole } from '../pages/users';
 import { Settlements, Reconciliation, ReconcilationUserDetails } from '../pages/settlements';
 import {
-  EmailNotification,
-  EmailNotificationUpdate,
+  NewNotificationPage,
+  NotificationUpdate,
   NewAppNotification,
   NewArticles,
   NewFaq,
@@ -163,15 +163,15 @@ function AppRoute() {
           path={NEWAPPNOTIFICATION}
           element={
             <PrivateRoute>
-              <NewAppNotification />
+              <NewNotificationPage />
             </PrivateRoute>
           }
         />
         <Route
-          path={APPNOTIFICATIONUPDATE}
+          path={`${APPNOTIFICATIONUPDATE}:id`}
           element={
             <PrivateRoute>
-              <NewAppNotification />
+              <NotificationUpdate />
             </PrivateRoute>
           }
         />
@@ -179,15 +179,15 @@ function AppRoute() {
           path={EMAILNOTIFICATION}
           element={
             <PrivateRoute>
-              <EmailNotification />
+              <NewNotificationPage />
             </PrivateRoute>
           }
         />
         <Route
-          path={EMAILNOTIFICATIONUPDATE}
+          path={`${EMAILNOTIFICATIONUPDATE}:id`}
           element={
             <PrivateRoute>
-              <EmailNotificationUpdate />
+              <NotificationUpdate />
             </PrivateRoute>
           }
         />

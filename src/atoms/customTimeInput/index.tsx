@@ -15,13 +15,13 @@ const CustomTimeInput = ({ setTimeValue, error }: CustomTimeInputIProps) => {
   const [minutes, setMinutes] = useState('');
 
   useEffect(() => {
-    setTimeValue(`${hour}:${minutes}`);
+    setTimeValue(`${hour < '10' && 0}${hour}:0${minutes}`);
   }, [hour, minutes, setTimeValue]);
 
   return (
     <div>
       <CustomTimeInputWrapper>
-        <StepperInput maxValue={23} setValue={setHour} />
+        <StepperInput maxValue={11} setValue={setHour} />
         <div>:</div>
         <StepperInput maxValue={59} setValue={setMinutes} />
       </CustomTimeInputWrapper>

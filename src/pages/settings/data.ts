@@ -1,3 +1,5 @@
+import { IPropsRadioData } from "../../atoms/newNotification";
+
 export const notificationDataHeader = {
   id: 1,
   title: 'Notification Title',
@@ -26,12 +28,12 @@ export const settingsCountData = [
   {
     id: 1,
     count: 3,
-    title: 'In-App Notifications',
+    title: 'in app notification',
   },
   {
     id: 2,
     count: 3,
-    title: 'Email Notification',
+    title: 'email notification',
   },
   {
     id: 3,
@@ -96,15 +98,15 @@ export const faqData = [
   },
 ];
 
-export const notificationRecipents = [
+export const notificationRecipents: IPropsRadioData[] = [
   {
     id: 1,
     label: 'Upload Specific Users',
-    value: 'upload specific users',
+    value: 'specific users',
   },
   {
     id: 2,
     label: 'All Users',
-    value: 'all users',
+    value: 'all user',
   },
 ];

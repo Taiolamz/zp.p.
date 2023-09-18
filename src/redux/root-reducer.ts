@@ -58,7 +58,13 @@ import {
 
   dashboardSliceReducer,
   customerGrowthInsightSliceReducer,
-  transactionVolumeSliceReducer
+  transactionVolumeSliceReducer,
+
+  getNotificationByIdSliceReducer,
+  getNotificationSliceReducer,
+  deleteNotificationSliceReducer,
+  createNotificationSliceReducer,
+  updateNotificationSliceReducer,
 } from './slice';
 
 const rootReducer = combineReducers({
@@ -118,6 +124,11 @@ const rootReducer = combineReducers({
   dashboard: dashboardSliceReducer,
   customer_growth_insight: customerGrowthInsightSliceReducer,
   transaction_volume: transactionVolumeSliceReducer,
+  getNotificationById: getNotificationByIdSliceReducer,
+  getNotification: getNotificationSliceReducer,
+  deleteNotification: deleteNotificationSliceReducer,
+  createNotification: createNotificationSliceReducer,
+  updateNotification: updateNotificationSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

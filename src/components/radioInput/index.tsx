@@ -1,3 +1,4 @@
+import { IPropsRadioData } from '../../atoms/newNotification';
 import { H5 } from '../../styles';
 import { RadioInputContainer, Radio } from './style';
 
@@ -7,7 +8,7 @@ export interface RadioIPropsIprops {
 }
 
 export interface RadioIProps {
-  data: RadioIPropsIprops[];
+  data?: IPropsRadioData[];
   selectedValue: any;
 }
 
@@ -18,7 +19,7 @@ const RadioInput = ({ data, selectedValue }: RadioIProps) => {
 
   return (
     <RadioInputContainer>
-      {data.map((item, index) => {
+      {data?.map((item, index) => {
         return (
           <Radio key={index}>
             <input type="radio" name="topping" value={item.value} id="regular" onChange={onOptionChange} />

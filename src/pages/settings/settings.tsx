@@ -18,7 +18,16 @@ import { useNavigate } from 'react-router';
 import { deleteArticleRequest, getArticlesRequest } from '../../redux/slice';
 import { useAppDispatch, useAppSelector } from '../../redux/redux-hooks';
 
-import { getAllFaqsRequest, getAllFaqsReset, deleteFaqRequest, deleteFaqReset } from '../../redux/slice';
+import {
+  getAllFaqsRequest,
+  getAllFaqsReset,
+  deleteFaqRequest,
+  deleteFaqReset,
+  getNotificationRequest,
+  getNotificationReset,
+  deleteNotificationRequest,
+  deleteNotificationReset,
+} from '../../redux/slice';
 
 const emptyListCenterStyle = {
   display: 'flex',
@@ -51,8 +60,10 @@ function Settings() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(5);
   const [transactionDataList, setTransactionDataList] = useState<any[]>([]);
+  const [notificationDataList, setNotificationDataList] = useState<any[]>([]);
   const [articlesDataList, setArticlesDataList] = useState<any[]>([]);
   const [selectedArticle, setSelectedArticle] = useState<any>({});
+  const [selectedNotification, setSelectedNotification] = useState<any>({});
   const [deleteIsModalVisible, setDeleteIsModalVisible] = useState(false);
   const [actionText, setActionText] = useState(beforeDeleteAction);
 
@@ -76,6 +87,12 @@ function Settings() {
 
   const deleteArticleState = useAppSelector(state => state.deleteArticle);
   const { status: deleteArticleStatus } = deleteArticleState;
+
+  const notificationState = useAppSelector(state => state.getNotification);
+  const { status: getNotificationStatus } = notificationState;
+
+  const deleteNotificationState = useAppSelector(state => state.deleteNotification);
+  const { status: deleteNotificationStatus } = deleteNotificationState;
 
   // const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -123,12 +140,22 @@ function Settings() {
   // handle different more icon text
   const handleMoreIconOptionsApp = async (item: string) => {
     if (item === viewDetails) {
-      navigate(`${APPNOTIFICATIONUPDATE}`);
+      navigate(`${APPNOTIFICATIONUPDATE}${selectedNotification.notificationId}`);
+    }
+
+    if (item === deleteEntry) {
+      setMoreIsVisible(false);
+      setDeleteIsModalVisible(true);
     }
   };
   const handleMoreIconOptionsEmail = async (item: string) => {
     if (item === viewDetails) {
-      navigate(`${EMAILNOTIFICATIONUPDATE}`);
+      navigate(`${EMAILNOTIFICATIONUPDATE}${selectedNotification.notificationId}`);
+    }
+
+    if (item === deleteEntry) {
+      setMoreIsVisible(false);
+      setDeleteIsModalVisible(true);
     }
   };
   const handleMoreIconOptionsArticle = async (item: string) => {
@@ -167,9 +194,20 @@ function Settings() {
       );
     }
   };
-  const handleActionClick = () => {
+
+  const handleArticleDelete = () => {
     if (actionText === beforeDeleteAction && deleteIsModalVisible === true) {
       dispatch(deleteArticleRequest({ articleId: selectedArticle.articleId }));
+    } else {
+      setActionText(beforeDeleteAction);
+      setDeleteIsModalVisible(false);
+    }
+  };
+
+  // DELETE NOTIFICATION
+  const handleNotificationDelete = () => {
+    if (actionText === beforeDeleteAction && deleteIsModalVisible === true) {
+      dispatch(deleteNotificationRequest({ id: selectedNotification.notificationId }));
     } else {
       setActionText(beforeDeleteAction);
       setDeleteIsModalVisible(false);
@@ -181,6 +219,7 @@ function Settings() {
     setDeleteIsModalVisible(false);
   };
 
+  // ARTICLES API
   useEffect(() => {
     if (deleteArticleStatus === 'succeeded') {
       setActionText(afterDeleteAction);
@@ -224,6 +263,57 @@ function Settings() {
       setArticlesDataList(updatedList);
     }
   }, [articlesState]);
+
+  // NOTIFICATION API
+  useEffect(() => {
+    if (deleteNotificationStatus === 'succeeded') {
+      setActionText(afterDeleteAction);
+    }
+  }, [deleteNotificationStatus]);
+
+  useEffect(() => {
+    if (selectedSettingsCard.id === 1 || 2) {
+      dispatch(
+        getNotificationRequest({
+          per_page: pageSize,
+          page: currentPage,
+          type: selectedSettingsCard.title,
+        }),
+      );
+    }
+  }, [selectedSettingsCard, currentPage, pageSize, dispatch]);
+
+  useEffect(() => {
+    if (getNotificationStatus === 'succeeded') {
+      let updatedList: any[] = [];
+
+      notificationState?.data?.custom_notification?.data.forEach((item: any, index: number) => {
+        updatedList.push({
+          createdBy: item?.author?.name,
+          createdAt: item?.created_at,
+          deliveryDate: item?.delivery_date,
+          deliveryMeridiem: item?.delivery_meridiem,
+          deliveryTime: item?.delivery_time,
+          notificationId: item?.id,
+          image: item?.image,
+          interval: item?.interval,
+          link: item?.link,
+          message: item?.message,
+          recipients: item?.recipients,
+          status: item?.status,
+          title: item?.title,
+          type: item?.type,
+        });
+      });
+
+      const {
+        meta: { links, last_page },
+      } = notificationState?.data?.custom_notification;
+      // setTotalPages(last_page);
+
+      setNotificationDataList(updatedList);
+    }
+  }, [getNotificationStatus, notificationState]);
 
   const settingsBoxShadow = '0px 30px 55px 0px rgba(120, 120, 143, 0.10)';
 
@@ -273,8 +363,10 @@ function Settings() {
               <NotificationTable
                 headerData={notificationDataHeader}
                 header={true}
-                data={notificationData}
+                type="notification"
+                data={notificationDataList}
                 onClick={(item: Dictionary) => setMoreIsVisible(true)}
+                setSelectedItem={setSelectedNotification}
               />
               {/* <Pagination
                 currentPage={currentPage}
@@ -294,6 +386,22 @@ function Settings() {
                 closeModal={() => setMoreIsVisible(false)}
                 options={moreIconOption}
                 onClick={item => handleMoreIconOptionsApp(item)}
+              />
+              <ActivityActionModal
+                actionText={actionText}
+                title=""
+                text={
+                  actionText === beforeDeleteAction
+                    ? 'Are you sure you want to delete this record?'
+                    : 'Record has been successfully deleted'
+                }
+                isModalVisible={deleteIsModalVisible}
+                closeModal={handleCloseModal}
+                actionClick={handleNotificationDelete}
+                image={actionText === beforeDeleteAction ? images.reject : images.check}
+                isLoading={false}
+                requestStatus={deleteArticleStatus}
+                secondaryActionText={actionText === beforeDeleteAction ? 'Cancel' : ''}
               />
             </>
           )}
@@ -323,7 +431,8 @@ function Settings() {
               <NotificationTable
                 headerData={notificationDataHeader}
                 header={true}
-                data={notificationData}
+                data={notificationDataList}
+                setSelectedItem={setSelectedNotification}
                 onClick={(item: Dictionary) => setMoreIsVisible(true)}
                 // onClick={item => navigate(`${USERDETAILS}${item.userId}`)}
               />
@@ -333,6 +442,22 @@ function Settings() {
                 closeModal={() => setMoreIsVisible(false)}
                 options={moreIconOption}
                 onClick={item => handleMoreIconOptionsEmail(item)}
+              />
+              <ActivityActionModal
+                actionText={actionText}
+                title=""
+                text={
+                  actionText === beforeDeleteAction
+                    ? 'Are you sure you want to delete this record?'
+                    : 'Record has been successfully deleted'
+                }
+                isModalVisible={deleteIsModalVisible}
+                closeModal={handleCloseModal}
+                actionClick={handleNotificationDelete}
+                image={actionText === beforeDeleteAction ? images.reject : images.check}
+                isLoading={false}
+                requestStatus={deleteNotificationStatus}
+                secondaryActionText={actionText === beforeDeleteAction ? 'Cancel' : ''}
               />
             </>
           )}
@@ -381,6 +506,22 @@ function Settings() {
                 closeModal={() => setMoreIsVisible(false)}
                 options={moreIconOption}
                 onClick={item => handleMoreIconOptionsArticle(item)}
+              />
+              <ActivityActionModal
+                actionText={actionText}
+                title=""
+                text={
+                  actionText === beforeDeleteAction
+                    ? 'Are you sure you want to delete this record?'
+                    : 'Record has been successfully deleted'
+                }
+                isModalVisible={deleteIsModalVisible}
+                closeModal={handleCloseModal}
+                actionClick={handleArticleDelete}
+                image={actionText === beforeDeleteAction ? images.reject : images.check}
+                isLoading={false}
+                requestStatus={deleteArticleStatus}
+                secondaryActionText={actionText === beforeDeleteAction ? 'Cancel' : ''}
               />
             </>
           )}
@@ -451,25 +592,11 @@ function Settings() {
               )} */}
         </TableContainer>
         <LoaderModal
-          isModalVisible={getArticlesStatus === 'loading' || faqsStatus === 'loading'}
+          isModalVisible={
+            getArticlesStatus === 'loading' || faqsStatus === 'loading' || getNotificationStatus === 'loading'
+          }
           text="Loading please wait..."
           closeModal={() => {}}
-        />
-        <ActivityActionModal
-          actionText={actionText}
-          title=""
-          text={
-            actionText === beforeDeleteAction
-              ? 'Are you sure you want to delete this record?'
-              : 'Record has been successfully deleted'
-          }
-          isModalVisible={deleteIsModalVisible}
-          closeModal={handleCloseModal}
-          actionClick={handleActionClick}
-          image={actionText === beforeDeleteAction ? images.reject : images.check}
-          isLoading={false}
-          requestStatus={deleteArticleStatus}
-          secondaryActionText={actionText === beforeDeleteAction ? 'Cancel' : ''}
         />
       </div>
     </AppContainer>
