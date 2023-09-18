@@ -16,7 +16,8 @@ export const Container = styled.div`
   padding-top: ${spacing.medium};
   display: flex;
   flex-direction: column;
-  z-index: 999;
+  // z-index: 999;
+  z-index: 0;
   @media (max-width: 768px) {
     height: 100%;
   }
@@ -40,7 +41,7 @@ export const BottomTabContainer = styled.div`
     display: block;
     background-color: ${colors.smokeWhite};
     width: 100%;
-    z-index: 999;
+    z-index: 0;
   }
 `;
 

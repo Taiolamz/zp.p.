@@ -1,6 +1,6 @@
 import { TableTag, TD, TH, TR, TableContainer } from './style';
 import { RxCaretRight } from 'react-icons/rx';
-import { colors } from '../../../utils';
+import { colors, dateFormat } from '../../../utils';
 import { ReactComponent as EmptySearchIcon } from '../../../assets/svg/emptySearch.svg';
 import { MoreIcon } from '../..';
 
@@ -18,6 +18,7 @@ export interface TableIPropsIProps {
   backgroundColor?: string;
   header?: boolean;
   headerData?: any;
+  type?: string;
   onClick?: any;
 }
 
@@ -27,7 +28,11 @@ const emptyListCenterStyle = {
   alignItems: 'center',
 };
 
-function NotificationTable({ data, headerData, onClick }: TableIPropsIProps) {
+function NotificationTable({ data, headerData, onClick, setSelectedItem, type }: TableIPropsIProps) {
+  const handleOnSelect = (item: any) => {
+    setSelectedItem(item);
+  };
+
   return (
     <div>
       {data?.length >= 1 ? (
@@ -37,21 +42,23 @@ function NotificationTable({ data, headerData, onClick }: TableIPropsIProps) {
               <tr>
                 <TH></TH>
                 <TH>{headerData.title}</TH>
-                <TH>{headerData.interval}</TH>
+                {type !== 'article' && <TH>{headerData.interval}</TH>}
                 <TH>{headerData.createdBy}</TH>
                 <TH>{headerData.dateCreated}</TH>
               </tr>
             </thead>
             <tbody>
               {data?.map((item: any) => (
-                <TR key={item.id}>
+                <TR key={item.notificationId}>
                   <TD>{item.id}</TD>
                   <TD>{item.title}</TD>
-                  <TD>{item.interval}</TD>
+                  {type !== 'article' && <TD>{item.interval}</TD>}
                   <TD>{item.createdBy}</TD>
-                  <TD>{item.dateCreated}</TD>
+                  <TD>{dateFormat(item.dateCreated)}</TD>
                   <TD>
-                    <MoreIcon onClick={onClick} />
+                    <div onClick={() => handleOnSelect(item)}>
+                      <MoreIcon onClick={() => onClick(item)} />
+                    </div>
                   </TD>
                 </TR>
               ))}

@@ -15,10 +15,10 @@ export const InputStyle = styled.input`
   position: relative;
   text-align: right;
   opacity: 0;
-  z-index: 2;
   cursor: pointer;
   height: 46px;
   max-width: 200px;
+  z-index: 1;
 `;
 
 export const InputButton = styled.button`
@@ -27,7 +27,6 @@ export const InputButton = styled.button`
   left: 0px;
   /* width: 100%;
   height: 100%; */
-  z-index: 1;
   display: flex;
   justify-content: space-between;
   align-items: center;

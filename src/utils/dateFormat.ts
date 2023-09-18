@@ -22,6 +22,14 @@ export const dateTimeFormat = (text: string) => {
   return datestring;
 };
 
+export const dateTimeFormat2 = (text: string) => {
+  let d = new Date(text);
+
+  let datestring = `${d.getFullYear()}-${d.getMonth() + 1 > 9 ? d.getMonth() + 1 : `0${d.getMonth() + 1}`}-${d.getDate()} `;
+
+  return datestring;
+};
+
 export function timeFormat(date: string, pmAm: boolean = false) {
   const d = new Date(date);
   let hours = d.getHours();
@@ -39,12 +47,12 @@ export function timeFormat(date: string, pmAm: boolean = false) {
 }
 
 export const formatRMDatePicker = (date: any) => {
-  // Format the date as 'DD-MM-YYYY'
+  // Format the date as 'YYYY-MM-DD'
   const day = date?.day?.toString()?.padStart(2, '0');
   const month = (date?.month?.number)?.toString()?.padStart(2, '0');
   const year = date?.year;
 
-  return `${day}-${month}-${year}`;
+  return `${year}-${month}-${day}`;
 };
 
 // export default dateFormat;

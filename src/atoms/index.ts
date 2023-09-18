@@ -46,3 +46,4 @@ export { default as CustomerGrowthInsight } from "./charts/CustomerGrowthInsight
 export { default as TransactionVolumeInsight } from "./charts/TransactionVolumeInsight"
 export { default as KycDistributionStat } from "./metrics/KYCDistributionStat"
 export { default as RightSideMetric } from "./metrics/RightSideMetric"
+export { default as MetricLabel } from "./labels/MetricLabel"
