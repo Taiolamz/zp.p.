@@ -15,6 +15,7 @@ interface IProps {
   color?: string;
   backgroundColor?: string;
   boxShadow?: string;
+  formIsNotValid?: boolean;
 }
 
 function Button({
@@ -28,6 +29,7 @@ function Button({
   color,
   backgroundColor = colors.primary,
   boxShadow,
+  formIsNotValid,
 }: IProps) {
   return (
     <Container
@@ -37,7 +39,7 @@ function Button({
       boxShadow={boxShadow}
       type={type}
       onClick={onClick}
-      disabled={disabled}>
+      disabled={disabled || formIsNotValid}>
       {icon && <ButtonIcon color={color}>{icon}</ButtonIcon>}
       {!disabled && (
         <H2 color={color ? color : icon ? colors.primary : colors.white} semiBold>

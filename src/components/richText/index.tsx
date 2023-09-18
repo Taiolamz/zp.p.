@@ -16,10 +16,10 @@ import { ReactComponent as Bold } from '../../assets/svg/bold.svg';
 import { ReactComponent as UnderLine } from '../../assets/svg/underline.svg';
 import { ReactComponent as Attachement } from '../../assets/svg/attachment.svg';
 import { ReactComponent as LinkIcon } from '../../assets/svg/link.svg';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { TextContainer, ToolBar } from './style';
 
-const RichText = ({ editor }: any) => {
+const Formatter = ({ editor }: any) => {
   // For Link Function
   const setLink = useCallback(() => {
     const previousUrl = editor.getAttributes('link').href;
@@ -123,23 +123,14 @@ display: none;
 </blockquote>
 `;
 
-// export default () => {
-//   return (
-//     <EditorProvider
-//       slotBefore={<MenuBar />}
-//       extensions={extensions}
-//       content={content}
-//       children={undefined}></EditorProvider>
-//   );
-// };
-
 // eslint-disable-next-line import/no-anonymous-default-export
-export default () => {
+const RichText = ({ setEditorContent }: any) => {
   const editor = useEditor({
     extensions: [
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
+
       Underline,
       Link.configure({
         openOnClick: true,
@@ -156,6 +147,9 @@ export default () => {
         },
       }),
     ],
+    onUpdate({ editor }: any) {
+      setEditorContent(editor.getJSON());
+    },
     editorProps: {
       attributes: {
         class: 'prose dark:prose-invert prose-sm sm:prose-base lg:prose-lg xl:prose-2xl focus:outline-none',
@@ -192,7 +186,9 @@ export default () => {
   return (
     <TextContainer>
       <EditorContent editor={editor} />
-      <RichText editor={editor} />
+      <Formatter editor={editor} />
     </TextContainer>
   );
 };
+
+export default RichText;
