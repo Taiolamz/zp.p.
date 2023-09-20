@@ -54,7 +54,7 @@ function NotificationTable({ data, headerData, onClick, setSelectedItem, type }:
                   <TD>{item.title}</TD>
                   {type !== 'article' && <TD>{item.interval}</TD>}
                   <TD>{item.createdBy}</TD>
-                  <TD>{dateFormat(item.dateCreated)}</TD>
+                  <TD>{dateFormat(item.createdAt)}</TD>
                   <TD>
                     <div onClick={() => handleOnSelect(item)}>
                       <MoreIcon onClick={() => onClick(item)} />

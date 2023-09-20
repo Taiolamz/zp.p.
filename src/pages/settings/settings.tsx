@@ -246,7 +246,7 @@ function Settings() {
           id: index + 1,
           title: item?.title,
           status: item?.status,
-          dateCreated: item?.created_at,
+          createdAt: item?.created_at,
           timeUpdated: item?.updated_at,
           articleId: item?.id,
           imageUrl: item?.image_url,
@@ -287,7 +287,7 @@ function Settings() {
     if (getNotificationStatus === 'succeeded') {
       let updatedList: any[] = [];
 
-      notificationState?.data?.custom_notification?.data.forEach((item: any, index: number) => {
+      notificationState?.data?.notifications?.data.forEach((item: any, index: number) => {
         updatedList.push({
           createdBy: item?.author?.name,
           createdAt: item?.created_at,
@@ -308,8 +308,8 @@ function Settings() {
 
       const {
         meta: { links, last_page },
-      } = notificationState?.data?.custom_notification;
-      // setTotalPages(last_page);
+      } = notificationState?.data?.notifications;
+      setTotalPages(last_page);
 
       setNotificationDataList(updatedList);
     }
