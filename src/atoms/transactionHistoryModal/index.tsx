@@ -37,7 +37,7 @@ function TransactionHistoryModal({
   const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
-    console.log(searchValue);
+    // console.log(searchValue);
   }, [searchValue]);
 
   return (

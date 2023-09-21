@@ -45,26 +45,23 @@ import {
   updateRoleSliceReducer,
   getSingleRoleSliceReducer,
   deleteRoleSliceReducer,
-
   updateArticleSliceReducer,
   deleteArticleSliceReducer,
-
   getAllFaqsSliceReducer,
   createFaqSliceReducer,
   getTagsSliceReducer,
   deleteFaqSliceReducer,
   updateFaqSliceReducer,
   getFaqSliceReducer,
-
   dashboardSliceReducer,
   customerGrowthInsightSliceReducer,
   transactionVolumeSliceReducer,
-
   getNotificationByIdSliceReducer,
   getNotificationSliceReducer,
   deleteNotificationSliceReducer,
   createNotificationSliceReducer,
   updateNotificationSliceReducer,
+  settingsCountSliceReducer,
 } from './slice';
 
 const rootReducer = combineReducers({
@@ -129,6 +126,7 @@ const rootReducer = combineReducers({
   deleteNotification: deleteNotificationSliceReducer,
   createNotification: createNotificationSliceReducer,
   updateNotification: updateNotificationSliceReducer,
+  settingsCount: settingsCountSliceReducer,
 });
 
 export type RootState = ReturnType<typeof rootReducer>;

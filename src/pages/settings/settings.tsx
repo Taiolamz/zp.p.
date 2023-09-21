@@ -6,7 +6,7 @@ import {
   faqDataHeader,
   notificationData,
   notificationDataHeader,
-  settingsCountData,
+  // settingsCountData,
 } from './data';
 
 import { colors, dateFormat, images, routesPath, yearDateFormat } from '../../utils';
@@ -27,6 +27,7 @@ import {
   getNotificationReset,
   deleteNotificationRequest,
   deleteNotificationReset,
+  settingsCountRequest,
 } from '../../redux/slice';
 
 const emptyListCenterStyle = {
@@ -55,7 +56,7 @@ function Settings() {
   const [selectedSettingsCard, setSelectedSettingsCard] = useState<Dictionary>({});
   const [searchValue, setSearchValue] = useState('');
   const [isSearching, setIsSearching] = useState(false);
-  const pageSize = 10;
+  const pageSize = 30;
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(5);
@@ -75,6 +76,28 @@ function Settings() {
   const [selectedNotificationText, setSelectedNotificationText] = useState('');
   const [selectedFaqData, setSelectedFaqData] = useState<Dictionary>({});
   const [isDeleteFaqModalVisible, setIsDeleteFaqModalVisible] = useState(false);
+  const [settingsCountData, setSettingsCountData] = useState([
+    {
+      id: 1,
+      count: 0,
+      title: 'in app notification',
+    },
+    {
+      id: 2,
+      count: 0,
+      title: 'email notification',
+    },
+    {
+      id: 3,
+      count: 0,
+      title: 'Articles',
+    },
+    {
+      id: 4,
+      count: 0,
+      title: 'FAQs',
+    },
+  ]);
 
   const viewDetails = 'View Details';
   const deleteEntry = 'Delete Entry';
@@ -95,6 +118,9 @@ function Settings() {
   const deleteNotificationState = useAppSelector(state => state.deleteNotification);
   const { status: deleteNotificationStatus } = deleteNotificationState;
 
+  const settingsCountState = useAppSelector(state => state.settingsCount);
+  const { status: settingsCountStatus } = settingsCountState;
+
   // const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -107,10 +133,54 @@ function Settings() {
   const deleteFaqState = useAppSelector(state => state.deleteFaq);
   const { status: deletedFaqStatus } = deleteFaqState;
 
+  // api settings count
+  useEffect(() => {
+    dispatch(settingsCountRequest({}));
+  }, []);
+
+  useEffect(() => {
+    if (settingsCountStatus === 'succeeded') {
+      // let updatedList: any[] = [];
+
+      const { articles_count, email_notifications_count, faq_count, in_app_notifications_count } =
+        settingsCountState?.data;
+
+      const updatedList: any[] = [
+        {
+          id: 1,
+          count: in_app_notifications_count,
+          title: 'in app notification',
+        },
+        {
+          id: 2,
+          count: email_notifications_count,
+          title: 'email notification',
+        },
+        {
+          id: 3,
+          count: articles_count,
+          title: 'Articles',
+        },
+        {
+          id: 4,
+          count: faq_count,
+          title: 'FAQs',
+        },
+      ];
+
+      setSettingsCountData(updatedList);
+    }
+  }, [settingsCountStatus]);
+
   // api faq
   useEffect(() => {
-    dispatch(getAllFaqsRequest({}));
-  }, [deletedFaqStatus]);
+    dispatch(
+      getAllFaqsRequest({
+        per_page: pageSize,
+        page: currentPageFaq,
+      }),
+    );
+  }, [deletedFaqStatus, currentPageFaq, dispatch]);
 
   useEffect(() => {
     if (faqsStatus === 'succeeded') {
@@ -585,6 +655,16 @@ function Settings() {
               />
             </>
           )}
+
+          <Pagination
+            // isLoading={kycsStatus === 'loading' || kycsAnalyticsStatus === 'loading'}
+            isLoading={false}
+            currentPage={currentPageFaq}
+            totalPages={totalPagesFaq}
+            onPageChange={selectedPage => {
+              setCurrentPageFaq(selectedPage);
+            }}
+          />
 
           {/* {usersData.length >= 1 && (
                 <Pagination
