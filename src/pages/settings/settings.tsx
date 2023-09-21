@@ -6,7 +6,7 @@ import {
   faqDataHeader,
   notificationData,
   notificationDataHeader,
-  settingsCountData,
+  // settingsCountData,
 } from './data';
 
 import { colors, dateFormat, images, routesPath, yearDateFormat } from '../../utils';
@@ -27,6 +27,7 @@ import {
   getNotificationReset,
   deleteNotificationRequest,
   deleteNotificationReset,
+  settingsCountRequest,
 } from '../../redux/slice';
 
 const emptyListCenterStyle = {
@@ -54,8 +55,8 @@ function Settings() {
 
   const [selectedSettingsCard, setSelectedSettingsCard] = useState<Dictionary>({});
   const [searchValue, setSearchValue] = useState('');
-  const pageSize = 10;
   const [isSearching, setIsSearching] = useState(false);
+  const pageSize = 30;
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(5);
@@ -68,12 +69,35 @@ function Settings() {
   const [actionText, setActionText] = useState(beforeDeleteAction);
 
   const [faqsData, setFaqsData] = useState<any[]>([]);
+  const [faqsDataList, setFaqsDataList] = useState<any[]>([]);
   const [currentPageFaq, setCurrentPageFaq] = useState(1);
   const [totalPagesFaq, setTotalPagesFaq] = useState(5);
 
   const [selectedNotificationText, setSelectedNotificationText] = useState('');
   const [selectedFaqData, setSelectedFaqData] = useState<Dictionary>({});
   const [isDeleteFaqModalVisible, setIsDeleteFaqModalVisible] = useState(false);
+  const [settingsCountData, setSettingsCountData] = useState([
+    {
+      id: 1,
+      count: 0,
+      title: 'in app notification',
+    },
+    {
+      id: 2,
+      count: 0,
+      title: 'email notification',
+    },
+    {
+      id: 3,
+      count: 0,
+      title: 'Articles',
+    },
+    {
+      id: 4,
+      count: 0,
+      title: 'FAQs',
+    },
+  ]);
 
   const viewDetails = 'View Details';
   const deleteEntry = 'Delete Entry';
@@ -94,6 +118,9 @@ function Settings() {
   const deleteNotificationState = useAppSelector(state => state.deleteNotification);
   const { status: deleteNotificationStatus } = deleteNotificationState;
 
+  const settingsCountState = useAppSelector(state => state.settingsCount);
+  const { status: settingsCountStatus } = settingsCountState;
+
   // const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -106,10 +133,54 @@ function Settings() {
   const deleteFaqState = useAppSelector(state => state.deleteFaq);
   const { status: deletedFaqStatus } = deleteFaqState;
 
+  // api settings count
+  useEffect(() => {
+    dispatch(settingsCountRequest({}));
+  }, []);
+
+  useEffect(() => {
+    if (settingsCountStatus === 'succeeded') {
+      // let updatedList: any[] = [];
+
+      const { articles_count, email_notifications_count, faq_count, in_app_notifications_count } =
+        settingsCountState?.data;
+
+      const updatedList: any[] = [
+        {
+          id: 1,
+          count: in_app_notifications_count,
+          title: 'in app notification',
+        },
+        {
+          id: 2,
+          count: email_notifications_count,
+          title: 'email notification',
+        },
+        {
+          id: 3,
+          count: articles_count,
+          title: 'Articles',
+        },
+        {
+          id: 4,
+          count: faq_count,
+          title: 'FAQs',
+        },
+      ];
+
+      setSettingsCountData(updatedList);
+    }
+  }, [settingsCountStatus]);
+
   // api faq
   useEffect(() => {
-    dispatch(getAllFaqsRequest({}));
-  }, []);
+    dispatch(
+      getAllFaqsRequest({
+        per_page: pageSize,
+        page: currentPageFaq,
+      }),
+    );
+  }, [deletedFaqStatus, currentPageFaq, dispatch]);
 
   useEffect(() => {
     if (faqsStatus === 'succeeded') {
@@ -134,6 +205,7 @@ function Settings() {
       setTotalPagesFaq(last_page);
 
       setFaqsData(updatedList);
+      setFaqsDataList(updatedList);
     }
   }, [faqsState]);
 
@@ -246,7 +318,7 @@ function Settings() {
           id: index + 1,
           title: item?.title,
           status: item?.status,
-          dateCreated: item?.created_at,
+          createdAt: item?.created_at,
           timeUpdated: item?.updated_at,
           articleId: item?.id,
           imageUrl: item?.image_url,
@@ -287,7 +359,7 @@ function Settings() {
     if (getNotificationStatus === 'succeeded') {
       let updatedList: any[] = [];
 
-      notificationState?.data?.custom_notification?.data.forEach((item: any, index: number) => {
+      notificationState?.data?.notifications?.data.forEach((item: any, index: number) => {
         updatedList.push({
           createdBy: item?.author?.name,
           createdAt: item?.created_at,
@@ -308,8 +380,8 @@ function Settings() {
 
       const {
         meta: { links, last_page },
-      } = notificationState?.data?.custom_notification;
-      // setTotalPages(last_page);
+      } = notificationState?.data?.notifications;
+      setTotalPages(last_page);
 
       setNotificationDataList(updatedList);
     }
@@ -541,7 +613,11 @@ function Settings() {
                   value={searchValue}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     if (e.target.value.length === 0) {
-                      setIsSearching(!isSearching);
+                      setFaqsDataList(faqsData);
+                    } else {
+                      const filteredResult = faqsDataList.filter(item => item.faqTitle.includes(searchValue));
+
+                      setFaqsDataList(filteredResult);
                     }
                     setSearchValue(e.target.value);
                   }}
@@ -551,7 +627,7 @@ function Settings() {
               <FaqTable
                 headerData={faqDataHeader}
                 header={true}
-                data={faqsData}
+                data={faqsDataList}
                 onClick={(item: Dictionary) => handleSelectedFaq(item)}
               />
               <MoreIconView
@@ -579,6 +655,16 @@ function Settings() {
               />
             </>
           )}
+
+          <Pagination
+            // isLoading={kycsStatus === 'loading' || kycsAnalyticsStatus === 'loading'}
+            isLoading={false}
+            currentPage={currentPageFaq}
+            totalPages={totalPagesFaq}
+            onPageChange={selectedPage => {
+              setCurrentPageFaq(selectedPage);
+            }}
+          />
 
           {/* {usersData.length >= 1 && (
                 <Pagination

@@ -48,13 +48,14 @@ function NotificationTable({ data, headerData, onClick, setSelectedItem, type }:
               </tr>
             </thead>
             <tbody>
-              {data?.map((item: any) => (
-                <TR key={item.notificationId}>
+              {data?.map((item: any, i: number) => (
+                // <TR key={item.notificationId}>
+                <TR key={i}>
                   <TD>{item.id}</TD>
                   <TD>{item.title}</TD>
                   {type !== 'article' && <TD>{item.interval}</TD>}
                   <TD>{item.createdBy}</TD>
-                  <TD>{dateFormat(item.dateCreated)}</TD>
+                  <TD>{dateFormat(item.createdAt)}</TD>
                   <TD>
                     <div onClick={() => handleOnSelect(item)}>
                       <MoreIcon onClick={() => onClick(item)} />

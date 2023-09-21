@@ -4,31 +4,33 @@ import { Button, Input, Picker, RichText } from '../../components';
 
 import { Formik } from 'formik';
 
-import { colors, routesPath } from '../../utils';
+import { colors, routesPath, spacing } from '../../utils';
 
 import { ButtonContainer, MiniInputs } from './style';
-
+import { H2 } from '../../styles';
 import * as yup from 'yup';
 
 import { useNavigate } from 'react-router-dom';
 
 const { SETTINGS } = routesPath;
 
-const NewFaqAtom = ({ setFormvalues }: any) => {
+const NewFaqAtom = ({ setFormvalues, onClick, tagsList }: any) => {
   const [editorContent, setEditorContent] = useState<any>({});
 
   const navigate = useNavigate();
 
   const [activePlatform, setActivePlatform] = useState('');
-
+  const [selectedTags, setSelectedTags] = useState('');
   // This checks to see if there is any text in the textbox
 
   const formatIsNotValid = !editorContent?.content?.[0].content;
 
   const schema = yup.object().shape({
     question: yup.string().required('Question is required'),
+    solution: yup.string().required('Content is required'),
 
-    solution: formatIsNotValid ? yup.string().required('Content is required') : yup.string(),
+    platform: activePlatform.length < 2 ? yup.string().required('Select a platform') : yup.string(),
+    tag: selectedTags.length < 2 ? yup.string().required('Select a Tag') : yup.string(),
   });
 
   return (
@@ -36,32 +38,31 @@ const NewFaqAtom = ({ setFormvalues }: any) => {
       <Formik
         initialValues={{
           question: '',
-
           solution: '',
-
           platform: '',
+          tag: '',
         }}
         enableReinitialize={true}
         validationSchema={schema}
         onSubmit={async (values, { setSubmitting }) => {
-          const { question } = values;
-
+          const { question, solution } = values;
           setFormvalues({
             question,
-
-            solution: JSON.stringify(editorContent),
-
+            solution,
             activePlatform,
+            selectedTags,
           });
 
           setSubmitting(false);
         }}>
         {formikProps => {
           const { handleChange, values, handleSubmit, errors } = formikProps;
-
           return (
             <form onSubmit={handleSubmit}>
               <div>
+                <H2 left bold style={{ marginBottom: spacing.small }}>
+                  New FAQ
+                </H2>
                 <Input
                   label="Frequently Asked Question"
                   backgroundColor={colors.white}
@@ -83,26 +84,6 @@ const NewFaqAtom = ({ setFormvalues }: any) => {
                   label={'Prosposed Solution'}
                 />
 
-                {/* <TextArea
-
-                  label="Prosposed Solution"
-
-                  backgroundColor={colors.white}
-
-                  borderColor={colors.grey}
-
-                  placeholder="Enter answer to the FAQ"
-
-                  value={values.solution}
-
-                  name={'solution'}
-
-                  onChange={handleChange}
-
-                  error={errors.solution}
-
-                /> */}
-
                 <MiniInputs>
                   <Picker
                     error={errors.platform}
@@ -110,18 +91,26 @@ const NewFaqAtom = ({ setFormvalues }: any) => {
                     selectedValue={setActivePlatform}
                     marginBottom="0"
                     options={[
-                      { label: 'Low', value: 'low' },
-
-                      { label: 'Medium', value: 'medium' },
-
-                      { label: 'High', value: 'high' },
+                      { label: 'App', value: 'app' },
+                      { label: 'Web', value: 'web' },
                     ]}
                   />
                 </MiniInputs>
 
-                <ButtonContainer>
-                  <Button type="submit" text="Create Item" formIsNotValid={formatIsNotValid} />
+                <div style={{ marginBottom: spacing.large }}>
+                  {/* this is for the listings */}
+                  <Picker
+                    width={100}
+                    error={errors.tag}
+                    label="Select a Tag"
+                    selectedValue={setSelectedTags}
+                    marginBottom="0"
+                    options={tagsList}
+                  />
+                </div>
 
+                <ButtonContainer>
+                  <Button type="submit" text="Create Item" onClick={onClick} />
                   <Button
                     onClick={() => navigate(SETTINGS)}
                     text="Cancel"

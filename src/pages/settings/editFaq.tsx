@@ -4,7 +4,7 @@ import { AppContainer, ActivityActionModal, LoaderModal } from '../../atoms';
 import { routesPath, colors, spacing } from '../../utils';
 import { useNavigate, useParams } from 'react-router';
 import { NewAppContainer } from './style';
-import { TextArea, Input, Picker, Button } from '../../components';
+import { TextArea, Input, Picker, Button, RichText } from '../../components';
 import { H2 } from '../../styles';
 import { updateFaqRequest, updateFaqReset, getTagsRequest, getFaqRequest } from '../../redux/slice';
 import { images } from '../../utils';
@@ -32,7 +32,7 @@ function EditFaq() {
   const [activePlatform, setActivePlatform] = useState('');
   const [selectedTags, setSelectedTags] = useState('');
   const [selectedTagName, setSelectedTagName] = useState('');
-
+  const [solutionValue, setSolutionValue] = useState('');
   // redux state
   const faqState = useAppSelector(state => state.getFaq);
   const { status: faqStatus } = faqState;
@@ -78,8 +78,6 @@ function EditFaq() {
     );
   }, []);
 
-  console.log(faqState, 'faqState');
-
   useEffect(() => {
     if (faqStatus === 'succeeded') {
       setSelectedTagName(faqState?.data?.faq?.tag?.name);
@@ -122,7 +120,7 @@ function EditFaq() {
               dispatch(
                 updateFaqRequest({
                   question: question,
-                  propose_solution: solution,
+                  propose_solution: solutionValue,
                   active_platform: activePlatform,
                   status: 'active',
                   tag_id: selectedTags,
@@ -152,16 +150,13 @@ function EditFaq() {
                       // error={errors.question}
                     />
 
-                    <TextArea
-                      label="Prosposed Solution"
-                      backgroundColor={colors.white}
-                      borderColor={colors.grey}
-                      placeholder="Enter answer to the FAQ"
-                      value={values.solution}
-                      name={'solution'}
-                      onChange={handleChange}
-                      //   error={errors.solution}
+                    <RichText
+                      selectedValue={setSolutionValue}
+                      error={errors.solution}
+                      placeholderText={'Enter answer to the FAQ'}
+                      label={'Prosposed Solution'}
                     />
+
                     <MiniInputs>
                       <Picker
                         // error={errors.platform}
