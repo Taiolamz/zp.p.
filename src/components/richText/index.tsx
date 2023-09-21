@@ -96,7 +96,8 @@ const Formatter = ({ editor }: any) => {
 };
 
 // eslint-disable-next-line import/no-anonymous-default-export
-const RichText = ({ setEditorContent, error, formIsNotValid, placeholderText, label }: any) => {
+const RichText = ({ error, placeholderText, label, selectedValue }: any) => {
+  const [value, setValue] = useState<any>('');
   const editor = useEditor({
     extensions: [
       TextAlign.configure({
@@ -123,7 +124,13 @@ const RichText = ({ setEditorContent, error, formIsNotValid, placeholderText, la
       }),
     ],
     onUpdate({ editor }: any) {
-      setEditorContent(editor.getJSON());
+      // setEditorContent(editor.getJSON());
+
+      const toJSON = editor.getJSON();
+
+      let editedData = toJSON.content?.[0]?.content[0]?.text;
+      selectedValue(editedData);
+      setValue(editedData);
     },
     editorProps: {
       attributes: {
@@ -135,13 +142,13 @@ const RichText = ({ setEditorContent, error, formIsNotValid, placeholderText, la
   return (
     <RichTextContainer>
       <H5 semiBold style={{ marginLeft: 5, marginBottom: spacing.xsmall }} left color={colors.grey}>
-        <div>{label}</div>
+        {label}
       </H5>
-      <TextContainer>
+      <TextContainer error={value.length < 2 && error ? 'error' : ''}>
         <EditorContent editor={editor} />
         <Formatter editor={editor} />
       </TextContainer>
-      {formIsNotValid && error && (
+      {value.length < 2 && error && (
         <H5 left color={error ? colors.red : colors.grey}>
           <div>{error}</div>
         </H5>

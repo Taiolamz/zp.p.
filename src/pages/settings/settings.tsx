@@ -109,7 +109,7 @@ function Settings() {
   // api faq
   useEffect(() => {
     dispatch(getAllFaqsRequest({}));
-  }, []);
+  }, [deletedFaqStatus]);
 
   useEffect(() => {
     if (faqsStatus === 'succeeded') {
