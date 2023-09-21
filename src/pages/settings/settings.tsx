@@ -54,8 +54,8 @@ function Settings() {
 
   const [selectedSettingsCard, setSelectedSettingsCard] = useState<Dictionary>({});
   const [searchValue, setSearchValue] = useState('');
-  const pageSize = 10;
   const [isSearching, setIsSearching] = useState(false);
+  const pageSize = 10;
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(5);
@@ -68,6 +68,7 @@ function Settings() {
   const [actionText, setActionText] = useState(beforeDeleteAction);
 
   const [faqsData, setFaqsData] = useState<any[]>([]);
+  const [faqsDataList, setFaqsDataList] = useState<any[]>([]);
   const [currentPageFaq, setCurrentPageFaq] = useState(1);
   const [totalPagesFaq, setTotalPagesFaq] = useState(5);
 
@@ -134,6 +135,7 @@ function Settings() {
       setTotalPagesFaq(last_page);
 
       setFaqsData(updatedList);
+      setFaqsDataList(updatedList);
     }
   }, [faqsState]);
 
@@ -541,7 +543,11 @@ function Settings() {
                   value={searchValue}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     if (e.target.value.length === 0) {
-                      setIsSearching(!isSearching);
+                      setFaqsDataList(faqsData);
+                    } else {
+                      const filteredResult = faqsDataList.filter(item => item.faqTitle.includes(searchValue));
+
+                      setFaqsDataList(filteredResult);
                     }
                     setSearchValue(e.target.value);
                   }}
@@ -551,7 +557,7 @@ function Settings() {
               <FaqTable
                 headerData={faqDataHeader}
                 header={true}
-                data={faqsData}
+                data={faqsDataList}
                 onClick={(item: Dictionary) => handleSelectedFaq(item)}
               />
               <MoreIconView
