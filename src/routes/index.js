@@ -6,19 +6,21 @@ import { Support } from '../pages/support';
 import { Users, RoleDetails, UserDetails, CreateRole } from '../pages/users';
 import { Settlements, Reconciliation, ReconcilationUserDetails } from '../pages/settlements';
 import {
-  EmailNotification,
-  EmailNotificationUpdate,
+  NewNotificationPage,
+  NotificationUpdate,
   NewAppNotification,
   NewArticles,
   NewFaq,
   Settings,
+  UpdateArticle,
+  EditFaq,
 } from '../pages/settings';
 import { NotFound } from '../pages/notFound';
 import { PrivateRoute } from './privateRoute';
 import { routesPath } from '../utils';
 import { Transactions } from '../pages/transactions';
-import Skeleton from 'react-loading-skeleton'
-import 'react-loading-skeleton/dist/skeleton.css'
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 
 function AppRoute() {
   const {
@@ -161,15 +163,15 @@ function AppRoute() {
           path={NEWAPPNOTIFICATION}
           element={
             <PrivateRoute>
-              <NewAppNotification />
+              <NewNotificationPage />
             </PrivateRoute>
           }
         />
         <Route
-          path={APPNOTIFICATIONUPDATE}
+          path={`${APPNOTIFICATIONUPDATE}:id`}
           element={
             <PrivateRoute>
-              <NewAppNotification />
+              <NotificationUpdate />
             </PrivateRoute>
           }
         />
@@ -177,15 +179,15 @@ function AppRoute() {
           path={EMAILNOTIFICATION}
           element={
             <PrivateRoute>
-              <EmailNotification />
+              <NewNotificationPage />
             </PrivateRoute>
           }
         />
         <Route
-          path={EMAILNOTIFICATIONUPDATE}
+          path={`${EMAILNOTIFICATIONUPDATE}:id`}
           element={
             <PrivateRoute>
-              <EmailNotificationUpdate />
+              <NotificationUpdate />
             </PrivateRoute>
           }
         />
@@ -197,11 +199,12 @@ function AppRoute() {
             </PrivateRoute>
           }
         />
+
         <Route
-          path={ARTICLEUPDATE}
+          path={`${ARTICLEUPDATE}:id`}
           element={
             <PrivateRoute>
-              <NewArticles />
+              <UpdateArticle />
             </PrivateRoute>
           }
         />
@@ -214,10 +217,10 @@ function AppRoute() {
           }
         />
         <Route
-          path={FAQUPDATE}
+          path={`${FAQUPDATE}:id`}
           element={
             <PrivateRoute>
-              <NewFaq />
+              <EditFaq />
             </PrivateRoute>
           }
         />
@@ -230,15 +233,18 @@ function AppRoute() {
           }
         />
         <Route path="*" element={<NotFound />} />
-        <Route path='/test' element={<>
-          <div className='tw-w-1/2 tw-mx-auto'>
-            {
-              Array.from({ length: 3 }, (_, idx) => (
-                <Skeleton key={idx} count={2} className="tw-w-full tw-bg-red-400" />
-              ))
-            }
-          </div>
-        </>} />
+        <Route
+          path="/test"
+          element={
+            <>
+              <div className="tw-w-1/2 tw-mx-auto">
+                {Array.from({ length: 3 }, (_, idx) => (
+                  <Skeleton key={idx} count={2} className="tw-w-full tw-bg-red-400" />
+                ))}
+              </div>
+            </>
+          }
+        />
       </Routes>
     </>
   );

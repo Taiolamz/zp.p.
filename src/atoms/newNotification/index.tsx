@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, CustomUpload, DatePicker, Input, Picker, RadioInput, StepperInput, TextArea } from '../../components';
 import { Formik } from 'formik';
 import { colors } from '../../utils';
@@ -10,10 +10,37 @@ import CustomTimeInput from '../customTimeInput';
 import * as yup from 'yup';
 import { routesPath } from '../../utils';
 import { useNavigate } from 'react-router-dom';
+import { Dictionary } from '../../types';
 
 const { SETTINGS } = routesPath;
 
-const NewNotification = ({ radioData, setFormvalues, type }: any) => {
+export interface IPropsInitialValues {
+  title: string;
+  message: string;
+  status: string;
+  image: string;
+  interval: string;
+  delivery_date: string;
+  delivery_time: string;
+  delivery_meridiem: string;
+  type: string;
+}
+
+export interface IPropsRadioData {
+  id: number;
+  label: string;
+  value: string;
+}
+
+export interface IProps {
+  onSubmit: (item: Dictionary) => any;
+  initialValues?: IPropsInitialValues;
+  requestStatus?: string;
+  radioData?: IPropsRadioData[];
+  type?: string;
+}
+
+const NewNotification = ({ radioData, requestStatus, initialValues, type, onSubmit }: IProps) => {
   const [deliverTime, setDeliverTime] = useState({});
 
   const [selectedNotificationInterval, setSelectedNotificationInterval] = useState('');
@@ -39,30 +66,34 @@ const NewNotification = ({ radioData, setFormvalues, type }: any) => {
     <div>
       <Formik
         initialValues={{
-          message: '',
-          title: type === 'update' ? 'title' : '',
-          description: '',
-          deliveryTime: '',
-          notificationinterval: '',
-          deliverDate: '',
-          notificationaction: '',
+          title: initialValues?.title || '',
+          message: initialValues?.message || '',
+          interval: initialValues?.interval || '',
+          delivery_time: initialValues?.delivery_time || '',
+          delivery_date: initialValues?.delivery_date || '',
+          recipients: initialValues?.title || '',
+          image: '',
+          type: initialValues?.type || '',
+          spreadsheet: '',
         }}
         validationSchema={schema}
         enableReinitialize={true}
         onSubmit={async (values, { setSubmitting }) => {
           const { title, message } = values;
 
-          setFormvalues({
+          const payload = {
             title,
             message,
-            selectedNotificationAction,
-            selectedNotificationInterval,
-            deliverTime,
-            selectedNotificationReceipients,
-            imageValue,
-            recipentFileValue,
-            deliverDate,
-          });
+            interval: selectedNotificationInterval,
+            delivery_time: deliverTime,
+            recipients: selectedNotificationReceipients,
+            image: imageValue,
+            spreadsheet: recipentFileValue,
+            delivery_date: deliverDate,
+          };
+
+          onSubmit(payload);
+
           setSubmitting(false);
         }}>
         {formikProps => {
@@ -92,40 +123,18 @@ const NewNotification = ({ radioData, setFormvalues, type }: any) => {
                   onChange={handleChange}
                   error={errors.message}
                 />
-                <MiniInput1>
-                  <CustomUpload
-                    inputMessage={'Click here to attach image'}
-                    error={errors.notificationinterval}
-                    label={'Attach Image (Optional)'}
-                    backgroundColor={colors.white}
-                    setFileValue={setImageValue}
-                    icon={<BiImageAdd size={30} color={colors.primary} />}
-                  />
 
+                <MiniInput2>
                   <Picker
-                    error={errors.notificationinterval}
+                    error={errors.interval}
                     label="Notification Interval (Optional)"
                     selectedValue={setSelectedNotificationInterval}
                     marginBottom="0"
                     placeholder="Select an Action"
                     options={[
-                      { label: 'Low', value: 'low' },
-                      { label: 'Medium', value: 'medium' },
-                      { label: 'High', value: 'high' },
-                    ]}
-                  />
-                </MiniInput1>
-                <MiniInput2>
-                  <Picker
-                    error={errors.notificationaction}
-                    label="Notification Action (Optional)"
-                    selectedValue={setSelectedNotificationAction}
-                    placeholder="Select an Action"
-                    marginBottom="0"
-                    options={[
-                      { label: 'Low', value: 'low' },
-                      { label: 'Medium', value: 'medium' },
-                      { label: 'High', value: 'high' },
+                      { label: 'One Time', value: 'one time' },
+                      { label: 'Weekly', value: 'weekly' },
+                      { label: 'Monthly', value: 'monthly' },
                     ]}
                   />
                   <SingleMiniInput>
@@ -138,25 +147,23 @@ const NewNotification = ({ radioData, setFormvalues, type }: any) => {
                     <H5 left color={colors.grey} semiBold>
                       Enter Delivery Time
                     </H5>
-                    <CustomTimeInput setTimeValue={setDeliverTime} error={errors.deliveryTime} />
+                    <CustomTimeInput setTimeValue={setDeliverTime} error={errors.delivery_time} />
                   </SingleMiniInput>
                 </MiniInput2>
                 <RadioStyle>
                   <H3 left>Notification Receipients</H3>
                   <RadioInput data={radioData} selectedValue={setSelectedNotificationReceipients} />
-                  <CustomUpload
-                    icon={<AiFillFile color={colors.grey} />}
-                    inputMessage={'Import File'}
-                    backgroundColor={colors.white}
-                    setFileValue={setRecipentFileValue}
-                  />
+                  {selectedNotificationReceipients === 'specific users' && (
+                    <CustomUpload
+                      icon={<AiFillFile color={colors.grey} />}
+                      inputMessage={'Import File'}
+                      backgroundColor={colors.white}
+                      setFileValue={setRecipentFileValue}
+                    />
+                  )}
                 </RadioStyle>
                 <ButtonContainer>
-                  <Button
-                    type="submit"
-                    text="Create Item"
-                    //   disabled={createEscalationTicketStatus === 'loading' ? true : false}
-                  />
+                  <Button type="submit" text="Create Item" disabled={requestStatus === 'loading' ? true : false} />
                   <Button
                     onClick={() => navigate(SETTINGS)}
                     text="Cancel"

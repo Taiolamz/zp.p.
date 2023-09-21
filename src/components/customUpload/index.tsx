@@ -10,9 +10,18 @@ export interface CustomUploadIProps {
   icon?: any;
   setFileValue?: any;
   error?: string;
+  name?: string;
 }
 
-const CustomUpload = ({ label, inputMessage, backgroundColor, icon, setFileValue, error }: CustomUploadIProps) => {
+const CustomUpload = ({
+  label,
+  inputMessage,
+  backgroundColor,
+  icon,
+  setFileValue,
+  error,
+  name,
+}: CustomUploadIProps) => {
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setFileValue(e.target.files[0]);
@@ -27,7 +36,7 @@ const CustomUpload = ({ label, inputMessage, backgroundColor, icon, setFileValue
         </label>
       )}
       <FileInputs>
-        <InputStyle type="file" onChange={handleFileChange} />
+        <InputStyle name={name} id={name} type="file" onChange={handleFileChange} />
         <InputButton>
           {icon}
           <H6>{inputMessage}</H6>

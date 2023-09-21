@@ -5,6 +5,7 @@ import {
   getTransactionsSliceReducer,
   getReconciliationAccountSliceReducer,
   reconcileAccountSliceReducer,
+  getArticlesSliceReducer,
   getEscalationAgentsSliceReducer,
   createEscalationTicketSliceReducer,
   getTransactionByIdSliceReducer,
@@ -40,6 +41,12 @@ import {
   updateRoleSliceReducer,
   getSingleRoleSliceReducer,
   deleteRoleSliceReducer,
+  getAllFaqsSliceReducer,
+  getTagsSliceReducer,
+  deleteFaqSliceReducer,
+  updateFaqSliceReducer,
+  getFaqSliceReducer,
+  settingsCountSliceReducer,
 } from './slice';
 const state = {
   login: loginSliceReducer,
@@ -83,6 +90,12 @@ const state = {
   updateRole: updateRoleSliceReducer,
   getSingleRole: getSingleRoleSliceReducer,
   deleteRole: deleteRoleSliceReducer,
+  getAllFaqs: getAllFaqsSliceReducer,
+  getTags: getTagsSliceReducer,
+  deleteFaq: deleteFaqSliceReducer,
+  updateFaq: updateFaqSliceReducer,
+  getFaq: getFaqSliceReducer,
+  settingsCount: settingsCountSliceReducer,
 };
 
 export const testAppSelector = (f: any) => f(state);
